@@ -1,4 +1,5 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,7 @@ namespace Player
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
     
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : NetworkBehaviour
     {
         private InputSystem_Actions _inputActions;
         private InputSystem_Actions.PlayerActions _playerActions;
@@ -20,7 +21,23 @@ namespace Player
         [Header("Private variables")]
         private Vector2 _inputVector;
         private bool isGrounded;
+        
+        [Header("Public variables")]
+        public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
 
+        public override void OnNetworkSpawn()
+        {
+            Position.OnValueChanged += OnStateChanged;
+        }
+        
+        public void OnStateChanged(Vector3 previousValue, Vector3 newValue)
+        {
+            if (Position.Value != previousValue)
+            {
+                transform.position = Position.Value;
+            }
+        }
+        
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -32,21 +49,18 @@ namespace Player
         // Update is called once per frame
         void FixedUpdate()
         {
-            Vector3 moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            
-            _rb.AddForce(moveVector * 10, ForceMode.Force);
+            if(IsOwner) Move();
         }
 
         private void Update()
         {
             isGrounded = Physics.Raycast(transform.position, Vector3.down, _colli.bounds.extents.y + 0.1f);
             Debug.DrawRay(transform.position, Vector3.down * (_colli.bounds.extents.y + 0.1f), Color.red);
-            if(_playerCamera)
+            if (_playerCamera && IsOwner)
             {
                 _playerCamera.transform.position = transform.position + new Vector3(0, 1f, 0);
-                _playerCamera.transform.rotation = transform.rotation;
+                _playerCamera.transform.rotation = Quaternion.Euler(transform.rotation.x, _playerCamera.transform.rotation.y, transform.rotation.z);
             }
-            
         }
 
         private void OnEnable()
@@ -70,22 +84,46 @@ namespace Player
             _playerActions.Look.performed -= LookInput;
             _playerActions.Disable();
         }
-
+        
         private void Jump()
         {
-            if(isGrounded){
+            if(isGrounded && IsOwner){
                 _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
             }
+        }
+
+        private void Move()
+        {
+            MoveRpc();
+        }
+        
+        private void MoveCamera()
+        {
+            MoveCameraRpc();
+        }
+
+        [Rpc(SendTo.Server)]
+        private void MoveCameraRpc(RpcParams rpcParams = default)
+        {
+            if (_playerCamera)
+            {
+                _playerCamera.transform.position = transform.position + new Vector3(0, 1f, 0);
+                _playerCamera.transform.rotation = transform.rotation;
+            }
+        }
+
+        [Rpc(SendTo.Server)]
+        private void MoveRpc(RpcParams rpcParams = default)
+        {
+            Vector3 moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
+            _rb.AddForce(moveVector * 10, ForceMode.Force);
+            Position.Value = transform.position;
         }
         
         private void LookInput(InputAction.CallbackContext context)
         {
             Vector2 lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0, lookVector.x * 0.1f, 0);
-            if(_playerCamera)
-            {
-                _playerCamera.transform.Rotate(-lookVector.y * 0.1f, 0, 0);
-            }
         }
         
         private void JumpInput(InputAction.CallbackContext context)

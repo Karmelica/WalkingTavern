@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 6798936064959861390}
   - component: {fileID: 8138332659535494281}
   - component: {fileID: 7539453088699758875}
-  - component: {fileID: 716150627258913904}
   - component: {fileID: -4989356760784755770}
-  - component: {fileID: 9115356641826530292}
+  - component: {fileID: 716150627258913904}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -144,18 +143,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &716150627258913904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7153339746370882463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52ac230d1983414bb7d646f8ad28b14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
 --- !u!114 &-4989356760784755770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +168,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &9115356641826530292
+--- !u!114 &716150627258913904
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,7 +177,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7153339746370882463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d75b7a00f82f7264e81f7bec97a47864, type: 3}
+  m_Script: {fileID: 11500000, guid: c52ac230d1983414bb7d646f8ad28b14, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Server.RpcTest
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
   ShowTopMostFoldoutHeaderGroup: 1
