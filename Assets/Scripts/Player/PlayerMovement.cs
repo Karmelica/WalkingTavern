@@ -21,29 +21,24 @@ namespace Player
         [Header("Private variables")]
         private Vector2 _inputVector;
         private bool isGrounded;
-        
-        [Header("Public variables")]
-        public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
+        private bool isSprinting;
+
+        #region Network
 
         public override void OnNetworkSpawn()
         {
-            Position.OnValueChanged += OnStateChanged;
+            _playerCamera = Camera.main;
         }
-        
-        public void OnStateChanged(Vector3 previousValue, Vector3 newValue)
-        {
-            if (Position.Value != previousValue)
-            {
-                transform.position = Position.Value;
-            }
-        }
-        
+
+        #endregion
+
+        #region Unity
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             _rb = GetComponent<Rigidbody>();
             _colli = GetComponent<Collider>();
-            _playerCamera = Camera.main;
         }
 
         // Update is called once per frame
@@ -59,7 +54,7 @@ namespace Player
             if (_playerCamera && IsOwner)
             {
                 _playerCamera.transform.position = transform.position + new Vector3(0, 1f, 0);
-                _playerCamera.transform.rotation = Quaternion.Euler(transform.rotation.x, _playerCamera.transform.rotation.y, transform.rotation.z);
+                _playerCamera.transform.rotation = Quaternion.LookRotation(transform.forward);
             }
         }
 
@@ -73,6 +68,8 @@ namespace Player
             _playerActions.Move.performed += MoveInput;
             _playerActions.Move.canceled += MoveInput;
             _playerActions.Look.performed += LookInput;
+            _playerActions.Sprint.performed += SprintInput;
+            _playerActions.Sprint.canceled += SprintInput;
         }
         
         private void OnDisable()
@@ -82,61 +79,62 @@ namespace Player
             _playerActions.Move.performed -= MoveInput;
             _playerActions.Move.canceled -= MoveInput;
             _playerActions.Look.performed -= LookInput;
+            _playerActions.Sprint.performed -= SprintInput;
+            _playerActions.Sprint.canceled -= SprintInput;
             _playerActions.Disable();
         }
+
+        #endregion
         
         private void Jump()
         {
-            if(isGrounded && IsOwner){
-                _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
+            if(isGrounded){
+                _rb.AddForce(Vector3.up * 7, ForceMode.Impulse);
             }
         }
-
+        
         private void Move()
         {
-            MoveRpc();
-        }
-        
-        private void MoveCamera()
-        {
-            MoveCameraRpc();
-        }
-
-        [Rpc(SendTo.Server)]
-        private void MoveCameraRpc(RpcParams rpcParams = default)
-        {
-            if (_playerCamera)
-            {
-                _playerCamera.transform.position = transform.position + new Vector3(0, 1f, 0);
-                _playerCamera.transform.rotation = transform.rotation;
-            }
-        }
-
-        [Rpc(SendTo.Server)]
-        private void MoveRpc(RpcParams rpcParams = default)
-        {
             Vector3 moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            _rb.AddForce(moveVector * 10, ForceMode.Force);
-            Position.Value = transform.position;
+            _rb.AddForce(isSprinting? moveVector * 20 : moveVector * 10, ForceMode.Force);
         }
-        
+
+        #region Inputs
+
         private void LookInput(InputAction.CallbackContext context)
         {
+            if(!Application.isFocused || !IsOwner) return;
             Vector2 lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0, lookVector.x * 0.1f, 0);
         }
         
         private void JumpInput(InputAction.CallbackContext context)
         {
-                if(context.performed)
+            if(IsOwner){
+                if (context.performed)
                     InvokeRepeating(nameof(Jump), 0, 0.1f);
-                if(context.canceled)
+                if (context.canceled)
                     CancelInvoke(nameof(Jump));
+            }
         }
         
         private void MoveInput(InputAction.CallbackContext context)
         {
             _inputVector = context.ReadValue<Vector2>();
         }
+        
+        private void SprintInput(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                isSprinting = true;
+            }
+            if (context.canceled)
+            {
+                isSprinting = false;
+            }
+        }
+
+        #endregion
     }
 }
