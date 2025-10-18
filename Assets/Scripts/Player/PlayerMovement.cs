@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +10,8 @@ namespace Player
     
     public class PlayerMovement : NetworkBehaviour
     {
+        [SerializeField] private List<GameObject> customizations = new List<GameObject>();
+        
         private InputSystem_Actions _inputActions;
         private InputSystem_Actions.PlayerActions _playerActions;
         
@@ -28,6 +30,13 @@ namespace Player
         public override void OnNetworkSpawn()
         {
             _playerCamera = Camera.main;
+            if (IsOwner)
+            {
+                foreach (var customization in customizations)
+                {
+                    customization.SetActive(false);
+                }
+            }
         }
 
         #endregion
