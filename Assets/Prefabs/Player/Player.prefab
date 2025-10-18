@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ca580b573c862804a85c4a259d8aad5d, type: 2}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,13 +99,14 @@ GameObject:
   m_Component:
   - component: {fileID: 5021921163044335068}
   - component: {fileID: 642423622663694352}
-  - component: {fileID: 6798936064959861390}
+  - component: {fileID: -2394049706973848201}
   - component: {fileID: 8138332659535494281}
   - component: {fileID: 7539453088699758875}
   - component: {fileID: -4989356760784755770}
   - component: {fileID: 5127199924688067477}
   - component: {fileID: 4885276137073383602}
   - component: {fileID: 716150627258913904}
+  - component: {fileID: 4876690589704989583}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -127,6 +128,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5126625939084289911}
+  - {fileID: 8572880066889729306}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.043, y: 0.036, z: -0.051}
 --- !u!33 &642423622663694352
@@ -137,7 +139,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7153339746370882463}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6798936064959861390
+--- !u!23 &-2394049706973848201
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,3 +340,49 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   customizations:
   - {fileID: 5475251674294832253}
+--- !u!114 &4876690589704989583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7153339746370882463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5e425f5c457fd418edc251a3ad6726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Interactor
+  ShowTopMostFoldoutHeaderGroup: 1
+  arm: {fileID: 8572880066889729306}
+  _interactRange: 3
+--- !u!1 &8722903924001629591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8572880066889729306}
+  m_Layer: 0
+  m_Name: Arm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8572880066889729306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722903924001629591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.22, z: 1.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5021921163044335068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

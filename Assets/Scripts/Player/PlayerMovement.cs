@@ -17,38 +17,35 @@ namespace Player
         
         [Header("Components")]
         private Rigidbody _rb;
-        private Collider _colli;
+        private Collider _coli;
         private Camera _playerCamera;
         
         [Header("Private variables")]
         private Vector2 _inputVector;
-        private bool isGrounded;
-        private bool isSprinting;
+        private bool _isGrounded;
+        private bool _isSprinting;
 
         #region Network
 
         public override void OnNetworkSpawn()
         {
-            _playerCamera = Camera.main;
             if (IsOwner)
             {
+                _playerCamera = Camera.main;
                 foreach (var customization in customizations)
                 {
                     customization.SetActive(false);
                 }
+                _rb = GetComponent<Rigidbody>();
+                _coli = GetComponent<Collider>();
             }
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         #endregion
 
         #region Unity
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            _rb = GetComponent<Rigidbody>();
-            _colli = GetComponent<Collider>();
-        }
 
         // Update is called once per frame
         void FixedUpdate()
@@ -58,12 +55,16 @@ namespace Player
 
         private void Update()
         {
-            isGrounded = Physics.Raycast(transform.position, Vector3.down, _colli.bounds.extents.y + 0.1f);
-            Debug.DrawRay(transform.position, Vector3.down * (_colli.bounds.extents.y + 0.1f), Color.red);
+            _isGrounded = Physics.Raycast(transform.position, Vector3.down, _coli.bounds.extents.y + 0.1f);
+            //Debug.DrawRay(transform.position, Vector3.down * (_coli.bounds.extents.y + 0.1f), Color.red);
             if (_playerCamera && IsOwner)
             {
-                _playerCamera.transform.position = transform.position + new Vector3(0, 1f, 0);
-                _playerCamera.transform.rotation = Quaternion.LookRotation(transform.forward);
+                _playerCamera.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+                /*var lookVectorY = _playerCamera.transform.rotation.eulerAngles.x > 180f
+                    ? _playerCamera.transform.rotation.eulerAngles.x - 360f
+                    : _playerCamera.transform.rotation.eulerAngles.x;*/
+                var lookVectorY = Mathf.Clamp(NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x), -87f, 87f);
+                _playerCamera.transform.localRotation = Quaternion.Euler(new Vector3(lookVectorY, transform.localRotation.eulerAngles.y, 0));
             }
         }
 
@@ -97,7 +98,7 @@ namespace Player
         
         private void Jump()
         {
-            if(isGrounded){
+            if(_isGrounded){
                 _rb.AddForce(Vector3.up * 7, ForceMode.Impulse);
             }
         }
@@ -105,7 +106,13 @@ namespace Player
         private void Move()
         {
             Vector3 moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            _rb.AddForce(isSprinting? moveVector * 20 : moveVector * 10, ForceMode.Force);
+            _rb.AddForce(_isSprinting? moveVector * 20 : moveVector * 10, ForceMode.Force);
+        }
+        
+        private float NormalizeAngle(float angle)
+        {
+            if (angle > 180f) angle -= 360f;
+            return angle;
         }
 
         #region Inputs
@@ -115,6 +122,7 @@ namespace Player
             if(!Application.isFocused || !IsOwner) return;
             Vector2 lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0, lookVector.x * 0.1f, 0);
+            _playerCamera.transform.Rotate(-lookVector.y * 0.1f, 0, 0);
         }
         
         private void JumpInput(InputAction.CallbackContext context)
@@ -136,11 +144,11 @@ namespace Player
         {
             if (context.performed)
             {
-                isSprinting = true;
+                _isSprinting = true;
             }
             if (context.canceled)
             {
-                isSprinting = false;
+                _isSprinting = false;
             }
         }
 
