@@ -1,23 +1,38 @@
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
+    [RequireComponent(typeof(NetworkAnimator))]
+    [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
     
     public class PlayerMovement : NetworkBehaviour
     {
-        [SerializeField] private List<GameObject> customizations = new List<GameObject>();
+        [Header("Animator Parameters")]
+        private readonly NetworkVariable<float> _networkWalkSpeed = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<float> _networkYSpeed = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<bool> _networkIsGrounded = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private static readonly int WalkSpeed = Animator.StringToHash("WalkSpeed");
+        private static readonly int VelocityY = Animator.StringToHash("VelocityY");
+        private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
+        
+        
+        [SerializeField] private SkinnedMeshRenderer customization;
         
         private InputSystem_Actions _inputActions;
         private InputSystem_Actions.PlayerActions _playerActions;
         
         [Header("Components")]
+        private Animator _animator;
         private Rigidbody _rb;
-        private Collider _coli;
+        //private Collider _coli;
         private Camera _playerCamera;
         
         [Header("Private variables")]
@@ -29,15 +44,28 @@ namespace Player
 
         public override void OnNetworkSpawn()
         {
-            if (IsOwner)
+            _animator = GetComponent<Animator>();
+            _rb = GetComponent<Rigidbody>();
+            switch (IsOwner)
             {
-                _playerCamera = Camera.main;
-                foreach (var customization in customizations)
-                {
-                    customization.SetActive(false);
-                }
-                _rb = GetComponent<Rigidbody>();
-                _coli = GetComponent<Collider>();
+                case false:
+                    _networkWalkSpeed.OnValueChanged += (float previousValue, float newValue) =>
+                    {
+                        _animator.SetFloat(WalkSpeed, newValue);
+                    };
+                    _networkYSpeed.OnValueChanged += (float previousValue, float newValue) =>
+                    {                    
+                        _animator.SetFloat(VelocityY, newValue);
+                    };
+                    _networkIsGrounded.OnValueChanged += (bool previousValue, bool newValue) =>
+                    {
+                        _animator.SetBool(IsGrounded, newValue);
+                    };
+                    break;
+                case true:
+                    _playerCamera = Camera.main;
+                    //customization.enabled = false;
+                    break;
             }
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -55,18 +83,26 @@ namespace Player
 
         private void Update()
         {
-            _isGrounded = Physics.Raycast(transform.position, Vector3.down, _coli.bounds.extents.y + 0.1f);
-            //Debug.DrawRay(transform.position, Vector3.down * (_coli.bounds.extents.y + 0.1f), Color.red);
-            if (_playerCamera && IsOwner)
+            if (IsOwner)
             {
-                _playerCamera.transform.position = transform.position + new Vector3(0, 0.5f, 0);
-                /*var lookVectorY = _playerCamera.transform.rotation.eulerAngles.x > 180f
-                    ? _playerCamera.transform.rotation.eulerAngles.x - 360f
-                    : _playerCamera.transform.rotation.eulerAngles.x;*/
-                var lookVectorY = Mathf.Clamp(NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x), -87f, 87f);
-                _playerCamera.transform.localRotation = Quaternion.Euler(new Vector3(lookVectorY, transform.localRotation.eulerAngles.y, 0));
+                _networkWalkSpeed.Value = _rb.linearVelocity.magnitude;
+                _networkYSpeed.Value = Mathf.FloorToInt(_rb.linearVelocity.y);
             }
+            _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
+            _animator.SetFloat(VelocityY, Mathf.FloorToInt(_rb.linearVelocity.y));
+            _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+            _animator.SetBool(IsGrounded, _isGrounded);
+            if (!IsOwner) return;
+            //Debug.DrawRay(transform.position, Vector3.down * 0.1f, Color.red);
+            if (!_playerCamera) return;
+            _playerCamera.transform.position = transform.position + new Vector3(0, 1.7f, 0);
+            var lookVectorY = Mathf.Clamp(NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x), -87f,
+                87f);
+            _playerCamera.transform.localRotation =
+                Quaternion.Euler(new Vector3(lookVectorY, transform.localRotation.eulerAngles.y, 0));
         }
+        
+        
 
         private void OnEnable()
         {
@@ -99,17 +135,21 @@ namespace Player
         private void Jump()
         {
             if(_isGrounded){
-                _rb.AddForce(Vector3.up * 7, ForceMode.Impulse);
+                _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
             }
         }
-        
         private void Move()
         {
-            Vector3 moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            _rb.AddForce(_isSprinting? moveVector * 20 : moveVector * 10, ForceMode.Force);
+            var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
+            _rb.AddForce(_isSprinting ? moveVector * 20f : moveVector * 10f, ForceMode.Force);
+            if (!(_rb.linearVelocity.magnitude > (_isSprinting ? 10f : 5f))) return;
+            Vector2 limitedVelocity = new(_rb.linearVelocity.x, _rb.linearVelocity.z);
+            limitedVelocity = limitedVelocity.normalized * (_isSprinting ? 10f : 5f);
+            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
+
         }
         
-        private float NormalizeAngle(float angle)
+        private static float NormalizeAngle(float angle)
         {
             if (angle > 180f) angle -= 360f;
             return angle;
@@ -120,19 +160,18 @@ namespace Player
         private void LookInput(InputAction.CallbackContext context)
         {
             if(!Application.isFocused || !IsOwner) return;
-            Vector2 lookVector = context.ReadValue<Vector2>();
+            var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0, lookVector.x * 0.1f, 0);
             _playerCamera.transform.Rotate(-lookVector.y * 0.1f, 0, 0);
         }
         
         private void JumpInput(InputAction.CallbackContext context)
         {
-            if(IsOwner){
-                if (context.performed)
-                    InvokeRepeating(nameof(Jump), 0, 0.1f);
-                if (context.canceled)
-                    CancelInvoke(nameof(Jump));
-            }
+            if (!IsOwner) return;
+            if (context.performed)
+                InvokeRepeating(nameof(Jump), 0, 0.1f);
+            if (context.canceled)
+                CancelInvoke(nameof(Jump));
         }
         
         private void MoveInput(InputAction.CallbackContext context)

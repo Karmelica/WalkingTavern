@@ -21,7 +21,7 @@ namespace Managers
             NetworkManager.Singleton.StartServer();
         }
         
-        private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+        private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
             /*// The client identifier to be authenticated
             var clientId = request.ClientNetworkId;

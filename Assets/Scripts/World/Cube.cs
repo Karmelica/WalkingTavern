@@ -1,3 +1,5 @@
+using System;
+using Player;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,20 +9,13 @@ namespace World
     [RequireComponent(typeof(Rigidbody))]
     public class Cube : NetworkBehaviour, IInteractable
     {
-        private Collider _collider;
-        private Rigidbody _rigidbody;
+        private Transform _targetPos;
         
-        public void PrimaryInteract(Transform pos)
+        public void PrimaryInteract(ref GameObject heldObject)
         {
-            _rigidbody.isKinematic = true;
-            transform.position = pos.position + pos.forward * 1.5f;
-            transform.rotation = pos.rotation;
-        }
-
-        public override void OnNetworkSpawn()
-        {
-            _collider = GetComponent<Collider>();
-            _rigidbody = GetComponent<Rigidbody>();
+            heldObject = gameObject;
+            NetworkObject.Despawn(false);
+            gameObject.SetActive(false);
         }
     }
 }
