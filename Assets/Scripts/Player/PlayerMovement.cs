@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -13,27 +13,24 @@ namespace Player
     [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
     
-    public class PlayerMovement : NetworkBehaviour
+    public class PlayerMovement : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         [Header("Animator Parameters")]
-        private readonly NetworkVariable<float> _networkWalkSpeed = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        private readonly NetworkVariable<float> _networkYSpeed = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        private readonly NetworkVariable<bool> _networkIsGrounded = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private static readonly int WalkSpeed = Animator.StringToHash("WalkSpeed");
-        private static readonly int VelocityY = Animator.StringToHash("VelocityY");
         private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
-        
-        
+        private static readonly int Jumping = Animator.StringToHash("Jumping");
+
+
         [SerializeField] private SkinnedMeshRenderer customization;
         
         private InputSystem_Actions _inputActions;
         private InputSystem_Actions.PlayerActions _playerActions;
         
         [Header("Components")]
+        private Camera _playerCamera;
         private Animator _animator;
         private Rigidbody _rb;
         //private Collider _coli;
-        private Camera _playerCamera;
         
         [Header("Private variables")]
         private Vector2 _inputVector;
@@ -41,34 +38,31 @@ namespace Player
         private bool _isSprinting;
 
         #region Network
-
+        
         public override void OnNetworkSpawn()
         {
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody>();
-            switch (IsOwner)
+            if(IsOwner)
             {
-                case false:
-                    _networkWalkSpeed.OnValueChanged += (float previousValue, float newValue) =>
-                    {
-                        _animator.SetFloat(WalkSpeed, newValue);
-                    };
-                    _networkYSpeed.OnValueChanged += (float previousValue, float newValue) =>
-                    {                    
-                        _animator.SetFloat(VelocityY, newValue);
-                    };
-                    _networkIsGrounded.OnValueChanged += (bool previousValue, bool newValue) =>
-                    {
-                        _animator.SetBool(IsGrounded, newValue);
-                    };
-                    break;
-                case true:
-                    _playerCamera = Camera.main;
-                    //customization.enabled = false;
-                    break;
+                StartCoroutine(WaitForMainCamera());
+                customization.enabled = false;
             }
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            
+            
+            if(!IsOwner) return;
+            
+            _inputActions = new InputSystem_Actions();
+            _inputActions.Player.SetCallbacks(this);
+            _inputActions.Player.Enable();
+        }
+
+        private IEnumerator WaitForMainCamera()
+        {
+            yield return new WaitUntil(() => Camera.main);
+            _playerCamera = Camera.main;
         }
 
         #endregion
@@ -76,72 +70,66 @@ namespace Player
         #region Unity
 
         // Update is called once per frame
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             if(IsOwner) Move();
         }
 
         private void Update()
         {
-            if (IsOwner)
-            {
-                _networkWalkSpeed.Value = _rb.linearVelocity.magnitude;
-                _networkYSpeed.Value = Mathf.FloorToInt(_rb.linearVelocity.y);
-            }
-            _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
-            _animator.SetFloat(VelocityY, Mathf.FloorToInt(_rb.linearVelocity.y));
-            _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
-            _animator.SetBool(IsGrounded, _isGrounded);
             if (!IsOwner) return;
-            //Debug.DrawRay(transform.position, Vector3.down * 0.1f, Color.red);
             if (!_playerCamera) return;
+            _isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
+            Debug.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * 0.2f, Color.red);
+            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _isGrounded);
             _playerCamera.transform.position = transform.position + new Vector3(0, 1.7f, 0);
             var lookVectorY = Mathf.Clamp(NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x), -87f,
                 87f);
             _playerCamera.transform.localRotation =
                 Quaternion.Euler(new Vector3(lookVectorY, transform.localRotation.eulerAngles.y, 0));
         }
-        
-        
 
-        private void OnEnable()
+        [ServerRpc]
+        private void SetAnimationServerRpc(float walkSpeed, bool isGrounded, ServerRpcParams serverRpcParams = default)
         {
-            _inputActions = new InputSystem_Actions();
-            _playerActions = _inputActions.Player;
-            _playerActions.Enable();
-            _playerActions.Jump.performed += JumpInput;
-            _playerActions.Jump.canceled += JumpInput;
-            _playerActions.Move.performed += MoveInput;
-            _playerActions.Move.canceled += MoveInput;
-            _playerActions.Look.performed += LookInput;
-            _playerActions.Sprint.performed += SprintInput;
-            _playerActions.Sprint.canceled += SprintInput;
+            var clientId = serverRpcParams.Receive.SenderClientId;
+            SetAnimationClientRpc(walkSpeed, isGrounded, clientId);
         }
         
-        private void OnDisable()
+        [ClientRpc]
+        private void SetAnimationClientRpc(float walkSpeed, bool isGrounded, ulong clientId)
         {
-            _playerActions.Jump.performed -= JumpInput;
-            _playerActions.Jump.canceled -= JumpInput;
-            _playerActions.Move.performed -= MoveInput;
-            _playerActions.Move.canceled -= MoveInput;
-            _playerActions.Look.performed -= LookInput;
-            _playerActions.Sprint.performed -= SprintInput;
-            _playerActions.Sprint.canceled -= SprintInput;
-            _playerActions.Disable();
+            if(OwnerClientId != clientId) return;
+            _animator.SetFloat(WalkSpeed, walkSpeed);
+            _animator.SetBool(IsGrounded, isGrounded);
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            {
+                if(_inputActions == null) return;
+            
+                _inputActions.Player.Disable();
+                _inputActions.Dispose();
+            }
         }
 
         #endregion
         
         private void Jump()
         {
-            if(_isGrounded){
-                _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
-            }
+            if (!_isGrounded) return;
+            _animator.SetTrigger(Jumping);
+            _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
         }
+        
         private void Move()
         {
             var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
+            
             _rb.AddForce(_isSprinting ? moveVector * 20f : moveVector * 10f, ForceMode.Force);
+            
             if (!(_rb.linearVelocity.magnitude > (_isSprinting ? 10f : 5f))) return;
             Vector2 limitedVelocity = new(_rb.linearVelocity.x, _rb.linearVelocity.z);
             limitedVelocity = limitedVelocity.normalized * (_isSprinting ? 10f : 5f);
@@ -155,40 +143,84 @@ namespace Player
             return angle;
         }
 
-        #region Inputs
+        #region Input Callbacks
 
-        private void LookInput(InputAction.CallbackContext context)
+        /// <summary>
+        /// Obsługuje input patrzenia (ruch myszy/pada)
+        /// </summary>
+        public void OnLook(InputAction.CallbackContext context)
         {
-            if(!Application.isFocused || !IsOwner) return;
+            if(!Application.isFocused || !IsOwner || _playerCamera == null) return;
+            
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0, lookVector.x * 0.1f, 0);
             _playerCamera.transform.Rotate(-lookVector.y * 0.1f, 0, 0);
         }
         
-        private void JumpInput(InputAction.CallbackContext context)
+        /// <summary>
+        /// Obsługuje input skoku
+        /// </summary>
+        public void OnJump(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
             if (context.performed)
-                InvokeRepeating(nameof(Jump), 0, 0.1f);
-            if (context.canceled)
-                CancelInvoke(nameof(Jump));
+                Jump();
         }
         
-        private void MoveInput(InputAction.CallbackContext context)
+        /// <summary>
+        /// Obsługuje input ruchu (WASD/analog)
+        /// </summary>
+        public void OnMove(InputAction.CallbackContext context)
         {
             _inputVector = context.ReadValue<Vector2>();
         }
         
-        private void SprintInput(InputAction.CallbackContext context)
+        /// <summary>
+        /// Obsługuje input sprintu
+        /// </summary>
+        public void OnSprint(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                _isSprinting = true;
-            }
-            if (context.canceled)
-            {
-                _isSprinting = false;
-            }
+            _isSprinting = context.performed;
+        }
+
+        /// <summary>
+        /// Obsługuje input ataku
+        /// </summary>
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            // TODO: Implementacja ataku
+        }
+
+        /// <summary>
+        /// Obsługuje input kucania
+        /// </summary>
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
+            // TODO: Implementacja kucania
+        }
+
+        /// <summary>
+        /// Obsługuje input interakcji
+        /// </summary>
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            // TODO: Implementacja interakcji
+        }
+
+        /// <summary>
+        /// Obsługuje input przejścia do następnego elementu
+        /// </summary>
+        public void OnNext(InputAction.CallbackContext context)
+        {
+            // TODO: Implementacja next
+        }
+
+        /// <summary>
+        /// Obsługuje input przejścia do poprzedniego elementu
+        /// </summary>
+        public void OnPrevious(InputAction.CallbackContext context)
+        {
+            // TODO: Implementacja previous
         }
 
         #endregion

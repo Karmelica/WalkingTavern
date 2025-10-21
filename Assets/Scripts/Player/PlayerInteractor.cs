@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,7 +10,7 @@ namespace Player
         public void PrimaryInteract(ref GameObject heldObject);
     }
 
-    public class PlayerInteractor : NetworkBehaviour
+    public class PlayerInteractor : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         [SerializeField] private float interactRange = 3f;
         private Camera _mainCamera;
@@ -27,23 +28,29 @@ namespace Player
                 enabled = false;
                 return;
             }
-        
+            
+            StartCoroutine(WaitForMainCamera());
             _inputActions = new InputSystem_Actions();
             _playerActions = _inputActions.Player;
-            _mainCamera = Camera.main;
+            _playerActions.SetCallbacks(this);
             _playerActions.Enable();
-            _playerActions.Interact.started += Interact;
         
         }
-
+        
         public override void OnNetworkDespawn()
         {
             if (!IsOwner) return;
-            _playerActions.Interact.started -= Interact;
             _playerActions.Disable();
+            _inputActions.Dispose();
         }
-
-        private void Interact(InputAction.CallbackContext obj)
+        
+        private IEnumerator WaitForMainCamera()
+        {
+            yield return new WaitUntil(() => Camera.main);
+            _mainCamera = Camera.main;
+        }
+        
+        public void OnInteract(InputAction.CallbackContext context)
         {
             var interactPoint = _mainCamera.transform;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
@@ -63,6 +70,47 @@ namespace Player
                 heldObject.GetComponent<NetworkObject>().Spawn();
                 heldObject = null;
             }
+        }
+
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnLook(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnPrevious(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnNext(InputAction.CallbackContext context)
+        {
+            //TODO
+        }
+
+        public void OnSprint(InputAction.CallbackContext context)
+        {
+            //TODO
         }
     }
 }

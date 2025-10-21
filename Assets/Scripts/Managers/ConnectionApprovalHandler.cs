@@ -1,31 +1,34 @@
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
-/// <summary>
-/// Connection Approval Handler Component
-/// </summary>
-/// <remarks>
-/// This should be placed on the same GameObject as the NetworkManager.
-/// It automatically declines the client connection for example purposes.
-/// </remarks>
-public class ConnectionApprovalHandler : MonoBehaviour
+namespace Managers
 {
-    private NetworkManager m_NetworkManager;
-
-    private void Start()
+    /// <summary>
+    /// Connection Approval Handler Component
+    /// </summary>
+    /// <remarks>
+    /// This should be placed on the same GameObject as the NetworkManager.
+    /// It automatically declines the client connection for example purposes.
+    /// </remarks>
+    public class ConnectionApprovalHandler : MonoBehaviour
     {
-        m_NetworkManager = GetComponent<NetworkManager>();
-        if (m_NetworkManager != null)
+        private NetworkManager m_NetworkManager;
+
+        private void Start()
         {
-            m_NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
+            m_NetworkManager = GetComponent<NetworkManager>();
+            if (m_NetworkManager != null)
+            {
+                m_NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
+            }
         }
-    }
 
-    private void OnClientDisconnectCallback(ulong obj)
-    {
-        if (!m_NetworkManager.IsServer && m_NetworkManager.DisconnectReason != string.Empty)
+        private void OnClientDisconnectCallback(ulong obj)
         {
-            Debug.Log($"Approval Declined Reason: {m_NetworkManager.DisconnectReason}");
+            if (!m_NetworkManager.IsServer && m_NetworkManager.DisconnectReason != string.Empty)
+            {
+                Debug.Log($"Approval Declined Reason: {m_NetworkManager.DisconnectReason}");
+            }
         }
     }
 }
