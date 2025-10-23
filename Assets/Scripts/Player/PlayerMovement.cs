@@ -6,89 +6,225 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
+    /// <summary>
+    /// Obsługuje ruch gracza, skakanie i input w środowisku sieciowym
+    /// </summary>
     [RequireComponent(typeof(NetworkAnimator))]
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
-    
     public class PlayerMovement : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
-        [Header("Animator Parameters")]
+        #region Constants
+        
+        private const float CameraHeightOffset = 1.7f;
+        private const float CameraVerticalClampMin = -87f;
+        private const float CameraVerticalClampMax = 87f;
+        private const float GroundCheckDistance = 0.2f;
+        private const float GroundCheckOffset = 0.1f;
+        private const float WalkForce = 10f;
+        private const float SprintForce = 20f;
+        private const float MaxWalkSpeed = 5f;
+        private const float MaxSprintSpeed = 10f;
+        private const float JumpForce = 5f;
+        private const float LookSensitivity = 0.1f;
+        
+        #endregion
+        
+        #region Animator Parameters
+        
         private static readonly int WalkSpeed = Animator.StringToHash("WalkSpeed");
         private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
         private static readonly int Jumping = Animator.StringToHash("Jumping");
-
-
-        [SerializeField] private SkinnedMeshRenderer customization;
+        
+        #endregion
+        
+        #region Serialized Fields
+        
+        [Header("Customization")]
+        [SerializeField, Tooltip("Renderer używany do customizacji gracza")]
+        private SkinnedMeshRenderer localPlayerMesh;
+        
+        #endregion
+        
+        #region Private Fields
         
         private InputSystem_Actions _inputActions;
-        private InputSystem_Actions.PlayerActions _playerActions;
-        
-        [Header("Components")]
         private Camera _playerCamera;
         private Animator _animator;
         private Rigidbody _rb;
-        //private Collider _coli;
-        
-        [Header("Private variables")]
         private Vector2 _inputVector;
         private bool _isGrounded;
         private bool _isSprinting;
+        
+        #endregion
 
-        #region Network
+        #region Unity Lifecycle
+        
+        private void Awake()
+        {
+            // Cache component references
+            _animator = GetComponent<Animator>();
+            _rb = GetComponent<Rigidbody>();
+        }
+        
+        private void Update()
+        {
+            if (!IsOwner) return;
+            if (_playerCamera == null) return;
+            
+            UpdateGroundCheck();
+            UpdateCameraPosition();
+            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _isGrounded);
+        }
+        
+        private void FixedUpdate()
+        {
+            if (IsOwner) 
+                Move();
+        }
+        
+        #endregion
+
+        #region Network Lifecycle
         
         public override void OnNetworkSpawn()
         {
-            _animator = GetComponent<Animator>();
-            _rb = GetComponent<Rigidbody>();
-            if(IsOwner)
+            base.OnNetworkSpawn();
+            
+            if (IsOwner)
             {
-                StartCoroutine(WaitForMainCamera());
-                customization.enabled = false;
+                _playerCamera = Camera.main;
+                localPlayerMesh.enabled = false;
+                InitializeInput();
             }
+            
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            
-            
-            if(!IsOwner) return;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            CleanupInput();
+        }
+        
+        #endregion
+        
+        #region Input Initialization
+        
+        /// <summary>
+        /// Inicjalizuje system inputów dla właściciela
+        /// </summary>
+        private void InitializeInput()
+        {
+            if (_inputActions != null) return;
             
             _inputActions = new InputSystem_Actions();
             _inputActions.Player.SetCallbacks(this);
             _inputActions.Player.Enable();
         }
-
-        private IEnumerator WaitForMainCamera()
+        
+        /// <summary>
+        /// Czyści system inputów
+        /// </summary>
+        private void CleanupInput()
         {
-            yield return new WaitUntil(() => Camera.main);
-            _playerCamera = Camera.main;
+            if (_inputActions == null) return;
+            
+            _inputActions.Player.Disable();
+            _inputActions.Dispose();
+            _inputActions = null;
         }
-
+        
         #endregion
-
-        #region Unity
-
-        // Update is called once per frame
-        private void FixedUpdate()
+        
+        #region Ground Check & Camera
+        
+        /// <summary>
+        /// Sprawdza czy gracz dotyka ziemi
+        /// </summary>
+        private void UpdateGroundCheck()
         {
-            if(IsOwner) Move();
+            var rayOrigin = transform.position + Vector3.up * GroundCheckOffset;
+            _isGrounded = Physics.Raycast(rayOrigin, Vector3.down, GroundCheckDistance);
+            Debug.DrawRay(rayOrigin, Vector3.down * GroundCheckDistance, Color.red);
         }
-
-        private void Update()
+        
+        /// <summary>
+        /// Aktualizuje pozycję i rotację kamery gracza
+        /// </summary>
+        private void UpdateCameraPosition()
         {
-            if (!IsOwner) return;
-            if (!_playerCamera) return;
-            _isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
-            Debug.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * 0.2f, Color.red);
-            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _isGrounded);
-            _playerCamera.transform.position = transform.position + new Vector3(0, 1.7f, 0);
-            var lookVectorY = Mathf.Clamp(NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x), -87f,
-                87f);
-            _playerCamera.transform.localRotation =
-                Quaternion.Euler(new Vector3(lookVectorY, transform.localRotation.eulerAngles.y, 0));
+            _playerCamera.transform.position = transform.position + Vector3.up * CameraHeightOffset;
+            
+            var lookVectorY = Mathf.Clamp(
+                NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
+                CameraVerticalClampMin,
+                CameraVerticalClampMax
+            );
+            
+            _playerCamera.transform.localRotation = Quaternion.Euler(
+                lookVectorY,
+                transform.localRotation.eulerAngles.y,
+                0f
+            );
         }
-
+        
+        /// <summary>
+        /// Normalizuje kąt do zakresu -180 do 180
+        /// </summary>
+        private static float NormalizeAngle(float angle)
+        {
+            if (angle > 180f) 
+                angle -= 360f;
+            return angle;
+        }
+        
+        #endregion
+        
+        #region Movement & Physics
+        
+        /// <summary>
+        /// Obsługuje ruch gracza używając fizyki
+        /// </summary>
+        private void Move()
+        {
+            var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
+            var moveForce = _isSprinting ? SprintForce : WalkForce;
+            
+            _rb.AddForce(moveVector * moveForce, ForceMode.Force);
+            
+            // Limit horizontal velocity
+            var maxSpeed = _isSprinting ? MaxSprintSpeed : MaxWalkSpeed;
+            if (_rb.linearVelocity.magnitude > maxSpeed)
+            {
+                var limitedVelocity = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z);
+                limitedVelocity = limitedVelocity.normalized * maxSpeed;
+                _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
+            }
+        }
+        
+        /// <summary>
+        /// Wykonuje skok jeśli gracz dotyka ziemi
+        /// </summary>
+        private void Jump()
+        {
+            if (!_isGrounded) return;
+            
+            _animator.SetTrigger(Jumping);
+            _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+        }
+        
+        #endregion
+        
+        #region Network RPCs
+        
+        /// <summary>
+        /// Wysyła dane animacji do serwera
+        /// </summary>
         [ServerRpc]
         private void SetAnimationServerRpc(float walkSpeed, bool isGrounded, ServerRpcParams serverRpcParams = default)
         {
@@ -96,52 +232,19 @@ namespace Player
             SetAnimationClientRpc(walkSpeed, isGrounded, clientId);
         }
         
+        /// <summary>
+        /// Synchronizuje animacje dla wszystkich klientów
+        /// </summary>
         [ClientRpc]
         private void SetAnimationClientRpc(float walkSpeed, bool isGrounded, ulong clientId)
         {
-            if(OwnerClientId != clientId) return;
+            if (OwnerClientId != clientId) return;
+            
             _animator.SetFloat(WalkSpeed, walkSpeed);
             _animator.SetBool(IsGrounded, isGrounded);
         }
-
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-            {
-                if(_inputActions == null) return;
-            
-                _inputActions.Player.Disable();
-                _inputActions.Dispose();
-            }
-        }
-
+        
         #endregion
-        
-        private void Jump()
-        {
-            if (!_isGrounded) return;
-            _animator.SetTrigger(Jumping);
-            _rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
-        }
-        
-        private void Move()
-        {
-            var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            
-            _rb.AddForce(_isSprinting ? moveVector * 20f : moveVector * 10f, ForceMode.Force);
-            
-            if (!(_rb.linearVelocity.magnitude > (_isSprinting ? 10f : 5f))) return;
-            Vector2 limitedVelocity = new(_rb.linearVelocity.x, _rb.linearVelocity.z);
-            limitedVelocity = limitedVelocity.normalized * (_isSprinting ? 10f : 5f);
-            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
-
-        }
-        
-        private static float NormalizeAngle(float angle)
-        {
-            if (angle > 180f) angle -= 360f;
-            return angle;
-        }
 
         #region Input Callbacks
 
@@ -150,11 +253,11 @@ namespace Player
         /// </summary>
         public void OnLook(InputAction.CallbackContext context)
         {
-            if(!Application.isFocused || !IsOwner || _playerCamera == null) return;
+            if (!Application.isFocused || !IsOwner || _playerCamera == null) return;
             
             var lookVector = context.ReadValue<Vector2>();
-            transform.Rotate(0, lookVector.x * 0.1f, 0);
-            _playerCamera.transform.Rotate(-lookVector.y * 0.1f, 0, 0);
+            transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
+            _playerCamera.transform.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
         }
         
         /// <summary>
@@ -162,13 +265,12 @@ namespace Player
         /// </summary>
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
-            if (context.performed)
-                Jump();
+            if (!IsOwner || !context.started) return;
+            Jump();
         }
         
         /// <summary>
-        /// Obsługuje input ruchu (WASD/analog)
+        /// Obsługuje input ruchu (WASD/analog stick)
         /// </summary>
         public void OnMove(InputAction.CallbackContext context)
         {
