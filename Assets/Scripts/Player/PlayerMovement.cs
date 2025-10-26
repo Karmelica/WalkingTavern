@@ -1,4 +1,3 @@
-using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -15,6 +14,7 @@ namespace Player
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
+    
     public class PlayerMovement : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         #region Constants
@@ -30,12 +30,14 @@ namespace Player
         private const float MaxSprintSpeed = 10f;
         private const float JumpForce = 5f;
         private const float LookSensitivity = 0.1f;
+        private const float InteractRange = 3f;
         
         #endregion
         
         #region Animator Parameters
         
         private static readonly int WalkSpeed = Animator.StringToHash("WalkSpeed");
+        private static readonly int WalkDir = Animator.StringToHash("WalkDir");
         private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
         private static readonly int Jumping = Animator.StringToHash("Jumping");
         
@@ -44,8 +46,8 @@ namespace Player
         #region Serialized Fields
         
         [Header("Customization")]
-        [SerializeField, Tooltip("Renderer używany do customizacji gracza")]
-        private SkinnedMeshRenderer localPlayerMesh;
+        [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
+        [SerializeField] private GameObject playerCameraPrefab;
         
         #endregion
         
@@ -58,6 +60,7 @@ namespace Player
         private Vector2 _inputVector;
         private bool _isGrounded;
         private bool _isSprinting;
+        private bool _currentInteractable;
         
         #endregion
 
@@ -77,7 +80,7 @@ namespace Player
             
             UpdateGroundCheck();
             UpdateCameraPosition();
-            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _isGrounded);
+            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _inputVector.y, _isGrounded);
         }
         
         private void FixedUpdate()
@@ -96,7 +99,7 @@ namespace Player
             
             if (IsOwner)
             {
-                _playerCamera = Camera.main;
+                _playerCamera = Instantiate(playerCameraPrefab, null).GetComponent<Camera>();
                 localPlayerMesh.enabled = false;
                 InitializeInput();
             }
@@ -226,21 +229,22 @@ namespace Player
         /// Wysyła dane animacji do serwera
         /// </summary>
         [ServerRpc]
-        private void SetAnimationServerRpc(float walkSpeed, bool isGrounded, ServerRpcParams serverRpcParams = default)
+        private void SetAnimationServerRpc(float walkSpeed, float walkDir, bool isGrounded, ServerRpcParams serverRpcParams = default)
         {
             var clientId = serverRpcParams.Receive.SenderClientId;
-            SetAnimationClientRpc(walkSpeed, isGrounded, clientId);
+            SetAnimationClientRpc(walkSpeed, walkDir, isGrounded, clientId);
         }
         
         /// <summary>
         /// Synchronizuje animacje dla wszystkich klientów
         /// </summary>
         [ClientRpc]
-        private void SetAnimationClientRpc(float walkSpeed, bool isGrounded, ulong clientId)
+        private void SetAnimationClientRpc(float walkSpeed, float walkDir, bool isGrounded, ulong clientId)
         {
             if (OwnerClientId != clientId) return;
             
             _animator.SetFloat(WalkSpeed, walkSpeed);
+            _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
             _animator.SetBool(IsGrounded, isGrounded);
         }
         
@@ -285,6 +289,11 @@ namespace Player
             _isSprinting = context.performed;
         }
 
+        public void OnEscape(InputAction.CallbackContext context)
+        {
+            Application.Quit();
+        }
+
         /// <summary>
         /// Obsługuje input ataku
         /// </summary>
@@ -306,7 +315,15 @@ namespace Player
         /// </summary>
         public void OnInteract(InputAction.CallbackContext context)
         {
-            // TODO: Implementacja interakcji
+            if(context.performed){
+                var interactPoint = _playerCamera.transform;
+                var ray = new Ray(interactPoint.position, interactPoint.forward);
+                if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
+                if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
+                {
+                    interactObj.PrimaryInteract();
+                }
+            }
         }
 
         /// <summary>
@@ -327,4 +344,10 @@ namespace Player
 
         #endregion
     }
+}
+
+
+public interface IInteractable
+{
+    public void PrimaryInteract();
 }

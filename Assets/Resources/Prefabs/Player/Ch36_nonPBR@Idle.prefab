@@ -351,9 +351,6 @@ PrefabInstance:
       addedObject: {fileID: 3231727551264482569}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90b16e35d17c81443ba7cc27321f0c66, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5661102948314161059}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90b16e35d17c81443ba7cc27321f0c66, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8875113954277275143}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90b16e35d17c81443ba7cc27321f0c66, type: 3}
       insertIndex: -1
@@ -464,23 +461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
   ShowTopMostFoldoutHeaderGroup: 1
-  customization: {fileID: 4031710865546798987}
-  cameraObject: {fileID: 3956507594826782905, guid: 502d3567dc4d7b6439e6ebb538b3089a, type: 3}
---- !u!114 &5661102948314161059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916158516354675700}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb5e425f5c457fd418edc251a3ad6726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
-  ShowTopMostFoldoutHeaderGroup: 1
-  interactRange: 5
-  heldObject: {fileID: 0}
+  localPlayerMesh: {fileID: 4031710865546798987}
+  playerCameraPrefab: {fileID: 3956507594826782905, guid: 502d3567dc4d7b6439e6ebb538b3089a, type: 3}
 --- !u!114 &8875113954277275143
 MonoBehaviour:
   m_ObjectHideFlags: 0

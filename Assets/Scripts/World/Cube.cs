@@ -1,21 +1,31 @@
-using System;
-using Player;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace World
 {
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(NetworkTransform))]
     public class Cube : NetworkBehaviour, IInteractable
     {
-        private Transform _targetPos;
-        
-        public void PrimaryInteract(ref GameObject heldObject)
+        public void PrimaryInteract()
         {
-            heldObject = gameObject;
-            NetworkObject.Despawn(false);
-            gameObject.SetActive(false);
+            RandomizeColorServerRpc();
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        private void RandomizeColorServerRpc()
+        {
+            var color = new Color(Random.value, Random.value, Random.value);
+            RandomizeColorClientRpc(color);
+        }
+        
+        [ClientRpc]
+        private void RandomizeColorClientRpc(Color color)
+        {
+            var cubeRenderer = GetComponent<Renderer>();
+            cubeRenderer.material.color = color;
         }
     }
 }
+
