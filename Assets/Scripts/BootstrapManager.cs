@@ -13,7 +13,7 @@ public class BootstrapManager : MonoBehaviour
     private GameObject _uiManagerInstance;
     private GameObject _gameManagerInstance;
     
-    private void Awake()
+    private void OnEnable()
     {
         InstantiateManagers();
     }
@@ -21,8 +21,8 @@ public class BootstrapManager : MonoBehaviour
     private void InstantiateManagers()
     {
         _networkManagerInstance = Instantiate(networkManagerPrefab);
-        _audioManagerInstance = Instantiate(audioManagerPrefab);
-        _uiManagerInstance = Instantiate(uiManagerPrefab);
         _gameManagerInstance = Instantiate(gameManagerPrefab);
+        _uiManagerInstance = Instantiate(uiManagerPrefab);
+        _audioManagerInstance = Instantiate(audioManagerPrefab);
     }
 }

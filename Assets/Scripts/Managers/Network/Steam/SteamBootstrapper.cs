@@ -2,11 +2,11 @@
 using Steamworks;
 using UnityEngine;
 
-namespace Managers.Network
+namespace Managers.Network.Steam
 {
     public class SteamBootstrapper : MonoBehaviour
     {
-#if !UNITY_EDITOR
+//#if !UNITY_EDITOR
         private void Start()
         {
             if (!SteamClient.IsValid)
@@ -37,6 +37,6 @@ namespace Managers.Network
         {
             SteamClient.Shutdown();
         }
-#endif
+//#endif
     }
 }

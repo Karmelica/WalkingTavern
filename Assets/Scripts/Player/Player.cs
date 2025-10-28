@@ -1,3 +1,5 @@
+using Steamworks;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -15,7 +17,7 @@ namespace Player
     [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
     
-    public class PlayerMovement : NetworkBehaviour, InputSystem_Actions.IPlayerActions
+    public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         #region Constants
         
@@ -46,8 +48,11 @@ namespace Player
         #region Serialized Fields
         
         [Header("Customization")]
+        [SerializeField] private Canvas playerNameCanvas;
+        [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
         [SerializeField] private GameObject playerCameraPrefab;
+        public NetworkVariable<string> playerNickname = new("Nickname");
         
         #endregion
         
@@ -100,10 +105,12 @@ namespace Player
             if (IsOwner)
             {
                 _playerCamera = Instantiate(playerCameraPrefab, null).GetComponent<Camera>();
+                playerNameCanvas.worldCamera = _playerCamera;
                 localPlayerMesh.enabled = false;
                 InitializeInput();
+                SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
             }
-            
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -248,6 +255,21 @@ namespace Player
             _animator.SetBool(IsGrounded, isGrounded);
         }
         
+        [ServerRpc]
+        private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
+        {
+            var clientId = serverRpcParams.Receive.SenderClientId;
+            playerNickname.Value = new Friend(id).Name;
+            SetSteamNicknameClientRpc(clientId);
+        }
+
+        [ClientRpc]
+        private void SetSteamNicknameClientRpc(ulong clientId)
+        {
+            if (OwnerClientId != clientId) return;
+            steamNickname.text = playerNickname.Value;
+        }
+
         #endregion
 
         #region Input Callbacks

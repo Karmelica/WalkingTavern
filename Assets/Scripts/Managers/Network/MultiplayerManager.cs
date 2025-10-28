@@ -15,7 +15,7 @@ namespace Managers.Network
         private static FacepunchTransport _facepunchTransport;
         private static UnityTransport _unityTransport;
         
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         void Awake()
         {
             _facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
@@ -25,7 +25,7 @@ namespace Managers.Network
                 _facepunchTransport.enabled = false;
                 _unityTransport.enabled = true;
                 NetworkManager.Singleton.NetworkConfig.NetworkTransport = _unityTransport;
-                Debug.Log("Using Unity Transport for Editor");
+                Debug.LogError("Using Unity Transport for Editor");
             }
         }
         
@@ -42,7 +42,7 @@ namespace Managers.Network
             NetworkManager.Singleton.StartClient();
         }
         
-#else
+#else*/
         private TMP_InputField clientSteamIdInputField;
 
 
@@ -83,7 +83,7 @@ namespace Managers.Network
             _facepunchTransport.targetSteamId = targetSteamId;
             NetworkManager.Singleton.StartClient();
         }
-#endif
+//#endif
 
 
         

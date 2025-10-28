@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 647003611250690505}
   - component: {fileID: 4705376763541865569}
-  - component: {fileID: 2386351267373838462}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -45,15 +44,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67497b079b46f30418ed7084036849c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
---- !u!114 &2386351267373838462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6826314656455357769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 310528df8b84196418e36a65f3e36d75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FMODEvents
+  footsteps:
+    Guid:
+      Data1: -206750194
+      Data2: 1325523904
+      Data3: -651345247
+      Data4: 483126379
+    Path: event:/Player/walk
+  jump:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  backgroundMusic:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

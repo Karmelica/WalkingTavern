@@ -384,6 +384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 926613922}
   - component: {fileID: 926613921}
+  - component: {fileID: 926613923}
   m_Layer: 0
   m_Name: Core
   m_TagString: Untagged
@@ -405,6 +406,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoreGameManager
   networkManagerPrefab: {fileID: 6230255668695601467, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
   audioManagerPrefab: {fileID: 6826314656455357769, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+  audioEventsPrefab: {fileID: 0}
   uiManagerPrefab: {fileID: 5227537769859937672, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
   gameManagerPrefab: {fileID: 5744491098172178097, guid: 670f8dd92ff6b4d4e8a4923be8cc3a5a, type: 3}
 --- !u!4 &926613922
@@ -422,6 +424,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &926613923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926613920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ee860b7f8600e44820ff38967d1890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

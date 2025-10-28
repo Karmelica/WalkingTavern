@@ -8,43 +8,48 @@ namespace Managers
 {
     public class AudioManager : MonoBehaviour
     {
-        public static AudioManager Instance { get; private set; }
+        [Header("Audio Events")]
+        public EventReference footsteps;
+        public EventReference jump;
+        public EventReference backgroundMusic;
         
+        [Header("Event Instances")]
         private EventInstance _backgroundMusicEvent;
     
-        private void Awake()
+        private void OnEnable()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
+            DependencyResolver.Instance.Register(this);
             DontDestroyOnLoad(gameObject);
-        }
-        
-        private void Start()
-        {
-            //InitializeEventInstance(out _backgroundMusicEvent, transform);
-            //StartEventInstance(_backgroundMusicEvent);
         }
 
         private void OnDestroy()
         {
-            //StopEventInstance(_backgroundMusicEvent);
+            DependencyResolver.Instance.Unregister<AudioManager>();
         }
 
-        public void PlayOneShot(EventReference eventReference, Transform position)
+        /*private void Start()
         {
-            RuntimeManager.PlayOneShot(eventReference, position.position);
+            _backgroundMusicEvent = InitializeEventInstance(backgroundMusic);
+            StartEventInstance(_backgroundMusicEvent);
+        }
+
+        private void OnDestroy()
+        {
+            StopEventInstance(_backgroundMusicEvent);
+        }*/
+
+        public void PlayOneShot(EventReference eventReference, Vector3 audioPos = default)
+        {
+            RuntimeManager.PlayOneShot(eventReference, audioPos);
         }
 
         #region Event Instances
 
-        private void InitializeEventInstance(out EventInstance eventInstance, Transform transform)
+        private EventInstance InitializeEventInstance(EventReference eventRef, Vector3 audioPos = default)
         {
-            eventInstance = RuntimeManager.CreateInstance(FMODEvents.Instance.backgroundMusic);
-            eventInstance.set3DAttributes(transform.To3DAttributes());
+            var eventInstance = RuntimeManager.CreateInstance(eventRef);
+            eventInstance.set3DAttributes(audioPos.To3DAttributes());
+            return eventInstance;
         }
         
         private void StartEventInstance(EventInstance eventInstance)
