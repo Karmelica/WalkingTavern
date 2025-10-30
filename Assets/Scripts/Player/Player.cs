@@ -28,8 +28,8 @@ namespace Player
         private const float GroundCheckOffset = 0.1f;
         private const float WalkForce = 10f;
         private const float SprintForce = 20f;
-        private const float MaxWalkSpeed = 5f;
-        private const float MaxSprintSpeed = 10f;
+        private const float MaxWalkSpeed = 2.5f;
+        private const float MaxSprintSpeed = 5f;
         private const float JumpForce = 5f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
@@ -52,7 +52,9 @@ namespace Player
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
         [SerializeField] private GameObject playerCameraPrefab;
+#if !UNITY_EDITOR
         public NetworkVariable<string> playerNickname = new("Nickname");
+#endif
         
         #endregion
         
@@ -108,7 +110,9 @@ namespace Player
                 playerNameCanvas.worldCamera = _playerCamera;
                 localPlayerMesh.enabled = false;
                 InitializeInput();
+#if !UNITY_EDITOR
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
+#endif
             }
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -254,7 +258,8 @@ namespace Player
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
             _animator.SetBool(IsGrounded, isGrounded);
         }
-        
+
+#if !UNITY_EDITOR
         [ServerRpc]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
@@ -269,6 +274,7 @@ namespace Player
             if (OwnerClientId != clientId) return;
             steamNickname.text = playerNickname.Value;
         }
+#endif
 
         #endregion
 
