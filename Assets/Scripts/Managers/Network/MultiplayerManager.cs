@@ -14,24 +14,6 @@ namespace Managers.Network
     {
         [SerializeField] private GameObject loginUI;
         
-#if UNITY_EDITOR
-        public void OnHostButtonClicked()
-        {
-            loginUI.SetActive(false);
-            NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
-        }
-
-
-
-        public void OnClientButtonClicked()
-        {
-            loginUI.SetActive(false);
-            NetworkManager.Singleton.StartClient();
-        }
-        
-#else
         private TMP_InputField clientSteamIdInputField;
 
         void Awake()
@@ -44,7 +26,8 @@ namespace Managers.Network
             loginUI.SetActive(false);
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+            if (!NetworkManager.Singleton.IsServer) return;
+            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); 
             Debug.Log("Host started with SteamID: " + SteamClient.SteamId);
         }
 
@@ -59,10 +42,10 @@ namespace Managers.Network
             loginUI.SetActive(false);
             var steamId = clientSteamIdInputField.text;
             var targetSteamId = ulong.Parse(steamId);
-            _facepunchTransport.targetSteamId = targetSteamId;
+            var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
+            facepunchTransport.targetSteamId = targetSteamId;
             NetworkManager.Singleton.StartClient();
         }
-#endif
 
         private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {

@@ -1,5 +1,6 @@
 using Steamworks;
 using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -45,18 +46,14 @@ namespace Player
         
         #endregion
         
-        #region Serialized Fields
         
         [Header("Customization")]
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
         [SerializeField] private GameObject playerCameraPrefab;
-#if !UNITY_EDITOR
-        public NetworkVariable<string> playerNickname = new("Nickname");
-#endif
+        private NetworkVariable<FixedString64Bytes> playerNickname = new("Nickname");
         
-        #endregion
         
         #region Private Fields
         
@@ -115,9 +112,7 @@ namespace Player
                 }
                 localPlayerMesh.enabled = false;
                 InitializeInput();
-#if !UNITY_EDITOR
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
-#endif
             }
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -264,7 +259,6 @@ namespace Player
             _animator.SetBool(IsGrounded, isGrounded);
         }
 
-#if !UNITY_EDITOR
         [ServerRpc]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
@@ -277,9 +271,8 @@ namespace Player
         private void SetSteamNicknameClientRpc(ulong clientId)
         {
             if (OwnerClientId != clientId) return;
-            steamNickname.text = playerNickname.Value;
+            steamNickname.text = playerNickname.Value.ToString();
         }
-#endif
 
         #endregion
 

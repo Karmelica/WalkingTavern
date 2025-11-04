@@ -6,7 +6,6 @@ namespace Managers.Network.Steam
 {
     public class SteamBootstrapper : MonoBehaviour
     {
-#if !UNITY_EDITOR
         private void Start()
         {
             if (!SteamClient.IsValid)
@@ -36,6 +35,5 @@ namespace Managers.Network.Steam
         {
             SteamClient.Shutdown();
         }
-#endif
     }
 }
