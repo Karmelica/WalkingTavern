@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers.Network
 {
@@ -16,11 +18,16 @@ namespace Managers.Network
 
         private void Start()
         {
-            if (NetworkManager != null)
-            {
-                NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
-            }
+            if (NetworkManager == null) return;
+            NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
+            //NetworkManager.SceneManager.OnLoadEventCompleted += SceneLoaded;
         }
+        
+        /*private void SceneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+        {
+            Debug.Log("Scene Loaded: " + sceneName);
+            NetworkManager.SceneManager.OnLoadEventCompleted -= SceneLoaded;
+        }*/
 
         private static void OnClientDisconnectCallback(ulong obj)
         {

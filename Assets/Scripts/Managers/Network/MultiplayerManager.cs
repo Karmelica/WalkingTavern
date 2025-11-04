@@ -1,41 +1,30 @@
 using System;
+using System.Collections.Generic;
 using Netcode.Transports.Facepunch;
 using Steamworks;
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers.Network
 {
     public class MultiplayerManager : MonoBehaviour
     {
         [SerializeField] private GameObject loginUI;
-
-        private static FacepunchTransport _facepunchTransport;
-        private static UnityTransport _unityTransport;
         
 #if UNITY_EDITOR
-        void Awake()
-        {
-            _facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
-            _unityTransport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            if (_facepunchTransport != null && _unityTransport != null)
-            {
-                _facepunchTransport.enabled = false;
-                _unityTransport.enabled = true;
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = _unityTransport;
-                Debug.Log("Using Unity Transport for Editor");
-            }
-        }
-        
         public void OnHostButtonClicked()
         {
             loginUI.SetActive(false);
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.StartHost();
+            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
         }
-        
+
+
+
         public void OnClientButtonClicked()
         {
             loginUI.SetActive(false);
@@ -45,19 +34,8 @@ namespace Managers.Network
 #else
         private TMP_InputField clientSteamIdInputField;
 
-
         void Awake()
         {
-            _facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
-            _unityTransport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            if (_facepunchTransport != null && _unityTransport != null)
-            {
-                _unityTransport.enabled = false;
-                _facepunchTransport.enabled = true;
-
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport = _facepunchTransport;
-                Debug.Log("Using Facepunch Transport for Build");
-            }
             clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
         }
 
@@ -66,6 +44,7 @@ namespace Managers.Network
             loginUI.SetActive(false);
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.StartHost();
+            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
             Debug.Log("Host started with SteamID: " + SteamClient.SteamId);
         }
 
@@ -85,8 +64,6 @@ namespace Managers.Network
         }
 #endif
 
-
-        
         private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
             if(NetworkManager.Singleton.ConnectedClients.Count >= 4)
@@ -100,7 +77,7 @@ namespace Managers.Network
             response.Approved = true;
             response.CreatePlayerObject = true;
 
-            response.PlayerPrefabHash = null;
+            response.PlayerPrefabHash = 1959477017;
 
             response.Position = Vector3.zero + new Vector3(0,5,0);
             response.Pending = false;

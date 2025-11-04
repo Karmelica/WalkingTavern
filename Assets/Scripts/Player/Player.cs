@@ -78,6 +78,7 @@ namespace Player
             // Cache component references
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody>();
+            DontDestroyOnLoad(gameObject);
         }
         
         private void Update()
@@ -106,8 +107,12 @@ namespace Player
             
             if (IsOwner)
             {
-                _playerCamera = Instantiate(playerCameraPrefab, null).GetComponent<Camera>();
-                playerNameCanvas.worldCamera = _playerCamera;
+                Debug.Log("Local player spawned.");
+                if(_playerCamera == null)
+                {
+                    _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
+                    DontDestroyOnLoad(_playerCamera.gameObject);
+                }
                 localPlayerMesh.enabled = false;
                 InitializeInput();
 #if !UNITY_EDITOR

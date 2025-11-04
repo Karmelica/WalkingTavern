@@ -7,7 +7,7 @@ public class DependencyResolver : MonoBehaviour
 {
     public static DependencyResolver Instance { get; private set; }
     
-    private Dictionary<Type, object> _dependencies = new();
+    private readonly Dictionary<Type, object> _dependencies = new();
     
     private void Awake()
     {
@@ -24,11 +24,10 @@ public class DependencyResolver : MonoBehaviour
     public void Register<T>(T instance)
     {
         var type = typeof(T);
-        if (_dependencies.ContainsKey(type))
+        if (!_dependencies.TryAdd(type, instance))
         {
             Debug.LogWarning($"Dependency of type {type} is already registered.");
         }
-        _dependencies[type] = instance;
     }
     
     public T Resolve<T>()
@@ -38,7 +37,6 @@ public class DependencyResolver : MonoBehaviour
         {
             return (T)instance;
         }
-        
         throw new Exception($"No dependency of type {type} is registered.");
     }
     

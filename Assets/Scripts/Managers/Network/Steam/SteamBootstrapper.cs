@@ -14,7 +14,6 @@ namespace Managers.Network.Steam
                 Debug.LogError("Nie udało się zainicjalizować Steam!");
                 return;
             }
-            Debug.Log($"Zalogowano jako {SteamClient.Name} ({SteamClient.SteamId})");
 
             try
             {

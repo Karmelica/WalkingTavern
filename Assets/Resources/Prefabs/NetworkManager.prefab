@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2288393641710627389}
   - component: {fileID: 7816614862683114416}
-  - component: {fileID: 8331445648881263076}
   - component: {fileID: 8554908450959441956}
   - component: {fileID: 1304039560620450827}
+  - component: {fileID: 8331445648881263076}
   - component: {fileID: 8877089886642803208}
   m_Layer: 0
   m_Name: NetworkManager
@@ -51,8 +51,8 @@ MonoBehaviour:
   NetworkManagerExpanded: 0
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 8554908450959441956}
-    PlayerPrefab: {fileID: 8916158516354675700, guid: 3375ef62c726fb54d9b064df452c0755, type: 3}
+    NetworkTransport: {fileID: 1304039560620450827}
+    PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 93349a639bfab2c409da6bd5d21dd2bd, type: 2}
@@ -79,18 +79,6 @@ MonoBehaviour:
     OldPrefabList: []
   RunInBackground: 1
   LogLevel: 1
---- !u!114 &8331445648881263076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6230255668695601467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adc462f6cae7e247ad57c46087f1d86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConnectionApprovalHandler
 --- !u!114 &8554908450959441956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +86,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6230255668695601467}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44dd247a00edbfa44b77868d755af6ea, type: 3}
   m_Name: 
@@ -135,6 +123,18 @@ MonoBehaviour:
     PacketDelayMS: 0
     PacketJitterMS: 0
     PacketDropRate: 0
+--- !u!114 &8331445648881263076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6230255668695601467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adc462f6cae7e247ad57c46087f1d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionApprovalHandler
 --- !u!114 &8877089886642803208
 MonoBehaviour:
   m_ObjectHideFlags: 0

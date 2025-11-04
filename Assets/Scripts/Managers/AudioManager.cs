@@ -18,6 +18,11 @@ namespace Managers
     
         private void OnEnable()
         {
+            if(DependencyResolver.Instance.IsRegistered<AudioManager>())
+            {
+                gameObject.SetActive(false);
+                return;
+            }
             DependencyResolver.Instance.Register(this);
             DontDestroyOnLoad(gameObject);
         }
