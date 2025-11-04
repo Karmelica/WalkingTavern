@@ -20,6 +20,10 @@ namespace Managers.Network
         {
             if (NetworkManager == null) return;
             NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
+            NetworkManager.OnClientConnectedCallback += (ulong clientId) =>
+            {
+                Debug.Log($"Client connected: {clientId}");
+            };
             //NetworkManager.SceneManager.OnLoadEventCompleted += SceneLoaded;
         }
         

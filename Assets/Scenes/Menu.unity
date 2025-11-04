@@ -424,6 +424,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1304039560620450827, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2288393641710627389, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -475,27 +479,16 @@ PrefabInstance:
     - target: {fileID: 7816614862683114416, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: NetworkConfig.NetworkTransport
       value: 
-      objectReference: {fileID: 1092037054}
+      objectReference: {fileID: 1176319477}
     - target: {fileID: 8554908450959441956, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
---- !u!114 &1092037054 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1304039560620450827, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-  m_PrefabInstance: {fileID: 902686280}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Transports.UTP.UnityTransport
 --- !u!1001 &1110502373
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -553,6 +546,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+--- !u!114 &1176319477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8554908450959441956, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
+  m_PrefabInstance: {fileID: 902686280}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44dd247a00edbfa44b77868d755af6ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Facepunch Transport for Netcode for GameObjects::Netcode.Transports.Facepunch.FacepunchTransport
 --- !u!1 &1628125910
 GameObject:
   m_ObjectHideFlags: 0
