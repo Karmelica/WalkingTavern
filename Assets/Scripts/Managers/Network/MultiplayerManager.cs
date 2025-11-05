@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Netcode.Transports.Facepunch;
 using Steamworks;
 using TMPro;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,11 +11,11 @@ namespace Managers.Network
     {
         [SerializeField] private GameObject loginUI;
         
-        private TMP_InputField clientSteamIdInputField;
+        private TMP_InputField _clientSteamIdInputField;
 
         void Awake()
         {
-            clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
+            _clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
         }
 
         public void OnHostButtonClicked()
@@ -33,14 +30,14 @@ namespace Managers.Network
 
         public void OnClientButtonClicked()
         {
-            if (string.IsNullOrEmpty(clientSteamIdInputField.text))
+            if (string.IsNullOrEmpty(_clientSteamIdInputField.text))
             {
                 Debug.LogWarning("Client Steam ID input field is empty.");
                 return;
             }
 
             loginUI.SetActive(false);
-            var steamId = clientSteamIdInputField.text;
+            var steamId = _clientSteamIdInputField.text;
             var targetSteamId = ulong.Parse(steamId);
             var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
             facepunchTransport.targetSteamId = targetSteamId;

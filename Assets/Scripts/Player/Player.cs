@@ -213,12 +213,10 @@ namespace Player
             
             // Limit horizontal velocity
             var maxSpeed = _isSprinting ? MaxSprintSpeed : MaxWalkSpeed;
-            if (_rb.linearVelocity.magnitude > maxSpeed)
-            {
-                var limitedVelocity = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z);
-                limitedVelocity = limitedVelocity.normalized * maxSpeed;
-                _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
-            }
+            if (!(_rb.linearVelocity.magnitude > maxSpeed)) return;
+            var limitedVelocity = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z);
+            limitedVelocity = limitedVelocity.normalized * maxSpeed;
+            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
         }
         
         /// <summary>
@@ -259,6 +257,9 @@ namespace Player
             _animator.SetBool(IsGrounded, isGrounded);
         }
 
+        /// <summary>
+        /// Pobiera nick gracza ze Steam i ustawia go
+        /// </summary>
         [ServerRpc]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
@@ -267,6 +268,9 @@ namespace Player
             SetSteamNicknameClientRpc(clientId);
         }
 
+        /// <summary>
+        /// Ustawia nick steam dla wszystkich klientów
+        /// </summary>
         [ClientRpc]
         private void SetSteamNicknameClientRpc(ulong clientId)
         {
@@ -278,9 +282,6 @@ namespace Player
 
         #region Input Callbacks
 
-        /// <summary>
-        /// Obsługuje input patrzenia (ruch myszy/pada)
-        /// </summary>
         public void OnLook(InputAction.CallbackContext context)
         {
             if (!Application.isFocused || !IsOwner || _playerCamera == null) return;
@@ -290,26 +291,17 @@ namespace Player
             _playerCamera.transform.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
         }
         
-        /// <summary>
-        /// Obsługuje input skoku
-        /// </summary>
         public void OnJump(InputAction.CallbackContext context)
         {
             if (!IsOwner || !context.started) return;
             Jump();
         }
         
-        /// <summary>
-        /// Obsługuje input ruchu (WASD/analog stick)
-        /// </summary>
         public void OnMove(InputAction.CallbackContext context)
         {
             _inputVector = context.ReadValue<Vector2>();
         }
         
-        /// <summary>
-        /// Obsługuje input sprintu
-        /// </summary>
         public void OnSprint(InputAction.CallbackContext context)
         {
             _isSprinting = context.performed;
@@ -320,49 +312,33 @@ namespace Player
             Application.Quit();
         }
 
-        /// <summary>
-        /// Obsługuje input ataku
-        /// </summary>
         public void OnAttack(InputAction.CallbackContext context)
         {
             // TODO: Implementacja ataku
         }
 
-        /// <summary>
-        /// Obsługuje input kucania
-        /// </summary>
         public void OnCrouch(InputAction.CallbackContext context)
         {
             // TODO: Implementacja kucania
         }
 
-        /// <summary>
-        /// Obsługuje input interakcji
-        /// </summary>
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if(context.performed){
-                var interactPoint = _playerCamera.transform;
-                var ray = new Ray(interactPoint.position, interactPoint.forward);
-                if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
-                if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
-                {
-                    interactObj.PrimaryInteract();
-                }
+            if (!context.performed) return;
+            var interactPoint = _playerCamera.transform;
+            var ray = new Ray(interactPoint.position, interactPoint.forward);
+            if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
+            if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
+            {
+                interactObj.PrimaryInteract();
             }
         }
 
-        /// <summary>
-        /// Obsługuje input przejścia do następnego elementu
-        /// </summary>
         public void OnNext(InputAction.CallbackContext context)
         {
             // TODO: Implementacja next
         }
 
-        /// <summary>
-        /// Obsługuje input przejścia do poprzedniego elementu
-        /// </summary>
         public void OnPrevious(InputAction.CallbackContext context)
         {
             // TODO: Implementacja previous

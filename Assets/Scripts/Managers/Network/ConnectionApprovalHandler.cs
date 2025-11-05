@@ -24,14 +24,7 @@ namespace Managers.Network
             {
                 Debug.Log($"Client connected: {clientId}");
             };
-            //NetworkManager.SceneManager.OnLoadEventCompleted += SceneLoaded;
         }
-        
-        /*private void SceneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-        {
-            Debug.Log("Scene Loaded: " + sceneName);
-            NetworkManager.SceneManager.OnLoadEventCompleted -= SceneLoaded;
-        }*/
 
         private static void OnClientDisconnectCallback(ulong obj)
         {
