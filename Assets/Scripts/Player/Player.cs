@@ -56,7 +56,6 @@ namespace Player
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
         private NetworkVariable<FixedString64Bytes> playerNickname = new("Nickname");
-        private NetworkVariable<Image> playerAvatar = new();
         
         #endregion
 
@@ -286,10 +285,6 @@ namespace Player
         {
             //var clientId = serverRpcParams.Receive.SenderClientId;
             playerNickname.Value = new Friend(id).Name;
-            
-            // TODO - pobieranie avatara
-            // new Friend(id).GetSmallAvatarAsync();
-            
             //SetSteamNicknameClientRpc(clientId);
         }
         

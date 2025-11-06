@@ -21,6 +21,7 @@ namespace Managers.Network.Steam
             }
             catch ( Exception e )
             {
+                if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
                 Debug.LogWarning( $"Steam initialization failed: {e.Message}" );
             }
             
