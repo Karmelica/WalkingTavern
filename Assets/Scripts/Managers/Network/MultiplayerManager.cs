@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Netcode.Transports.Facepunch;
 using Steamworks;
 using TMPro;
@@ -27,8 +29,20 @@ namespace Managers.Network
             NetworkManager.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.StartHost();
             if (!NetworkManager.IsServer) return;
-            NetworkManager.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); 
+            LoadGame();
+        }
+
+        private static void LoadGame()
+        {
+            NetworkManager.SceneManager.OnLoadEventCompleted += SceneManagerOnOnLoadEventCompleted;
+            NetworkManager.SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
             Debug.Log("Host started with SteamID: " + SteamClient.SteamId);
+        }
+
+        private static void SceneManagerOnOnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+        {
+            NetworkManager.SceneManager.OnLoadEventCompleted -= SceneManagerOnOnLoadEventCompleted;
+            Debug.Log($"Scene {sceneName} loaded for all clients.");
         }
 
         public void OnClientButtonClicked()
