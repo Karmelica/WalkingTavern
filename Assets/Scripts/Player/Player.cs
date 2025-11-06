@@ -1,6 +1,5 @@
-using System.Collections;
+using System.Collections.Generic;
 using Steamworks;
-using Steamworks.Data;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
@@ -8,7 +7,6 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Color = UnityEngine.Color;
 
 namespace Player
 {
@@ -89,24 +87,24 @@ namespace Player
             // Cache component references
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody>();
-            DontDestroyOnLoad(gameObject);
         }
         
         private void Update()
         {
+            UpdateGroundCheck();
+            SetAnimationVars();
             if (!IsOwner) return;
             if (_playerCamera == null) return;
             
-            UpdateGroundCheck();
             UpdateCameraPosition();
-            SetAnimationServerRpc(_rb.linearVelocity.magnitude, _inputVector.y, _isGrounded);
+            SetAnimationServerRpc(_inputVector.y);
             
             if (_isInteracting && _interactObj != null)
             {
                 PerformInteraction(_interactObj, _playerCamera.transform);
             }
         }
-        
+
         private void FixedUpdate()
         {
             if (IsOwner) 
@@ -123,7 +121,7 @@ namespace Player
             
             if (IsOwner)
             {
-                Debug.Log("Local player spawned.");
+                //Debug.Log("Local player spawned.");
                 if(_playerCamera == null)
                 {
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
@@ -139,19 +137,14 @@ namespace Player
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-
-        public override void OnNetworkPreDespawn()
+        
+        public override void OnNetworkDespawn()
         {
-            base.OnNetworkPreDespawn();
+            base.OnNetworkDespawn();
             if (IsOwner && _playerCamera != null)
             {
                 Destroy(_playerCamera.gameObject);
             }
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
             CleanupInput();
         }
         
@@ -262,29 +255,34 @@ namespace Player
         
         #endregion
         
+        private void SetAnimationVars()
+        {
+            _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
+            _animator.SetBool(IsGrounded, _isGrounded);
+            
+        }
+        
         #region Network RPCs
         
         /// <summary>
         /// Wysyła dane animacji do serwera
         /// </summary>
         [ServerRpc]
-        private void SetAnimationServerRpc(float walkSpeed, float walkDir, bool isGrounded, ServerRpcParams serverRpcParams = default)
+        private void SetAnimationServerRpc(float walkDir, ServerRpcParams serverRpcParams = default)
         {
             var clientId = serverRpcParams.Receive.SenderClientId;
-            SetAnimationClientRpc(walkSpeed, walkDir, isGrounded, clientId);
+            SetAnimationClientRpc(walkDir, clientId);
         }
         
         /// <summary>
         /// Synchronizuje animacje dla wszystkich klientów
         /// </summary>
         [ClientRpc]
-        private void SetAnimationClientRpc(float walkSpeed, float walkDir, bool isGrounded, ulong clientId)
+        private void SetAnimationClientRpc(float walkDir, ulong clientId)
         {
             if (OwnerClientId != clientId) return;
             
-            _animator.SetFloat(WalkSpeed, walkSpeed);
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
-            _animator.SetBool(IsGrounded, isGrounded);
         }
 
         /// <summary>
@@ -381,10 +379,4 @@ namespace Player
 
         #endregion
     }
-}
-
-
-public interface IInteractable
-{
-    public void PrimaryInteract(Transform interactor = null);
 }

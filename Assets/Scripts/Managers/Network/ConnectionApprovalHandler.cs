@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Steamworks;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,16 +23,16 @@ namespace Managers.Network
             NetworkManager.OnClientConnectedCallback += OnClientConnectionCallback;
         }
 
-        private static void OnClientConnectionCallback(ulong clientId)
-        {
-                Debug.Log($"Client connected: {clientId}");
-        }
-
         private void OnDisable()
         {
             if (NetworkManager == null) return;
             NetworkManager.OnClientDisconnectCallback -= OnClientDisconnectCallback;
             NetworkManager.OnClientConnectedCallback -= OnClientConnectionCallback;
+        }
+
+        private static void OnClientConnectionCallback(ulong clientId)
+        {
+            Debug.Log($"Client connected: {clientId}");
         }
 
         private static void OnClientDisconnectCallback(ulong obj)

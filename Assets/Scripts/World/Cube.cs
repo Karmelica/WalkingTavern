@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -10,14 +11,11 @@ namespace World
     {
         private const float CubeVel = 10f;
         private readonly NetworkVariable<Color> _cubeColor = new (Color.white);
-        private Vector3 _interactorPosition;
-        private Vector3 _interactorForward;
-        private NetworkVariable<bool> _pickedUp = new (false);
+        private Vector3 _trackPosition;
+        private Vector3 _trackForward;
+        private NetworkVariable<bool> _isPickedUp = new (false);
         
-        private Renderer _cubeRenderer;
         private Rigidbody _rigidbody;
-        
-        
 
         private void Update()
         {
@@ -26,14 +24,12 @@ namespace World
         
         private void Awake()
         {
-            _cubeRenderer = GetComponent<Renderer>();
             _rigidbody = GetComponent<Rigidbody>();
         }
         
         public void PrimaryInteract(Transform interactor)
         {
-            //RandomizeColorServerRpc();
-            if (interactor != null && !_pickedUp.Value)
+            if (interactor != null && !_isPickedUp.Value)
             {
                 SetTransformsServerRpc(true, interactor.position, interactor.forward);
             }
@@ -46,30 +42,19 @@ namespace World
         [ServerRpc(RequireOwnership = false)]
         private void SetCubePositionServerRpc()
         {
-            _rigidbody.useGravity = !_pickedUp.Value;
-            if (!_pickedUp.Value) return;
-            _rigidbody.linearVelocity = ((_interactorPosition + _interactorForward * 2f) - transform.position ) * CubeVel;
+            _rigidbody.useGravity = !_isPickedUp.Value;
+            if (!_isPickedUp.Value) return;
+            _rigidbody.linearVelocity = ((_trackPosition + _trackForward * 2f) - transform.position) * CubeVel;
         }
         
         [ServerRpc(RequireOwnership = false)]
         private void SetTransformsServerRpc(bool isPickedUp, Vector3 transformPosition = default, Vector3 transformForward = default)
         {
-            _pickedUp.Value = isPickedUp;
+            _isPickedUp.Value = isPickedUp;
             if (!isPickedUp) return;
-            _interactorPosition = transformPosition;
-            _interactorForward = transformForward;
+            _trackPosition = transformPosition;
+            _trackForward = transformForward;
         }
-        
-        // private void SetColor(Color previousValue, Color newValue)
-        // {
-        //     _cubeRenderer.material.color = _cubeColor.Value;
-        // }
-        
-        // [ServerRpc(RequireOwnership = false)]
-        // private void RandomizeColorServerRpc()
-        // {
-        //     _cubeColor.Value = new Color(Random.value, Random.value, Random.value);
-        // }
     }
 }
 

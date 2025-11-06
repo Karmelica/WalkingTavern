@@ -373,7 +373,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4205217801590023695, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 887579849}
   m_SourcePrefab: {fileID: 100100000, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
 --- !u!1 &198510819
 GameObject:
@@ -490,6 +493,25 @@ PrefabInstance:
       addedObject: {fileID: 198510820}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05638b7afb3decc468f3e2f752dc9ef4, type: 3}
+--- !u!1 &887579845 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4205217801590023695, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
+  m_PrefabInstance: {fileID: 110304528}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &887579849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887579845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 887579845}
 --- !u!1001 &902686280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -541,6 +563,14 @@ PrefabInstance:
     - target: {fileID: 6230255668695601467, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: m_Name
       value: NetworkManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816614862683114416, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
+      propertyPath: NetworkConfig.TickRate
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7816614862683114416, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
+      propertyPath: NetworkConfig.NetworkTopology
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
