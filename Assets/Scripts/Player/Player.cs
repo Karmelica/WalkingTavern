@@ -132,7 +132,7 @@ namespace Player
             }
 
             playerNickname.OnValueChanged += SetNickname;
-            SetNickname(null, playerNickname.Value);
+            SetNickname("Nickname", playerNickname.Value);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
