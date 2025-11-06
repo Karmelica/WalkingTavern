@@ -16,6 +16,8 @@ namespace Managers.Network
 
         void Awake()
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             _clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
         }
 
