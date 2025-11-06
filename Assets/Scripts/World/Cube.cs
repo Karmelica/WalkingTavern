@@ -8,6 +8,7 @@ namespace World
     [RequireComponent(typeof(NetworkTransform))]
     public class Cube : NetworkBehaviour, IInteractable
     {
+        private const float CubeVel = 10f;
         private readonly NetworkVariable<Color> _cubeColor = new (Color.white);
         private Vector3 _interactorPosition;
         private Vector3 _interactorForward;
@@ -20,8 +21,6 @@ namespace World
 
         private void Update()
         {
-            _rigidbody.useGravity = !_pickedUp.Value;
-            if (!_pickedUp.Value) return;
             SetCubePositionServerRpc();
         }
         
@@ -29,13 +28,6 @@ namespace World
         {
             _cubeRenderer = GetComponent<Renderer>();
             _rigidbody = GetComponent<Rigidbody>();
-        }
-        
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            //_cubeColor.OnValueChanged += SetColor;
-            //SetColor(Color.white, _cubeColor.Value);
         }
         
         public void PrimaryInteract(Transform interactor)
@@ -54,7 +46,9 @@ namespace World
         [ServerRpc(RequireOwnership = false)]
         private void SetCubePositionServerRpc()
         {
-            transform.position = _interactorPosition + _interactorForward * 2f;
+            _rigidbody.useGravity = !_pickedUp.Value;
+            if (!_pickedUp.Value) return;
+            _rigidbody.linearVelocity = ((_interactorPosition + _interactorForward * 2f) - transform.position ) * CubeVel;
         }
         
         [ServerRpc(RequireOwnership = false)]

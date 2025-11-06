@@ -10,6 +10,7 @@ namespace Managers.Network
     public class MultiplayerManager : MonoBehaviour
     {
         [SerializeField] private GameObject loginUI;
+        private static NetworkManager NetworkManager => NetworkManager.Singleton;
         
         private TMP_InputField _clientSteamIdInputField;
 
@@ -21,10 +22,10 @@ namespace Managers.Network
         public void OnHostButtonClicked()
         {
             loginUI.SetActive(false);
-            NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.Singleton.StartHost();
-            if (!NetworkManager.Singleton.IsServer) return;
-            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); 
+            NetworkManager.ConnectionApprovalCallback += ApprovalCheck;
+            NetworkManager.StartHost();
+            if (!NetworkManager.IsServer) return;
+            NetworkManager.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single); 
             Debug.Log("Host started with SteamID: " + SteamClient.SteamId);
         }
 
@@ -42,6 +43,14 @@ namespace Managers.Network
             var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
             facepunchTransport.targetSteamId = targetSteamId;
             NetworkManager.Singleton.StartClient();
+        }
+
+        public void DisconnectClient(ulong clientId)
+        {
+            if (NetworkManager.IsServer)
+            {
+                NetworkManager.DisconnectClient(clientId);
+            }
         }
 
         private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)

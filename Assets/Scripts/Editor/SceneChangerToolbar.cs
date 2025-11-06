@@ -176,7 +176,7 @@ namespace Editor
                 imguiContainer = new IMGUIContainer();
                 imguiContainer.style.flexGrow = 1;
                 imguiContainer.onGUIHandler += () => { OnToolbarGUI?.Invoke(); };
-                container.Insert(0, imguiContainer);
+                container.Insert(6, imguiContainer);
             }
 
             EditorApplication.update -= OnUpdate;

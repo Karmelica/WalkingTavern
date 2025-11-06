@@ -32,6 +32,7 @@ namespace Managers.Network
             {
                 Debug.Log($"Approval Declined Reason: {NetworkManager.DisconnectReason}");
             }
+            SceneManager.LoadScene("Menu", LoadSceneMode.Single);
         }
     }
 }
