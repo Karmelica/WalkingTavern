@@ -1,11 +1,13 @@
 using System.Collections;
 using Steamworks;
+using Steamworks.Data;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Color = UnityEngine.Color;
 
 namespace Player
 {
@@ -54,6 +56,7 @@ namespace Player
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
         private NetworkVariable<FixedString64Bytes> playerNickname = new("Nickname");
+        private NetworkVariable<Image> playerAvatar = new();
         
         #endregion
 
@@ -276,31 +279,27 @@ namespace Player
         }
 
         /// <summary>
-        /// Pobiera nick gracza ze Steam i ustawia go
+        /// Pobiera nick ze Steam i ustawia go dla tego gracza
         /// </summary>
         [ServerRpc(RequireOwnership = false)]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
             //var clientId = serverRpcParams.Receive.SenderClientId;
             playerNickname.Value = new Friend(id).Name;
+            
+            // TODO - pobieranie avatara
+            // new Friend(id).GetSmallAvatarAsync();
+            
             //SetSteamNicknameClientRpc(clientId);
         }
-
-        /*/// <summary>
-        /// Ustawia nick steam dla wszystkich klientów
-        /// </summary>
-        [ClientRpc]
-        private void SetSteamNicknameClientRpc(ulong clientId)
-        {
-            if (OwnerClientId != clientId) return;
-            steamNickname.text = playerNickname.Value.ToString();
-        }*/
         
+        /// <summary>
+        /// Ustawia nick przy wejściu klienta
+        /// </summary>
         private void SetNickname(FixedString64Bytes previousValue, FixedString64Bytes newValue)
         {
             steamNickname.text = playerNickname.Value.ToString();
         }
-
 
         #endregion
 
