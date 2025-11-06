@@ -276,7 +276,7 @@ namespace Player
         /// <summary>
         /// Pobiera nick gracza ze Steam i ustawia go
         /// </summary>
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
             var clientId = serverRpcParams.Receive.SenderClientId;
