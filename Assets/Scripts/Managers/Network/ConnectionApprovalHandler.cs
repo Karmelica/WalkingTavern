@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Steamworks;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -39,10 +41,13 @@ namespace Managers.Network
         {
             if (!NetworkManager.IsServer && NetworkManager.DisconnectReason != string.Empty)
             {
-                Debug.Log($"Disconnected: {NetworkManager.DisconnectReason}");
+                Debug.Log($"{obj} Disconnected: {NetworkManager.DisconnectReason}");
             }
-            
-            SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+
+            if(NetworkManager.IsClient){
+                SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+            }
+            SteamClient.Shutdown();
         }
     }
 }

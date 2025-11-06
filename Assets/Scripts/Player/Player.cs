@@ -7,6 +7,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Color = UnityEngine.Color;
 
 namespace Player
@@ -137,6 +138,15 @@ namespace Player
             SetNickname("Nickname", playerNickname.Value);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        public override void OnNetworkPreDespawn()
+        {
+            base.OnNetworkPreDespawn();
+            if (IsOwner && _playerCamera != null)
+            {
+                Destroy(_playerCamera.gameObject);
+            }
         }
 
         public override void OnNetworkDespawn()
@@ -327,19 +337,6 @@ namespace Player
 
         public void OnPrevious(InputAction.CallbackContext context)
         {
-            if(IsServer){
-                foreach(var client in NetworkManager.Singleton.ConnectedClientsList){
-                    if(client.ClientId != OwnerClientId){
-                        NetworkManager.Singleton.DisconnectClient(client.ClientId, "RIP bozo");
-                    }
-                }
-                NetworkManager.Singleton.Shutdown();
-                return;
-            }
-            if(IsClient){
-                NetworkManager.Singleton.DisconnectClient(OwnerClientId);
-            }
-            //Application.Quit();
         }
 
         public void OnNext(InputAction.CallbackContext context)

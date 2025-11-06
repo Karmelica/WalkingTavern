@@ -230,6 +230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5227537769859937672, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6774083391023441708, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -424,10 +428,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1304039560620450827, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2288393641710627389, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -471,18 +471,6 @@ PrefabInstance:
     - target: {fileID: 6230255668695601467, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: m_Name
       value: NetworkManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 7816614862683114416, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-      propertyPath: NetworkConfig.PlayerPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7816614862683114416, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-      propertyPath: NetworkConfig.NetworkTransport
-      value: 
-      objectReference: {fileID: 1176319477}
-    - target: {fileID: 8554908450959441956, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -546,17 +534,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
---- !u!114 &1176319477 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8554908450959441956, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
-  m_PrefabInstance: {fileID: 902686280}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44dd247a00edbfa44b77868d755af6ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Facepunch Transport for Netcode for GameObjects::Netcode.Transports.Facepunch.FacepunchTransport
 --- !u!1 &1628125910
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +805,7 @@ SceneRoots:
   - {fileID: 1628125913}
   - {fileID: 1756756632}
   - {fileID: 50609745}
+  - {fileID: 1110502373}
   - {fileID: 902686280}
   - {fileID: 769323434}
   - {fileID: 110304528}
-  - {fileID: 1110502373}

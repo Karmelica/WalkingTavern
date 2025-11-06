@@ -70,7 +70,7 @@ namespace Managers.Network
 
             response.PlayerPrefabHash = 1959477017;
 
-            response.Position = Vector3.zero + new Vector3(0,5,0);
+            response.Position = Vector3.zero + new Vector3(0, 1, 0);
             response.Pending = false;
         }
     }
