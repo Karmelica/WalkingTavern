@@ -70,9 +70,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Escape",
+                    "name": "Previous",
                     "type": "Button",
-                    "id": "2a33ca38-46c9-404f-8b69-6dc8f53eec49",
+                    "id": "4c659989-83e7-4fc2-bf29-cbb65d056231",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Next",
+                    "type": "Button",
+                    "id": "1cbb8b4f-f0e7-4ecc-a002-a521dc7c43bb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -423,12 +432,45 @@
                 },
                 {
                     "name": "",
-                    "id": "8b30ea98-e136-42cb-95e5-ef2a42c4f279",
+                    "id": "f2ff8bcd-4561-446f-9b8f-8bddb59894bc",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Escape",
+                    "action": "Previous",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9fa82760-93b8-4761-ad0b-b53a356e8b90",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Previous",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df9fbaa5-0518-49b8-8d55-0cbeedebb669",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5dd9acab-b747-446c-b7c8-6e833103c648",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Next",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

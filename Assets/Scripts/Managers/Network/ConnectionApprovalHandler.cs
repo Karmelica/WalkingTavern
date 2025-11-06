@@ -16,22 +16,32 @@ namespace Managers.Network
     {
         private static NetworkManager NetworkManager => NetworkManager.Singleton;
 
-        private void Start()
+        private void OnEnable()
         {
             if (NetworkManager == null) return;
             NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
-            NetworkManager.OnClientConnectedCallback += (ulong clientId) =>
-            {
+            NetworkManager.OnClientConnectedCallback += OnClientConnectionCallback;
+        }
+
+        private static void OnClientConnectionCallback(ulong clientId)
+        {
                 Debug.Log($"Client connected: {clientId}");
-            };
+        }
+
+        private void OnDisable()
+        {
+            if (NetworkManager == null) return;
+            NetworkManager.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+            NetworkManager.OnClientConnectedCallback -= OnClientConnectionCallback;
         }
 
         private static void OnClientDisconnectCallback(ulong obj)
         {
             if (!NetworkManager.IsServer && NetworkManager.DisconnectReason != string.Empty)
             {
-                Debug.Log($"Approval Declined Reason: {NetworkManager.DisconnectReason}");
+                Debug.Log($"Disconnected: {NetworkManager.DisconnectReason}");
             }
+            
             SceneManager.LoadScene("Menu", LoadSceneMode.Single);
         }
     }

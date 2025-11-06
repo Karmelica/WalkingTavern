@@ -325,9 +325,25 @@ namespace Player
             _isSprinting = context.performed;
         }
 
-        public void OnEscape(InputAction.CallbackContext context)
+        public void OnPrevious(InputAction.CallbackContext context)
         {
-            Application.Quit();
+            if(IsServer){
+                foreach(var client in NetworkManager.Singleton.ConnectedClientsList){
+                    if(client.ClientId != OwnerClientId){
+                        NetworkManager.Singleton.DisconnectClient(client.ClientId, "RIP bozo");
+                    }
+                }
+                NetworkManager.Singleton.Shutdown();
+                return;
+            }
+            if(IsClient){
+                NetworkManager.Singleton.DisconnectClient(OwnerClientId);
+            }
+            //Application.Quit();
+        }
+
+        public void OnNext(InputAction.CallbackContext context)
+        {
         }
 
         public void OnAttack(InputAction.CallbackContext context)
