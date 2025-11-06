@@ -1,3 +1,4 @@
+using System.Collections;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -45,15 +46,22 @@ namespace Player
         private static readonly int Jumping = Animator.StringToHash("Jumping");
         
         #endregion
-        
-        
+
+        #region Customs
+
         [Header("Customization")]
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
-        [SerializeField] private GameObject playerCameraPrefab;
         private NetworkVariable<FixedString64Bytes> playerNickname = new("Nickname");
         
+        #endregion
+
+        #region Components
+
+        [SerializeField] private GameObject playerCameraPrefab;
+
+        #endregion
         
         #region Private Fields
         
@@ -65,7 +73,10 @@ namespace Player
         private bool _isGrounded;
         private bool _isSprinting;
         private bool _currentInteractable;
-        
+        private Coroutine _interactionCoroutine;
+        private bool _isInteracting;
+        private IInteractable _interactObj;
+
         #endregion
 
         #region Unity Lifecycle
@@ -86,6 +97,11 @@ namespace Player
             UpdateGroundCheck();
             UpdateCameraPosition();
             SetAnimationServerRpc(_rb.linearVelocity.magnitude, _inputVector.y, _isGrounded);
+            
+            if (_isInteracting && _interactObj != null)
+            {
+                PerformInteraction(_interactObj, _playerCamera.transform);
+            }
         }
         
         private void FixedUpdate()
@@ -314,7 +330,28 @@ namespace Player
 
         public void OnAttack(InputAction.CallbackContext context)
         {
-            // TODO: Implementacja ataku
+            if(context.started)
+            {
+                var interactPoint = _playerCamera.transform;
+                var ray = new Ray(interactPoint.position, interactPoint.forward);
+                if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
+                if (!hitInfo.collider.TryGetComponent(out IInteractable interactObj)) return;
+                _isInteracting = true;
+                _interactObj = interactObj;
+            }
+            
+            if (context.canceled)
+            {
+                if (_interactObj == null) return;
+                _isInteracting = false;
+                _interactObj.PrimaryInteract();
+                _interactObj = null;
+            }
+        }
+
+        private void PerformInteraction(IInteractable interactObj, Transform interactPoint)
+        {
+            interactObj.PrimaryInteract(interactPoint);
         }
 
         public void OnCrouch(InputAction.CallbackContext context)
@@ -324,24 +361,7 @@ namespace Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (!context.performed) return;
-            var interactPoint = _playerCamera.transform;
-            var ray = new Ray(interactPoint.position, interactPoint.forward);
-            if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
-            if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
-            {
-                interactObj.PrimaryInteract();
-            }
-        }
-
-        public void OnNext(InputAction.CallbackContext context)
-        {
-            // TODO: Implementacja next
-        }
-
-        public void OnPrevious(InputAction.CallbackContext context)
-        {
-            // TODO: Implementacja previous
+            // TODO: Implementacja interakcji / skillchecków
         }
 
         #endregion
@@ -351,5 +371,5 @@ namespace Player
 
 public interface IInteractable
 {
-    public void PrimaryInteract();
+    public void PrimaryInteract(Transform interactor = null);
 }

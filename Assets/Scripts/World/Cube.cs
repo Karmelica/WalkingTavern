@@ -9,35 +9,73 @@ namespace World
     public class Cube : NetworkBehaviour, IInteractable
     {
         private readonly NetworkVariable<Color> _cubeColor = new (Color.white);
-        private Renderer _cubeRenderer;
+        private Vector3 _interactorPosition;
+        private Vector3 _interactorForward;
+        private NetworkVariable<bool> _pickedUp = new (false);
         
-        public void PrimaryInteract()
-        {
-            RandomizeColorServerRpc();
-        }
+        private Renderer _cubeRenderer;
+        private Rigidbody _rigidbody;
+        
+        
 
+        private void Update()
+        {
+            _rigidbody.useGravity = !_pickedUp.Value;
+            if (!_pickedUp.Value) return;
+            SetCubePositionServerRpc();
+        }
+        
         private void Awake()
         {
             _cubeRenderer = GetComponent<Renderer>();
+            _rigidbody = GetComponent<Rigidbody>();
         }
         
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            _cubeColor.OnValueChanged += SetColor;
-            SetColor(Color.white, _cubeColor.Value);
+            //_cubeColor.OnValueChanged += SetColor;
+            //SetColor(Color.white, _cubeColor.Value);
         }
-
-        private void SetColor(Color previousValue, Color newValue)
+        
+        public void PrimaryInteract(Transform interactor)
         {
-            _cubeRenderer.material.color = _cubeColor.Value;
+            //RandomizeColorServerRpc();
+            if (interactor != null && !_pickedUp.Value)
+            {
+                SetTransformsServerRpc(true, interactor.position, interactor.forward);
+            }
+            else
+            {
+                SetTransformsServerRpc(false);
+            }
         }
-
+        
         [ServerRpc(RequireOwnership = false)]
-        private void RandomizeColorServerRpc()
+        private void SetCubePositionServerRpc()
         {
-            _cubeColor.Value = new Color(Random.value, Random.value, Random.value);
+            transform.position = _interactorPosition + _interactorForward * 2f;
         }
+        
+        [ServerRpc(RequireOwnership = false)]
+        private void SetTransformsServerRpc(bool isPickedUp, Vector3 transformPosition = default, Vector3 transformForward = default)
+        {
+            _pickedUp.Value = isPickedUp;
+            if (!isPickedUp) return;
+            _interactorPosition = transformPosition;
+            _interactorForward = transformForward;
+        }
+        
+        // private void SetColor(Color previousValue, Color newValue)
+        // {
+        //     _cubeRenderer.material.color = _cubeColor.Value;
+        // }
+        
+        // [ServerRpc(RequireOwnership = false)]
+        // private void RandomizeColorServerRpc()
+        // {
+        //     _cubeColor.Value = new Color(Random.value, Random.value, Random.value);
+        // }
     }
 }
 
