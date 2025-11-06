@@ -131,6 +131,7 @@ namespace Player
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
             }
 
+            playerNickname.OnValueChanged += SetNickname;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -279,12 +280,12 @@ namespace Player
         [ServerRpc(RequireOwnership = false)]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
-            var clientId = serverRpcParams.Receive.SenderClientId;
+            //var clientId = serverRpcParams.Receive.SenderClientId;
             playerNickname.Value = new Friend(id).Name;
-            SetSteamNicknameClientRpc(clientId);
+            //SetSteamNicknameClientRpc(clientId);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Ustawia nick steam dla wszystkich klientów
         /// </summary>
         [ClientRpc]
@@ -292,7 +293,13 @@ namespace Player
         {
             if (OwnerClientId != clientId) return;
             steamNickname.text = playerNickname.Value.ToString();
+        }*/
+        
+        private void SetNickname(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+        {
+            steamNickname.text = playerNickname.Value.ToString();
         }
+
 
         #endregion
 
