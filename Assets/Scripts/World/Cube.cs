@@ -32,6 +32,11 @@ namespace World
             SetTransformsServerRpc(interactor, pickingUp);
         }
 
+        public string GetInteractName()
+        {
+            return gameObject.name;
+        }
+
         public bool IsPickedUp()
         {
             return _isPickedUp.Value;

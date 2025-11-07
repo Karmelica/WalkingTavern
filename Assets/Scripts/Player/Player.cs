@@ -62,6 +62,7 @@ namespace Player
         #region Components
 
         [SerializeField] private GameObject playerCameraPrefab;
+        [SerializeField] private Transform interactor;
 
         #endregion
         
@@ -93,16 +94,12 @@ namespace Player
         {
             UpdateGroundCheck();
             SetAnimationVars();
+            UpdateInteractorPosition();
             if (!IsOwner) return;
             if (_playerCamera == null) return;
             
             UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _isInteracting);
-            
-            if (_isInteracting && _interactObj != null)
-            {
-                PerformInteraction(_interactObj, _playerCamera.transform);
-            }
         }
 
         private void FixedUpdate()
@@ -195,7 +192,9 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            _playerCamera.transform.position = transform.position + Vector3.up * CameraHeightOffset;
+            _playerCamera.transform.position = interactor.position;
+            _playerCamera.transform.rotation = interactor.localRotation;
+            /*_playerCamera.transform.position = transform.position + Vector3.up * CameraHeightOffset;
             
             var lookVectorY = Mathf.Clamp(
                 NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
@@ -204,6 +203,23 @@ namespace Player
             );
             
             _playerCamera.transform.localRotation = Quaternion.Euler(
+                lookVectorY,
+                transform.localRotation.eulerAngles.y,
+                0f
+            );*/
+        }
+        
+        private void UpdateInteractorPosition()
+        {
+            interactor.position = transform.position + Vector3.up * CameraHeightOffset;
+            
+            var lookVectorY = Mathf.Clamp(
+                NormalizeAngle(interactor.rotation.eulerAngles.x),
+                CameraVerticalClampMin,
+                CameraVerticalClampMax
+            );
+            
+            interactor.localRotation = Quaternion.Euler(
                 lookVectorY,
                 transform.localRotation.eulerAngles.y,
                 0f
@@ -310,11 +326,11 @@ namespace Player
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || !IsOwner || _playerCamera == null) return;
+            if (!Application.isFocused || !IsOwner || _playerCamera == null || interactor == null) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
-            _playerCamera.transform.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
+            interactor.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
         }
         
         public void OnJump(InputAction.CallbackContext context)
@@ -346,7 +362,7 @@ namespace Player
             if(context.started)
             {
                 var interactPoint = _playerCamera.transform;
-                // TODO: interactPoint jest nullem poza serwere
+                // TODO: interactPoint jest nullem poza serwerem
                 // trzeba naprawić system interakcji
                 var ray = new Ray(interactPoint.position, interactPoint.forward);
                 if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
@@ -369,7 +385,7 @@ namespace Player
         
         public Transform GetInteractPoint()
         {
-            return _playerCamera.transform;
+            return interactor;
         }
 
         private void PerformInteraction(IInteractable interactObj, Transform interactPoint)
