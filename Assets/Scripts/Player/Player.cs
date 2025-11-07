@@ -94,10 +94,10 @@ namespace Player
         {
             UpdateGroundCheck();
             SetAnimationVars();
-            UpdateInteractorPosition();
             if (!IsOwner) return;
             if (_playerCamera == null) return;
             
+            UpdateInteractorPosition();
             UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _isInteracting);
         }
@@ -193,7 +193,7 @@ namespace Player
         private void UpdateCameraPosition()
         {
             _playerCamera.transform.position = interactor.position;
-            _playerCamera.transform.rotation = interactor.localRotation;
+            _playerCamera.transform.rotation = Quaternion.Euler(interactor.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
             /*_playerCamera.transform.position = transform.position + Vector3.up * CameraHeightOffset;
             
             var lookVectorY = Mathf.Clamp(
@@ -219,11 +219,7 @@ namespace Player
                 CameraVerticalClampMax
             );
             
-            interactor.localRotation = Quaternion.Euler(
-                lookVectorY,
-                transform.localRotation.eulerAngles.y,
-                0f
-            );
+            interactor.localRotation = Quaternion.Euler(lookVectorY, 0f, 0f);
         }
         
         /// <summary>
