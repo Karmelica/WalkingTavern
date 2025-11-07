@@ -84,7 +84,6 @@ namespace Player
         
         private void Awake()
         {
-            // Cache component references
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody>();
         }
@@ -259,7 +258,6 @@ namespace Player
         {
             _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
             _animator.SetBool(IsGrounded, _isGrounded);
-            
         }
         
         #region Network RPCs
