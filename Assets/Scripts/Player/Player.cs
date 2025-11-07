@@ -96,12 +96,12 @@ namespace Player
         {
             UpdateGroundCheck();
             SetAnimationVars();
+            UpdateInteractorPosition();
             if (!IsOwner) return;
             if (_playerCamera == null) return;
 
             var interactable = GetHitInfo();
             canvasScript.interactText.text = interactable != null ? $"Interact with {interactable.GetInteractName()}" : string.Empty;
-            UpdateInteractorPosition();
             UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _isInteracting);
         }
@@ -132,6 +132,7 @@ namespace Player
                 localPlayerMesh.enabled = false;
                 InitializeInput();
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
+                canvasScript.gameObject.SetActive(true);
             }
 
             playerNickname.OnValueChanged += SetNickname;
