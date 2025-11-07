@@ -349,22 +349,30 @@ namespace Player
                 var ray = new Ray(interactPoint.position, interactPoint.forward);
                 if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
                 if (!hitInfo.collider.TryGetComponent(out IInteractable interactObj)) return;
-                _isInteracting = true;
+                if (interactObj.IsPickedUp()) return;
+                
                 _interactObj = interactObj;
+                _interactObj.PrimaryInteract(this);
+                _isInteracting = true;
             }
             
             if (context.canceled)
             {
                 if (_interactObj == null) return;
                 _isInteracting = false;
-                _interactObj.PrimaryInteract();
+                _interactObj.PrimaryInteract(this, false);
                 _interactObj = null;
             }
+        }
+        
+        public Transform GetInteractPoint()
+        {
+            return _playerCamera.transform;
         }
 
         private void PerformInteraction(IInteractable interactObj, Transform interactPoint)
         {
-            interactObj.PrimaryInteract(interactPoint);
+            //interactObj.PrimaryInteract(interactPoint);
         }
 
         public void OnCrouch(InputAction.CallbackContext context)

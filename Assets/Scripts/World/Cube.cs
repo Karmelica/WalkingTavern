@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -10,9 +9,9 @@ namespace World
     public class Cube : NetworkBehaviour, IInteractable
     {
         private const float CubeVel = 10f;
-        private readonly NetworkVariable<Color> _cubeColor = new (Color.white);
-        private Vector3 _trackPosition;
-        private Vector3 _trackForward;
+        private Transform _interactTransform;
+        /*private Vector3 _trackPosition;
+        private Vector3 _trackForward;*/
         private NetworkVariable<bool> _isPickedUp = new (false);
         
         private Rigidbody _rigidbody;
@@ -25,35 +24,39 @@ namespace World
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _interactTransform = transform;
         }
         
-        public void PrimaryInteract(Transform interactor)
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
-            if (interactor != null && !_isPickedUp.Value)
-            {
-                SetTransformsServerRpc(true, interactor.position, interactor.forward);
-            }
-            else
-            {
-                SetTransformsServerRpc(false);
-            }
+            SetTransformsServerRpc(interactor, pickingUp);
         }
-        
+
+        public bool IsPickedUp()
+        {
+            return _isPickedUp.Value;
+        }
+
         [ServerRpc(RequireOwnership = false)]
         private void SetCubePositionServerRpc()
         {
-            _rigidbody.useGravity = !_isPickedUp.Value;
             if (!_isPickedUp.Value) return;
-            _rigidbody.linearVelocity = ((_trackPosition + _trackForward * 2f) - transform.position) * CubeVel;
+            _rigidbody.linearVelocity = ((_interactTransform.position + _interactTransform.forward * 2f) - transform.position) * CubeVel;
         }
         
         [ServerRpc(RequireOwnership = false)]
-        private void SetTransformsServerRpc(bool isPickedUp, Vector3 transformPosition = default, Vector3 transformForward = default)
+        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
-            _isPickedUp.Value = isPickedUp;
-            if (!isPickedUp) return;
-            _trackPosition = transformPosition;
-            _trackForward = transformForward;
+            if (interactor.TryGet(out Player.Player player))
+            {
+                _isPickedUp.Value = pickingUp;
+                _rigidbody.useGravity = !_isPickedUp.Value;
+                _interactTransform = player.GetInteractPoint();
+            }
+            else
+            {
+                Debug.LogError("Interactor is not a Player.");
+            }
         }
     }
 }
