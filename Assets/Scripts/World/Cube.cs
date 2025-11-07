@@ -51,7 +51,7 @@ namespace World
             {
                 _isPickedUp.Value = pickingUp;
                 _rigidbody.useGravity = !_isPickedUp.Value;
-                _interactTransform = player.GetInteractPoint();
+                _interactTransform = pickingUp ? player.GetInteractPoint() : transform;
             }
             else
             {
