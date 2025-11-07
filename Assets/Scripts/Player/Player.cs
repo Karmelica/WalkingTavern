@@ -45,7 +45,8 @@ namespace Player
         private static readonly int WalkDir = Animator.StringToHash("WalkDir");
         private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
         private static readonly int Jumping = Animator.StringToHash("Jumping");
-        
+        private static readonly int IsInteracting = Animator.StringToHash("IsInteracting");
+
         #endregion
 
         #region Customs
@@ -96,7 +97,7 @@ namespace Player
             if (_playerCamera == null) return;
             
             UpdateCameraPosition();
-            SetAnimationServerRpc(_inputVector.y);
+            SetAnimationServerRpc(_inputVector.y, _isInteracting);
             
             if (_isInteracting && _interactObj != null)
             {
@@ -266,20 +267,21 @@ namespace Player
         /// Wysyła dane animacji do serwera
         /// </summary>
         [ServerRpc]
-        private void SetAnimationServerRpc(float walkDir, ServerRpcParams serverRpcParams = default)
+        private void SetAnimationServerRpc(float walkDir, bool isInteracting, ServerRpcParams serverRpcParams = default)
         {
             var clientId = serverRpcParams.Receive.SenderClientId;
-            SetAnimationClientRpc(walkDir, clientId);
+            SetAnimationClientRpc(walkDir, isInteracting, clientId);
         }
         
         /// <summary>
         /// Synchronizuje animacje dla wszystkich klientów
         /// </summary>
         [ClientRpc]
-        private void SetAnimationClientRpc(float walkDir, ulong clientId)
+        private void SetAnimationClientRpc(float walkDir, bool isInteracting, ulong clientId)
         {
             if (OwnerClientId != clientId) return;
             
+            _animator.SetBool(IsInteracting, isInteracting);
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
         }
 
