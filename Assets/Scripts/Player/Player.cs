@@ -346,6 +346,8 @@ namespace Player
             if(context.started)
             {
                 var interactPoint = _playerCamera.transform;
+                // TODO: interactPoint jest nullem poza serwere
+                // trzeba naprawić system interakcji
                 var ray = new Ray(interactPoint.position, interactPoint.forward);
                 if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
                 if (!hitInfo.collider.TryGetComponent(out IInteractable interactObj)) return;
