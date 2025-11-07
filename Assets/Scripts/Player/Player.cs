@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Steamworks;
 using TMPro;
@@ -63,6 +64,7 @@ namespace Player
 
         [SerializeField] private GameObject playerCameraPrefab;
         [SerializeField] private Transform interactor;
+        [SerializeField] private CanvasScript canvasScript;
 
         #endregion
         
@@ -96,7 +98,9 @@ namespace Player
             SetAnimationVars();
             if (!IsOwner) return;
             if (_playerCamera == null) return;
-            
+
+            var interactable = GetHitInfo();
+            canvasScript.interactText.text = interactable != null ? $"Interact with {interactable.GetInteractName()}" : string.Empty;
             UpdateInteractorPosition();
             UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _isInteracting);
@@ -124,6 +128,7 @@ namespace Player
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
                     DontDestroyOnLoad(_playerCamera.gameObject);
                 }
+                
                 localPlayerMesh.enabled = false;
                 InitializeInput();
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
@@ -357,14 +362,13 @@ namespace Player
         {
             if(context.started)
             {
-                var interactPoint = _playerCamera.transform;
                 // TODO: interactPoint jest nullem poza serwerem
                 // trzeba naprawić system interakcji
-                var ray = new Ray(interactPoint.position, interactPoint.forward);
-                if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return;
-                if (!hitInfo.collider.TryGetComponent(out IInteractable interactObj)) return;
-                if (interactObj.IsPickedUp()) return;
                 
+                var interactObj = GetHitInfo();
+
+                if (interactObj == null) return;
+                if (interactObj.IsPickedUp()) return;
                 _interactObj = interactObj;
                 _interactObj.PrimaryInteract(this);
                 _isInteracting = true;
@@ -378,15 +382,18 @@ namespace Player
                 _interactObj = null;
             }
         }
-        
+
+        private IInteractable GetHitInfo()
+        {
+            var interactPoint = interactor;
+            var ray = new Ray(interactPoint.position, interactPoint.forward);
+            if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return null;
+            return hitInfo.collider.TryGetComponent(out IInteractable interactObj) ? interactObj : null;
+        }
+
         public Transform GetInteractPoint()
         {
             return interactor;
-        }
-
-        private void PerformInteraction(IInteractable interactObj, Transform interactPoint)
-        {
-            //interactObj.PrimaryInteract(interactPoint);
         }
 
         public void OnCrouch(InputAction.CallbackContext context)
