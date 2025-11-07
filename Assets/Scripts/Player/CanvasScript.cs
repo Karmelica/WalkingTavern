@@ -1,3 +1,4 @@
+using Cooking;
 using TMPro;
 using UnityEngine;
 
@@ -7,5 +8,13 @@ namespace Player
     public class CanvasScript : MonoBehaviour
     {
         public TextMeshProUGUI interactText;
+        public SkillCheck skillCheck;
+        
+        public void EnableSkillCheck()
+        {
+            if (!skillCheck.gameObject.activeInHierarchy)
+                skillCheck.gameObject.SetActive(true);
+            else skillCheck.TryComplete();
+        }
     }
 }

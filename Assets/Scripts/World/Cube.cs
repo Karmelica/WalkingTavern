@@ -5,7 +5,10 @@ using UnityEngine;
 namespace World
 {
     [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkTransform))]
+    [RequireComponent(typeof(NetworkRigidbody))]
+    
     public class Cube : NetworkBehaviour, IInteractable
     {
         private const float CubeVel = 10f;

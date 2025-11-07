@@ -407,7 +407,10 @@ namespace Player
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            // TODO: Implementacja interakcji / skillchecków
+            if (context.started)
+            {
+                canvasScript.EnableSkillCheck();
+            }
         }
 
         #endregion
