@@ -96,10 +96,11 @@ namespace Player
         {
             UpdateGroundCheck();
             SetAnimationVars();
+            UpdateInteractorPosition();
+            
             if (!IsOwner) return;
             if (_playerCamera == null) return;
 
-            UpdateInteractorPosition();
             var interactable = GetHitInfo();
             canvasScript.interactText.text = interactable != null && !interactable.IsPickedUp()
                 ? $"Interact with {interactable.GetInteractName()}"
