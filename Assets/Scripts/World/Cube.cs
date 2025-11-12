@@ -50,6 +50,7 @@ namespace World
         {
             if (!_isPickedUp.Value) return;
             _rigidbody.linearVelocity = ((_interactTransform.position + _interactTransform.forward * 2f) - transform.position) * CubeVel;
+            transform.rotation = Quaternion.identity;
         }
         
         [ServerRpc(RequireOwnership = false)]
