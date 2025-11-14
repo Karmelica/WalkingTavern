@@ -14,6 +14,8 @@ namespace Managers.Network
     {
         [SerializeField] private GameObject loginUI;
         [SerializeField] private GameObject lobbyUI;
+        [SerializeField] private GameObject startGameButton;
+        [SerializeField] private GameObject waitingForPlayersText;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
         
@@ -66,7 +68,7 @@ namespace Managers.Network
             SteamCurrentLobby.CurrentLobby = lobby;
             lobbyId.text = lobby.Id.ToString();
             ShowPlayers(lobby);
-            SetUI(false);
+            SetUI();
 
             if(NetworkManager.Singleton.IsHost) return;
             
@@ -124,7 +126,7 @@ namespace Managers.Network
         {
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
-            SetUI(true);
+            SetUI();
             NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
         }
@@ -149,10 +151,12 @@ namespace Managers.Network
             textEditor.Copy();
         }
         
-        private void SetUI(bool login)
+        private void SetUI()
         {
-            loginUI.SetActive(login);
-            lobbyUI.SetActive(!login);
+            loginUI.SetActive(SteamCurrentLobby.CurrentLobby == null);
+            lobbyUI.SetActive(SteamCurrentLobby.CurrentLobby != null);
+            startGameButton.SetActive(NetworkManager.Singleton.IsHost);
+            waitingForPlayersText.SetActive(!NetworkManager.Singleton.IsHost);
         }
         
         private void ShowPlayers(Lobby lobby)

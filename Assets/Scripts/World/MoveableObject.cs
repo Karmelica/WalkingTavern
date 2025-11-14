@@ -39,7 +39,7 @@ namespace World
         
         #region RPC Methods
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectPositionServerRpc()
         {
             if (!_isPickedUp.Value) return;
@@ -47,7 +47,7 @@ namespace World
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
