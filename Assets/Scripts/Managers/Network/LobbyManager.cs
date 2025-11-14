@@ -79,6 +79,7 @@ namespace Managers.Network
         {
             SteamCurrentLobby.CurrentLobby = lobby;
             lobbyId.text = lobby.Id.ToString();
+            ShowPlayers(lobby);
             //Debug.Log("Joined lobby with ID: " + lobby.Id);
             SetUI(false);
         }
