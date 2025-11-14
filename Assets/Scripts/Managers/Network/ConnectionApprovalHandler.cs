@@ -33,6 +33,7 @@ namespace Managers.Network
         private static void OnClientConnectionCallback(ulong clientId)
         {
             Debug.Log($"Client connected: {clientId}");
+            
         }
 
         private static void OnClientDisconnectCallback(ulong obj)

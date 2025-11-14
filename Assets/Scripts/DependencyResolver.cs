@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Steamworks.Data;
 using UnityEngine;
 
 [DefaultExecutionOrder(-50)]
 public class DependencyResolver : MonoBehaviour
 {
     public static DependencyResolver Instance { get; private set; }
-    
     private readonly Dictionary<Type, object> _dependencies = new();
     
     private void Awake()
