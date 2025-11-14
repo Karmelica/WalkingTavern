@@ -20,6 +20,8 @@ namespace Managers.Network
         
         private TMP_InputField _clientSteamIdInputField;
 
+        #region Unity Methods
+
         void Awake()
         {
             Cursor.lockState = CursorLockMode.None;
@@ -45,34 +47,17 @@ namespace Managers.Network
             SteamFriends.OnGameLobbyJoinRequested -= GameLobbyJoinRequested;
         }
 
-        private void PlayerJoined(Lobby lobby, Friend friend)
-        {
-            Debug.Log($"{friend.Name} joined the lobby.");
-            ShowPlayers(lobby);
-        }
+        #endregion
 
-
-        private void PlayerLeft(Lobby lobby, Friend friend)
-        {
-            Debug.Log($"{friend.Name} left the lobby.");
-            ShowPlayers(lobby);
-        }
+        #region Lobby Events
         
-        private void ShowPlayers(Lobby lobby)
-        {
-            playersInLobby.text = "Players in Lobby:\n";
-            foreach (var player in lobby.Members)
-            {
-                playersInLobby.text += player.Name + "\n";
-            }
-        }
-
         private void LobbyCreated(Result result, Lobby lobby)
         {
             if (result != Result.OK) return;
             lobby.SetPublic();
             lobby.SetJoinable(true);
-            //Debug.Log("Lobby created with ID: " + lobby.Id);
+            NetworkManager.StartHost();
+            NetworkManager.ConnectionApprovalCallback += ApprovalCheck;
         }
 
         private void LobbyEntered(Lobby lobby)
@@ -80,16 +65,15 @@ namespace Managers.Network
             SteamCurrentLobby.CurrentLobby = lobby;
             lobbyId.text = lobby.Id.ToString();
             ShowPlayers(lobby);
-            //Debug.Log("Joined lobby with ID: " + lobby.Id);
             SetUI(false);
-        }
 
-        private void SetUI(bool login)
-        {
-            loginUI.SetActive(login);
-            lobbyUI.SetActive(!login);
+            if(NetworkManager.IsHost) return;
+            var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
+            facepunchTransport.targetSteamId = lobby.Owner.Id;
+            
+            NetworkManager.StartClient();
         }
-
+        
         private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
         {
             try
@@ -101,6 +85,19 @@ namespace Managers.Network
                 Debug.LogError("Error joining lobby from invite: " + e.Message);
             }
         }
+        private void PlayerJoined(Lobby lobby, Friend friend)
+        {
+            ShowPlayers(lobby);
+        }
+        
+        private void PlayerLeft(Lobby lobby, Friend friend)
+        {
+            ShowPlayers(lobby);
+        }
+
+        #endregion
+
+        #region Buttons
 
         public void OnHostButtonClicked()
         {
@@ -111,7 +108,8 @@ namespace Managers.Network
         {
             try
             {
-                if (!ulong.TryParse(_clientSteamIdInputField.text, out var lobbyID)) return;
+                ulong lobbyID;
+                if (!ulong.TryParse(_clientSteamIdInputField.text, out lobbyID)) return;
                 var lobbies = await SteamMatchmaking.LobbyList.WithSlotsAvailable(1).RequestAsync();
 
                 foreach (var lobby in lobbies)
@@ -133,55 +131,40 @@ namespace Managers.Network
         {
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
+            NetworkManager.Shutdown();
             SetUI(true);
         }
 
+        #endregion
+
+        #region UI Changes
+
         public void CopyID()
         {
-            var textEditor = new TextEditor();
-            textEditor.text = lobbyId.text;
+            var textEditor = new TextEditor
+            {
+                text = lobbyId.text
+            };
             textEditor.SelectAll();
             textEditor.Copy();
         }
-
-        /*public void OnHostButtonClicked()
+        
+        private void SetUI(bool login)
         {
-            loginUI.SetActive(false);
-            NetworkManager.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.StartHost();
-            if (!NetworkManager.IsServer) return;
-            LoadGame();
+            loginUI.SetActive(login);
+            lobbyUI.SetActive(!login);
         }
-
-        private static void LoadGame()
+        
+        private void ShowPlayers(Lobby lobby)
         {
-            NetworkManager.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
-            //Debug.Log("Host started with SteamID: " + SteamClient.SteamId);
-        }
-
-        public void OnClientButtonClicked()
-        {
-            if (string.IsNullOrEmpty(_clientSteamIdInputField.text))
+            playersInLobby.text = "Players in Lobby:\n";
+            foreach (var player in lobby.Members)
             {
-                Debug.LogWarning("Client Steam ID input field is empty.");
-                return;
+                playersInLobby.text += player.Name + "\n";
             }
-
-            loginUI.SetActive(false);
-            var steamId = _clientSteamIdInputField.text;
-            var targetSteamId = ulong.Parse(steamId);
-            var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
-            facepunchTransport.targetSteamId = targetSteamId;
-            NetworkManager.Singleton.StartClient();
         }
 
-        public void DisconnectClient(ulong clientId)
-        {
-            if (NetworkManager.IsServer)
-            {
-                NetworkManager.DisconnectClient(clientId);
-            }
-        }*/
+        #endregion
 
         private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
@@ -193,13 +176,11 @@ namespace Managers.Network
                 return;
             }
             
-            response.Approved = true;
             //response.CreatePlayerObject = true;
-            response.CreatePlayerObject = false;
-
             //response.PlayerPrefabHash = 1959477017;
-
             //response.Position = Vector3.zero + new Vector3(0, 1, 0);
+            response.CreatePlayerObject = false;
+            response.Approved = true;
             response.Pending = false;
         }
     }
