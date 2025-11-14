@@ -65,7 +65,11 @@ namespace World
         {
             SetTransformsServerRpc(interactor, pickingUp);
         }
-        
+
+        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        {
+        }
+
         public string GetInteractName()
         {
             return gameObject.name;

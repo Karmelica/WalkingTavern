@@ -198,9 +198,9 @@ namespace Cooking
         /// Call this when player clicks/presses button during skill check
         /// </summary>
         /// <returns>0 = fail, 1 = success, 2 = perfect</returns>
-        public int TryComplete()
+        public SkillCheckResult TryComplete()
         {
-            if (_isComplete) return 0;
+            if (_isComplete) return SkillCheckResult.Completed;
 
             _isComplete = true;
 
@@ -215,7 +215,7 @@ namespace Cooking
                 ShowResult(true, true);
                 if (_skillCheckRoutine != null) StopCoroutine(_skillCheckRoutine);
                 StartCoroutine(CloseAfterDelay());
-                return 2; // Perfect
+                return SkillCheckResult.Perfect; // Perfect
             }
             
             if (isSuccess)
@@ -223,40 +223,15 @@ namespace Cooking
                 ShowResult(true, false);
                 if (_skillCheckRoutine != null) StopCoroutine(_skillCheckRoutine);
                 StartCoroutine(CloseAfterDelay());
-                return 1; // Success
+                return SkillCheckResult.Success; // Success
             }
 
             ShowResult(false, false);
             if (_skillCheckRoutine != null) StopCoroutine(_skillCheckRoutine);
             StartCoroutine(CloseAfterDelay());
-            return 0; // Fail
+            return SkillCheckResult.Fail; // Fail
         }
         
-        /// <summary>
-        /// Gets the result type based on current progress
-        /// </summary>
-        /// <returns>0 = would fail, 1 = would success, 2 = would be perfect</returns>
-        public int GetCurrentResultType()
-        {
-            var progress = _elapsedTime / totalDuration;
-            
-            if (progress >= _perfectZoneStartTime && progress <= _perfectZoneEndTime)
-                return 2;
-            
-            if (progress >= successZoneStartTime && progress <= successZoneEndTime)
-                return 1;
-            
-            return 0;
-        }
-
-        /// <summary>
-        /// Gets current progress (0-1)
-        /// </summary>
-        public float GetProgress()
-        {
-            return Mathf.Clamp01(_elapsedTime / totalDuration);
-        }
-
         /// <summary>
         /// Closes skill check after showing result
         /// </summary>
@@ -284,5 +259,13 @@ namespace Cooking
 
         #endregion
     }
+}
+
+public enum SkillCheckResult
+{
+    Completed,
+    Fail,
+    Success,
+    Perfect
 }
 
