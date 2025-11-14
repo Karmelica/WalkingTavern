@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -29,7 +30,7 @@ namespace Managers
         {
             foreach (var clientId in clients)
             {
-                var playerInstance = Instantiate(playerPrefab);
+                var playerInstance = Instantiate(playerPrefab, new Vector3(Random.Range(0f, 5), 1, Random.Range(0f, 5)), Quaternion.identity);
                 playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
             }
         }

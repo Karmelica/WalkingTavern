@@ -69,12 +69,13 @@ namespace Managers.Network
             SetUI(false);
 
             if(NetworkManager.Singleton.IsHost) return;
+            
             var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
             facepunchTransport.targetSteamId = lobby.Owner.Id;
-            
             NetworkManager.Singleton.StartClient();
         }
-        
+
+
         private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
         {
             try
@@ -83,7 +84,7 @@ namespace Managers.Network
             }
             catch (Exception e)
             {
-                Debug.LogError("Error joining lobby from invite: " + e.Message);
+                Debug.LogError($"Error joining lobby from invite: {e.Message}\n{e.StackTrace}");
             }
         }
         private void PlayerJoined(Lobby lobby, Friend friend)
@@ -125,6 +126,7 @@ namespace Managers.Network
             SteamCurrentLobby.CurrentLobby = null;
             SetUI(true);
             NetworkManager.Singleton.Shutdown();
+            NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
         }
 
         public void OnStartGameButtonClicked()
