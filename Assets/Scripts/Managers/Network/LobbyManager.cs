@@ -48,18 +48,18 @@ namespace Managers.Network
         private void PlayerJoined(Lobby lobby, Friend friend)
         {
             Debug.Log($"{friend.Name} joined the lobby.");
-            
-            playersInLobby.text = "Players in Lobby:\n";
-            foreach (var player in lobby.Members)
-            {
-                playersInLobby.text += player.Name + "\n";
-            }
+            ShowPlayers(lobby);
         }
-        
+
+
         private void PlayerLeft(Lobby lobby, Friend friend)
         {
             Debug.Log($"{friend.Name} left the lobby.");
-            
+            ShowPlayers(lobby);
+        }
+        
+        private void ShowPlayers(Lobby lobby)
+        {
             playersInLobby.text = "Players in Lobby:\n";
             foreach (var player in lobby.Members)
             {
