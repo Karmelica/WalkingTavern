@@ -108,31 +108,33 @@ namespace Managers.Network
         {
             try
             {
-                ulong lobbyID;
-                if (!ulong.TryParse(_clientSteamIdInputField.text, out lobbyID)) return;
-                var lobbies = await SteamMatchmaking.LobbyList.WithSlotsAvailable(1).RequestAsync();
-
-                foreach (var lobby in lobbies)
+                if (!ulong.TryParse(_clientSteamIdInputField.text, out ulong lobbyID))
                 {
-                    if (lobby.Id == lobbyID)
-                    {
-                        await lobby.Join();
-                        return;
-                    }
+                    return;
+                }
+
+                // Bezpośrednie dołączenie do lobby po ID
+                var lobby = await SteamMatchmaking.JoinLobbyAsync(lobbyID);
+
+                if (!lobby.HasValue)
+                {
+                    Debug.LogError("Failed to join lobby with ID: " + lobbyID);
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError("Error joining lobby: " + e.Message);
+                Debug.LogError($"Error joining lobby: {e.Message}\n{e.StackTrace}");
             }
         }
+
 
         public void OnLeaveButtonClicked()
         {
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
-            NetworkManager.Shutdown();
             SetUI(true);
+            if(NetworkManager.IsHost) NetworkManager.ConnectionApprovalCallback -= ApprovalCheck;
+            NetworkManager.Shutdown();
         }
 
         #endregion
