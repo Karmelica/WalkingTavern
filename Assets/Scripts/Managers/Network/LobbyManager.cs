@@ -48,17 +48,18 @@ namespace Managers.Network
         private void PlayerJoined(Lobby lobby, Friend friend)
         {
             Debug.Log($"{friend.Name} joined the lobby.");
-            ShowPlayersInLobby(lobby);
+            
+            playersInLobby.text = "Players in Lobby:\n";
+            foreach (var player in lobby.Members)
+            {
+                playersInLobby.text += player.Name + "\n";
+            }
         }
         
         private void PlayerLeft(Lobby lobby, Friend friend)
         {
             Debug.Log($"{friend.Name} left the lobby.");
-            ShowPlayersInLobby(lobby);
-        }
-        
-        private void ShowPlayersInLobby(Lobby lobby)
-        {
+            
             playersInLobby.text = "Players in Lobby:\n";
             foreach (var player in lobby.Members)
             {
@@ -77,7 +78,7 @@ namespace Managers.Network
         private void LobbyEntered(Lobby lobby)
         {
             SteamCurrentLobby.CurrentLobby = lobby;
-            lobbyId.text = "Lobby ID: " + lobby.Id;
+            lobbyId.text = lobby.Id.ToString();
             //Debug.Log("Joined lobby with ID: " + lobby.Id);
             SetUI(false);
         }
@@ -114,9 +115,11 @@ namespace Managers.Network
 
                 foreach (var lobby in lobbies)
                 {
-                    if (lobby.Id != lobbyID) continue;
-                    await lobby.Join();
-                    return;
+                    if (lobby.Id == lobbyID)
+                    {
+                        await lobby.Join();
+                        return;
+                    }
                 }
             }
             catch (Exception e)
@@ -134,10 +137,8 @@ namespace Managers.Network
 
         public void CopyID()
         {
-            var textEditor = new TextEditor
-            {
-                text = lobbyId.ToString()
-            };
+            var textEditor = new TextEditor();
+            textEditor.text = lobbyId.text;
             textEditor.SelectAll();
             textEditor.Copy();
         }
