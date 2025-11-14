@@ -10,11 +10,15 @@ namespace Player
         public TextMeshProUGUI interactText;
         public SkillCheck skillCheck;
         
-        public void EnableSkillCheck()
+        public void TrySkillCheck()
         {
-            if (!skillCheck.gameObject.activeInHierarchy)
-                skillCheck.gameObject.SetActive(true);
+            if (!IsSkillCheckActive()) skillCheck.gameObject.SetActive(true);
             else skillCheck.TryComplete();
+        }
+        
+        public bool IsSkillCheckActive()
+        {
+            return skillCheck.gameObject.activeInHierarchy;
         }
     }
 }

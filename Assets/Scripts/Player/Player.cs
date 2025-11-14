@@ -53,7 +53,8 @@ namespace Player
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
-        private NetworkVariable<FixedString64Bytes> playerNickname = new("Nickname");
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname");
         
         #endregion
 
@@ -78,6 +79,7 @@ namespace Player
         private Coroutine _interactionCoroutine;
         private bool _isInteracting;
         private IInteractable _interactObj;
+        private bool _canMove = true;
 
         #endregion
 
@@ -108,7 +110,7 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (IsOwner) 
+            if (IsOwner && _canMove)
                 Move();
         }
         
@@ -134,8 +136,8 @@ namespace Player
                 InitializeInput();
             }
 
-            playerNickname.OnValueChanged += SetNickname;
-            SetNickname("Nickname", playerNickname.Value);
+            _playerNickname.OnValueChanged += SetNickname;
+            SetNickname("Nickname", _playerNickname.Value);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -219,8 +221,8 @@ namespace Player
         /// </summary>
         private static float NormalizeAngle(float angle)
         {
-            if (angle > 180f) 
-                angle -= 360f;
+            if (angle > 180f) angle -= 360f;
+            if( angle < -180f) angle += 360f;
             return angle;
         }
         
@@ -296,7 +298,7 @@ namespace Player
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
             //var clientId = serverRpcParams.Receive.SenderClientId;
-            playerNickname.Value = new Friend(id).Name;
+            _playerNickname.Value = new Friend(id).Name;
             //SetSteamNicknameClientRpc(clientId);
         }
         
@@ -305,7 +307,7 @@ namespace Player
         /// </summary>
         private void SetNickname(FixedString64Bytes previousValue, FixedString64Bytes newValue)
         {
-            steamNickname.text = playerNickname.Value.ToString();
+            steamNickname.text = _playerNickname.Value.ToString();
         }
 
         #endregion
@@ -314,7 +316,7 @@ namespace Player
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || !IsOwner || _playerCamera == null || interactor == null) return;
+            if (!Application.isFocused || !IsOwner || _playerCamera == null || interactor == null || !_canMove) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
@@ -323,7 +325,7 @@ namespace Player
         
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!IsOwner || !context.started) return;
+            if (!IsOwner || !context.started || !_canMove) return;
             Jump();
         }
         
@@ -349,9 +351,6 @@ namespace Player
         {
             if(context.started)
             {
-                // TODO: interactPoint jest nullem poza serwerem
-                // trzeba naprawić system interakcji
-                
                 var interactObj = GetHitInfo();
 
                 if (interactObj == null) return;
@@ -367,6 +366,17 @@ namespace Player
                 _isInteracting = false;
                 _interactObj.PrimaryInteract(this, false);
                 _interactObj = null;
+            }
+        }
+        
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                var interactable = GetHitInfo();
+                if( interactable == null) return;
+                interactable.PrimaryInteract(this);
+                //canvasScript.TrySkillCheck();
             }
         }
 
@@ -386,14 +396,6 @@ namespace Player
         public void OnCrouch(InputAction.CallbackContext context)
         {
             // TODO: Implementacja kucania
-        }
-
-        public void OnInteract(InputAction.CallbackContext context)
-        {
-            if (context.started)
-            {
-                canvasScript.EnableSkillCheck();
-            }
         }
 
         #endregion
