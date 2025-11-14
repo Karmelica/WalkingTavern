@@ -49,8 +49,8 @@ namespace World
         private void SetCubePositionServerRpc()
         {
             if (!_isPickedUp.Value) return;
-            _rigidbody.linearVelocity = ((_interactTransform.position + _interactTransform.forward * 2f) - transform.position) * CubeVel;
-            transform.rotation = Quaternion.identity;
+            _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 2f - transform.position) * CubeVel;
+            transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         
         [ServerRpc(RequireOwnership = false)]

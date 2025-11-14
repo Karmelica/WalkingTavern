@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -7,7 +5,6 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -95,7 +92,7 @@ namespace Player
         private void Update()
         {
             UpdateGroundCheck();
-            SetAnimationVars();
+            SetAnimationVariables();
             UpdateInteractorPosition();
             
             if (!IsOwner) return;
@@ -129,13 +126,12 @@ namespace Player
                 if(_playerCamera == null)
                 {
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
-                    DontDestroyOnLoad(_playerCamera.gameObject);
                 }
                 
                 localPlayerMesh.enabled = false;
-                InitializeInput();
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
                 canvasScript.gameObject.SetActive(true);
+                InitializeInput();
             }
 
             playerNickname.OnValueChanged += SetNickname;
@@ -203,19 +199,6 @@ namespace Player
         {
             _playerCamera.transform.position = interactor.position;
             _playerCamera.transform.rotation = Quaternion.Euler(interactor.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
-            /*_playerCamera.transform.position = transform.position + Vector3.up * CameraHeightOffset;
-            
-            var lookVectorY = Mathf.Clamp(
-                NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
-                CameraVerticalClampMin,
-                CameraVerticalClampMax
-            );
-            
-            _playerCamera.transform.localRotation = Quaternion.Euler(
-                lookVectorY,
-                transform.localRotation.eulerAngles.y,
-                0f
-            );*/
         }
         
         private void UpdateInteractorPosition()
@@ -276,7 +259,7 @@ namespace Player
         
         #endregion
         
-        private void SetAnimationVars()
+        private void SetAnimationVariables()
         {
             _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
             _animator.SetBool(IsGrounded, _isGrounded);

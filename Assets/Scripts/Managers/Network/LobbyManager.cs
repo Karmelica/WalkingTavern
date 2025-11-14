@@ -16,7 +16,6 @@ namespace Managers.Network
         [SerializeField] private GameObject lobbyUI;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
-        private static NetworkManager NetworkManager => NetworkManager.Singleton;
         
         private TMP_InputField _clientSteamIdInputField;
 
@@ -56,8 +55,10 @@ namespace Managers.Network
             if (result != Result.OK) return;
             lobby.SetPublic();
             lobby.SetJoinable(true);
-            NetworkManager.StartHost();
-            NetworkManager.ConnectionApprovalCallback += ApprovalCheck;
+            
+            // Przypisz callback PRZED uruchomieniem hosta
+            NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
+            NetworkManager.Singleton.StartHost();
         }
 
         private void LobbyEntered(Lobby lobby)
@@ -67,11 +68,11 @@ namespace Managers.Network
             ShowPlayers(lobby);
             SetUI(false);
 
-            if(NetworkManager.IsHost) return;
+            if(NetworkManager.Singleton.IsHost) return;
             var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
             facepunchTransport.targetSteamId = lobby.Owner.Id;
             
-            NetworkManager.StartClient();
+            NetworkManager.Singleton.StartClient();
         }
         
         private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
@@ -108,33 +109,28 @@ namespace Managers.Network
         {
             try
             {
-                if (!ulong.TryParse(_clientSteamIdInputField.text, out ulong lobbyID))
-                {
-                    return;
-                }
+                if (!ulong.TryParse(_clientSteamIdInputField.text, out ulong lobbyID)) return;
+                await SteamMatchmaking.JoinLobbyAsync(lobbyID);
 
-                // Bezpośrednie dołączenie do lobby po ID
-                var lobby = await SteamMatchmaking.JoinLobbyAsync(lobbyID);
-
-                if (!lobby.HasValue)
-                {
-                    Debug.LogError("Failed to join lobby with ID: " + lobbyID);
-                }
             }
             catch (Exception e)
             {
                 Debug.LogError($"Error joining lobby: {e.Message}\n{e.StackTrace}");
             }
         }
-
-
+        
         public void OnLeaveButtonClicked()
         {
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
             SetUI(true);
-            if(NetworkManager.IsHost) NetworkManager.ConnectionApprovalCallback -= ApprovalCheck;
-            NetworkManager.Shutdown();
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        public void OnStartGameButtonClicked()
+        {
+            if (!NetworkManager.Singleton.IsHost) return;
+            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
         }
 
         #endregion
@@ -168,6 +164,8 @@ namespace Managers.Network
 
         #endregion
 
+        #region Connection Approval
+
         private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
             if(NetworkManager.Singleton.ConnectedClients.Count >= 4)
@@ -178,12 +176,11 @@ namespace Managers.Network
                 return;
             }
             
-            //response.CreatePlayerObject = true;
-            //response.PlayerPrefabHash = 1959477017;
-            //response.Position = Vector3.zero + new Vector3(0, 1, 0);
             response.CreatePlayerObject = false;
             response.Approved = true;
             response.Pending = false;
         }
+
+        #endregion
     }
 }
