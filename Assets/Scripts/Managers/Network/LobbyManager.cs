@@ -58,7 +58,6 @@ namespace Managers.Network
             lobby.SetPublic();
             lobby.SetJoinable(true);
             
-            // Przypisz callback PRZED uruchomieniem hosta
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.StartHost();
         }

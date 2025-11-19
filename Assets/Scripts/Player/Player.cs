@@ -376,7 +376,6 @@ namespace Player
                 var interactable = GetHitInfo();
                 if( interactable == null) return;
                 interactable.SecondaryInteract(this);
-                //canvasScript.TrySkillCheck();
             }
         }
 
