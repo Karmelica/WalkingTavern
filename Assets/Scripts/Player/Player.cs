@@ -96,7 +96,6 @@ namespace Player
             UpdateGroundCheck();
             SetAnimationVariables();
             UpdateInteractorPosition();
-            UpdatePlayerNickRotation();
             
             if (!IsOwner) return;
             if (_playerCamera == null) return;
@@ -203,11 +202,6 @@ namespace Player
         {
             _playerCamera.transform.position = interactor.position;
             _playerCamera.transform.rotation = Quaternion.Euler(interactor.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
-        }
-        
-        private void UpdatePlayerNickRotation()
-        {
-            playerNameCanvas.transform.forward = _playerCamera.transform.forward;
         }
         
         private void UpdateInteractorPosition()
