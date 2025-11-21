@@ -26,7 +26,8 @@ namespace World
 
         private void Update()
         {
-            SetObjectPositionServerRpc();
+            //SetObjectPositionServerRpc();
+            SetObjectPosition();
         }
 
         private void Awake()
@@ -39,15 +40,22 @@ namespace World
         
         #region RPC Methods
 
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+        /*[Rpc(SendTo.Server)]
         private void SetObjectPositionServerRpc()
+        {
+            if (!_isPickedUp.Value) return;
+            _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
+            transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
+        }*/
+        
+        private void SetObjectPosition()
         {
             if (!_isPickedUp.Value) return;
             _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+        [Rpc(SendTo.Server)]
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
