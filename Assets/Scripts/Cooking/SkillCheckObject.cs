@@ -18,6 +18,7 @@ namespace Cooking
 
         public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
+            //nothing to do here
         }
 
         public void SecondaryInteract(NetworkBehaviourReference interactor)
@@ -25,7 +26,7 @@ namespace Cooking
             if (!interactor.TryGet(out Player.Player player)) return;
             _interactTransform = player.GetInteractPoint();
             if(IsSkillCheckActive())
-                Debug.Log(skillCheck.TryComplete());
+                skillCheck.TryComplete();
             else
                 skillCheck.gameObject.SetActive(true);
         }
@@ -35,7 +36,7 @@ namespace Cooking
             return gameObject.name;
         }
 
-        public bool IsPickedUp()
+        public bool IsInteractedWith()
         {
             return false;
         }

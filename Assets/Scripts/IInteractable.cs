@@ -7,5 +7,5 @@ public interface IInteractable
     public void SecondaryInteract(NetworkBehaviourReference interactor);
     public string GetInteractName();
 
-    public bool IsPickedUp();
+    public bool IsInteractedWith();
 }

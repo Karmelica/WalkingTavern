@@ -102,7 +102,7 @@ namespace Player
             if (_playerCamera == null) return;
             
             var interactable = GetHitInfo();
-            canvasScript.interactText.text = interactable != null && !interactable.IsPickedUp()
+            canvasScript.interactText.text = interactable != null && !interactable.IsInteractedWith()
                 ? $"Interact with {interactable.GetInteractName()}"
                 : string.Empty;
             UpdateCameraPosition();
@@ -361,7 +361,7 @@ namespace Player
                 var interactObj = GetHitInfo();
 
                 if (interactObj == null) return;
-                if (interactObj.IsPickedUp()) return;
+                if (interactObj.IsInteractedWith()) return;
                 _interactObj = interactObj;
                 _interactObj.PrimaryInteract(this);
                 _isInteracting = true;

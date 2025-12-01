@@ -16,7 +16,7 @@ namespace World
 
         private const float CubeVel = 10f;
         private Transform _interactTransform;
-        private NetworkVariable<bool> _isPickedUp = new (false);
+        private readonly NetworkVariable<bool> _isInteractedWith = new (false);
         
         private Rigidbody _rigidbody;
 
@@ -50,7 +50,7 @@ namespace World
         
         private void SetObjectPosition()
         {
-            if (!_isPickedUp.Value) return;
+            if (!_isInteractedWith.Value) return;
             _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
@@ -59,9 +59,9 @@ namespace World
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
-            _isPickedUp.Value = pickingUp;
-            _rigidbody.useGravity = !_isPickedUp.Value;
-            _rigidbody.maxLinearVelocity = _isPickedUp.Value ? float.MaxValue : _rigidbody.maxLinearVelocity = 5f;
+            _isInteractedWith.Value = pickingUp;
+            _rigidbody.useGravity = !_isInteractedWith.Value;
+            _rigidbody.maxLinearVelocity = _isInteractedWith.Value ? float.MaxValue : _rigidbody.maxLinearVelocity = 5f;
             _interactTransform = pickingUp ? player.GetInteractPoint() : transform;
         }
 
@@ -83,9 +83,9 @@ namespace World
             return gameObject.name;
         }
 
-        public bool IsPickedUp()
+        public bool IsInteractedWith()
         {
-            return _isPickedUp.Value;
+            return _isInteractedWith.Value;
         }
 
         #endregion
