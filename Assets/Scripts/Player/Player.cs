@@ -75,14 +75,14 @@ namespace Player
         private CharacterController _charController;
         private Vector2 _inputVector;
         private Vector3 _playerVelocity;
-        private bool _isGrounded;
+        private NetworkVariable<bool> _isGrounded = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private bool _isSprinting;
         private bool _currentInteractable;
         private Coroutine _interactionCoroutine;
         private bool _isInteracting;
         private IInteractable _interactObj;
         private bool _canMove = true;
-        private NetworkVariable<bool> _isCrouching = new(false);
+        private bool _isCrouching;
 
         #endregion
 
@@ -216,7 +216,7 @@ namespace Player
         
         private void UpdateInteractorPosition()
         {
-            var cameraHeight = _isCrouching.Value ? CameraHeight / 2f : CameraHeight;
+            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
             interactor.position = transform.position + Vector3.up * cameraHeight;
             
             var lookVectorY = Mathf.Clamp(
@@ -244,9 +244,9 @@ namespace Player
 
         private void Move()
         {
-            _isGrounded = _charController.isGrounded;
+            _isGrounded.Value = _charController.isGrounded;
 
-            if (_isGrounded)
+            if (_isGrounded.Value)
             {
                 if(_playerVelocity.y < -2f)
                     _playerVelocity.y = -2f;
@@ -274,7 +274,7 @@ namespace Player
         /// </summary>
         private void Jump()
         {
-            if (!_isGrounded) return;
+            if (!_isGrounded.Value) return;
             
             _animator.SetTrigger(Jumping);
             _playerVelocity.y = Mathf.Sqrt(JumpForce * -2f * Physics.gravity.y);
@@ -415,17 +415,16 @@ namespace Player
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            if (!IsOwner || !_canMove) return;
+            if(!IsOwner) return;
             if (context.started)
             {
-                _isCrouching.Value = true;
+                _isCrouching = true;
                 var newHeight = _charController.height = Height / 2f;
                 _charController.center = new Vector3(0f, newHeight / 2f, 0f);
             }
-
             if (context.canceled)
             {
-                _isCrouching.Value = false;
+                _isCrouching = false;
                 var newHeight = _charController.height = Height;
                 _charController.center = new Vector3(0f, newHeight / 2f, 0f);
             }
