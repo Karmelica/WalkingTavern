@@ -26,7 +26,6 @@ namespace World
 
         private void Update()
         {
-            //SetObjectPositionServerRpc();
             SetObjectPosition();
         }
 
@@ -39,14 +38,6 @@ namespace World
         #endregion
         
         #region RPC Methods
-
-        /*[Rpc(SendTo.Server)]
-        private void SetObjectPositionServerRpc()
-        {
-            if (!_isPickedUp.Value) return;
-            _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
-            transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
-        }*/
         
         private void SetObjectPosition()
         {
@@ -55,7 +46,7 @@ namespace World
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Everyone)]
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
