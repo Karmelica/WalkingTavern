@@ -207,7 +207,8 @@ namespace Player
         
         private void UpdatePlayerNickRotation()
         {
-            playerNameCanvas.transform.forward = _playerCamera.transform.forward;
+            if(playerNameCanvas && _playerCamera)
+                playerNameCanvas.transform.forward = _playerCamera.transform.forward;
         }
         
         private void UpdateInteractorPosition()
