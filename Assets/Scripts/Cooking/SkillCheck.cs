@@ -124,17 +124,16 @@ namespace Cooking
             skillCheckZone.localPosition = new Vector3(zoneCenterX, 0, 0);
             
             // Calculate perfect zone
-            if (skillCheckPerfectZone != null)
-            {
-                var perfectZoneWidthRatio = _perfectZoneEndTime - _perfectZoneStartTime;
-                var perfectZoneWidth = barWidth * perfectZoneWidthRatio;
-                
-                var perfectZoneCenterRatio = (_perfectZoneStartTime + _perfectZoneEndTime) / 2f;
-                var perfectZoneCenterX = (perfectZoneCenterRatio - 0.5f) * barWidth;
-                
-                skillCheckPerfectZone.sizeDelta = new Vector2(perfectZoneWidth, skillCheckPerfectZone.sizeDelta.y);
-                skillCheckPerfectZone.localPosition = new Vector3(perfectZoneCenterX, 0, 0);
-            }
+            
+            var perfectZoneWidthRatio = _perfectZoneEndTime - _perfectZoneStartTime;
+            var perfectZoneWidth = barWidth * perfectZoneWidthRatio;
+            
+            var perfectZoneCenterRatio = (_perfectZoneStartTime + _perfectZoneEndTime) / 2f;
+            var perfectZoneCenterX = (perfectZoneCenterRatio - 0.5f) * barWidth;
+            
+            skillCheckPerfectZone.sizeDelta = new Vector2(perfectZoneWidth, skillCheckPerfectZone.sizeDelta.y);
+            skillCheckPerfectZone.localPosition = new Vector3(perfectZoneCenterX, 0, 0);
+            
         }
 
         /// <summary>

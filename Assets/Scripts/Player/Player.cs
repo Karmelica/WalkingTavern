@@ -1,3 +1,4 @@
+using System.Collections;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -14,8 +15,6 @@ namespace Player
     [RequireComponent(typeof(NetworkAnimator))]
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkObject))]
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(NetworkRigidbody))]
     [RequireComponent(typeof(Collider))]
     
     public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
@@ -27,10 +26,10 @@ namespace Player
         private const float CameraVerticalClampMax = 87f;
         private const float GroundCheckDistance = 0.2f;
         private const float GroundCheckOffset = 0.1f;
-        private const float WalkForce = 10f;
-        private const float SprintForce = 20f;
-        private const float MaxWalkSpeed = 2.5f;
-        private const float MaxSprintSpeed = 5f;
+        private const float WalkForce = 5f;
+        private const float SprintForce = 10f;
+        //private const float MaxWalkSpeed = 2.5f;
+        //private const float MaxSprintSpeed = 5f;
         private const float JumpForce = 5f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
@@ -72,6 +71,7 @@ namespace Player
         private Camera _playerCamera;
         private Animator _animator;
         private Rigidbody _rb;
+        private CharacterController _controller;
         private Vector2 _inputVector;
         private bool _isGrounded;
         private bool _isSprinting;
@@ -88,7 +88,8 @@ namespace Player
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _rb = GetComponent<Rigidbody>();
+            //_rb = GetComponent<Rigidbody>();
+            _controller = GetComponent<CharacterController>();
         }
         
         private void Update()
@@ -96,15 +97,10 @@ namespace Player
             UpdateGroundCheck();
             SetAnimationVariables();
             UpdateInteractorPosition();
-            UpdatePlayerNickRotation();
             
             if (!IsOwner) return;
             if (_playerCamera == null) return;
             
-            var interactable = GetHitInfo();
-            canvasScript.interactText.text = interactable != null && !interactable.IsInteractedWith()
-                ? $"Interact with {interactable.GetInteractName()}"
-                : string.Empty;
             UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _isInteracting);
         }
@@ -142,8 +138,24 @@ namespace Player
             SetNickname("Nickname", _playerNickname.Value);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            StartCoroutine(UpdateInterface());
         }
-        
+
+        private IEnumerator UpdateInterface()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.2f);
+                UpdatePlayerNickRotation();
+                if(!IsOwner || !_playerCamera) continue;
+                var interactable = GetHitInfo();
+                canvasScript.interactText.text = interactable != null && !interactable.IsInteractedWith()
+                    ? $"Interact with {interactable.GetInteractName()}"
+                    : string.Empty;
+            }
+        }
+
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
@@ -230,30 +242,34 @@ namespace Player
         private static float NormalizeAngle(float angle)
         {
             if (angle > 180f) angle -= 360f;
-            if( angle < -180f) angle += 360f;
+            //if( angle < -180f) angle += 360f;
             return angle;
         }
         
         #endregion
         
         #region Movement & Physics
-        
-        /// <summary>
-        /// Obsługuje ruch gracza używając fizyki
-        /// </summary>
+
         private void Move()
         {
+            
+            
             var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
             var moveForce = _isSprinting ? SprintForce : WalkForce;
+
+            _controller.Move(moveVector * (moveForce * Time.fixedDeltaTime));
             
-            _rb.AddForce(moveVector * moveForce, ForceMode.Force);
+            if(!_isGrounded)
+                _controller.SimpleMove(Physics.gravity);
             
+            /*_rb.AddForce(moveVector * moveForce, ForceMode.Force);
+
             // Limit horizontal velocity
             var maxSpeed = _isSprinting ? MaxSprintSpeed : MaxWalkSpeed;
             if (!(_rb.linearVelocity.magnitude > maxSpeed)) return;
             var limitedVelocity = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z);
             limitedVelocity = limitedVelocity.normalized * maxSpeed;
-            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);
+            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);*/
         }
         
         /// <summary>
@@ -271,7 +287,7 @@ namespace Player
         
         private void SetAnimationVariables()
         {
-            _animator.SetFloat(WalkSpeed, _rb.linearVelocity.magnitude);
+            _animator.SetFloat(WalkSpeed, _controller.velocity.magnitude);
             _animator.SetBool(IsGrounded, _isGrounded);
         }
         

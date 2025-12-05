@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.615}
+  m_AnchoredPosition: {x: 0, y: 0.853}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &193620687
@@ -216,7 +216,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1094,6 +1094,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 446
       objectReference: {fileID: 0}
+    - target: {fileID: 280985664144447647, guid: f698f0a5b12b21d4e9d5f718a3ad8815, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.9785
+      objectReference: {fileID: 0}
     - target: {fileID: 344380668077991769, guid: f698f0a5b12b21d4e9d5f718a3ad8815, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2073450298
@@ -1162,6 +1166,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1279868654}
+    - target: {fileID: 5837175929213079597, guid: f698f0a5b12b21d4e9d5f718a3ad8815, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.967
+      objectReference: {fileID: 0}
     - target: {fileID: 7068711098569329182, guid: f698f0a5b12b21d4e9d5f718a3ad8815, type: 3}
       propertyPath: m_Mesh
       value: 
