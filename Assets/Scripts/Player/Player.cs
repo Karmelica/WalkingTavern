@@ -101,9 +101,9 @@ namespace Player
             
             if (!IsOwner) return;
             if (!_playerCamera) return;
-            
-            UpdateCameraPosition();
             SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
+            if (!_canMove) return;
+            UpdateCameraPosition();
         }
 
         private void FixedUpdate()
