@@ -59,6 +59,7 @@ namespace World
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
+            NetworkObject.RequestOwnership();
             _isInteractedWith.Value = pickingUp;
             _rigidbody.useGravity = !_isInteractedWith.Value;
             _rigidbody.maxLinearVelocity = _isInteractedWith.Value ? float.MaxValue : _rigidbody.maxLinearVelocity = 5f;
@@ -71,7 +72,6 @@ namespace World
 
         public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
-            NetworkObject.RequestOwnership();
             SetTransformsServerRpc(interactor, pickingUp);
         }
 
