@@ -27,10 +27,10 @@ namespace Player
         private const float GroundCheckDistance = 0.2f;
         private const float GroundCheckOffset = 0.1f;
         private const float WalkForce = 5f;
-        private const float SprintForce = 10f;
+        private const float SprintForce = 7.5f;
         //private const float MaxWalkSpeed = 2.5f;
         //private const float MaxSprintSpeed = 5f;
-        private const float JumpForce = 5f;
+        private const float JumpForce = 1f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
         
@@ -70,9 +70,9 @@ namespace Player
         private InputSystem_Actions _inputActions;
         private Camera _playerCamera;
         private Animator _animator;
-        private Rigidbody _rb;
         private CharacterController _controller;
         private Vector2 _inputVector;
+        private Vector3 _playerVelocity;
         private bool _isGrounded;
         private bool _isSprinting;
         private bool _currentInteractable;
@@ -203,9 +203,9 @@ namespace Player
         /// </summary>
         private void UpdateGroundCheck()
         {
-            var rayOrigin = transform.position + Vector3.up * GroundCheckOffset;
-            _isGrounded = Physics.Raycast(rayOrigin, Vector3.down, GroundCheckDistance);
-            Debug.DrawRay(rayOrigin, Vector3.down * GroundCheckDistance, Color.red);
+            //var rayOrigin = transform.position + Vector3.up * GroundCheckOffset;
+            //_isGrounded = Physics.Raycast(rayOrigin, Vector3.down, GroundCheckDistance);
+            //Debug.DrawRay(rayOrigin, Vector3.down * GroundCheckDistance, Color.red);
         }
         
         /// <summary>
@@ -252,13 +252,20 @@ namespace Player
 
         private void Move()
         {
-            var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
-            var moveForce = _isSprinting ? SprintForce : WalkForce;
+            _isGrounded = _controller.isGrounded;
 
-            _controller.Move(moveVector * (moveForce * Time.fixedDeltaTime));
+            if (_isGrounded)
+            {
+                if(_playerVelocity.y < -2f)
+                    _playerVelocity.y = -2f;
+            }
             
-            if(!_isGrounded)
-                _controller.SimpleMove(Physics.gravity);
+            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized;
+            var moveForce = _isSprinting ? SprintForce : WalkForce;
+            
+            _playerVelocity.y += Physics.gravity.y * Time.fixedDeltaTime;
+            
+            _controller.Move((moveVector * moveForce + Vector3.up * _playerVelocity.y) * Time.fixedDeltaTime);
             
             /*_rb.AddForce(moveVector * moveForce, ForceMode.Force);
 
@@ -278,14 +285,14 @@ namespace Player
             if (!_isGrounded) return;
             
             _animator.SetTrigger(Jumping);
-            _rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+            _playerVelocity.y = Mathf.Sqrt(JumpForce * -2f * Physics.gravity.y);
         }
         
         #endregion
         
         private void SetAnimationVariables()
         {
-            _animator.SetBool(IsGrounded, _isGrounded);
+            _animator.SetBool(IsGrounded, _controller.isGrounded);
         }
         
         #region Network RPCs
