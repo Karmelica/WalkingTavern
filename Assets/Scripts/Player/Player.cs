@@ -102,7 +102,7 @@ namespace Player
             if (_playerCamera == null) return;
             
             UpdateCameraPosition();
-            SetAnimationServerRpc(_inputVector.y, _isInteracting);
+            SetAnimationServerRpc(_inputVector.y, _controller.velocity.magnitude, _isInteracting);
         }
 
         private void FixedUpdate()
@@ -252,8 +252,6 @@ namespace Player
 
         private void Move()
         {
-            
-            
             var moveVector = _inputVector.y * transform.forward + _inputVector.x * transform.right;
             var moveForce = _isSprinting ? SprintForce : WalkForce;
 
@@ -287,7 +285,6 @@ namespace Player
         
         private void SetAnimationVariables()
         {
-            _animator.SetFloat(WalkSpeed, _controller.velocity.magnitude);
             _animator.SetBool(IsGrounded, _isGrounded);
         }
         
@@ -297,20 +294,21 @@ namespace Player
         /// Wysyła dane animacji do serwera
         /// </summary>
         [ServerRpc]
-        private void SetAnimationServerRpc(float walkDir, bool isInteracting, ServerRpcParams serverRpcParams = default)
+        private void SetAnimationServerRpc(float walkDir, float velocity, bool isInteracting, ServerRpcParams serverRpcParams = default)
         {
             var clientId = serverRpcParams.Receive.SenderClientId;
-            SetAnimationClientRpc(walkDir, isInteracting, clientId);
+            SetAnimationClientRpc(walkDir, velocity, isInteracting, clientId);
         }
         
         /// <summary>
         /// Synchronizuje animacje dla wszystkich klientów
         /// </summary>
         [ClientRpc]
-        private void SetAnimationClientRpc(float walkDir, bool isInteracting, ulong clientId)
+        private void SetAnimationClientRpc(float walkDir, float velocity, bool isInteracting, ulong clientId)
         {
             if (OwnerClientId != clientId) return;
             
+            _animator.SetFloat(WalkSpeed, velocity);
             _animator.SetBool(IsInteracting, isInteracting);
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
         }
