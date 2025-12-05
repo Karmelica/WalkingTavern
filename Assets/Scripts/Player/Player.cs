@@ -16,12 +16,14 @@ namespace Player
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(CharacterController))]
     
     public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         #region Constants
         
-        private const float CameraHeightOffset = 1.7f;
+        private const float CameraHeight = 1.7f;
+        private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
         private const float GroundCheckDistance = 0.2f;
@@ -70,7 +72,7 @@ namespace Player
         private InputSystem_Actions _inputActions;
         private Camera _playerCamera;
         private Animator _animator;
-        private CharacterController _controller;
+        private CharacterController _charController;
         private Vector2 _inputVector;
         private Vector3 _playerVelocity;
         private bool _isGrounded;
@@ -80,6 +82,7 @@ namespace Player
         private bool _isInteracting;
         private IInteractable _interactObj;
         private bool _canMove = true;
+        private bool _isCrouching;
 
         #endregion
 
@@ -88,21 +91,19 @@ namespace Player
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            //_rb = GetComponent<Rigidbody>();
-            _controller = GetComponent<CharacterController>();
+            _charController = GetComponent<CharacterController>();
         }
         
         private void Update()
         {
-            UpdateGroundCheck();
             SetAnimationVariables();
             UpdateInteractorPosition();
             
             if (!IsOwner) return;
-            if (_playerCamera == null) return;
+            if (!_playerCamera) return;
             
             UpdateCameraPosition();
-            SetAnimationServerRpc(_inputVector.y, _controller.velocity.magnitude, _isInteracting);
+            SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
         }
 
         private void FixedUpdate()
@@ -122,7 +123,7 @@ namespace Player
             if (IsOwner)
             {
                 //Debug.Log("Local player spawned.");
-                if(_playerCamera == null)
+                if(!_playerCamera)
                 {
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
                 }
@@ -199,16 +200,6 @@ namespace Player
         #region Ground Check & Camera
         
         /// <summary>
-        /// Sprawdza czy gracz dotyka ziemi
-        /// </summary>
-        private void UpdateGroundCheck()
-        {
-            //var rayOrigin = transform.position + Vector3.up * GroundCheckOffset;
-            //_isGrounded = Physics.Raycast(rayOrigin, Vector3.down, GroundCheckDistance);
-            //Debug.DrawRay(rayOrigin, Vector3.down * GroundCheckDistance, Color.red);
-        }
-        
-        /// <summary>
         /// Aktualizuje pozycję i rotację kamery gracza
         /// </summary>
         private void UpdateCameraPosition()
@@ -225,7 +216,8 @@ namespace Player
         
         private void UpdateInteractorPosition()
         {
-            interactor.position = transform.position + Vector3.up * CameraHeightOffset;
+            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
+            interactor.position = transform.position + Vector3.up * cameraHeight;
             
             var lookVectorY = Mathf.Clamp(
                 NormalizeAngle(interactor.rotation.eulerAngles.x),
@@ -252,7 +244,7 @@ namespace Player
 
         private void Move()
         {
-            _isGrounded = _controller.isGrounded;
+            _isGrounded = _charController.isGrounded;
 
             if (_isGrounded)
             {
@@ -265,7 +257,7 @@ namespace Player
             
             _playerVelocity.y += Physics.gravity.y * Time.fixedDeltaTime;
             
-            _controller.Move((moveVector * moveForce + Vector3.up * _playerVelocity.y) * Time.fixedDeltaTime);
+            _charController.Move((moveVector * moveForce + Vector3.up * _playerVelocity.y) * Time.fixedDeltaTime);
             
             /*_rb.AddForce(moveVector * moveForce, ForceMode.Force);
 
@@ -292,7 +284,7 @@ namespace Player
         
         private void SetAnimationVariables()
         {
-            _animator.SetBool(IsGrounded, _controller.isGrounded);
+            _animator.SetBool(IsGrounded, _charController.isGrounded);
         }
         
         #region Network RPCs
@@ -423,7 +415,18 @@ namespace Player
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            // TODO: Implementacja kucania
+            if (context.started)
+            {
+                _isCrouching = true;
+                var newHeight = _charController.height = Height / 2f;
+                _charController.center = new Vector3(0f, newHeight / 2f, 0f);
+            }
+            if (context.canceled)
+            {
+                _isCrouching = false;
+                var newHeight = _charController.height = Height;
+                _charController.center = new Vector3(0f, newHeight / 2f, 0f);
+            }
         }
 
         #endregion
