@@ -284,7 +284,7 @@ namespace Player
         
         private void SetAnimationVariables()
         {
-            _animator.SetBool(IsGrounded, _charController.isGrounded);
+            _animator.SetBool(IsGrounded, _isGrounded.Value);
         }
         
         #region Network RPCs
@@ -307,8 +307,8 @@ namespace Player
         {
             if (OwnerClientId != clientId) return;
             
-            _animator.SetFloat(WalkSpeed, velocity);
             _animator.SetBool(IsInteracting, isInteracting);
+            _animator.SetFloat(WalkSpeed, velocity);
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
         }
 
