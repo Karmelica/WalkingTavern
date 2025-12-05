@@ -82,7 +82,7 @@ namespace Player
         private bool _isInteracting;
         private IInteractable _interactObj;
         private bool _canMove = true;
-        private bool _isCrouching;
+        private NetworkVariable<bool> _isCrouching = new(false);
 
         #endregion
 
@@ -216,7 +216,7 @@ namespace Player
         
         private void UpdateInteractorPosition()
         {
-            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
+            var cameraHeight = _isCrouching.Value ? CameraHeight / 2f : CameraHeight;
             interactor.position = transform.position + Vector3.up * cameraHeight;
             
             var lookVectorY = Mathf.Clamp(
@@ -415,15 +415,17 @@ namespace Player
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
+            if (!IsOwner || !_canMove) return;
             if (context.started)
             {
-                _isCrouching = true;
+                _isCrouching.Value = true;
                 var newHeight = _charController.height = Height / 2f;
                 _charController.center = new Vector3(0f, newHeight / 2f, 0f);
             }
+
             if (context.canceled)
             {
-                _isCrouching = false;
+                _isCrouching.Value = false;
                 var newHeight = _charController.height = Height;
                 _charController.center = new Vector3(0f, newHeight / 2f, 0f);
             }
