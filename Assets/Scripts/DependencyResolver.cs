@@ -53,7 +53,4 @@ public class DependencyResolver : MonoBehaviour
     {
         return _dependencies.ContainsKey(typeof(T));
     }
-    
-    
-    
 }
