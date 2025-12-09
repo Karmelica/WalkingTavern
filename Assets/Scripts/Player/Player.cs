@@ -258,19 +258,10 @@ namespace Player
             _playerVelocity.y += Physics.gravity.y * Time.fixedDeltaTime;
             
             _charController.Move((moveVector * moveForce + Vector3.up * _playerVelocity.y) * Time.fixedDeltaTime);
-            
-            /*_rb.AddForce(moveVector * moveForce, ForceMode.Force);
-
-            // Limit horizontal velocity
-            var maxSpeed = _isSprinting ? MaxSprintSpeed : MaxWalkSpeed;
-            if (!(_rb.linearVelocity.magnitude > maxSpeed)) return;
-            var limitedVelocity = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z);
-            limitedVelocity = limitedVelocity.normalized * maxSpeed;
-            _rb.linearVelocity = new Vector3(limitedVelocity.x, _rb.linearVelocity.y, limitedVelocity.y);*/
         }
         
         /// <summary>
-        /// Wykonuje skok jeśli gracz dotyka ziemi
+        /// Wykonuje skok
         /// </summary>
         private void Jump()
         {
