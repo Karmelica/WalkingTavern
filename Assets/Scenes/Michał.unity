@@ -1017,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bush_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6227141666254301230, guid: 9a9e59726d2cd5b4595d098e1facbdba, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1074,6 +1078,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1993336431099490047, guid: 2c7bb72d1e4c89a4094971397a02f679, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3a12477446945744ebf4cf97e4dadd39, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
