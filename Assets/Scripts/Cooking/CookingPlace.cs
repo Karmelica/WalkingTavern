@@ -1,26 +1,28 @@
 using System;
 using System.Collections.Generic;
+using Cooking.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using World;
 
 namespace Cooking
 {
+    
     public class CookingPlace : MonoBehaviour
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
-        private readonly Dictionary<IngredientType, int> _requiredIngredients = new()
-        {
-            { IngredientType.Cheese, 2 },
-            { IngredientType.Lettuce, 1 }
-        };
+        [SerializeField] private Recipe recipe;
         
         [SerializeField] private SkillCheckObject skillCheck;
         [SerializeField] private TextMeshProUGUI ingredientListText;
 
         private void Start()
         {
-            CheckForIngredients();
+            foreach (var ingredientType in Enum.GetValues(typeof(IngredientType)))
+            {
+                _placedIngredients.TryAdd((IngredientType)ingredientType, 0);
+            }
+            UpdateRecipeText();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -31,7 +33,11 @@ namespace Cooking
                 _placedIngredients[foodItem.ingredientType]++;
             }
             
-            CheckForIngredients();
+            UpdateRecipeText();
+            if(IsRecipeComplete())
+            {
+                skillCheck.enabled = true;
+            }
         }
         
         private void OnTriggerExit(Collider other)
@@ -45,24 +51,40 @@ namespace Cooking
             }
             _placedIngredients[foodItem.ingredientType]--;
                 
-            CheckForIngredients();
+            UpdateRecipeText();
         }
         
-        private void CheckForIngredients()
+        private void UpdateRecipeText()
         {
-            var ingredientsList = "Ingredients:\n";
-            foreach (var (requiredIngredientKey, requiredCount) in _requiredIngredients)
+            ingredientListText.text = "Ingredients:\n";
+            foreach (var ingredient in recipe.ingredients)
             {
-                if (_placedIngredients.TryGetValue(requiredIngredientKey, out var placedCount))
+                var ingredientType = ingredient.ingredient;
+                var ingredientQuantity = ingredient.quantity;
+
+                if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
+                ingredientListText.text += $"{placedCount}/{ingredientQuantity} of {ingredientType}\n";
+            }
+        }
+        
+        private bool IsRecipeComplete()
+        {
+            foreach (var ingredient in recipe.ingredients)
+            {
+                var ingredientType = ingredient.ingredient;
+                var ingredientQuantity = ingredient.quantity;
+
+                if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) return false;
+                
+                if (placedCount < ingredientQuantity)
                 {
-                    ingredientsList += $"{placedCount}/{requiredCount} of {requiredIngredientKey}\n";
-                }
-                else
-                {
-                    ingredientsList += $"0/{requiredCount} of {requiredIngredientKey}\n";
+                    return false;
                 }
             }
-            ingredientListText.text = ingredientsList;
+            return true;
+
+            //recipe complete
+            //skillCheck.gameObject.SetActive(true);
         }
     }
 }
