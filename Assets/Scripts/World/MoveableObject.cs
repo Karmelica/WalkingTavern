@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -24,13 +23,13 @@ namespace World
 
         #region Unity Methods
 
-        private void Update()
+        protected virtual void Update()
         {
             //SetObjectPositionServerRpc();
             SetObjectPosition();
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _interactTransform = transform;

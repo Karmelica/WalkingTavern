@@ -260,11 +260,4 @@ namespace Cooking
     }
 }
 
-public enum SkillCheckResult
-{
-    Completed,
-    Fail,
-    Success,
-    Perfect
-}
 

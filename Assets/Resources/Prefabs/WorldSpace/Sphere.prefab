@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2998941501729818945}
   - component: {fileID: 5559782508645443392}
   - component: {fileID: 4538284803273507309}
-  - component: {fileID: 3422927587365123871}
+  - component: {fileID: 6285091827716914870}
   m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
@@ -231,7 +231,7 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &3422927587365123871
+--- !u!114 &6285091827716914870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3200837471173810449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 802f812c95c44214e825d38f235537ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 08ea8582201dd2147985f9fdfbc19dc5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::World.Cube
+  m_EditorClassIdentifier: Assembly-CSharp::World.FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
