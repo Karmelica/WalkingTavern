@@ -9,11 +9,17 @@ namespace Cooking
         [SerializeField] private GameObject worldCanvas;
         [SerializeField] private SkillCheck skillCheck;
         private Transform _interactTransform;
+        private Camera _camera;
+
+        private void Start()
+        {
+            _camera = Camera.main;
+        }
 
         private void Update()
         {
-            if(_interactTransform == null && !IsSkillCheckActive()) return;
-            worldCanvas.transform.forward = _interactTransform.forward;;
+            if(!_camera) return;
+            worldCanvas.transform.forward = _camera.transform.forward;
         }
 
         public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)

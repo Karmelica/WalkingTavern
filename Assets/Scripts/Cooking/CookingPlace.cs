@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using World;
 
@@ -12,8 +14,15 @@ namespace Cooking
             { IngredientType.Cheese, 2 },
             { IngredientType.Lettuce, 1 }
         };
-        [SerializeField] private SkillCheck skillCheck;
         
+        [SerializeField] private SkillCheckObject skillCheck;
+        [SerializeField] private TextMeshProUGUI ingredientListText;
+
+        private void Start()
+        {
+            CheckForIngredients();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!other.TryGetComponent<FoodItem>(out var foodItem)) return;
@@ -21,8 +30,7 @@ namespace Cooking
             {
                 _placedIngredients[foodItem.ingredientType]++;
             }
-
-            //Debug.Log($"Ingredient {foodItem.ingredientType} count: {_placedIngredients[foodItem.ingredientType]}");
+            
             CheckForIngredients();
         }
         
@@ -30,30 +38,31 @@ namespace Cooking
         {
             if (!other.TryGetComponent<FoodItem>(out var foodItem)) return;
             if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out var ingredient)) return;
-            if (ingredient <= 0) return;
+            if (ingredient <= 0)
+            {
+                _placedIngredients.Remove(foodItem.ingredientType);
+                return;
+            }
             _placedIngredients[foodItem.ingredientType]--;
                 
-            //Debug.Log($"Ingredient {foodItem.ingredientType} count: {_placedIngredients[foodItem.ingredientType]}");
             CheckForIngredients();
         }
         
         private void CheckForIngredients()
         {
-            foreach (var requiredIngredient in _requiredIngredients)
+            var ingredientsList = "Ingredients:\n";
+            foreach (var (requiredIngredientKey, requiredCount) in _requiredIngredients)
             {
-                var requiredIngredientKey = requiredIngredient.Key;
-                var requiredCount = requiredIngredient.Value;
                 if (_placedIngredients.TryGetValue(requiredIngredientKey, out var placedCount))
                 {
-                    Debug.Log($"Placed {placedCount}/{requiredCount} of {requiredIngredientKey}");
+                    ingredientsList += $"{placedCount}/{requiredCount} of {requiredIngredientKey}\n";
                 }
                 else
                 {
-                    Debug.Log($"Placed 0/{requiredCount} of {requiredIngredientKey}");
+                    ingredientsList += $"0/{requiredCount} of {requiredIngredientKey}\n";
                 }
             }
-            //Debug.Log("All ingredients placed! Starting skill check.");
-            //skillCheck.gameObject.SetActive(true);
+            ingredientListText.text = ingredientsList;
         }
     }
 }
