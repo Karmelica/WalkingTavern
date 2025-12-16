@@ -7,7 +7,6 @@ using World;
 
 namespace Cooking
 {
-    
     public class CookingPlace : MonoBehaviour
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
