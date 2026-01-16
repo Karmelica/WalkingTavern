@@ -10,10 +10,12 @@ namespace Cooking
     public class CookingPlace : MonoBehaviour
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
+        [SerializeField] private List<GameObject> _placedFoodItems = new();
         [SerializeField] private Recipe recipe;
         
         [SerializeField] private SkillCheckObject skillCheck;
         [SerializeField] private TextMeshProUGUI ingredientListText;
+        [SerializeField] private Collider triggerCollider;
 
         private void Start()
         {
@@ -30,12 +32,19 @@ namespace Cooking
             if (!_placedIngredients.TryAdd(foodItem.ingredientType, 1))
             {
                 _placedIngredients[foodItem.ingredientType]++;
+                if (!_placedFoodItems.Contains(other.gameObject))
+                {
+                    _placedFoodItems.Add(other.gameObject);
+                }
             }
             
             UpdateRecipeText();
             if(IsRecipeComplete())
             {
-                skillCheck.enabled = true;
+                Debug.Log("Recipe Complete!");
+                //triggerCollider.enabled = false;
+                CompleteRecipe();
+                //skillCheck.enabled = true;
             }
         }
         
@@ -43,6 +52,10 @@ namespace Cooking
         {
             if (!other.TryGetComponent<FoodItem>(out var foodItem)) return;
             if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out var ingredient)) return;
+            if (_placedFoodItems.Contains(other.gameObject))
+            { 
+                _placedFoodItems.Remove(other.gameObject);
+            }
             if (ingredient <= 0)
             {
                 _placedIngredients.Remove(foodItem.ingredientType);
@@ -50,6 +63,33 @@ namespace Cooking
             }
             _placedIngredients[foodItem.ingredientType]--;
                 
+            UpdateRecipeText();
+        }
+
+        private void CompleteRecipe()
+        {
+            foreach (var foodItem in recipe.ingredients)
+            {
+                var ingredientType = foodItem.ingredient;
+                var quantity = foodItem.quantity;
+
+                if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
+                if (placedCount < quantity) continue;
+
+                int removedCount = 0;
+                for (int i = _placedFoodItems.Count - 1; i >= 0 && removedCount < quantity; i--)
+                {
+                    var item = _placedFoodItems[i];
+                    if (item.TryGetComponent<FoodItem>(out var foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
+                    {
+                        Destroy(item);
+                        _placedFoodItems.RemoveAt(i);
+                        removedCount++;
+                    }
+                }
+                _placedIngredients[ingredientType] -= removedCount;
+            }
+            //triggerCollider.enabled = true;
             UpdateRecipeText();
         }
         
