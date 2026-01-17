@@ -17,3 +17,12 @@ public enum IngredientType
     Bun,
     None
 }
+
+public enum CustomerState
+{
+    Ordering,
+    WaitingInLine,
+    WaitingForFood,
+    Eating,
+    Leaving
+}
