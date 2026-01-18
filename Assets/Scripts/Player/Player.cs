@@ -391,6 +391,14 @@ namespace Player
             }
         }
 
+        public void SetCanMove(bool canMove)
+        {
+            if(!IsOwner) return;
+            _canMove = canMove;
+            Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !canMove;
+        }
+
         private IInteractable GetHitInfo()
         {
             var interactPoint = interactor;

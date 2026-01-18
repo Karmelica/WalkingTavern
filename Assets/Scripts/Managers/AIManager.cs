@@ -6,14 +6,12 @@ using UnityEngine;
 
 public class AIManager : NetworkBehaviour
 {
-    
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<Transform> waypoints;
     [SerializeField] private Transform spawnPoint;
-    private List<Customer> _lineCustomers = new();
+    private List<Customer> _customers = new();
     private Customer _orderingCustomer;
-    private Queue<Customer> _waitingCustomers = new();
-    private Queue<Customer> _eatingCustomers = new();
+    private Customer _customerInFront;
     
 
     private void Start()
@@ -25,16 +23,6 @@ public class AIManager : NetworkBehaviour
         if (IsServer)
         {
             StartCoroutine(AIManagement());
-            StartCoroutine(ByeBye());
-        }
-    }
-
-    private IEnumerator ByeBye()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(15f);
-            GoToNextState();
         }
     }
 
@@ -42,53 +30,95 @@ public class AIManager : NetworkBehaviour
     {
         while (true)
         {
-            if (!_orderingCustomer && _lineCustomers.Count > 0)
+            foreach (var customer in _customers)
             {
-                var orderingCustomer = _lineCustomers[0];
-                _lineCustomers.RemoveAt(0);
-                _orderingCustomer = orderingCustomer;
-                _orderingCustomer.SetState(CustomerState.Ordering);
-                _orderingCustomer.SetDestination(waypoints[0]);
-            }
-
-            if (_lineCustomers.Count > 0)
-            {
-                _lineCustomers[0].SetState(CustomerState.WaitingInLine);
-                _lineCustomers[0].SetDestination(_orderingCustomer.transform);
-            }
-            if (_lineCustomers.Count > 1)
-            {
-                for (int i = 1; i < _lineCustomers.Count; i++)
+                switch (customer.state)
                 {
-                    _lineCustomers[i].SetState(CustomerState.WaitingInLine);
-                    _lineCustomers[i].SetDestination(_lineCustomers[i - 1].transform);
+                    case CustomerState.WaitingInLine:
+                        WaitingInLineState(customer);
+                        break;
+                    case CustomerState.Ordering:
+                        OrderingState(customer);
+                        break;
+                    case CustomerState.WaitingForFood:
+                        WaitingForFoodState(customer);
+                        break;
+                    case CustomerState.Eating:
+                        EatingState(customer);
+                        break;
+                    case CustomerState.Leaving:
+                        LeavingState(customer);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
-            yield return new WaitForSeconds(1f);
+
+            _customerInFront = null;
+            yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    private void WaitingInLineState(Customer customer)
+    {
+        if (!_orderingCustomer)
+        {
+            _orderingCustomer = customer;
+            GoToNextState(customer);
+        }
+        else if (!_customerInFront)
+        {
+            customer.SetDestination(_orderingCustomer.GetLineTransform());
+            _customerInFront = customer;
+        }
+        else
+        {
+            if(customer == _customerInFront) return;
+            customer.SetDestination(_customerInFront.GetLineTransform());
+            _customerInFront = customer;
+        }
+    }
+
+    private void OrderingState(Customer customer)
+    {
+        if(customer == _orderingCustomer)
+        {
+            customer.SetDestination(waypoints[0]);
+        }
+    }
+
+    private void WaitingForFoodState(Customer customer)
+    {
+        if(_orderingCustomer == customer)
+        {
+            _orderingCustomer = null;
+        }
+        customer.SetDestination(waypoints[1]);
+    }
+
+    private void EatingState(Customer customer)
+    {
+        customer.SetDestination(waypoints[1]);
+    }
+
+    private void LeavingState(Customer customer)
+    {
+        customer.SetDestination(waypoints[2]);
+    }
+    
+    private void GoToNextState(Customer customer)
+    {
+        if (!IsServer) return;
+        if(customer.state == CustomerState.Leaving) return;
+        
+        customer.SetState(customer.state + 1);
     }
 
     private void SpawnCustomer()
     {
         if (!IsServer) return;
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
-        _lineCustomers.Add(customerInstance.GetComponent<Customer>());
+        _customers.Add(customerInstance.GetComponent<Customer>());
         customerInstance.GetComponent<NetworkObject>().Spawn();
-    }
-    
-    public void GoToNextState()
-    {
-        if (!IsServer) return;
-        if(_orderingCustomer){
-            _orderingCustomer.SetState(CustomerState.Eating);
-            _orderingCustomer.SetDestination(waypoints[2]);
-            _eatingCustomers.Enqueue(_orderingCustomer);
-            _orderingCustomer = null;
-        }
-        /*foreach (var eatingCustomer in _eatingCustomers)
-        {
-            eatingCustomer.SetState(CustomerState.Leaving);
-            eatingCustomer.SetDestination(waypoints[0]);
-        }*/
     }
 }

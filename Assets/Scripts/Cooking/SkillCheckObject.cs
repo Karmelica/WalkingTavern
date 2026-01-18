@@ -32,9 +32,15 @@ namespace Cooking
             if (!interactor.TryGet(out Player.Player player)) return;
             _interactTransform = player.GetInteractPoint();
             if(IsSkillCheckActive())
-                skillCheck.TryComplete();
+            {
+                skillCheck.TryComplete(player);
+            }
             else
+            {
+                player.SetCanMove(false);
                 skillCheck.gameObject.SetActive(true);
+            }
+                
         }
 
         public string GetInteractName()

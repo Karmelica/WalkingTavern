@@ -20,8 +20,8 @@ public enum IngredientType
 
 public enum CustomerState
 {
-    Ordering,
     WaitingInLine,
+    Ordering,
     WaitingForFood,
     Eating,
     Leaving

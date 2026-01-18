@@ -48,6 +48,7 @@ namespace Cooking
         private bool _isComplete;
         private float _perfectZoneStartTime;
         private float _perfectZoneEndTime;
+        private Player.Player _player;
 
         #region Unity Lifecycle
 
@@ -197,8 +198,9 @@ namespace Cooking
         /// Call this when player clicks/presses button during skill check
         /// </summary>
         /// <returns>0 = fail, 1 = success, 2 = perfect</returns>
-        public SkillCheckResult TryComplete()
+        public SkillCheckResult TryComplete(Player.Player player)
         {
+            _player = player;
             if (_isComplete) return SkillCheckResult.Completed;
 
             _isComplete = true;
@@ -238,6 +240,7 @@ namespace Cooking
         {
             yield return new WaitForSeconds(0.5f);
             gameObject.SetActive(false);
+            _player?.SetCanMove(true);
         }
 
         #endregion
