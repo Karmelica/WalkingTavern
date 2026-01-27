@@ -198,7 +198,7 @@ namespace Cooking
         /// Call this when player clicks/presses button during skill check
         /// </summary>
         /// <returns>0 = fail, 1 = success, 2 = perfect</returns>
-        public SkillCheckResult TryComplete(Player.Player player)
+        public SkillCheckResult TryComplete()
         {
             if (_isComplete) return SkillCheckResult.Completed;
 
@@ -238,13 +238,7 @@ namespace Cooking
         private IEnumerator CloseAfterDelay()
         {
             yield return new WaitForSeconds(0.5f);
-            _player?.SetCanMove(true);
             gameObject.SetActive(false);
-        }
-
-        public void AssignPlayer(Player.Player player)
-        {
-            _player = player;
         }
 
         #endregion

@@ -399,6 +399,11 @@ namespace Player
             Cursor.visible = !canMove;
         }
 
+        public bool CanMove()
+        {
+            return _canMove;
+        }
+
         private IInteractable GetHitInfo()
         {
             var interactPoint = interactor;

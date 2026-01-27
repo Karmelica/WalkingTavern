@@ -8,18 +8,16 @@ namespace Cooking
     {
         [SerializeField] private GameObject worldCanvas;
         [SerializeField] private SkillCheck skillCheck;
-        private Transform _interactTransform;
-        private Camera _camera;
+        private bool _isEnabled;
 
-        private void Start()
+        private void OnEnable()
         {
-            _camera = Camera.main;
+            _isEnabled = true;
         }
 
-        private void Update()
+        private void OnDisable()
         {
-            if(!_camera) return;
-            worldCanvas.transform.forward = _camera.transform.forward;
+            _isEnabled = false;
         }
 
         public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
@@ -29,29 +27,25 @@ namespace Cooking
 
         public void SecondaryInteract(NetworkBehaviourReference interactor)
         {
-            if (!interactor.TryGet(out Player.Player player)) return;
-            _interactTransform = player.GetInteractPoint();
-            skillCheck.AssignPlayer(player);
+            if (!_isEnabled) return;
             if(IsSkillCheckActive())
             {
-                skillCheck.TryComplete(player);
+                skillCheck.TryComplete();
             }
             else
             {
-                player.SetCanMove(false);
                 skillCheck.gameObject.SetActive(true);
             }
-                
         }
 
         public string GetInteractName()
         {
             return gameObject.name;
         }
-
+ 
         public bool IsInteractedWith()
         {
-            return false;
+            return _isEnabled;
         }
 
         private bool IsSkillCheckActive()

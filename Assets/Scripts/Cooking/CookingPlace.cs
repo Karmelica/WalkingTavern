@@ -45,13 +45,9 @@ namespace Cooking
             }
             
             UpdateRecipeText();
-            if(IsRecipeComplete())
-            {
-                Debug.Log("Recipe Complete!");
-                //triggerCollider.enabled = false;
-                CompleteRecipe();
-                //skillCheck.enabled = true;
-            }
+            if (!IsRecipeComplete()) return;
+            CompleteRecipe();
+            skillCheck.enabled = true;
         }
         
         private void OnTriggerExit(Collider other)
