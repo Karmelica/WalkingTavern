@@ -10,6 +10,8 @@ namespace Cooking
     public class SkillCheck : MonoBehaviour
     {
         [Header("UI References")] 
+        [SerializeField] private SkillCheckObject skillCheckObject;
+        
         [SerializeField] [Tooltip("Moving pointer indicator")]
         private RectTransform skillCheckPointer;
 
@@ -238,6 +240,7 @@ namespace Cooking
         private IEnumerator CloseAfterDelay()
         {
             yield return new WaitForSeconds(0.5f);
+            skillCheckObject.enabled = false;
             gameObject.SetActive(false);
         }
 
