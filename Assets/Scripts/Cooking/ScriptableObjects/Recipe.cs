@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Cooking.ScriptableObjects;
 using UnityEngine;
+
 
 namespace Cooking.ScriptableObjects
 {

@@ -11,6 +11,8 @@ namespace Cooking
     public class CookingPlace : NetworkBehaviour
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
+        private List<Recipe> _availableRecipes = new ();
+        private NetworkVariable<int> _selectedRecipe = new();
         [SerializeField] private List<GameObject> _placedFoodItems = new();
         [SerializeField] private Recipe recipe;
         
@@ -28,6 +30,27 @@ namespace Cooking
 
             if (IsServer)
                 SpawnSomeIngredients();
+            
+            _selectedRecipe.OnValueChanged += UpdateSelectedRecipe;
+        }
+
+        private void UpdateSelectedRecipe(int previousValue, int newValue)
+        {
+            recipe = _availableRecipes[newValue];
+            UpdateRecipeText();
+        }
+
+        private void Awake()
+        {
+            LoadRecipes();
+        }
+
+        private void LoadRecipes()
+        {
+            var recipes = Resources.LoadAll<Recipe>("ScriptableObjects/Cooking");
+            _availableRecipes.AddRange(recipes);
+            recipe = _availableRecipes[0];
+            UpdateRecipeText();
         }
 
         private void SpawnSomeIngredients()
@@ -44,9 +67,10 @@ namespace Cooking
             
         }
 
-        public void ChangeRecipe(Recipe newRecipe)
+        public void ChangeRecipe(int newRecipeIndex)
         {
-            recipe = newRecipe;
+            _selectedRecipe.Value = newRecipeIndex;
+            recipe = _availableRecipes[newRecipeIndex];
             UpdateRecipeText();
         }
 

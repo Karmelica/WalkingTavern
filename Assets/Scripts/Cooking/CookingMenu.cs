@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class CookingMenu : MonoBehaviour, IInteractable
 {
+    
     [SerializeField] private List<Recipe> _availableRecipes = new ();
     [SerializeField] private TMP_Dropdown recipeDropdown;
     [SerializeField] private CookingPlace cookingPlace;
@@ -29,7 +30,7 @@ public class CookingMenu : MonoBehaviour, IInteractable
     
     public void OnRecipeSelected(int index)
     {
-        cookingPlace.ChangeRecipe(_availableRecipes[index]);
+        cookingPlace.ChangeRecipe(index);
     }
 
 
