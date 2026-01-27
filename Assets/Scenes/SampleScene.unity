@@ -297,6 +297,17 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &401152252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6302481825445643434, guid: e98d26f47c0a7b94a9af3016a95a71ad, type: 3}
+  m_PrefabInstance: {fileID: 8945033345859443493}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
 --- !u!43 &964525690
 Mesh:
   m_ObjectHideFlags: 0
@@ -1766,6 +1777,7 @@ MonoBehaviour:
   recipe: {fileID: 11400000, guid: c8fb898485187804e8c91d5fa5956cd7, type: 2}
   skillCheck: {fileID: 8167245909493690307}
   ingredientListText: {fileID: 148050951874376220}
+  dropdown: {fileID: 401152252}
   triggerCollider: {fileID: 4178204770614098701}
 --- !u!224 &6532198398172101181
 RectTransform:

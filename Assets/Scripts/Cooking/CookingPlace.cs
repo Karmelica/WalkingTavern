@@ -18,6 +18,7 @@ namespace Cooking
         
         [SerializeField] private SkillCheckObject skillCheck;
         [SerializeField] private TextMeshProUGUI ingredientListText;
+        [SerializeField] private TMP_Dropdown dropdown;
         [SerializeField] private Collider triggerCollider;
 
         private void Start()
@@ -37,6 +38,7 @@ namespace Cooking
         private void UpdateSelectedRecipe(int previousValue, int newValue)
         {
             recipe = _availableRecipes[newValue];
+            dropdown.value = newValue;
             UpdateRecipeText();
         }
 
