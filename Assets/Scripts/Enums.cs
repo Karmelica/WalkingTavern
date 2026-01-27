@@ -13,7 +13,7 @@ public enum IngredientType
     Lettuce,
     Tomato,
     Cheese,
-    Patty,
+    Meat,
     Bun,
     None
 }

@@ -143,6 +143,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3190780991680301690, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5227537769859937672, guid: 92881ea5c8adea54e903aa2b79efb216, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -272,6 +276,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 761392015665956313, guid: 05638b7afb3decc468f3e2f752dc9ef4, type: 3}
+      propertyPath: m_PointerBehavior
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3514105742584099191, guid: 05638b7afb3decc468f3e2f752dc9ef4, type: 3}
       propertyPath: m_Name
       value: Core

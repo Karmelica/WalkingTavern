@@ -25,6 +25,12 @@ namespace Cooking
             }
             UpdateRecipeText();
         }
+        
+        public void ChangeRecipe(Recipe newRecipe)
+        {
+            recipe = newRecipe;
+            UpdateRecipeText();
+        }
 
         private void OnTriggerEnter(Collider other)
         {

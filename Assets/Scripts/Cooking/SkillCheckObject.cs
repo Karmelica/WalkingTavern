@@ -31,6 +31,7 @@ namespace Cooking
         {
             if (!interactor.TryGet(out Player.Player player)) return;
             _interactTransform = player.GetInteractPoint();
+            skillCheck.AssignPlayer(player);
             if(IsSkillCheckActive())
             {
                 skillCheck.TryComplete(player);
