@@ -25,8 +25,25 @@ namespace Cooking
                 _placedIngredients.TryAdd((IngredientType)ingredientType, 0);
             }
             UpdateRecipeText();
+
+            if (IsServer)
+                SpawnSomeIngredients();
         }
-        
+
+        private void SpawnSomeIngredients()
+        {
+            for(int i = 0; i < 30; i++)
+            {
+                var ingredientTypes = Enum.GetValues(typeof(IngredientType));
+                var randomIngredient = (IngredientType)ingredientTypes.GetValue(UnityEngine.Random.Range(0, ingredientTypes.Length));
+                var prefab = Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + randomIngredient);
+                var position = transform.position + new Vector3(UnityEngine.Random.Range(-5f, 5f), 5f, UnityEngine.Random.Range(-5f, 5f));
+                var ingredient = Instantiate(prefab, position, Quaternion.identity);
+                ingredient.GetComponent<NetworkObject>().Spawn();
+            }
+            
+        }
+
         public void ChangeRecipe(Recipe newRecipe)
         {
             recipe = newRecipe;
@@ -47,8 +64,10 @@ namespace Cooking
             UpdateRecipeText();
             
             if (!IsRecipeComplete()) return;
-            CompleteRecipe();
+            
             skillCheck.enabled = true;
+            if(IsServer)
+                CompleteRecipe();
         }
         
         private void OnTriggerExit(Collider other)
@@ -85,7 +104,8 @@ namespace Cooking
                     var item = _placedFoodItems[i];
                     if (item.TryGetComponent<FoodItem>(out var foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
-                        Destroy(item);
+                        item.gameObject.SetActive(false);
+                        item.GetComponent<NetworkObject>().Despawn(false);
                         _placedFoodItems.RemoveAt(i);
                         removedCount++;
                     }
@@ -95,7 +115,7 @@ namespace Cooking
             
             if(IsServer){
                 var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + recipe.dishType);
-                var dish = Instantiate(prefab, transform.position + Vector3.up * 1.0f, Quaternion.identity);
+                var dish = Instantiate(prefab, transform.position + Vector3.up * 5.0f, Quaternion.identity);
                 dish.GetComponent<NetworkObject>().Spawn();
             }
             UpdateRecipeText();

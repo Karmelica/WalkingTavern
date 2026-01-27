@@ -14,16 +14,14 @@ public enum IngredientType
     Tomato,
     Cheese,
     Meat,
-    Bun,
-    None
+    Bun
 }
 
 public enum DishType
 {
     Hamburger,
     LettuceSoup,
-    CheeseCake,
-    None
+    CheeseCake
 }
 
 public enum CustomerState
