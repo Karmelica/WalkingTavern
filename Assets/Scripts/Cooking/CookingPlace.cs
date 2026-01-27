@@ -12,7 +12,7 @@ namespace Cooking
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
         private List<Recipe> _availableRecipes = new ();
-        private NetworkVariable<int> _selectedRecipe = new();
+        private NetworkVariable<int> _selectedRecipe = new ();
         [SerializeField] private List<GameObject> _placedFoodItems = new();
         [SerializeField] private Recipe recipe;
         
@@ -66,12 +66,18 @@ namespace Cooking
             }
             
         }
-
+        
         public void ChangeRecipe(int newRecipeIndex)
         {
-            _selectedRecipe.Value = newRecipeIndex;
+            ChangeRecipeServerRpc(newRecipeIndex);
             recipe = _availableRecipes[newRecipeIndex];
             UpdateRecipeText();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void ChangeRecipeServerRpc(int newRecipeIndex)
+        {
+            _selectedRecipe.Value = newRecipeIndex;
         }
 
         private void OnTriggerEnter(Collider other)
