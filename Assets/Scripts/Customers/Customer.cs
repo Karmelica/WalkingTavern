@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Cooking.ScriptableObjects;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,6 +16,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public CustomerState state { get; private set; } = CustomerState.WaitingInLine;
     [SerializeField] private Transform myDestination;
+    private Recipe _requestedRecipe;
 
     #region Unity Lifecycle
 
@@ -62,6 +64,11 @@ public class Customer : NetworkBehaviour, IInteractable
     public void SetDestination(Transform destination)
     {
         myDestination = destination;
+    }
+    
+    public void SetRecipe(Recipe newRecipe)
+    {
+        _requestedRecipe = newRecipe;
     }
     
     public Transform GetLineTransform()

@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using Cooking.ScriptableObjects;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using World;
 
 namespace Cooking
 {
-    public class CookingPlace : MonoBehaviour
+    public class CookingPlace : NetworkBehaviour
     {
         private readonly Dictionary<IngredientType, int> _placedIngredients = new();
         [SerializeField] private List<GameObject> _placedFoodItems = new();
@@ -43,8 +44,8 @@ namespace Cooking
                     _placedFoodItems.Add(other.gameObject);
                 }
             }
-            
             UpdateRecipeText();
+            
             if (!IsRecipeComplete()) return;
             CompleteRecipe();
             skillCheck.enabled = true;
@@ -91,7 +92,12 @@ namespace Cooking
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
-            //triggerCollider.enabled = true;
+            
+            if(IsServer){
+                var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + recipe.dishType);
+                var dish = Instantiate(prefab, transform.position + Vector3.up * 1.0f, Quaternion.identity);
+                dish.GetComponent<NetworkObject>().Spawn();
+            }
             UpdateRecipeText();
         }
         

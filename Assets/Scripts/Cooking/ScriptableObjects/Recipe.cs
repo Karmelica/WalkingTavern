@@ -8,6 +8,7 @@ namespace Cooking.ScriptableObjects
         public class Recipe : ScriptableObject
         {
                 public string recipeName;
+                public DishType dishType;
                 public List<Ingredients> ingredients;
         }
         

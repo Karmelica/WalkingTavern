@@ -6,7 +6,6 @@ namespace Cooking
 {
     public class SkillCheckObject : MonoBehaviour, IInteractable
     {
-        [SerializeField] private GameObject worldCanvas;
         [SerializeField] private SkillCheck skillCheck;
         private bool _isEnabled;
 

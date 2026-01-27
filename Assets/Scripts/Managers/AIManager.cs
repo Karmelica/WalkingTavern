@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cooking.ScriptableObjects;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,9 +14,12 @@ public class AIManager : NetworkBehaviour
     private Customer _orderingCustomer;
     private Customer _customerInFront;
     
+    private List<Recipe> _availableRecipes = new ();
 
     private void Start()
     {
+        LoadRecipes();
+        
         SpawnCustomer();
         SpawnCustomer();
         SpawnCustomer();
@@ -24,6 +28,12 @@ public class AIManager : NetworkBehaviour
         {
             StartCoroutine(AIManagement());
         }
+    }
+    
+    private void LoadRecipes()
+    {
+        var recipes = Resources.LoadAll<Recipe>("ScriptableObjects/Cooking");
+        _availableRecipes.AddRange(recipes);
     }
 
     private IEnumerator AIManagement()
@@ -118,7 +128,10 @@ public class AIManager : NetworkBehaviour
     {
         if (!IsServer) return;
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
-        _customers.Add(customerInstance.GetComponent<Customer>());
+        var customer = customerInstance.GetComponent<Customer>();
+        customer.SetRecipe(_availableRecipes[UnityEngine.Random.Range(0, _availableRecipes.Count)]);
+        _customers.Add(customer);
         customerInstance.GetComponent<NetworkObject>().Spawn();
+        
     }
 }

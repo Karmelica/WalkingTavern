@@ -18,6 +18,14 @@ public enum IngredientType
     None
 }
 
+public enum DishType
+{
+    Hamburger,
+    LettuceSoup,
+    CheeseCake,
+    None
+}
+
 public enum CustomerState
 {
     WaitingInLine,
