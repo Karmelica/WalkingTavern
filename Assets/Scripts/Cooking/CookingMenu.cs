@@ -11,6 +11,7 @@ public class CookingMenu : MonoBehaviour, IInteractable
     [SerializeField] private List<Recipe> _availableRecipes = new ();
     [SerializeField] private TMP_Dropdown recipeDropdown;
     [SerializeField] private CookingPlace cookingPlace;
+    [SerializeField] private GameObject cookingUI;
     
     private void Awake()
     {
@@ -44,6 +45,7 @@ public class CookingMenu : MonoBehaviour, IInteractable
         if (!interactor.TryGet(out Player.Player player)) return;
         
         player.SetCanMove(!player.CanMove());
+        cookingUI.SetActive(!player.CanMove());
     }
 
     public string GetInteractName()
