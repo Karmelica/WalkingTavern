@@ -108,8 +108,7 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (IsOwner && _canMove)
-                Move();
+            if (IsOwner && _canMove) Move();
         }
         
         #endregion
