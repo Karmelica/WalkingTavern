@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 23000932}
   - component: {fileID: 23000931}
   - component: {fileID: 23000930}
+  - component: {fileID: 23000934}
   m_Layer: 0
   m_Name: Cube_05
   m_TagString: Untagged
@@ -231,6 +232,26 @@ Transform:
   - {fileID: 1631012513}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &23000934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23000929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!43 &75930090
 Mesh:
   m_ObjectHideFlags: 0
@@ -432,6 +453,7 @@ GameObject:
   - component: {fileID: 624355605}
   - component: {fileID: 624355604}
   - component: {fileID: 624355603}
+  - component: {fileID: 624355607}
   m_Layer: 0
   m_Name: Cube_01
   m_TagString: Untagged
@@ -532,6 +554,26 @@ Transform:
   - {fileID: 910464388}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &624355607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624355602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &641431989
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,6 +586,7 @@ GameObject:
   - component: {fileID: 641431992}
   - component: {fileID: 641431991}
   - component: {fileID: 641431990}
+  - component: {fileID: 641431994}
   m_Layer: 0
   m_Name: Cube_04
   m_TagString: Untagged
@@ -644,6 +687,26 @@ Transform:
   - {fileID: 2103585173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &641431994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641431989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &655170123
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,6 +781,7 @@ GameObject:
   - component: {fileID: 903940548}
   - component: {fileID: 903940547}
   - component: {fileID: 903940546}
+  - component: {fileID: 903940550}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -818,6 +882,26 @@ Transform:
   - {fileID: 656108148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &903940550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903940545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &910464387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,6 +1123,7 @@ GameObject:
   - component: {fileID: 1271903282}
   - component: {fileID: 1271903281}
   - component: {fileID: 1271903280}
+  - component: {fileID: 1271903284}
   m_Layer: 0
   m_Name: Cube_03
   m_TagString: Untagged
@@ -1139,6 +1224,26 @@ Transform:
   - {fileID: 655170124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &1271903284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271903279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1344825646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,7 +1334,7 @@ MonoBehaviour:
   customerPrefab: {fileID: 1869845295134569847, guid: a5c414759dcc45b409d96dbb10b10c25, type: 3}
   waypoints:
   - {fileID: 6478743439658427495}
-  - {fileID: 5822824398514621494}
+  - {fileID: 0}
   - {fileID: 7976784989252312384}
   takenSeats:
   - {fileID: 656108148}
@@ -1423,6 +1528,7 @@ GameObject:
   - component: {fileID: 1683463036}
   - component: {fileID: 1683463035}
   - component: {fileID: 1683463034}
+  - component: {fileID: 1683463038}
   m_Layer: 0
   m_Name: Cube_02
   m_TagString: Untagged
@@ -1523,6 +1629,26 @@ Transform:
   - {fileID: 1344825647}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1683463038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683463033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1001 &1786026249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2171,22 +2297,6 @@ Transform:
   - {fileID: 9073552128381768519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4113296003629129432
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5822824398514621494}
-  m_Layer: 0
-  m_Name: Tables
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!65 &4178204770614098701
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2507,21 +2617,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!4 &5822824398514621494
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4113296003629129432}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.51, y: 1.83, z: 0.72}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6411372718703123609}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &5847454350328082544
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2577,7 +2672,6 @@ Transform:
   m_Children:
   - {fileID: 6478743439658427495}
   - {fileID: 7976784989252312384}
-  - {fileID: 5822824398514621494}
   m_Father: {fileID: 7159590788567898698}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &6433728644129795344
@@ -2619,7 +2713,7 @@ Transform:
   m_GameObject: {fileID: 2985241517446452095}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710593, z: -0, w: -0.70710766}
-  m_LocalPosition: {x: -20.85, y: 1.355, z: -9.13}
+  m_LocalPosition: {x: -20.85, y: 0, z: -9.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3183,7 +3277,7 @@ Transform:
   m_GameObject: {fileID: 7797577059843402005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.82, y: 1.83, z: 26.97}
+  m_LocalPosition: {x: -8.82, y: 0, z: 26.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

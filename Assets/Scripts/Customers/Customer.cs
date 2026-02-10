@@ -16,6 +16,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public CustomerState state { get; private set; } = CustomerState.WaitingInLine;
     public bool HasSeat = false;
+    public bool DespawnAfterArriving;
     [SerializeField] private Transform myDestination;
     private Recipe _requestedRecipe;
     private AIManager _aiManager;
@@ -35,13 +36,16 @@ public class Customer : NetworkBehaviour, IInteractable
         if (agent.remainingDistance <= agent.stoppingDistance + 0.1f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, myDestination.rotation, Time.deltaTime * 5f);
+            if (DespawnAfterArriving && Vector3.Distance(transform.position, myDestination.position) < 1f)
+            {
+                _aiManager.DespawnCustomer(this);
+            }
         }
         animator.SetFloat("WalkSpeed", agent.velocity.magnitude);
         animator.SetBool("IsGrounded", controller.isGrounded);
     }
 
     #endregion
-    
 
     private void Gravity()
     {
@@ -61,8 +65,18 @@ public class Customer : NetworkBehaviour, IInteractable
     
     public void SetState(CustomerState newState)
     {
+        if (newState == CustomerState.WaitingForFood)
+        {
+            StartCoroutine(WaitThreshold(30f));
+        }
         state = newState;
         _aiManager.CheckState();
+    }
+
+    private IEnumerator WaitThreshold(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SetState(CustomerState.Leaving);
     }
 
     public void SetManager(AIManager manager)

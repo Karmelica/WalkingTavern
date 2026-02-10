@@ -136,6 +136,7 @@ public class AIManager : NetworkBehaviour
             _availableSeats.Enqueue(customer.GetDestination());
         }
         customer.SetDestination(waypoints[2]);
+        customer.DespawnAfterArriving = true;
     }
     
     private void GoToNextState(Customer customer)
@@ -155,6 +156,13 @@ public class AIManager : NetworkBehaviour
         customer.SetManager(this);
         _customers.Add(customer);
         customerInstance.GetComponent<NetworkObject>().Spawn();
-        
+    }
+    
+    public void DespawnCustomer(Customer customer)
+    {
+        if (!IsServer) return;
+        _customers.Remove(customer);
+        customer.NetworkObject.Despawn();
+
     }
 }
