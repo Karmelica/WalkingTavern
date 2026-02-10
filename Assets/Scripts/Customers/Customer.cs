@@ -15,8 +15,10 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private bool isMoving = true;
 
     public CustomerState state { get; private set; } = CustomerState.WaitingInLine;
+    public bool HasSeat = false;
     [SerializeField] private Transform myDestination;
     private Recipe _requestedRecipe;
+    private AIManager _aiManager;
 
     #region Unity Lifecycle
 
@@ -39,6 +41,7 @@ public class Customer : NetworkBehaviour, IInteractable
     }
 
     #endregion
+    
 
     private void Gravity()
     {
@@ -59,11 +62,21 @@ public class Customer : NetworkBehaviour, IInteractable
     public void SetState(CustomerState newState)
     {
         state = newState;
+        _aiManager.CheckState();
+    }
+
+    public void SetManager(AIManager manager)
+    {
+        _aiManager = manager;
     }
     
     public void SetDestination(Transform destination)
     {
         myDestination = destination;
+    }
+    public Transform GetDestination()
+    {
+        return myDestination;
     }
     
     public void SetRecipe(Recipe newRecipe)
