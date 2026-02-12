@@ -52,12 +52,18 @@ public class Customer : NetworkBehaviour, IInteractable
         
         animator.SetBool("IsGrounded", controller.isGrounded);
         
-        if(IsServer)
+        if(IsOwner)
             SetAnimSpeedServerRpc(agent.velocity.magnitude);
     }
 
-    [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Owner)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void SetAnimSpeedServerRpc(float velocityMagnitude)
+    {
+        SetAnimSpeedClientRpc(velocityMagnitude);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetAnimSpeedClientRpc(float velocityMagnitude)
     {
         animator.SetFloat("WalkSpeed", velocityMagnitude);
     }
