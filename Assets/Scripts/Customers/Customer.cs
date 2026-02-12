@@ -2,45 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Cooking.ScriptableObjects;
+using Unity.Behavior;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
+    public CustomerState state { get; private set; } = CustomerState.Ordering;
+    
+    [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
+    private BlackboardReference _blackboardReference;
+    
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private CharacterController controller;
     [SerializeField] private Animator animator;
-    [SerializeField] private Transform lineTransform;
-    [SerializeField] private bool isMoving = true;
 
-    public CustomerState state { get; private set; } = CustomerState.WaitingInLine;
-    public bool HasSeat = false;
-    public bool DespawnAfterArriving;
-    [SerializeField] private Transform myDestination;
     private Recipe _requestedRecipe;
+    private List<Transform> _waypoints;
     private AIManager _aiManager;
 
     #region Unity Lifecycle
 
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn(); 
-        myDestination = transform;
+        base.OnNetworkSpawn();
+        _blackboardReference = behaviorGraphAgent.BlackboardReference;
+        _blackboardReference.SetVariableValue("Customer", this);
+        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
+        if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
+        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+        _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
+        _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
+        _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
+        
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
+        if(customerList.Contains(gameObject)) customerList.Remove(gameObject);
+        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
     }
 
     private void Update()
     {
         Gravity();
-        agent.SetDestination(myDestination.position);
-        if (agent.remainingDistance <= agent.stoppingDistance + 0.1f)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, myDestination.rotation, Time.deltaTime * 5f);
-            if (DespawnAfterArriving && Vector3.Distance(transform.position, myDestination.position) < 1f)
-            {
-                _aiManager.DespawnCustomer(this);
-            }
-        }
         animator.SetFloat("WalkSpeed", agent.velocity.magnitude);
         animator.SetBool("IsGrounded", controller.isGrounded);
     }
@@ -55,66 +63,42 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Get/Set
 
-    private void GoToNextState()
-    {
-        if (!IsServer) return;
-        if(state == CustomerState.Leaving) return;
-        
-        SetState(state + 1);
-    }
-    
-    public void SetState(CustomerState newState)
-    {
-        if (newState == CustomerState.WaitingForFood)
-        {
-            StartCoroutine(WaitThreshold(30f));
-        }
-        state = newState;
-        _aiManager.CheckState();
-    }
-
-    private IEnumerator WaitThreshold(float time)
-    {
-        yield return new WaitForSeconds(time);
-        SetState(CustomerState.Leaving);
-    }
-
-    public void SetManager(AIManager manager)
+    public void AssignVariables(AIManager manager, Recipe recipe, List<Transform> waypoints)
     {
         _aiManager = manager;
-    }
-    
-    public void SetDestination(Transform destination)
-    {
-        myDestination = destination;
-    }
-    public Transform GetDestination()
-    {
-        return myDestination;
-    }
-    
-    public void SetRecipe(Recipe newRecipe)
-    {
-        _requestedRecipe = newRecipe;
-    }
-    
-    public Transform GetLineTransform()
-    {
-        return lineTransform;
+        _requestedRecipe = recipe;
+        _waypoints = waypoints;
     }
 
+    public bool TryGetSeat(out Transform seat)
+    {
+        seat = _aiManager.TryGetAvailableSeat();
+        if(seat != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public void ReturnSeat(Transform seat)
+    {
+        _aiManager.ReturnSeat(seat);
+    }
+    
     #endregion
 
     #region Interact
 
     public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
     {
-        //nothing
+        _blackboardReference.GetVariableValue("State", out int customerState);
+        _blackboardReference.SetVariableValue("State", customerState + 1);
     }
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
-        GoToNextState();
+        _aiManager.DespawnCustomer(this);
     }
 
     public string GetInteractName()

@@ -104,6 +104,9 @@ PrefabInstance:
       addedObject: {fileID: -6934236205103561301}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99f550d5e9167a047b1d4284dd535bb6, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6204075748325362663}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99f550d5e9167a047b1d4284dd535bb6, type: 3}
+      insertIndex: -1
       addedObject: {fileID: -6447228633842858350}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99f550d5e9167a047b1d4284dd535bb6, type: 3}
       insertIndex: -1
@@ -228,13 +231,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Customer
   ShowTopMostFoldoutHeaderGroup: 1
+  behaviorGraphAgent: {fileID: 6204075748325362663}
   agent: {fileID: -6447228633842858350}
   controller: {fileID: -6670373666848501825}
   animator: {fileID: -4790823984280751156}
-  lineTransform: {fileID: 5520633448686879435}
-  isMoving: 1
-  HasSeat: 0
-  myDestination: {fileID: 0}
+--- !u!114 &6204075748325362663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869845295134569847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  ShowTopMostFoldoutHeaderGroup: 1
+  m_Graph: {fileID: -7298202207008445116, guid: 5dcb6018d3503b541bb68c608561cf34, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 132139595900649646
+  - rid: 132139598532313450
+  m_OriginalGraph: {fileID: -7298202207008445116, guid: 5dcb6018d3503b541bb68c608561cf34, type: 2}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  NetcodeRunOnlyOnOwner: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 132139595900649646
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 1869845295134569847}
+    - rid: 132139598532313450
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6729967189667575044
+          m_Value1: 2442367777170334768
+        Name: Animator
+        m_Value: {fileID: -4790823984280751156}
 --- !u!195 &-6447228633842858350
 NavMeshAgent:
   m_ObjectHideFlags: 0

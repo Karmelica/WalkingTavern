@@ -5,13 +5,14 @@ using System.Linq;
 using Cooking.ScriptableObjects;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AIManager : NetworkBehaviour
 {
 
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<Transform> waypoints;
-    [SerializeField] private List<Transform> takenSeats;
+    [SerializeField] private List<Transform> seats;
     [SerializeField] private Transform spawnPoint;
     private List<Customer> _customers = new();
     private Customer _orderingCustomer;
@@ -25,17 +26,15 @@ public class AIManager : NetworkBehaviour
     {
         LoadRecipes();
         
-        foreach (var seat in takenSeats.ToList())
+        foreach (var seat in seats.ToList())
         {
             _availableSeats.Enqueue(seat);
-            takenSeats.Remove(seat);
+            seats.Remove(seat);
         }
 
         for(var i = 0; i < 8; i++){
             SpawnCustomer();
         }
-        
-        CheckState();
     }
     
     private void LoadRecipes()
@@ -43,117 +42,24 @@ public class AIManager : NetworkBehaviour
         var recipes = Resources.LoadAll<Recipe>("ScriptableObjects/Cooking");
         _availableRecipes.AddRange(recipes);
     }
-
-    public void CheckState()
+    
+    public Transform TryGetAvailableSeat()
     {
-        if (!IsServer) return;
-        foreach (var customer in _customers)
-        {
-            switch (customer.state)
-            {
-                case CustomerState.WaitingInLine:
-                    WaitingInLineState(customer);
-                    break;
-                case CustomerState.Ordering:
-                    OrderingState(customer);
-                    break;
-                case CustomerState.WaitingForFood:
-                    WaitingForFoodState(customer);
-                    break;
-                case CustomerState.Eating:
-                    EatingState(customer);
-                    break;
-                case CustomerState.Leaving:
-                    LeavingState(customer);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        _customerInFront = null;
-    }
-
-    private void WaitingInLineState(Customer customer)
-    {
-        if (!_orderingCustomer)
-        {
-            _orderingCustomer = customer;
-            GoToNextState(customer);
-        }
-        else if (!_customerInFront)
-        {
-            customer.SetDestination(_orderingCustomer.GetLineTransform());
-            _customerInFront = customer;
-        }
-        else
-        {
-            if(customer == _customerInFront) return;
-            customer.SetDestination(_customerInFront.GetLineTransform());
-            _customerInFront = customer;
-        }
-    }
-
-    private void OrderingState(Customer customer)
-    {
-        if(customer == _orderingCustomer)
-        {
-            customer.SetDestination(waypoints[0]);
-        }
-    }
-
-    private void WaitingForFoodState(Customer customer)
-    {
-        if(_orderingCustomer == customer)
-        {
-            _orderingCustomer = null;
-        }
-
-        if (customer.HasSeat) return;
-        if(_availableSeats.Count > 0){
-            customer.HasSeat = true;
-            var seat = _availableSeats.Dequeue();
-            takenSeats.Add(seat);
-            customer.SetDestination(seat);
-        }
-        else
-        {
-            customer.SetState(CustomerState.Leaving);
-        }
-    }
-
-    private void EatingState(Customer customer)
-    {
-        //customer.SetDestination(waypoints[1]);
-    }
-
-    private void LeavingState(Customer customer)
-    {
-        if (customer.HasSeat)
-        {
-            customer.HasSeat = false;
-            takenSeats.Remove(customer.GetDestination());
-            _availableSeats.Enqueue(customer.GetDestination());
-        }
-        customer.SetDestination(waypoints[2]);
-        customer.DespawnAfterArriving = true;
+        return _availableSeats.Count > 0 ? _availableSeats.Dequeue() : null;
     }
     
-    private void GoToNextState(Customer customer)
+    public void ReturnSeat(Transform seat)
     {
-        if (!IsServer) return;
-        if(customer.state == CustomerState.Leaving) return;
-        
-        customer.SetState(customer.state + 1);
+        _availableSeats.Enqueue(seat);
     }
-
+    
     private void SpawnCustomer()
     {
         if (!IsServer) return;
-        var customerInstance = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
-        customer.SetRecipe(_availableRecipes[UnityEngine.Random.Range(0, _availableRecipes.Count)]);
-        customer.SetManager(this);
+        var recipe = _availableRecipes[Random.Range(0, _availableRecipes.Count)];
+        customer.AssignVariables(this, recipe, waypoints);
         _customers.Add(customer);
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
@@ -165,4 +71,5 @@ public class AIManager : NetworkBehaviour
         customer.NetworkObject.Despawn();
 
     }
+
 }

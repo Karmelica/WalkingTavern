@@ -1334,9 +1334,9 @@ MonoBehaviour:
   customerPrefab: {fileID: 1869845295134569847, guid: a5c414759dcc45b409d96dbb10b10c25, type: 3}
   waypoints:
   - {fileID: 6478743439658427495}
-  - {fileID: 0}
   - {fileID: 7976784989252312384}
-  takenSeats:
+  - {fileID: 1988594986}
+  seats:
   - {fileID: 656108148}
   - {fileID: 655170124}
   - {fileID: 910464388}
@@ -1730,6 +1730,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ba044eca0c015e4fa6ddfa06f50b085, type: 3}
+--- !u!1 &1988594985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1988594986}
+  m_Layer: 0
+  m_Name: Waiting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1988594986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988594985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.3, y: 0, z: 2.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6411372718703123609}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2103585172
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,6 +2703,7 @@ Transform:
   m_Children:
   - {fileID: 6478743439658427495}
   - {fileID: 7976784989252312384}
+  - {fileID: 1988594986}
   m_Father: {fileID: 7159590788567898698}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &6433728644129795344
