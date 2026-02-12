@@ -9,8 +9,6 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
-    public CustomerState state { get; private set; } = CustomerState.Ordering;
-    
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
     
@@ -29,12 +27,14 @@ public class Customer : NetworkBehaviour, IInteractable
         base.OnNetworkSpawn();
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
-        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
-        if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
-        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+        
         _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
         _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
         _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
+        
+        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
+        if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
+        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
         
     }
 
@@ -107,18 +107,21 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
     {
-        _blackboardReference.GetVariableValue("State", out int customerState);
+        _blackboardReference.GetVariableValue("State", out CustomerState customerState);
         _blackboardReference.SetVariableValue("State", customerState + 1);
     }
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
-        _aiManager.DespawnCustomer(this);
+        if(IsServer){
+            _aiManager.DespawnCustomer(this);
+        }
     }
 
     public string GetInteractName()
     {
-        return gameObject.name + " (" + state + ")";
+        _blackboardReference.GetVariableValue("State", out CustomerState customerState);
+        return gameObject.name + " (" + customerState + ")";
     }
 
     public bool IsInteractedWith()
