@@ -1,3 +1,4 @@
+using Unity.Behavior;
 using UnityEngine;
 
 public enum SkillCheckResult
@@ -24,9 +25,9 @@ public enum DishType
     CheeseCake
 }
 
+[BlackboardEnum]
 public enum CustomerState
 {
-    WaitingInLine,
     Ordering,
     WaitingForFood,
     Eating,
