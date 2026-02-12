@@ -49,8 +49,17 @@ public class Customer : NetworkBehaviour, IInteractable
     private void Update()
     {
         Gravity();
-        animator.SetFloat("WalkSpeed", agent.velocity.magnitude);
+        
         animator.SetBool("IsGrounded", controller.isGrounded);
+        
+        if(IsServer)
+            SetAnimSpeedServerRpc(agent.velocity.magnitude);
+    }
+
+    [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Owner)]
+    private void SetAnimSpeedServerRpc(float velocityMagnitude)
+    {
+        animator.SetFloat("WalkSpeed", velocityMagnitude);
     }
 
     #endregion
