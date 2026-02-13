@@ -61,7 +61,7 @@ PrefabInstance:
       addedObject: {fileID: -6261374681217738534}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99f550d5e9167a047b1d4284dd535bb6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -3216667631601938870}
+      addedObject: {fileID: -737615086878680499}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 99f550d5e9167a047b1d4284dd535bb6, type: 3}
       insertIndex: -1
       addedObject: {fileID: -4790823984280751156}
@@ -117,7 +117,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &-3216667631601938870
+--- !u!114 &-737615086878680499
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,9 +126,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1869845295134569847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList: []
   m_Animator: {fileID: -4790823984280751156}

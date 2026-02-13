@@ -1,4 +1,6 @@
 using System;
+using DefaultNamespace;
+using Unity.Netcode;
 using UnityEngine;
 
 public class TeleportScript : MonoBehaviour
@@ -6,6 +8,7 @@ public class TeleportScript : MonoBehaviour
     private bool isOverlapping = false;
     private Transform teleportedObject;
     [SerializeField] private Transform target;
+    private ITeleportable teleportable;
     
     
     // Update is called once per frame
@@ -14,20 +17,19 @@ public class TeleportScript : MonoBehaviour
         if (isOverlapping && teleportedObject)
         {
             Vector3 portalToObject = teleportedObject.position - transform.position;
-            float dotProduct = Vector3.Dot(Vector3.forward, portalToObject);
+            Vector3 posOffset = portalToObject;
+            var position = target.position + posOffset;
+            teleportable.Teleport(position);
+            isOverlapping = false;
+            teleportable = null;
 
-            if (dotProduct < 0f)
-            {
-                Vector3 posOffset = portalToObject;
-                teleportedObject.position = target.position + posOffset;
-                isOverlapping = false;
-            }
         }
     }
-    
+
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.TryGetComponent<ITeleportable>(out teleportable)) return;
         isOverlapping = true;
         teleportedObject = other.transform;
     }
@@ -35,6 +37,7 @@ public class TeleportScript : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         isOverlapping = true;
+        teleportable = null;
         teleportedObject = null;
     }
 }

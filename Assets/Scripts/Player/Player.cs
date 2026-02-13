@@ -1,4 +1,5 @@
 using System.Collections;
+using DefaultNamespace;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -18,7 +19,7 @@ namespace Player
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(CharacterController))]
     
-    public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
+    public class Player : NetworkBehaviour, ITeleportable, InputSystem_Actions.IPlayerActions
     {
         #region Constants
         
@@ -434,5 +435,17 @@ namespace Player
         }
 
         #endregion
+
+        public void Teleport(Vector3 position)
+        {
+            if(IsOwner)
+                TeleportServerRpc(position);
+        }
+
+        [Rpc(SendTo.Server)]
+        private void TeleportServerRpc(Vector3 position)
+        {
+            transform.position = position;
+        }
     }
 }
