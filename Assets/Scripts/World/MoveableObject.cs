@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -17,7 +18,8 @@ namespace World
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
         
-        private Rigidbody _rigidbody;
+        protected Rigidbody rb;
+        protected Collider colli;
 
         #endregion
 
@@ -31,36 +33,29 @@ namespace World
 
         protected virtual void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
+            colli = GetComponent<Collider>();
             _interactTransform = transform;
         }
 
         #endregion
         
         #region RPC Methods
-
-        /*[Rpc(SendTo.Server)]
-        private void SetObjectPositionServerRpc()
-        {
-            if (!_isPickedUp.Value) return;
-            _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
-            transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
-        }*/
         
         private void SetObjectPosition()
         {
             if (!_isInteractedWith.Value) return;
-            _rigidbody.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
+            rb.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         
         [Rpc(SendTo.Server)]
-        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
+        protected virtual void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
             _isInteractedWith.Value = pickingUp;
-            _rigidbody.useGravity = !_isInteractedWith.Value;
-            _rigidbody.maxLinearVelocity = _isInteractedWith.Value ? float.MaxValue : _rigidbody.maxLinearVelocity = 5f;
+            rb.useGravity = !_isInteractedWith.Value;
+            rb.maxLinearVelocity = _isInteractedWith.Value ? float.MaxValue : rb.maxLinearVelocity = 5f;
             _interactTransform = pickingUp ? player.GetInteractPoint() : transform;
         }
 

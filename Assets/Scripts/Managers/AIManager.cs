@@ -9,12 +9,11 @@ using Random = UnityEngine.Random;
 
 public class AIManager : NetworkBehaviour
 {
+    [SerializeField] private int customersToSpawn;
 
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private List<Transform> waypoints;
-    [SerializeField] private List<Transform> seats;
     [SerializeField] private Transform spawnPoint;
-    private List<Customer> _customers = new();
     private Customer _orderingCustomer;
     private Customer _customerInFront;
     
@@ -25,14 +24,16 @@ public class AIManager : NetworkBehaviour
     private void Start()
     {
         LoadRecipes();
+
+        var worldSeats = GameObject.FindGameObjectsWithTag("Seat");
         
-        foreach (var seat in seats.ToList())
+        foreach (var worldSeat in worldSeats)
         {
+            var seat = worldSeat.transform;
             _availableSeats.Enqueue(seat);
-            seats.Remove(seat);
         }
 
-        for(var i = 0; i < 8; i++){
+        for(var i = 0; i < customersToSpawn; i++){
             SpawnCustomer();
         }
     }
@@ -53,22 +54,21 @@ public class AIManager : NetworkBehaviour
         _availableSeats.Enqueue(seat);
     }
     
-    private void SpawnCustomer()
+    public void SpawnCustomer()
     {
         if (!IsServer) return;
-        var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), Quaternion.identity);
+        var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
         var recipe = _availableRecipes[Random.Range(0, _availableRecipes.Count)];
         customer.AssignVariables(this, recipe, waypoints);
-        _customers.Add(customer);
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
     
     public void DespawnCustomer(Customer customer)
     {
         if (!IsServer) return;
-        _customers.Remove(customer);
         customer.NetworkObject.Despawn();
+        SpawnCustomer();
 
     }
 
