@@ -28,14 +28,17 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
         
+        // Assign waypoints
         _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
         _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
         _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
         
+        // Add to waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
         
+        // SetRecipe
         _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
         
     }
@@ -43,6 +46,8 @@ public class Customer : NetworkBehaviour, IInteractable
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
+        
+        // Remove from waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if(customerList.Contains(gameObject)) customerList.Remove(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);

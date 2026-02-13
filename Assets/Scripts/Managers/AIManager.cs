@@ -69,7 +69,6 @@ public class AIManager : NetworkBehaviour
         if (!IsServer) return;
         customer.NetworkObject.Despawn();
         SpawnCustomer();
-
     }
 
 }

@@ -20,6 +20,7 @@ namespace World
         
         protected Rigidbody rb;
         protected Collider colli;
+        private LayerMask originalExcludeLayer;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace World
             rb = GetComponent<Rigidbody>();
             colli = GetComponent<Collider>();
             _interactTransform = transform;
+            originalExcludeLayer = colli.excludeLayers.value;
         }
 
         #endregion
@@ -50,7 +52,7 @@ namespace World
         }
         
         [Rpc(SendTo.Server)]
-        protected virtual void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
+        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
             if (!interactor.TryGet(out Player.Player player)) return;
             _isInteractedWith.Value = pickingUp;

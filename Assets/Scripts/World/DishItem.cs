@@ -12,13 +12,6 @@ namespace World
             if (!IsOwner) return;
             DespawnItemServerRpc();
         }
-        
-        [Rpc(SendTo.Server)]
-        protected override void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
-        {
-            base.SetTransformsServerRpc(interactor, pickingUp);
-            //colli.excludeLayers = pickingUp ? LayerMask.NameToLayer("Customer") : 0;
-        }
 
         [Rpc(SendTo.Server)]
         private void DespawnItemServerRpc()
