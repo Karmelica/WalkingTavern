@@ -337,9 +337,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8140078492593465678}
     m_Modifications:
+    - target: {fileID: 143609102277437718, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3404996530997338190, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
       propertyPath: m_Name
       value: NicknameCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3404996530997338190, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
       propertyPath: m_Pivot.x
