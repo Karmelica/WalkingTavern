@@ -367,7 +367,7 @@ namespace Player
                 if (interactObj == null) return;
                 if (interactObj.IsInteractedWith()) return;
                 _interactObj = interactObj;
-                _interactObj.PrimaryInteract(this);
+                _interactObj.PrimaryInteract(this, true);
                 _isInteracting = true;
             }
             

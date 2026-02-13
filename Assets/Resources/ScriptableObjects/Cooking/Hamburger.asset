@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Hamburger
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Scriptable_Objects.Recipe
   recipeName: Hamburger
+  dishType: 0
   ingredients:
   - ingredient: 0
     quantity: 1
@@ -21,4 +22,6 @@ MonoBehaviour:
   - ingredient: 4
     quantity: 2
   - ingredient: 1
+    quantity: 1
+  - ingredient: 3
     quantity: 1

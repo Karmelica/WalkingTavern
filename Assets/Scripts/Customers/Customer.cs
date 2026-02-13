@@ -28,22 +28,42 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
         
+        // Assign waypoints
         _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
         _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
         _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
         
+        // Add to waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+        
+        // SetRecipe
+        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
         
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
+        
+        // Remove from waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if(customerList.Contains(gameObject)) customerList.Remove(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+    }
+
+    public void DespawnCustomer()
+    {
+        if(IsOwner)
+            DespawnServerRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    private void DespawnServerRpc()
+    {
+        NetworkObject.Despawn();
+        _aiManager.SpawnCustomer();
     }
 
     private void Update()
@@ -107,21 +127,18 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
     {
-        _blackboardReference.GetVariableValue("State", out CustomerState customerState);
-        _blackboardReference.SetVariableValue("State", customerState + 1);
+        //nothing
     }
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
-        if(IsServer){
-            _aiManager.DespawnCustomer(this);
-        }
+        //nothing
     }
 
     public string GetInteractName()
     {
         _blackboardReference.GetVariableValue("State", out CustomerState customerState);
-        return gameObject.name + " (" + customerState + ")";
+        return $"Customer\nCurrent Task: {customerState}\nRequested Recipe: {_requestedRecipe.dishType}";
     }
 
     public bool IsInteractedWith()
