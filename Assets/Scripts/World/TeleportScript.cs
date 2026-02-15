@@ -1,53 +1,63 @@
 using System;
-using DefaultNamespace;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class TeleportScript : MonoBehaviour
 {
-    private bool isOverlapping = false;
-    private Transform teleportedObject;
-    [SerializeField] private Transform target;
-    private ITeleportable teleportable;
-    
-    
+    [SerializeField] private TeleportScript target;
+    private Teleportable traveller;
+
+
     // Update is called once per frame
-    void Update()
+    private void LateUpdate()
     {
-        if (isOverlapping && teleportedObject)
+        if (traveller)
         {
-            Debug.DrawLine(teleportedObject.position, transform.position, Color.red, 5f);
-            Debug.DrawLine(transform.position + transform.up, transform.position, Color.green, 5f);
-            Debug.DrawLine(transform.position + transform.up, teleportedObject.position - transform.localPosition, Color.blue, 5f);
-            Vector3 portalToObject = teleportedObject.position - transform.position;
-            Vector3 posOffset = portalToObject;
-            float dotProduct = Vector3.Dot(transform.position + transform.up, portalToObject);
-            Debug.Log(dotProduct + ": position");
-            dotProduct = Vector3.Dot(transform.localPosition + transform.up, portalToObject);
-            Debug.Log(dotProduct + ": localPosition");
-            /*if(dotProduct < 0)
+            var m = target.transform.localToWorldMatrix * transform.worldToLocalMatrix * traveller.transform.localToWorldMatrix;
+            
+            Vector3 portalToObject = traveller.transform.position - transform.position;
+
+            int portalSide = System.Math.Sign(Vector3.Dot(transform.forward, portalToObject));
+            int oldPortalSide = System.Math.Sign(Vector3.Dot(transform.forward, traveller.lastOffsetFromPortal));
+
+            if (oldPortalSide != portalSide)
             {
-                var position = target.position + posOffset;
-                teleportable.Teleport(position);
-                isOverlapping = false;
-                teleportable = null;
-            }*/
+                var position = target.transform.position;
+                traveller.Teleport(m.GetColumn(3));
+                target.EnterPortal(traveller);
+                traveller = null;
+            }
+            else
+            {
+                traveller.lastOffsetFromPortal = portalToObject;
+            }
 
         }
     }
-
+    
+    public void EnterPortal(Teleportable newTraveller)
+    {
+        var portalToObject = newTraveller.transform.position - transform.position;
+        newTraveller.lastOffsetFromPortal = portalToObject;
+        traveller = newTraveller;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.TryGetComponent<ITeleportable>(out teleportable)) return;
-        isOverlapping = true;
-        teleportedObject = other.transform;
+        var newTraveller = other.GetComponent<Teleportable>();
+        if(newTraveller){
+            EnterPortal(newTraveller);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        isOverlapping = true;
-        teleportable = null;
-        teleportedObject = null;
+        if(traveller)
+        {
+            traveller = null;
+        }
     }
 }
+
+

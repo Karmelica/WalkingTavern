@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using DefaultNamespace;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -19,7 +19,7 @@ namespace Player
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(CharacterController))]
     
-    public class Player : NetworkBehaviour, ITeleportable, InputSystem_Actions.IPlayerActions
+    public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         #region Constants
         
@@ -29,8 +29,8 @@ namespace Player
         private const float CameraVerticalClampMax = 87f;
         private const float GroundCheckDistance = 0.2f;
         private const float GroundCheckOffset = 0.1f;
-        private const float WalkForce = 5f;
-        private const float SprintForce = 7.5f;
+        private const float WalkForce = 4f;
+        private const float SprintForce = 5.5f;
         //private const float MaxWalkSpeed = 2.5f;
         //private const float MaxSprintSpeed = 5f;
         private const float JumpForce = 1f;
@@ -84,6 +84,8 @@ namespace Player
         private IInteractable _interactObj;
         private bool _canMove = true;
         private bool _isCrouching;
+        private Vector3 lastOffsetFromPortal;
+        private Vector3 interactorOffset;
 
         #endregion
 
@@ -111,7 +113,23 @@ namespace Player
         {
             if (IsOwner && _canMove) Move();
         }
-        
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Room"))
+            {
+                interactorOffset = other.GetComponent<Room>().windowOffset;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Room"))
+            {
+                interactorOffset = Vector3.zero;
+            }
+        }
+
         #endregion
 
         #region Network Lifecycle
@@ -122,7 +140,6 @@ namespace Player
             
             if (IsOwner)
             {
-                //Debug.Log("Local player spawned.");
                 if(!_playerCamera)
                 {
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
@@ -217,7 +234,7 @@ namespace Player
         private void UpdateInteractorPosition()
         {
             var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
-            interactor.position = transform.position + Vector3.up * cameraHeight;
+            interactor.position = transform.position + Vector3.up * cameraHeight - interactorOffset;
             
             var lookVectorY = Mathf.Clamp(
                 NormalizeAngle(interactor.rotation.eulerAngles.x),
@@ -246,11 +263,11 @@ namespace Player
         {
             _isGrounded.Value = _charController.isGrounded;
 
-            if (_isGrounded.Value)
+            /*if (_isGrounded.Value)
             {
                 if(_playerVelocity.y < -2f)
                     _playerVelocity.y = -2f;
-            }
+            }*/
             
             var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized;
             var moveForce = _isSprinting ? SprintForce : WalkForce;
@@ -435,17 +452,5 @@ namespace Player
         }
 
         #endregion
-
-        public void Teleport(Vector3 position)
-        {
-            if(IsOwner)
-                TeleportServerRpc(position);
-        }
-
-        [Rpc(SendTo.Server)]
-        private void TeleportServerRpc(Vector3 position)
-        {
-            transform.position = position;
-        }
     }
 }
