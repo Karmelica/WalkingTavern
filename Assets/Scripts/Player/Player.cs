@@ -221,7 +221,7 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            _playerCamera.transform.position = interactor.position;
+            _playerCamera.transform.position = interactor.position + interactorOffset;
             _playerCamera.transform.rotation = Quaternion.Euler(interactor.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
         }
         
@@ -263,11 +263,11 @@ namespace Player
         {
             _isGrounded.Value = _charController.isGrounded;
 
-            /*if (_isGrounded.Value)
+            if (_isGrounded.Value)
             {
                 if(_playerVelocity.y < -2f)
                     _playerVelocity.y = -2f;
-            }*/
+            }
             
             var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized;
             var moveForce = _isSprinting ? SprintForce : WalkForce;
