@@ -36,19 +36,21 @@ public class PortalCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!portalRenderer.isVisible)
-        {
-            portalCamera.enabled = false;
-            return;
-        }
-        
-        portalCamera.enabled = true;
+        if(portalCamera && portalRenderer && mainCamera){
+            if (!portalRenderer.isVisible)
+            {
+                portalCamera.enabled = false;
+                return;
+            }
 
-        var offset = -transform.position;
-        portalCamera.transform.position = mainCamera.transform.position + referenceTransform.position + offset;
-        var distance = Vector3.Distance(portalCamera.transform.position, referenceTransform.position);
-        portalCamera.nearClipPlane = Mathf.Clamp(distance - 2, 0.01f, 1000f);
-        portalCamera.transform.rotation = mainCamera.transform.rotation;
+            portalCamera.enabled = true;
+
+            var offset = -transform.position;
+            portalCamera.transform.position = mainCamera.transform.position + referenceTransform.position + offset;
+            var distance = Vector3.Distance(portalCamera.transform.position, referenceTransform.position);
+            portalCamera.nearClipPlane = Mathf.Clamp(distance - 2, 0.01f, 1000f);
+            portalCamera.transform.rotation = mainCamera.transform.rotation;
+        }
     
     }
 }
