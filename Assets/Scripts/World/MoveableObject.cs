@@ -21,8 +21,6 @@ namespace World
         private readonly NetworkVariable<Vector3> _networkVelocity = new ();
         
         protected Rigidbody rb;
-        protected Collider colli;
-        private LayerMask originalExcludeLayer;
 
         #endregion
 
@@ -31,7 +29,6 @@ namespace World
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            colli = GetComponent<Collider>();
         }
         
         public override void OnNetworkSpawn()
@@ -57,7 +54,7 @@ namespace World
         {
             if (Vector3.Distance(_networkPosition.Value, transform.position) > 1f)
             {
-                transform.position = newValue;
+                transform.localPosition = newValue;
             }
         }
 
@@ -69,7 +66,7 @@ namespace World
 
             if (IsServer)
             {
-                _networkPosition.Value = transform.position;
+                _networkPosition.Value = transform.localPosition;
                 _networkVelocity.Value = rb.linearVelocity;
             }
         }
