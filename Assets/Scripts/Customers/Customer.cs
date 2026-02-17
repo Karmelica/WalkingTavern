@@ -28,26 +28,24 @@ public class Customer : NetworkBehaviour, IInteractable
     {
         base.OnNetworkSpawn();
 
-        if(IsServer){
-            int rand = Random.Range(0, ears.Count);
-            ears[rand].SetActive(true);
+        int rand = Random.Range(0, ears.Count);
+        ears[rand].SetActive(true);
 
-            _blackboardReference = behaviorGraphAgent.BlackboardReference;
-            _blackboardReference.SetVariableValue("Customer", this);
+        _blackboardReference = behaviorGraphAgent.BlackboardReference;
+        _blackboardReference.SetVariableValue("Customer", this);
 
-            // Assign waypoints
-            _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
-            _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
-            _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
+        // Assign waypoints
+        _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
+        _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
+        _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
 
-            // Add to waiting line
-            _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
-            if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
-            _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+        // Add to waiting line
+        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
+        if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
+        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
 
-            // SetRecipe
-            _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
-        }
+        // SetRecipe
+        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
         
     }
 
