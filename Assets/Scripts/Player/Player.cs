@@ -23,7 +23,7 @@ namespace Player
     {
         #region Constants
         
-        private const float CameraHeight = 1.7f;
+        private const float CameraHeight = 1.6f;
         private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
@@ -31,8 +31,6 @@ namespace Player
         private const float GroundCheckOffset = 0.1f;
         private const float WalkForce = 4f;
         private const float SprintForce = 5.5f;
-        //private const float MaxWalkSpeed = 2.5f;
-        //private const float MaxSprintSpeed = 5f;
         private const float JumpForce = 1f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
@@ -54,7 +52,7 @@ namespace Player
         [Header("Customization")]
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private TextMeshProUGUI steamNickname;
-        [SerializeField] private SkinnedMeshRenderer localPlayerMesh;
+        [SerializeField] private SkinnedMeshRenderer[] localPlayerMesh;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname");
         
@@ -100,34 +98,18 @@ namespace Player
         private void Update()
         {
             SetAnimationVariables();
-            UpdateInteractorPosition();
+            UpdateCameraPosition();
             
             if (!IsOwner) return;
             if (!_playerCamera) return;
             SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
             if (!_canMove) return;
-            UpdateCameraPosition();
+            UpdateInteractorPosition();
         }
 
         private void FixedUpdate()
         {
             if (IsOwner && _canMove) Move();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Room"))
-            {
-                interactorOffset = other.GetComponent<Room>().windowOffset;
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Room"))
-            {
-                interactorOffset = Vector3.zero;
-            }
         }
 
         #endregion
@@ -145,7 +127,7 @@ namespace Player
                     _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
                 }
                 
-                localPlayerMesh.enabled = false;
+                foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
                 canvasScript.gameObject.SetActive(true);
                 InitializeInput();
@@ -221,8 +203,29 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            _playerCamera.transform.position = interactor.position + interactorOffset;
-            _playerCamera.transform.rotation = Quaternion.Euler(interactor.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
+            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo, InteractRange))
+            {
+                if(hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
+                {
+                    interactorOffset = portalCamera.offset;
+                }
+                else
+                {
+                    interactorOffset = Vector3.zero;
+                }
+            }
+            
+            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
+            _playerCamera.transform.position = transform.position + Vector3.up * cameraHeight;
+            
+            var lookVectorY = Mathf.Clamp(
+                NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
+                CameraVerticalClampMin,
+                CameraVerticalClampMax
+            );
+            
+            _playerCamera.transform.rotation = Quaternion.Euler(lookVectorY, transform.rotation.eulerAngles.y, 0f);
+            
         }
         
         private void UpdatePlayerNickRotation()
@@ -233,16 +236,8 @@ namespace Player
         
         private void UpdateInteractorPosition()
         {
-            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
-            interactor.position = transform.position + Vector3.up * cameraHeight - interactorOffset;
-            
-            var lookVectorY = Mathf.Clamp(
-                NormalizeAngle(interactor.rotation.eulerAngles.x),
-                CameraVerticalClampMin,
-                CameraVerticalClampMax
-            );
-            
-            interactor.localRotation = Quaternion.Euler(lookVectorY, 0f, 0f);
+            interactor.position = _playerCamera.transform.position - interactorOffset;
+            interactor.rotation = Quaternion.Euler(_playerCamera.transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
         }
         
         /// <summary>
@@ -349,7 +344,7 @@ namespace Player
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
-            interactor.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
+            _playerCamera.transform.Rotate(-lookVector.y * LookSensitivity, 0f, 0f);
         }
         
         public void OnJump(InputAction.CallbackContext context)
@@ -425,8 +420,15 @@ namespace Player
         {
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
-            if (!Physics.Raycast(ray, out var hitInfo, InteractRange)) return null;
-            return hitInfo.collider.TryGetComponent(out IInteractable interactObj) ? interactObj : null;
+            var rayHitInfo = Physics.RaycastAll(ray, InteractRange);
+            foreach (var hitInfo in rayHitInfo)
+            {
+                if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
+                {
+                    return interactObj;
+                }
+            }
+            return null;
         }
 
         public Transform GetInteractPoint()

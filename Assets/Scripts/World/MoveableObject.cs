@@ -47,7 +47,13 @@ namespace World
         private void SetObjectPosition()
         {
             if (!_isInteractedWith.Value) return;
-            rb.linearVelocity = (_interactTransform.position + _interactTransform.forward * 1.5f - transform.position) * CubeVel;
+            var dest = _interactTransform.position + _interactTransform.forward * 2f;
+            if(Vector3.Distance(transform.position, dest) > 5f)
+            {
+                transform.position = dest;
+            }
+            else
+                rb.linearVelocity = (dest - transform.position) * CubeVel;
             transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
         }
         

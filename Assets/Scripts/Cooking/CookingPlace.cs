@@ -62,7 +62,7 @@ namespace Cooking
                 var ingredientTypes = Enum.GetValues(typeof(IngredientType));
                 var randomIngredient = (IngredientType)ingredientTypes.GetValue(UnityEngine.Random.Range(0, ingredientTypes.Length));
                 var prefab = Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + randomIngredient);
-                var position = transform.position + new Vector3(UnityEngine.Random.Range(-5f, 5f), 5f, UnityEngine.Random.Range(-5f, 5f));
+                var position = transform.position + new Vector3(UnityEngine.Random.Range(-1.5f, 1.5f), 3f, UnityEngine.Random.Range(0f, 8f));
                 var ingredient = Instantiate(prefab, position, Quaternion.identity);
                 ingredient.GetComponent<NetworkObject>().Spawn();
             }
