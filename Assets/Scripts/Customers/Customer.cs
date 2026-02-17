@@ -9,7 +9,6 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
-    private NetworkVariable<CustomerState> _customerState = new();
     [SerializeField] private List<GameObject> ears;
     
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
@@ -146,7 +145,8 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        return $"Customer\nRequested Recipe: {_requestedRecipe.dishType}";
+        _blackboardReference.GetVariableValue("RequestedRecipe", out Recipe requestedRecipe);
+        return $"Customer\nRequested Recipe: {requestedRecipe.dishType}";
     }
 
     public bool IsInteractedWith()
