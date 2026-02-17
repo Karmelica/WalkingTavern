@@ -45,7 +45,7 @@ namespace World
 
         private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
         {
-            if (Vector3.Distance(_networkPosition.Value, transform.position) > 1f)
+            if (Vector3.Distance(_networkPosition.Value, transform.position) > 2f)
             {
                 transform.position = newValue;
             }
@@ -55,6 +55,12 @@ namespace World
         {
             if(_isInteractedWith.Value)
                 transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
+            
+
+            if (IsServer)
+            {
+                _networkPosition.Value = transform.position;
+            }
         }
 
         private void PickedUpChanged(bool previousValue, bool newValue)
@@ -62,11 +68,6 @@ namespace World
             if (newValue == false)
             {
                 transform.parent = null;
-            }
-
-            if (IsServer)
-            {
-                _networkPosition.Value = transform.position;
             }
         }
 
