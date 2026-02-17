@@ -158,6 +158,7 @@ namespace Player
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            _interactObj?.PrimaryInteract(this, false);
             if (IsOwner && _playerCamera != null)
             {
                 Destroy(_playerCamera.gameObject);
@@ -417,6 +418,7 @@ namespace Player
 
         private IInteractable GetHitInfo()
         {
+            if (_isInteracting) return null;
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
             var rayHitInfo = Physics.RaycastAll(ray, InteractRange);

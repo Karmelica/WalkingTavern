@@ -45,7 +45,7 @@ namespace World
 
         private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
         {
-            if (Vector3.Distance(_networkPosition.Value, transform.position) > 5f)
+            if (Vector3.Distance(_networkPosition.Value, transform.position) > 1f)
             {
                 transform.position = newValue;
             }
