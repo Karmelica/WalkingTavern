@@ -18,6 +18,7 @@ namespace World
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
         private readonly NetworkVariable<Vector3> _networkPosition = new ();
+        private readonly NetworkVariable<Vector3> _networkVelocity = new ();
         
         protected Rigidbody rb;
         protected Collider colli;
@@ -38,9 +39,18 @@ namespace World
             base.OnNetworkSpawn();
             _isInteractedWith.OnValueChanged += PickedUpChanged;
             _networkPosition.OnValueChanged += CheckForDistance;
+            _networkVelocity.OnValueChanged += CheckForVelocity;
             
             rb.useGravity = true;
             rb.isKinematic = false;
+        }
+
+        private void CheckForVelocity(Vector3 previousValue, Vector3 newValue)
+        {
+            if (Vector3.Magnitude(_networkVelocity.Value) - Vector3.Magnitude(rb.linearVelocity) < -0.1f)
+            {
+                rb.linearVelocity = newValue;
+            }
         }
 
         private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
@@ -60,6 +70,7 @@ namespace World
             if (IsServer)
             {
                 _networkPosition.Value = transform.position;
+                _networkVelocity.Value = rb.linearVelocity;
             }
         }
 
