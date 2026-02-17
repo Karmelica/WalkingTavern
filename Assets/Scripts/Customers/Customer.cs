@@ -19,7 +19,7 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private Animator animator;
 
     private Recipe _requestedRecipe;
-    private List<Transform> _waypoints;
+    private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
     #region Unity Lifecycle
@@ -30,6 +30,10 @@ public class Customer : NetworkBehaviour, IInteractable
 
         int rand = Random.Range(0, ears.Count);
         ears[rand].SetActive(true);
+
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Entrance").transform);
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Waiting").transform);
     }
 
     protected override void OnNetworkPostSpawn()
@@ -108,11 +112,10 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Get/Set
 
-    public void AssignVariables(AIManager manager, Recipe recipe, List<Transform> waypoints)
+    public void AssignVariables(AIManager manager, Recipe recipe)
     {
         _aiManager = manager;
         _requestedRecipe = recipe;
-        _waypoints = waypoints;
     }
 
     public bool TryGetSeat(out Transform seat)
