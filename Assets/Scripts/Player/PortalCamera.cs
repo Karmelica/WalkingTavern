@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class PortalCamera : MonoBehaviour
 {
+    public Vector3 offset { get; private set; }
+
     private MeshRenderer portalRenderer;
     private Camera mainCamera;
     [SerializeField] private Transform referenceTransform;
     [SerializeField] private Camera portalCamera;
-    private Plane[] mainCameraPlanes = new Plane[6];
-    [SerializeField] private Bounds bounds;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,13 +21,12 @@ public class PortalCamera : MonoBehaviour
         }
         mainCamera = Camera.main;
         
+        offset = transform.position - referenceTransform.position;
         
         portalCamera.fieldOfView = mainCamera.fieldOfView;
         
         portalRenderer = GetComponent<MeshRenderer>();
 
-        bounds = portalRenderer.bounds;
-        
         RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
         portalCamera.targetTexture = rt;
         portalRenderer.material.mainTexture = rt;

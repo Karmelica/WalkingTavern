@@ -29,9 +29,9 @@ public class CookingMenu : MonoBehaviour, IInteractable
         }
     }
     
-    public void OnRecipeSelected(int index)
+    public void OnRecipeSelected()
     {
-        cookingPlace.ChangeRecipe(index);
+        cookingPlace.ChangeRecipe(recipeDropdown.value);
     }
 
 

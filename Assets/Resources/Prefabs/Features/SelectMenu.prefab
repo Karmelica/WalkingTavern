@@ -786,7 +786,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4411880872469449046}
-  - component: {fileID: 3228930910248475693}
   m_Layer: 5
   m_Name: Holder
   m_TagString: Untagged
@@ -815,32 +814,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 576, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3228930910248475693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4550728417351845389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
-  m_Padding:
-    m_Left: 100
-    m_Right: 100
-    m_Top: 100
-    m_Bottom: 100
-  m_ChildAlignment: 4
-  m_Spacing: 100
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &4629168988774878481
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,7 +1158,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 510635518650278011}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: CookingMenu, Assembly-CSharp
         m_MethodName: OnRecipeSelected
         m_Mode: 0
@@ -1483,8 +1456,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1268308157677715049}
-  - component: {fileID: 510635518650278011}
-  - component: {fileID: 2056097529138111055}
   m_Layer: 5
   m_Name: SelectMenu
   m_TagString: Untagged
@@ -1512,42 +1483,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &510635518650278011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7835864475679636768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dde6fff5884e8a43a8995c6b994e688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _availableRecipes: []
-  recipeDropdown: {fileID: 6302481825445643434}
-  cookingPlace: {fileID: 0}
---- !u!65 &2056097529138111055
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7835864475679636768}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.3028276, y: 0.8727722, z: 0.9847784}
-  m_Center: {x: 1.6639885, y: -809.0387, z: 0.2603429}
 --- !u!1 &8026874892779962772
 GameObject:
   m_ObjectHideFlags: 0

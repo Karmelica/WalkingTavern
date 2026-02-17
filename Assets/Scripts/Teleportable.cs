@@ -8,7 +8,5 @@ public class Teleportable : MonoBehaviour
     public void Teleport(Vector3 position)
     {
         transform.position = position;
-        Debug.Log("Teleported");
-        
     }
 }

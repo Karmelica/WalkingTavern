@@ -9,6 +9,8 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
+    [SerializeField] private List<GameObject> ears;
+    
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
     
@@ -25,6 +27,10 @@ public class Customer : NetworkBehaviour, IInteractable
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        int rand = Random.Range(0, ears.Count);
+        ears[rand].SetActive(true);
+        
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
         
