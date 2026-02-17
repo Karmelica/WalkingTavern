@@ -60,7 +60,6 @@ namespace Player
 
         #region Components
 
-        [SerializeField] private GameObject playerCameraPrefab;
         [SerializeField] private Transform interactor;
         [SerializeField] private CanvasScript canvasScript;
 
@@ -124,7 +123,7 @@ namespace Player
             {
                 if(!_playerCamera)
                 {
-                    _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
+                    _playerCamera = Camera.main;
                 }
                 
                 foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;

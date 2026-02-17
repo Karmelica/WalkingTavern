@@ -51,8 +51,6 @@ namespace World
                 transform.parent = null;
             }
 
-            rb.useGravity = !newValue;
-            rb.isKinematic = newValue;
         }
 
         #endregion
@@ -69,6 +67,8 @@ namespace World
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SetParentClientRpc(NetworkBehaviourReference interactor, bool pickingUp)
         {
+            rb.useGravity = !pickingUp;
+            rb.isKinematic = pickingUp;
             if (interactor.TryGet(out Player.Player player))
             {
                 transform.SetParent(player.GetInteractPoint());
