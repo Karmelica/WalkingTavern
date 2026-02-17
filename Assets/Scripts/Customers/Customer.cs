@@ -153,6 +153,12 @@ public class Customer : NetworkBehaviour, IInteractable
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void GetStateServerRpc()
     {
+        SetStateClientRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SetStateClientRpc()
+    {
         _blackboardReference.GetVariableValue("State", out _customerState);
     }
 
