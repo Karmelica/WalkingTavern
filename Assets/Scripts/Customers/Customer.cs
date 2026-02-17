@@ -30,8 +30,22 @@ public class Customer : NetworkBehaviour, IInteractable
 
         int rand = Random.Range(0, ears.Count);
         ears[rand].SetActive(true);
-
         
+        _blackboardReference = behaviorGraphAgent.BlackboardReference;
+        _blackboardReference.SetVariableValue("Customer", this);
+
+        // Assign waypoints
+        _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
+        _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
+        _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
+
+        // Add to waiting line
+        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
+        if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
+        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+
+        // SetRecipe
+        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
     }
 
     public override void OnNetworkDespawn()
@@ -94,23 +108,6 @@ public class Customer : NetworkBehaviour, IInteractable
         _aiManager = manager;
         _requestedRecipe = recipe;
         _waypoints = waypoints;
-        
-        
-        _blackboardReference = behaviorGraphAgent.BlackboardReference;
-        _blackboardReference.SetVariableValue("Customer", this);
-
-        // Assign waypoints
-        _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
-        _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
-        _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
-
-        // Add to waiting line
-        _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
-        if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
-        _blackboardReference.SetVariableValue("CustomersInLine", customerList);
-
-        // SetRecipe
-        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
     }
 
     public bool TryGetSeat(out Transform seat)
