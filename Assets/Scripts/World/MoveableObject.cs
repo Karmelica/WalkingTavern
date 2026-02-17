@@ -17,6 +17,7 @@ namespace World
         private const float CubeVel = 10f;
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
+        private readonly NetworkVariable<Vector3> _networkPosition = new ();
         
         protected Rigidbody rb;
         protected Collider colli;
@@ -36,6 +37,18 @@ namespace World
         {
             base.OnNetworkSpawn();
             _isInteractedWith.OnValueChanged += PickedUpChanged;
+            _networkPosition.OnValueChanged += CheckForDistance;
+            
+            rb.useGravity = true;
+            rb.isKinematic = false;
+        }
+
+        private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
+        {
+            if (Vector3.Distance(_networkPosition.Value, transform.position) > 1f)
+            {
+                transform.position = newValue;
+            }
         }
 
         private void Update()
@@ -51,6 +64,10 @@ namespace World
                 transform.parent = null;
             }
 
+            if (IsServer)
+            {
+                _networkPosition.Value = transform.position;
+            }
         }
 
         #endregion
