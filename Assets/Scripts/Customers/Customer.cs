@@ -30,6 +30,11 @@ public class Customer : NetworkBehaviour, IInteractable
 
         int rand = Random.Range(0, ears.Count);
         ears[rand].SetActive(true);
+    }
+
+    protected override void OnNetworkPostSpawn()
+    {
+        base.OnNetworkPostSpawn();
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
