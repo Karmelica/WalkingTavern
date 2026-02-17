@@ -98,12 +98,12 @@ namespace Player
         private void Update()
         {
             SetAnimationVariables();
-            UpdateInteractorPosition();
             
             if (!IsOwner) return;
             if (!_playerCamera) return;
             SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
             if (!_canMove) return;
+            UpdateInteractorPosition();
             UpdateCameraPosition();
         }
 
