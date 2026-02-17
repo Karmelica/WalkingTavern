@@ -17,54 +17,91 @@ namespace World
         private const float CubeVel = 10f;
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
+        private readonly NetworkVariable<Vector3> _networkPosition = new ();
+        private readonly NetworkVariable<Vector3> _networkVelocity = new ();
         
         protected Rigidbody rb;
-        protected Collider colli;
-        private LayerMask originalExcludeLayer;
 
         #endregion
 
         #region Unity Methods
 
-        protected virtual void Update()
-        {
-            //SetObjectPositionServerRpc();
-            SetObjectPosition();
-        }
-
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            colli = GetComponent<Collider>();
-            _interactTransform = transform;
-            originalExcludeLayer = colli.excludeLayers.value;
+        }
+        
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            _isInteractedWith.OnValueChanged += PickedUpChanged;
+            if(!IsServer){
+                _networkPosition.OnValueChanged += CheckForDistance;
+                _networkVelocity.OnValueChanged += CheckForVelocity;
+            }
+            
+            rb.useGravity = true;
+            rb.isKinematic = false;
+        }
+
+        private void CheckForVelocity(Vector3 previousValue, Vector3 newValue)
+        {
+            if (Vector3.Magnitude(_networkVelocity.Value) - Vector3.Magnitude(rb.linearVelocity) < -0.1f)
+            {
+                rb.linearVelocity = newValue;
+            }
+        }
+
+        private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
+        {
+            if (Vector3.Distance(_networkPosition.Value, transform.position) > 0.1f)
+            {
+                transform.localPosition = newValue;
+            }
+        }
+
+        private void Update()
+        {
+            if(_isInteractedWith.Value)
+                transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
+            
+
+            if (IsServer)
+            {
+                _networkPosition.Value = transform.localPosition;
+                _networkVelocity.Value = rb.linearVelocity;
+            }
+        }
+
+        private void PickedUpChanged(bool previousValue, bool newValue)
+        {
+            if (newValue == false)
+            {
+                transform.parent = null;
+            }
         }
 
         #endregion
         
         #region RPC Methods
         
-        private void SetObjectPosition()
-        {
-            if (!_isInteractedWith.Value) return;
-            var dest = _interactTransform.position + _interactTransform.forward * 2f;
-            if(Vector3.Distance(transform.position, dest) > 5f)
-            {
-                transform.position = dest;
-            }
-            else
-                rb.linearVelocity = (dest - transform.position) * CubeVel;
-            transform.rotation = Quaternion.Euler(0, _interactTransform.rotation.eulerAngles.y, 0);
-        }
-        
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
-            if (!interactor.TryGet(out Player.Player player)) return;
+            SetParentClientRpc(interactor, pickingUp);
             _isInteractedWith.Value = pickingUp;
-            rb.useGravity = !_isInteractedWith.Value;
-            rb.maxLinearVelocity = _isInteractedWith.Value ? float.MaxValue : rb.maxLinearVelocity = 5f;
-            _interactTransform = pickingUp ? player.GetInteractPoint() : transform;
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool pickingUp)
+        {
+            rb.useGravity = !pickingUp;
+            rb.isKinematic = pickingUp;
+            if (interactor.TryGet(out Player.Player player))
+            {
+                transform.SetParent(player.GetInteractPoint());
+                transform.position = player.GetInteractPoint().position + player.GetInteractPoint().forward * 2f;
+            }
         }
 
         #endregion

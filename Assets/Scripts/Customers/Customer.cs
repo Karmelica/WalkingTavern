@@ -19,7 +19,7 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private Animator animator;
 
     private Recipe _requestedRecipe;
-    private List<Transform> _waypoints;
+    private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
     #region Unity Lifecycle
@@ -30,23 +30,31 @@ public class Customer : NetworkBehaviour, IInteractable
 
         int rand = Random.Range(0, ears.Count);
         ears[rand].SetActive(true);
+
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Entrance").transform);
+        _waypoints.Add(GameObject.FindGameObjectWithTag("Waiting").transform);
+    }
+
+    protected override void OnNetworkPostSpawn()
+    {
+        base.OnNetworkPostSpawn();
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
-        
+
         // Assign waypoints
         _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
         _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
         _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
-        
+
         // Add to waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
-        if(!customerList.Contains(gameObject)) customerList.Add(gameObject);
+        if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
-        
+
         // SetRecipe
         _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
-        
     }
 
     public override void OnNetworkDespawn()
@@ -104,11 +112,10 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Get/Set
 
-    public void AssignVariables(AIManager manager, Recipe recipe, List<Transform> waypoints)
+    public void AssignVariables(AIManager manager, Recipe recipe)
     {
         _aiManager = manager;
         _requestedRecipe = recipe;
-        _waypoints = waypoints;
     }
 
     public bool TryGetSeat(out Transform seat)
@@ -143,8 +150,8 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        _blackboardReference.GetVariableValue("State", out CustomerState customerState);
-        return $"Customer\nCurrent Task: {customerState}\nRequested Recipe: {_requestedRecipe.dishType}";
+        _blackboardReference.GetVariableValue("RequestedRecipe", out Recipe requestedRecipe);
+        return $"Customer\nRequested Recipe: {requestedRecipe.dishType}";
     }
 
     public bool IsInteractedWith()

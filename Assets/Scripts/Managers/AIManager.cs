@@ -12,7 +12,6 @@ public class AIManager : NetworkBehaviour
     [SerializeField] private int customersToSpawn;
 
     [SerializeField] private GameObject customerPrefab;
-    [SerializeField] private List<Transform> waypoints;
     [SerializeField] private Transform spawnPoint;
     private Customer _orderingCustomer;
     private Customer _customerInFront;
@@ -60,7 +59,7 @@ public class AIManager : NetworkBehaviour
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
         var recipe = _availableRecipes[Random.Range(0, _availableRecipes.Count)];
-        customer.AssignVariables(this, recipe, waypoints);
+        customer.AssignVariables(this, recipe);
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
     

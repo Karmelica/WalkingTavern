@@ -60,7 +60,6 @@ namespace Player
 
         #region Components
 
-        [SerializeField] private GameObject playerCameraPrefab;
         [SerializeField] private Transform interactor;
         [SerializeField] private CanvasScript canvasScript;
 
@@ -98,13 +97,13 @@ namespace Player
         private void Update()
         {
             SetAnimationVariables();
-            UpdateCameraPosition();
             
             if (!IsOwner) return;
             if (!_playerCamera) return;
             SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
             if (!_canMove) return;
             UpdateInteractorPosition();
+            UpdateCameraPosition();
         }
 
         private void FixedUpdate()
@@ -124,7 +123,7 @@ namespace Player
             {
                 if(!_playerCamera)
                 {
-                    _playerCamera = Instantiate(playerCameraPrefab).GetComponent<Camera>();
+                    _playerCamera = Camera.main;
                 }
                 
                 foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
@@ -159,6 +158,7 @@ namespace Player
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            _interactObj?.PrimaryInteract(this, false);
             if (IsOwner && _playerCamera != null)
             {
                 Destroy(_playerCamera.gameObject);
@@ -418,6 +418,7 @@ namespace Player
 
         private IInteractable GetHitInfo()
         {
+            if (_isInteracting) return null;
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
             var rayHitInfo = Physics.RaycastAll(ray, InteractRange);
