@@ -146,14 +146,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        GetStateServerRpc();
-        return $"Customer\nCurrent Task: {_customerState.Value}\nRequested Recipe: {_requestedRecipe.dishType}";
-    }
-
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    private void GetStateServerRpc()
-    {
-        _blackboardReference.GetVariableValue("State", out _customerState);
+        return $"Customer\nRequested Recipe: {_requestedRecipe.dishType}";
     }
 
     public bool IsInteractedWith()
