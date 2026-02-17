@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
-    private CustomerState _customerState;
+    private NetworkVariable<CustomerState> _customerState;
     [SerializeField] private List<GameObject> ears;
     
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
@@ -147,7 +147,7 @@ public class Customer : NetworkBehaviour, IInteractable
     public string GetInteractName()
     {
         GetStateServerRpc();
-        return $"Customer\nCurrent Task: {_customerState}\nRequested Recipe: {_requestedRecipe.dishType}";
+        return $"Customer\nCurrent Task: {_customerState.Value}\nRequested Recipe: {_requestedRecipe.dishType}";
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
