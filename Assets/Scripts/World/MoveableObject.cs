@@ -35,8 +35,10 @@ namespace World
         {
             base.OnNetworkSpawn();
             _isInteractedWith.OnValueChanged += PickedUpChanged;
-            _networkPosition.OnValueChanged += CheckForDistance;
-            _networkVelocity.OnValueChanged += CheckForVelocity;
+            if(!IsServer){
+                _networkPosition.OnValueChanged += CheckForDistance;
+                _networkVelocity.OnValueChanged += CheckForVelocity;
+            }
             
             rb.useGravity = true;
             rb.isKinematic = false;
@@ -52,7 +54,7 @@ namespace World
 
         private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
         {
-            if (Vector3.Distance(_networkPosition.Value, transform.position) > 1f)
+            if (Vector3.Distance(_networkPosition.Value, transform.position) > 0.1f)
             {
                 transform.localPosition = newValue;
             }
