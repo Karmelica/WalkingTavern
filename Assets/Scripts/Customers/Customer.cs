@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
-    private NetworkVariable<CustomerState> _customerState;
+    private NetworkVariable<CustomerState> _customerState = new();
     [SerializeField] private List<GameObject> ears;
     
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
