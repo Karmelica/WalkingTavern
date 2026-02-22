@@ -17,7 +17,7 @@ namespace Player
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(CharacterController))]
+    //[RequireComponent(typeof(CharacterController))]
     
     public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
@@ -27,9 +27,9 @@ namespace Player
         private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
-        private const float WalkForce = 4f;
-        private const float SprintForce = 5.5f;
-        private const float JumpForce = 1f;
+        private const float WalkForce = 200f;
+        private const float SprintForce = 250f;
+        private const float JumpForce = 250f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
         
@@ -68,9 +68,10 @@ namespace Player
         private InputSystem_Actions _inputActions;
         private Camera _playerCamera;
         private Animator _animator;
-        private CharacterController _charController;
+        //private CharacterController _charController;
+        private Rigidbody _rigidbody;
+        private Collider _collider;
         private Vector2 _inputVector;
-        private Vector3 _playerVelocity;
         private NetworkVariable<bool> _isGrounded = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private bool _isSprinting;
         private bool _currentInteractable;
@@ -89,7 +90,8 @@ namespace Player
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _charController = GetComponent<CharacterController>();
+            //_charController = GetComponent<CharacterController>();
+            _rigidbody = GetComponent<Rigidbody>();
         }
         
         private void Update()
@@ -98,7 +100,8 @@ namespace Player
             
             if (!IsOwner) return;
             if (!_playerCamera) return;
-            SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
+            //SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
+            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _isInteracting);
             if (!_canMove) return;
             UpdateInteractorPosition();
             UpdateCameraPosition();
@@ -244,7 +247,6 @@ namespace Player
         private static float NormalizeAngle(float angle)
         {
             if (angle > 180f) angle -= 360f;
-            //if( angle < -180f) angle += 360f;
             return angle;
         }
         
@@ -254,20 +256,14 @@ namespace Player
 
         private void Move()
         {
-            _isGrounded.Value = _charController.isGrounded;
-
-            if (_isGrounded.Value)
-            {
-                if(_playerVelocity.y < -2f)
-                    _playerVelocity.y = -2f;
-            }
+            _isGrounded.Value = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
             
-            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized;
             var moveForce = _isSprinting ? SprintForce : WalkForce;
+            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized * (moveForce * Time.fixedDeltaTime);
             
-            _playerVelocity.y += Physics.gravity.y * Time.fixedDeltaTime;
+            moveVector.y = _rigidbody.linearVelocity.y;
             
-            _charController.Move((moveVector * moveForce + Vector3.up * _playerVelocity.y) * Time.fixedDeltaTime);
+            _rigidbody.linearVelocity = moveVector;
         }
         
         /// <summary>
@@ -278,7 +274,7 @@ namespace Player
             if (!_isGrounded.Value) return;
             
             _animator.SetTrigger(Jumping);
-            _playerVelocity.y = Mathf.Sqrt(JumpForce * -2f * Physics.gravity.y);
+            _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Force);
         }
         
         #endregion
@@ -319,9 +315,7 @@ namespace Player
         [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
         private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
         {
-            //var clientId = serverRpcParams.Receive.SenderClientId;
             _playerNickname.Value = new Friend(id).Name;
-            //SetSteamNicknameClientRpc(clientId);
         }
         
         /// <summary>
@@ -437,19 +431,6 @@ namespace Player
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            if(!IsOwner) return;
-            if (context.started)
-            {
-                _isCrouching = true;
-                var newHeight = _charController.height = Height / 2f;
-                _charController.center = new Vector3(0f, newHeight / 2f, 0f);
-            }
-            if (context.canceled)
-            {
-                _isCrouching = false;
-                var newHeight = _charController.height = Height;
-                _charController.center = new Vector3(0f, newHeight / 2f, 0f);
-            }
         }
 
         #endregion
