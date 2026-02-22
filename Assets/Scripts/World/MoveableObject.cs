@@ -14,13 +14,12 @@ namespace World
     {
         #region Variables
 
-        private const float CubeVel = 10f;
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
         private readonly NetworkVariable<Vector3> _networkPosition = new ();
         private readonly NetworkVariable<Vector3> _networkVelocity = new ();
         
-        protected Rigidbody rb;
+        private Rigidbody _rigidbody;
 
         #endregion
 
@@ -28,7 +27,7 @@ namespace World
 
         protected virtual void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            _rigidbody = GetComponent<Rigidbody>();
         }
         
         public override void OnNetworkSpawn()
@@ -40,15 +39,15 @@ namespace World
                 _networkVelocity.OnValueChanged += CheckForVelocity;
             }
             
-            rb.useGravity = true;
-            rb.isKinematic = false;
+            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
         }
 
         private void CheckForVelocity(Vector3 previousValue, Vector3 newValue)
         {
-            if (Vector3.Magnitude(_networkVelocity.Value) - Vector3.Magnitude(rb.linearVelocity) < -0.1f)
+            if (Vector3.Magnitude(_networkVelocity.Value) - Vector3.Magnitude(_rigidbody.linearVelocity) < -0.1f)
             {
-                rb.linearVelocity = newValue;
+                _rigidbody.linearVelocity = newValue;
             }
         }
 
@@ -69,7 +68,7 @@ namespace World
             if (IsServer)
             {
                 _networkPosition.Value = transform.localPosition;
-                _networkVelocity.Value = rb.linearVelocity;
+                _networkVelocity.Value = _rigidbody.linearVelocity;
             }
         }
 
@@ -95,8 +94,8 @@ namespace World
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SetParentClientRpc(NetworkBehaviourReference interactor, bool pickingUp)
         {
-            rb.useGravity = !pickingUp;
-            rb.isKinematic = pickingUp;
+            _rigidbody.useGravity = !pickingUp;
+            _rigidbody.isKinematic = pickingUp;
             if (interactor.TryGet(out Player.Player player))
             {
                 transform.SetParent(player.GetInteractPoint());

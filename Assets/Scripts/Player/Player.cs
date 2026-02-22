@@ -27,8 +27,6 @@ namespace Player
         private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
-        private const float GroundCheckDistance = 0.2f;
-        private const float GroundCheckOffset = 0.1f;
         private const float WalkForce = 4f;
         private const float SprintForce = 5.5f;
         private const float JumpForce = 1f;
