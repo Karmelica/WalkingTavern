@@ -110,6 +110,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -235,6 +236,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -266,8 +268,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 5723808127883651389}
   m_AABB:
-    m_Center: {x: -0.00007688999, y: 0.08328861, z: 0.04566148}
-    m_Extent: {x: 0.75537425, y: 0.98750705, z: 0.36134383}
+    m_Center: {x: -0.00007688999, y: 0.16663241, z: 0.04566148}
+    m_Extent: {x: 0.28885734, y: 0.90416324, z: 0.16746962}
   m_DirtyAABB: 0
 --- !u!1 &892978601895178110
 GameObject:
@@ -380,6 +382,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -1118,8 +1121,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
   m_Animator: {fileID: 8098776129283324567}
+  TransitionStateInfoList: []
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: WalkSpeed
+      NameHash: -895785005
+      Synchronize: 1
+      ParameterType: 1
+    - name: IsGrounded
+      NameHash: 507951781
+      Synchronize: 1
+      ParameterType: 4
+    - name: WalkDir
+      NameHash: 1978981140
+      Synchronize: 1
+      ParameterType: 1
+    - name: IsSitting
+      NameHash: 209758592
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsEating
+      NameHash: -29066099
+      Synchronize: 1
+      ParameterType: 4
+  AnimatorParametersExpanded: 0
 --- !u!95 &8098776129283324567
 Animator:
   serializedVersion: 7
@@ -1451,6 +1479,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0

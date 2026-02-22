@@ -18,6 +18,7 @@ public enum IngredientType
     Bun
 }
 
+[BlackboardEnum]
 public enum DishType
 {
     Hamburger,

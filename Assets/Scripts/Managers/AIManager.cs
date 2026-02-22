@@ -58,8 +58,8 @@ public class AIManager : NetworkBehaviour
         if (!IsServer) return;
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
-        var recipe = _availableRecipes[Random.Range(0, _availableRecipes.Count)];
-        customer.AssignVariables(this, recipe);
+        var dish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType;
+        customer.AssignVariables(this, dish);
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
     

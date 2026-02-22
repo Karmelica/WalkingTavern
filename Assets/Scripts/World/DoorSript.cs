@@ -5,6 +5,8 @@ using UnityEngine;
 public class DoorSript : MonoBehaviour, IInteractable
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private Animator otherAnimator;
+    
     public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
     {
     }
@@ -12,6 +14,10 @@ public class DoorSript : MonoBehaviour, IInteractable
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
         animator.SetTrigger("Interact");
+        if (otherAnimator)
+        {
+            otherAnimator.SetTrigger("Interact");
+        }
     }
 
     public string GetInteractName()

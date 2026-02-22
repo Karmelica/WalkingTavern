@@ -59,7 +59,7 @@ namespace Player
         #region Components
 
         [SerializeField] private Transform interactor;
-        [SerializeField] private CanvasScript canvasScript;
+        [SerializeField] private CanvasScript playerGUICanvas;
 
         #endregion
         
@@ -126,7 +126,7 @@ namespace Player
                 
                 foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
                 SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
-                canvasScript.gameObject.SetActive(true);
+                playerGUICanvas.gameObject.SetActive(true);
                 InitializeInput();
                 playerNameCanvas.enabled = false;
             }
@@ -147,7 +147,7 @@ namespace Player
                 UpdatePlayerNickRotation();
                 if(!IsOwner || !_playerCamera) continue;
                 var interactable = GetHitInfo();
-                canvasScript.interactText.text = interactable != null && !interactable.IsInteractedWith()
+                playerGUICanvas.interactText.text = interactable != null && !interactable.IsInteractedWith()
                     ? $"Interact with {interactable.GetInteractName()}"
                     : string.Empty;
             }
@@ -205,7 +205,7 @@ namespace Player
             {
                 if(hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
                 {
-                    interactorOffset = portalCamera.offset;
+                    interactorOffset = portalCamera.globalOffset;
                 }
                 else
                 {

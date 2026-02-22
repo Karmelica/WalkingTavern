@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PortalCamera : MonoBehaviour
 {
-    public Vector3 offset { get; private set; }
+    public Vector3 globalOffset { get; private set; }
 
     private MeshRenderer portalRenderer;
     private Camera mainCamera;
@@ -20,8 +20,6 @@ public class PortalCamera : MonoBehaviour
             return;
         }
         mainCamera = Camera.main;
-        
-        offset = transform.position - referenceTransform.position;
         
         portalCamera.fieldOfView = mainCamera.fieldOfView;
         
@@ -43,6 +41,8 @@ public class PortalCamera : MonoBehaviour
             }
 
             portalCamera.enabled = true;
+        
+            globalOffset = transform.position - referenceTransform.position;
 
             var offset = -transform.position;
             portalCamera.transform.position = mainCamera.transform.position + referenceTransform.position + offset;

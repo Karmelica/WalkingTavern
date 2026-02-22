@@ -18,7 +18,8 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private CharacterController controller;
     [SerializeField] private Animator animator;
 
-    private Recipe _requestedRecipe;
+    private NetworkVariable<DishType> _requestedDish = new();
+    private DishType _requestedDishServer;
     private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
@@ -39,6 +40,8 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
+
+        _requestedDish.Value = _requestedDishServer;
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
@@ -54,7 +57,7 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
 
         // SetRecipe
-        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedRecipe);
+        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedDish);
     }
 
     public override void OnNetworkDespawn()
@@ -112,10 +115,10 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Get/Set
 
-    public void AssignVariables(AIManager manager, Recipe recipe)
+    public void AssignVariables(AIManager manager, DishType dish)
     {
         _aiManager = manager;
-        _requestedRecipe = recipe;
+        _requestedDishServer = dish;
     }
 
     public bool TryGetSeat(out Transform seat)
@@ -150,8 +153,8 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        _blackboardReference.GetVariableValue("RequestedRecipe", out Recipe requestedRecipe);
-        return $"Customer\nRequested Recipe: {requestedRecipe.dishType}";
+        _blackboardReference.GetVariableValue("RequestedRecipe", out DishType requestedDishType);
+        return $"Customer\nRequested Dish: {requestedDishType}";
     }
 
     public bool IsInteractedWith()
