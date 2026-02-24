@@ -148,7 +148,10 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
-        //nothing
+        _blackboardReference.GetVariableValue("Ordering", out CustomerState orderingState);
+        if(orderingState == CustomerState.Ordering){
+            _blackboardReference.SetVariableValue("Ordered", true);
+        }
     }
 
     public string GetInteractName()
