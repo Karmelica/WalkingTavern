@@ -1,12 +1,16 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace World
 {
-    public class CaravanScript : MonoBehaviour
+    public class CaravanScript : MonoBehaviour, IInteractable
     {
+        private bool _shouldDrive = false;
+        
         private void FixedUpdate()
         {
-            transform.Translate(transform.forward * (0.1f * Time.fixedDeltaTime));
+            if(_shouldDrive)
+                transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime));
         }
 
         private void OnCollisionEnter(Collision other)
@@ -23,6 +27,26 @@ namespace World
             {
                 other.transform.SetParent(null);
             }
+        }
+
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+        {
+            //
+        }
+
+        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        {
+            _shouldDrive = !_shouldDrive;
+        }
+
+        public string GetInteractName()
+        {
+            return gameObject.name;
+        }
+
+        public bool IsInteractedWith()
+        {
+            return false;
         }
     }
 }
