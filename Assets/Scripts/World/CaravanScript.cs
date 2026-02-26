@@ -6,11 +6,14 @@ namespace World
     public class CaravanScript : MonoBehaviour, IInteractable
     {
         private bool _shouldDrive = false;
+        private bool _shouldRotate = false;
         
         private void FixedUpdate()
         {
             if(_shouldDrive)
                 transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime));
+            if(_shouldRotate)
+                transform.RotateAround(transform.position, transform.up, Time.deltaTime * 10.0f);
         }
 
         private void OnCollisionEnter(Collision other)
@@ -31,7 +34,7 @@ namespace World
 
         public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
         {
-            //
+            _shouldRotate = !_shouldRotate;
         }
 
         public void SecondaryInteract(NetworkBehaviourReference interactor)

@@ -1698,13 +1698,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 532351777724581850}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0.000000029802322, z: 0.000000029802322, w: 0.7071068}
+  m_LocalRotation: {x: -0.000000119209275, y: -0.7071069, z: 0.70710677, w: -0.00000044703478}
   m_LocalPosition: {x: 0.018750193, y: 1.4317999, z: 1.1749994}
   m_LocalScale: {x: 0.22477019, y: 1, z: 0.09597068}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6490449205935152089}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!1 &239452397001304839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1961,8 +1961,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  referenceTransform: {fileID: 4410608656311802372}
-  portalCamera: {fileID: 692748342757384722}
+  otherPortal: {fileID: 6760285267946665758}
+  portalCam: {fileID: 692748342757384722}
 --- !u!20 &692748342757384722
 Camera:
   m_ObjectHideFlags: 0
@@ -2389,8 +2389,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  referenceTransform: {fileID: 6484707746106591470}
-  portalCamera: {fileID: 8283830481461834448}
+  otherPortal: {fileID: 2276757485331778554}
+  portalCam: {fileID: 8283830481461834448}
 --- !u!114 &2276757485331778554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2403,8 +2403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  referenceTransform: {fileID: 2579560771541720109}
-  portalCamera: {fileID: 3385522163380344681}
+  otherPortal: {fileID: 2195073353823141840}
+  portalCam: {fileID: 3385522163380344681}
 --- !u!222 &2329910838936776449
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3838,8 +3838,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  referenceTransform: {fileID: 175143808787271236}
-  portalCamera: {fileID: 6401490405458566644}
+  otherPortal: {fileID: 689740870042735063}
+  portalCam: {fileID: 6401490405458566644}
 --- !u!65 &6760285267946665759
 BoxCollider:
   m_ObjectHideFlags: 0
