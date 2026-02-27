@@ -5,8 +5,8 @@ public class Teleportable : MonoBehaviour
     public Vector3 lastOffsetFromPortal;
     [SerializeField] private CharacterController myCenter;
     
-    public void Teleport(Vector3 position)
+    public void Teleport(Vector3 position, Quaternion rotation)
     {
-        transform.position = position;
+        transform.SetPositionAndRotation(position, rotation);
     }
 }

@@ -23,8 +23,7 @@ public class TeleportScript : MonoBehaviour
 
             if (oldPortalSide != portalSide)
             {
-                var position = target.transform.position;
-                traveller.Teleport(m.GetColumn(3));
+                traveller.Teleport(m.GetColumn(3), m.rotation);
                 target.EnterPortal(traveller);
                 traveller = null;
             }
