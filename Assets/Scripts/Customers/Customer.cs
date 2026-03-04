@@ -45,9 +45,6 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
-
-        // SetRecipe
-        _blackboardReference.SetVariableValue("RequestedRecipe", requestedDish.Value);
     }
 
     public override void OnNetworkDespawn()

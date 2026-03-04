@@ -23,7 +23,8 @@ public enum DishType
 {
     Hamburger,
     LettuceSoup,
-    CheeseCake
+    CheeseCake,
+    Sandwich
 }
 
 [BlackboardEnum]

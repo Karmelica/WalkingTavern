@@ -59,8 +59,10 @@ public class AIManager : NetworkBehaviour
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
         customer.AssignVariables(this);
+
+        var randomDish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType;
+        customer.requestedDish = new NetworkVariable<DishType>(randomDish); 
         
-        customer.requestedDish = new NetworkVariable<DishType>(_availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType); 
         int rand = Random.Range(0, customer.ears.Count);
         customer.ears[rand].SetActive(true);
         
