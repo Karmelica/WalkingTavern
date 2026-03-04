@@ -16,8 +16,6 @@ namespace World
 
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
-        private readonly NetworkVariable<Vector3> _networkPosition = new ();
-        private readonly NetworkVariable<Vector3> _networkVelocity = new ();
         
         private Rigidbody _rigidbody;
 
@@ -34,42 +32,15 @@ namespace World
         {
             base.OnNetworkSpawn();
             _isInteractedWith.OnValueChanged += PickedUpChanged;
-            if(!IsServer){
-                _networkPosition.OnValueChanged += CheckForDistance;
-                _networkVelocity.OnValueChanged += CheckForVelocity;
-            }
             
             _rigidbody.useGravity = true;
             _rigidbody.isKinematic = false;
-        }
-
-        private void CheckForVelocity(Vector3 previousValue, Vector3 newValue)
-        {
-            if (Vector3.Magnitude(_networkVelocity.Value) - Vector3.Magnitude(_rigidbody.linearVelocity) < -0.1f)
-            {
-                _rigidbody.linearVelocity = newValue;
-            }
-        }
-
-        private void CheckForDistance(Vector3 previousValue, Vector3 newValue)
-        {
-            if (Vector3.Distance(_networkPosition.Value, transform.position) > 0.1f)
-            {
-                transform.localPosition = newValue;
-            }
         }
 
         private void Update()
         {
             if(_isInteractedWith.Value)
                 transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
-            
-
-            if (IsServer)
-            {
-                _networkPosition.Value = transform.localPosition;
-                _networkVelocity.Value = _rigidbody.linearVelocity;
-            }
         }
 
         private void PickedUpChanged(bool previousValue, bool newValue)

@@ -57,8 +57,6 @@ namespace Player
         private Vector2 _inputVector;
         private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
-        private bool _currentInteractable;
-        private Coroutine _interactionCoroutine;
         private bool _isInteracting;
         private IInteractable _interactObj;
         private bool _canMove = true;
@@ -284,7 +282,7 @@ namespace Player
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || _playerCamera == null || interactor == null || !_canMove) return;
+            if (!Application.isFocused || _playerCamera == null || !_canMove) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
