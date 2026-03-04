@@ -16,7 +16,6 @@ namespace Cooking
         [SerializeField] private List<GameObject> _placedFoodItems = new();
         [SerializeField] private Recipe recipe;
         
-        [SerializeField] private SkillCheckObject skillCheck;
         [SerializeField] private TextMeshProUGUI ingredientListText;
         [SerializeField] private TMP_Dropdown dropdown;
         [SerializeField] private Collider triggerCollider;
@@ -97,7 +96,7 @@ namespace Cooking
             
             if (!IsRecipeComplete()) return;
             
-            skillCheck.enabled = true;
+            //enable skillcheck here
             if(IsServer)
                 CompleteRecipe();
         }

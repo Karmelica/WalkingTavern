@@ -10,6 +10,8 @@ public class PortalCamera : MonoBehaviour
     private Camera playerCam;
     public PortalCamera otherPortal;
     [SerializeField] private Camera portalCam;
+    private float nearClipLimit = 0.1f;
+    private float nearClipOffset = 0.03f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,7 +28,7 @@ public class PortalCamera : MonoBehaviour
         
         portalCam.fieldOfView = playerCam.fieldOfView;
         
-        portalRenderer = GetComponent<MeshRenderer>();
+        portalRenderer = GetComponentInChildren<MeshRenderer>();
 
         RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
         portalCam.targetTexture = rt;
@@ -63,6 +65,8 @@ public class PortalCamera : MonoBehaviour
             
         var m = transform.localToWorldMatrix * otherPortal.transform.worldToLocalMatrix * playerCam.transform.localToWorldMatrix;
 
+        SetNearClipPlane();
+        
         portalCam.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
 
         globalOffset = transform.position - otherPortal.transform.position;
@@ -72,4 +76,21 @@ public class PortalCamera : MonoBehaviour
         portalRenderer.enabled = true;
     }
     
+    void SetNearClipPlane () {
+        Transform clipPlane = transform;
+        int dot = System.Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - portalCam.transform.position));
+
+        Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
+        Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
+        float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + nearClipOffset;
+
+        if (Mathf.Abs (camSpaceDst) > nearClipLimit) {
+            Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
+
+            portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
+        } else 
+        {
+            portalCam.projectionMatrix = playerCam.projectionMatrix;
+        }
+    }
 }

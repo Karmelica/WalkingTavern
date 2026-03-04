@@ -27,9 +27,9 @@ namespace Player
         private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
-        private const float WalkForce = 200f;
-        private const float SprintForce = 250f;
-        private const float JumpForce = 250f;
+        [SerializeField] private float WalkForce = 20f;
+        [SerializeField] private float SprintForce = 25f;
+        [SerializeField] private float JumpForce = 250f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
         
@@ -144,15 +144,23 @@ namespace Player
 
         private IEnumerator UpdateInterface()
         {
+            if (!IsOwner) yield break;
             while (true)
             {
-                yield return new WaitForSeconds(0.2f);
                 UpdatePlayerNickRotation();
-                if(!IsOwner || !_playerCamera) continue;
-                var interactable = GetHitInfo();
-                playerGUICanvas.interactText.text = interactable != null && !interactable.IsInteractedWith()
-                    ? $"Interact with {interactable.GetInteractName()}"
-                    : string.Empty;
+                //if(!_playerCamera) continue;
+                if(GetHitInfo(out IInteractable interactable))
+                {
+                    if (!interactable.IsInteractedWith())
+                    {
+                        playerGUICanvas.interactText.text = $"Interact with {interactable.GetInteractName()}";
+                    }
+                }
+                else
+                {
+                    playerGUICanvas.interactText.text = string.Empty;
+                }
+                yield return new WaitForSeconds(0.2f);
             }
         }
 
@@ -257,13 +265,22 @@ namespace Player
         private void Move()
         {
             _isGrounded.Value = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
+
+            if (_isGrounded.Value)
+            {
+                _rigidbody.AddForce(Vector3.down * (0.2f * Time.fixedDeltaTime), ForceMode.Force);
+            }
             
             var moveForce = _isSprinting ? SprintForce : WalkForce;
             var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized * (moveForce * Time.fixedDeltaTime);
             
-            moveVector.y = _rigidbody.linearVelocity.y;
+            //moveVector.y = _rigidbody.linearVelocity.y;
             
-            _rigidbody.linearVelocity = moveVector;
+            //_rigidbody.linearVelocity = moveVector;
+            if(_rigidbody.linearVelocity.magnitude < moveForce){
+                _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
+            }
+            _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
         }
         
         /// <summary>
@@ -367,13 +384,13 @@ namespace Player
         {
             if(context.started)
             {
-                var interactObj = GetHitInfo();
-
-                if (interactObj == null) return;
-                if (interactObj.IsInteractedWith()) return;
-                _interactObj = interactObj;
-                _interactObj.PrimaryInteract(this, true);
-                _isInteracting = true;
+                if (GetHitInfo(out var interactObj))
+                {
+                    if (interactObj.IsInteractedWith()) return;
+                    _interactObj = interactObj;
+                    _interactObj.PrimaryInteract(this, true);
+                    _isInteracting = true;
+                }
             }
             
             if (context.canceled)
@@ -389,16 +406,41 @@ namespace Player
         {
             if (context.started)
             {
-                var interactable = GetHitInfo();
-                if( interactable == null) return;
-                interactable.SecondaryInteract(this);
+                if(GetHitInfo(out var interactable))
+                {
+                    interactable.SecondaryInteract(this);
+                }
             }
+        }
+
+        private bool GetHitInfo(out IInteractable interactableComponent)
+        {
+            interactableComponent = null;
+            if (_isInteracting)
+            {
+                return false;
+            }
+            var interactPoint = interactor;
+            var ray = new Ray(interactPoint.position, interactPoint.forward);
+            if (!Physics.Raycast(ray, out var rayHitInfo, InteractRange, ~LayerMask.NameToLayer("Interactable"))) return false;
+            if (rayHitInfo.collider.TryGetComponent(out interactableComponent))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Transform GetInteractPoint()
+        {
+            return interactor;
         }
 
         public void SetCanMove(bool canMove)
         {
             if(!IsOwner) return;
             _canMove = canMove;
+            _rigidbody.linearDamping = float.PositiveInfinity;
+            _rigidbody.linearDamping = 0f;
             Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !canMove;
         }
@@ -406,27 +448,6 @@ namespace Player
         public bool CanMove()
         {
             return _canMove;
-        }
-
-        private IInteractable GetHitInfo()
-        {
-            if (_isInteracting) return null;
-            var interactPoint = interactor;
-            var ray = new Ray(interactPoint.position, interactPoint.forward);
-            var rayHitInfo = Physics.RaycastAll(ray, InteractRange);
-            foreach (var hitInfo in rayHitInfo)
-            {
-                if (hitInfo.collider.TryGetComponent(out IInteractable interactObj))
-                {
-                    return interactObj;
-                }
-            }
-            return null;
-        }
-
-        public Transform GetInteractPoint()
-        {
-            return interactor;
         }
 
         public void OnCrouch(InputAction.CallbackContext context)

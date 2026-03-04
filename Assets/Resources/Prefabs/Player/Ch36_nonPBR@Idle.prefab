@@ -2067,7 +2067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1959477017
+  GlobalObjectIdHash: 1928220444
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2139,6 +2139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
   ShowTopMostFoldoutHeaderGroup: 1
+  WalkForce: 200
+  SprintForce: 250
+  JumpForce: 250
   playerNameCanvas: {fileID: 7498144743461933851}
   steamNickname: {fileID: 1051630126875954535}
   localPlayerMesh:
@@ -2228,7 +2231,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Teleportable
   lastOffsetFromPortal: {x: 0, y: 0, z: 0}
-  myCenter: {fileID: 0}
 --- !u!136 &-325690249119775024
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2271,7 +2273,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
