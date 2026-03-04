@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Player
 {
-    [DefaultExecutionOrder(-40)]
-    public class CanvasScript : MonoBehaviour
+    public class PlayerGUI : MonoBehaviour
     {
         public TextMeshProUGUI interactText;
     }

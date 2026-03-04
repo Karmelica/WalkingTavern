@@ -42,7 +42,7 @@ public class CookingMenu : MonoBehaviour, IInteractable
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
-        if (!interactor.TryGet(out Player.Player player)) return;
+        if (!interactor.TryGet(out Player.OwnerPlayer player)) return;
         
         player.SetCanMove(!player.CanMove());
         cookingUI.SetActive(!player.CanMove());

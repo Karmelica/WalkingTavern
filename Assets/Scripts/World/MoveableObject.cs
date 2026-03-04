@@ -96,7 +96,7 @@ namespace World
         {
             _rigidbody.useGravity = !pickingUp;
             _rigidbody.isKinematic = pickingUp;
-            if (interactor.TryGet(out Player.Player player))
+            if (interactor.TryGet(out Player.OwnerPlayer player))
             {
                 transform.SetParent(player.GetInteractPoint());
                 transform.position = player.GetInteractPoint().position + player.GetInteractPoint().forward * 2f;

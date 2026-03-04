@@ -17,14 +17,12 @@ namespace Player
     [RequireComponent(typeof(NetworkTransform))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(Collider))]
-    //[RequireComponent(typeof(CharacterController))]
     
-    public class Player : NetworkBehaviour, InputSystem_Actions.IPlayerActions
+    public class OwnerPlayer : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
         #region Constants
         
         private const float CameraHeight = 1.6f;
-        private const float Height = 1.8f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
         [SerializeField] private float WalkForce = 20f;
@@ -35,31 +33,17 @@ namespace Player
         
         #endregion
         
-        #region Animator Parameters
-        
-        private static readonly int WalkSpeed = Animator.StringToHash("WalkSpeed");
-        private static readonly int WalkDir = Animator.StringToHash("WalkDir");
-        private static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
-        private static readonly int Jumping = Animator.StringToHash("Jumping");
-        private static readonly int IsInteracting = Animator.StringToHash("IsInteracting");
-
-        #endregion
-
         #region Customs
 
         [Header("Customization")]
         [SerializeField] private Canvas playerNameCanvas;
-        [SerializeField] private TextMeshProUGUI steamNickname;
         [SerializeField] private SkinnedMeshRenderer[] localPlayerMesh;
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname");
         
         #endregion
 
         #region Components
 
         [SerializeField] private Transform interactor;
-        [SerializeField] private CanvasScript playerGUICanvas;
 
         #endregion
         
@@ -67,12 +51,11 @@ namespace Player
         
         private InputSystem_Actions _inputActions;
         private Camera _playerCamera;
-        private Animator _animator;
-        //private CharacterController _charController;
         private Rigidbody _rigidbody;
         private Collider _collider;
+        private PlayerGUI _playerGUI;
         private Vector2 _inputVector;
-        private NetworkVariable<bool> _isGrounded = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
         private bool _currentInteractable;
         private Coroutine _interactionCoroutine;
@@ -82,6 +65,7 @@ namespace Player
         private bool _isCrouching;
         private Vector3 lastOffsetFromPortal;
         private Vector3 interactorOffset;
+        private NetworkedPlayer _networkedPlayer;
 
         #endregion
 
@@ -89,27 +73,22 @@ namespace Player
         
         private void Awake()
         {
-            _animator = GetComponent<Animator>();
-            //_charController = GetComponent<CharacterController>();
             _rigidbody = GetComponent<Rigidbody>();
+            _networkedPlayer =  GetComponent<NetworkedPlayer>();
         }
         
         private void Update()
         {
-            SetAnimationVariables();
-            
-            if (!IsOwner) return;
             if (!_playerCamera) return;
-            //SetAnimationServerRpc(_inputVector.y, _charController.velocity.magnitude, _isInteracting);
+            
             SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _isInteracting);
-            if (!_canMove) return;
             UpdateInteractorPosition();
             UpdateCameraPosition();
         }
 
         private void FixedUpdate()
         {
-            if (IsOwner && _canMove) Move();
+            Move();
         }
 
         #endregion
@@ -120,59 +99,50 @@ namespace Player
         {
             base.OnNetworkSpawn();
             
-            if (IsOwner)
-            {
-                if(!_playerCamera)
-                {
-                    _playerCamera = Camera.main;
-                }
-                
-                foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
-                SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
-                playerGUICanvas.gameObject.SetActive(true);
-                InitializeInput();
-                playerNameCanvas.enabled = false;
-            }
-
-            _playerNickname.OnValueChanged += SetNickname;
-            SetNickname("Nickname", _playerNickname.Value);
+            if(!IsOwner) enabled = false;
+            
+            _playerCamera = Camera.main;
+            
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            
+            foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
+            _networkedPlayer.SetSteamNicknameServerRpc(SteamClient.SteamId.Value);
 
+            _playerGUI = FindFirstObjectByType<PlayerGUI>();
+        
+            InitializeInput();
+            playerNameCanvas.enabled = false;
+            
             StartCoroutine(UpdateInterface());
         }
-
-        private IEnumerator UpdateInterface()
-        {
-            if (!IsOwner) yield break;
-            while (true)
-            {
-                UpdatePlayerNickRotation();
-                //if(!_playerCamera) continue;
-                if(GetHitInfo(out IInteractable interactable))
-                {
-                    if (!interactable.IsInteractedWith())
-                    {
-                        playerGUICanvas.interactText.text = $"Interact with {interactable.GetInteractName()}";
-                    }
-                }
-                else
-                {
-                    playerGUICanvas.interactText.text = string.Empty;
-                }
-                yield return new WaitForSeconds(0.2f);
-            }
-        }
+        
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
             _interactObj?.PrimaryInteract(this, false);
-            if (IsOwner && _playerCamera != null)
-            {
-                Destroy(_playerCamera.gameObject);
-            }
+            _shouldUpdateInterface = false;
             CleanupInput();
+        }
+
+        private IEnumerator UpdateInterface()
+        {
+            while (_shouldUpdateInterface)
+            {
+                if(GetHitInfo(out IInteractable interactable))
+                {
+                    if (!interactable.IsInteractedWith())
+                    {
+                        _playerGUI.interactText.text = $"Interact with {interactable.GetInteractName()}";
+                    }
+                }
+                else
+                {
+                    _playerGUI.interactText.text = string.Empty;
+                }
+                yield return new WaitForSeconds(0.2f);
+            }
         }
         
         #endregion
@@ -237,12 +207,6 @@ namespace Player
             
         }
         
-        private void UpdatePlayerNickRotation()
-        {
-            if(playerNameCanvas && _playerCamera)
-                playerNameCanvas.transform.forward = _playerCamera.transform.forward;
-        }
-        
         private void UpdateInteractorPosition()
         {
             interactor.position = _playerCamera.transform.position - interactorOffset;
@@ -264,23 +228,23 @@ namespace Player
 
         private void Move()
         {
-            _isGrounded.Value = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
-
-            if (_isGrounded.Value)
+            _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
+            
+            if (_networkedPlayer.IsGrounded)
             {
                 _rigidbody.AddForce(Vector3.down * (0.2f * Time.fixedDeltaTime), ForceMode.Force);
             }
             
-            var moveForce = _isSprinting ? SprintForce : WalkForce;
-            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized * (moveForce * Time.fixedDeltaTime);
-            
-            //moveVector.y = _rigidbody.linearVelocity.y;
-            
-            //_rigidbody.linearVelocity = moveVector;
-            if(_rigidbody.linearVelocity.magnitude < moveForce){
-                _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
+            if(_canMove){
+                var moveForce = _isSprinting ? SprintForce : WalkForce;
+                var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
+                                 (moveForce * Time.fixedDeltaTime);
+
+                if (_rigidbody.linearVelocity.magnitude < moveForce)
+                {
+                    _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
+                }
             }
-            _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
         }
         
         /// <summary>
@@ -288,68 +252,34 @@ namespace Player
         /// </summary>
         private void Jump()
         {
-            if (!_isGrounded.Value) return;
-            
-            _animator.SetTrigger(Jumping);
+            if (!_networkedPlayer.IsGrounded) return;
+
+            _networkedPlayer.SetJumping();
             _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Force);
         }
         
         #endregion
         
-        private void SetAnimationVariables()
-        {
-            _animator.SetBool(IsGrounded, _isGrounded.Value);
-        }
         
         #region Network RPCs
         
         /// <summary>
         /// Wysyła dane animacji do serwera
         /// </summary>
-        [ServerRpc]
-        private void SetAnimationServerRpc(float walkDir, float velocity, bool isInteracting, ServerRpcParams serverRpcParams = default)
+        [Rpc(SendTo.Server)]
+        private void SetAnimationServerRpc(float walkDir, float velocity, bool isInteracting)
         {
-            var clientId = serverRpcParams.Receive.SenderClientId;
-            SetAnimationClientRpc(walkDir, velocity, isInteracting, clientId);
+            _networkedPlayer.SetAnimationRpc(walkDir, velocity, isInteracting);
         }
         
-        /// <summary>
-        /// Synchronizuje animacje dla wszystkich klientów
-        /// </summary>
-        [ClientRpc]
-        private void SetAnimationClientRpc(float walkDir, float velocity, bool isInteracting, ulong clientId)
-        {
-            if (OwnerClientId != clientId) return;
-            
-            _animator.SetBool(IsInteracting, isInteracting);
-            _animator.SetFloat(WalkSpeed, velocity);
-            _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
-        }
-
-        /// <summary>
-        /// Pobiera nick ze Steam i ustawia go dla tego gracza
-        /// </summary>
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
-        {
-            _playerNickname.Value = new Friend(id).Name;
-        }
-        
-        /// <summary>
-        /// Ustawia nick przy wejściu klienta
-        /// </summary>
-        private void SetNickname(FixedString64Bytes previousValue, FixedString64Bytes newValue)
-        {
-            steamNickname.text = _playerNickname.Value.ToString();
-        }
-
         #endregion
+        
 
         #region Input Callbacks
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || !IsOwner || _playerCamera == null || interactor == null || !_canMove) return;
+            if (!Application.isFocused || _playerCamera == null || interactor == null || !_canMove) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
@@ -358,7 +288,7 @@ namespace Player
         
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!IsOwner || !context.started || !_canMove) return;
+            if (!context.started || !_canMove) return;
             Jump();
         }
         
@@ -437,7 +367,6 @@ namespace Player
 
         public void SetCanMove(bool canMove)
         {
-            if(!IsOwner) return;
             _canMove = canMove;
             _rigidbody.linearDamping = float.PositiveInfinity;
             _rigidbody.linearDamping = 0f;
