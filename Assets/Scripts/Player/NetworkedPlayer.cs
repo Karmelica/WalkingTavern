@@ -81,8 +81,8 @@ namespace Player
         /// <summary>
         /// Pobiera nick ze Steam i ustawia go dla tego gracza
         /// </summary>
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
-        public void SetSteamNicknameServerRpc(ulong id, ServerRpcParams serverRpcParams = default)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        public void SetSteamNicknameRpc(ulong id)
         {
             _playerNickname.Value = new Friend(id).Name;
         }
