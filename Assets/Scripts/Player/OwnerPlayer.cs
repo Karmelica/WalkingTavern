@@ -100,6 +100,11 @@ namespace Player
             base.OnNetworkSpawn();
             
             if(!IsOwner) enabled = false;
+        }
+
+        protected override void OnNetworkPostSpawn()
+        {
+            base.OnNetworkPostSpawn();
             
             _playerCamera = Camera.main;
             
@@ -116,7 +121,6 @@ namespace Player
             
             StartCoroutine(UpdateInterface());
         }
-        
 
         public override void OnNetworkDespawn()
         {
