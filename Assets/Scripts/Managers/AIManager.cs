@@ -58,8 +58,12 @@ public class AIManager : NetworkBehaviour
         if (!IsServer) return;
         var customerInstance = Instantiate(customerPrefab, spawnPoint.position + new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5)), Quaternion.identity);
         var customer = customerInstance.GetComponent<Customer>();
-        var dish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType;
-        customer.AssignVariables(this, dish);
+        customer.AssignVariables(this);
+        
+        customer.requestedDish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType; 
+        int rand = Random.Range(0, customer.ears.Count);
+        customer.ears[rand].SetActive(true);
+        
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
     
@@ -69,5 +73,4 @@ public class AIManager : NetworkBehaviour
         customer.NetworkObject.Despawn();
         SpawnCustomer();
     }
-
 }

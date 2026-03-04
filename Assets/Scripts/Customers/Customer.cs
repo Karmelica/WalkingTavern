@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
-    [SerializeField] private List<GameObject> ears;
+    [SerializeField] public List<GameObject> ears;
     
     [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
@@ -18,31 +18,20 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private CharacterController controller;
     [SerializeField] private Animator animator;
 
-    private NetworkVariable<DishType> _requestedDish = new();
-    private DishType _requestedDishServer;
+    public DishType requestedDish;
     private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
     #region Unity Lifecycle
-
-    public override void OnNetworkSpawn()
+    
+    protected override void OnNetworkPostSpawn()
     {
-        base.OnNetworkSpawn();
-
-        int rand = Random.Range(0, ears.Count);
-        ears[rand].SetActive(true);
+        base.OnNetworkPostSpawn();
+        if (!IsOwner) return;
 
         _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
         _waypoints.Add(GameObject.FindGameObjectWithTag("Entrance").transform);
         _waypoints.Add(GameObject.FindGameObjectWithTag("Waiting").transform);
-    }
-
-    protected override void OnNetworkPostSpawn()
-    {
-        base.OnNetworkPostSpawn();
-
-        if(IsOwner)
-            SetRecipeServerRpc();
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
@@ -58,13 +47,7 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
 
         // SetRecipe
-        _blackboardReference.SetVariableValue("RequestedRecipe", _requestedDish);
-    }
-
-    [Rpc(SendTo.Server)]
-    private void SetRecipeServerRpc()
-    {
-        _requestedDish.Value = _requestedDishServer;
+        _blackboardReference.SetVariableValue("RequestedRecipe", requestedDish);
     }
 
     public override void OnNetworkDespawn()
@@ -122,10 +105,9 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Get/Set
 
-    public void AssignVariables(AIManager manager, DishType dish)
+    public void AssignVariables(AIManager manager)
     {
         _aiManager = manager;
-        _requestedDishServer = dish;
     }
 
     public bool TryGetSeat(out Transform seat)
@@ -163,8 +145,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        _blackboardReference.GetVariableValue("RequestedRecipe", out DishType requestedDishType);
-        return $"Customer\nRequested Dish: {requestedDishType}";
+        return $"Customer\nRequested Dish: {requestedDish}";
     }
 
     public bool IsInteractedWith()
