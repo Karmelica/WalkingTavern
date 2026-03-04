@@ -136,9 +136,9 @@ namespace Cooking
                     if (item.TryGetComponent<FoodItem>(out var foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
                         item.gameObject.SetActive(false);
-                        if (IsServer) item.GetComponent<NetworkObject>().Despawn(false);
                         _placedFoodItems.RemoveAt(i);
                         removedCount++;
+                        //if (IsServer) item.GetComponent<NetworkObject>().Despawn(false);
                     }
                 }
                 _placedIngredients[ingredientType] -= removedCount;
