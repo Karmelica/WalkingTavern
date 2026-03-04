@@ -40,8 +40,6 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
-
-        _requestedDish.Value = _requestedDishServer;
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
@@ -99,7 +97,7 @@ public class Customer : NetworkBehaviour, IInteractable
         SetAnimSpeedClientRpc(velocityMagnitude);
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+    [Rpc(SendTo.Everyone)]
     private void SetAnimSpeedClientRpc(float velocityMagnitude)
     {
         animator.SetFloat("WalkSpeed", velocityMagnitude);
@@ -118,7 +116,13 @@ public class Customer : NetworkBehaviour, IInteractable
     public void AssignVariables(AIManager manager, DishType dish)
     {
         _aiManager = manager;
-        _requestedDishServer = dish;
+        SetDishRpc(dish);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SetDishRpc(DishType dish)
+    {
+        _requestedDish.Value = dish;
     }
 
     public bool TryGetSeat(out Transform seat)

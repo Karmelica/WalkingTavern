@@ -78,7 +78,7 @@ namespace Player
             _steamNicknameTMP.text = _playerNickname.Value.ToString();
         }
         
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetSteamNicknameRpc(ulong id)
         {
             _playerNickname.Value = new Friend(id).Name;
