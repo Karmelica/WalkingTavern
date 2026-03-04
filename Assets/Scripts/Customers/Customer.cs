@@ -40,6 +40,9 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
+
+        if(IsOwner)
+            SetRecipeServerRpc();
         
         _blackboardReference = behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
@@ -56,6 +59,12 @@ public class Customer : NetworkBehaviour, IInteractable
 
         // SetRecipe
         _blackboardReference.SetVariableValue("RequestedRecipe", _requestedDish);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetRecipeServerRpc()
+    {
+        _requestedDish.Value = _requestedDishServer;
     }
 
     public override void OnNetworkDespawn()
@@ -116,13 +125,7 @@ public class Customer : NetworkBehaviour, IInteractable
     public void AssignVariables(AIManager manager, DishType dish)
     {
         _aiManager = manager;
-        SetDishRpc(dish);
-    }
-
-    [Rpc(SendTo.Everyone)]
-    private void SetDishRpc(DishType dish)
-    {
-        _requestedDish.Value = dish;
+        _requestedDishServer = dish;
     }
 
     public bool TryGetSeat(out Transform seat)
