@@ -23,7 +23,7 @@ namespace Player
         private TextMeshProUGUI _steamNicknameTMP;
         
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname");
+        private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -78,11 +78,7 @@ namespace Player
             _steamNicknameTMP.text = _playerNickname.Value.ToString();
         }
         
-        /// <summary>
-        /// Pobiera nick ze Steam i ustawia go dla tego gracza
-        /// </summary>
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
-        public void SetSteamNicknameRpc(ulong id)
+        public void SetSteamNickname(ulong id)
         {
             _playerNickname.Value = new Friend(id).Name;
         }
