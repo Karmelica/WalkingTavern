@@ -40,7 +40,11 @@ namespace World
         private void Update()
         {
             if(_isInteractedWith.Value)
+            {
                 transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
+
+                transform.position = transform.parent.position + transform.parent.forward * 2f;
+            }
         }
 
         private void PickedUpChanged(bool previousValue, bool newValue)
@@ -70,7 +74,6 @@ namespace World
             if (interactor.TryGet(out Player.OwnerPlayer player))
             {
                 transform.SetParent(player.GetInteractPoint());
-                transform.position = player.GetInteractPoint().position + player.GetInteractPoint().forward * 2f;
             }
         }
 
