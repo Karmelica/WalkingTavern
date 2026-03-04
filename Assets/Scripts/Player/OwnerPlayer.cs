@@ -105,20 +105,21 @@ namespace Player
         protected override void OnNetworkPostSpawn()
         {
             base.OnNetworkPostSpawn();
+            if (!IsOwner) return;
             
             _playerCamera = Camera.main;
-            
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            
+
             foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
             _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
 
             _playerGUI = FindFirstObjectByType<PlayerGUI>();
-        
+
             InitializeInput();
             playerNameCanvas.enabled = false;
-            
+
             StartCoroutine(UpdateInterface());
         }
 
