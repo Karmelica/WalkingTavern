@@ -18,7 +18,7 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private CharacterController controller;
     [SerializeField] private Animator animator;
 
-    public DishType requestedDish;
+    public NetworkVariable<DishType> requestedDish;
     private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
@@ -47,7 +47,7 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
 
         // SetRecipe
-        _blackboardReference.SetVariableValue("RequestedRecipe", requestedDish);
+        _blackboardReference.SetVariableValue("RequestedRecipe", requestedDish.Value);
     }
 
     public override void OnNetworkDespawn()
@@ -145,7 +145,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractName()
     {
-        return $"Customer\nRequested Dish: {requestedDish}";
+        return $"Customer\nRequested Dish: {requestedDish.Value}";
     }
 
     public bool IsInteractedWith()

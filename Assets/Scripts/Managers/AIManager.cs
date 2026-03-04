@@ -60,7 +60,7 @@ public class AIManager : NetworkBehaviour
         var customer = customerInstance.GetComponent<Customer>();
         customer.AssignVariables(this);
         
-        customer.requestedDish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType; 
+        customer.requestedDish = new NetworkVariable<DishType>(_availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType); 
         int rand = Random.Range(0, customer.ears.Count);
         customer.ears[rand].SetActive(true);
         
