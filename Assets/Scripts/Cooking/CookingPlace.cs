@@ -56,16 +56,17 @@ namespace Cooking
 
         private void SpawnSomeIngredients()
         {
-            for(int i = 0; i < 30; i++)
+            var ingredientTypes = Enum.GetValues(typeof(IngredientType));
+            foreach (var type in ingredientTypes)
             {
-                var ingredientTypes = Enum.GetValues(typeof(IngredientType));
-                var randomIngredient = (IngredientType)ingredientTypes.GetValue(UnityEngine.Random.Range(0, ingredientTypes.Length));
-                var prefab = Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + randomIngredient);
-                var position = transform.position + new Vector3(UnityEngine.Random.Range(-1.5f, 1.5f), 3f, UnityEngine.Random.Range(0f, 8f));
-                var ingredient = Instantiate(prefab, position, Quaternion.identity);
-                ingredient.GetComponent<NetworkObject>().Spawn();
+                for(var i = 0; i < 5; i++){
+                    var prefab = Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + type);
+                    var position = transform.position + new Vector3(UnityEngine.Random.Range(-1.5f, 1.5f), 3f,
+                        UnityEngine.Random.Range(0f, 8f));
+                    var ingredient = Instantiate(prefab, position, Quaternion.identity);
+                    ingredient.GetComponent<NetworkObject>().Spawn();
+                }
             }
-            
         }
         
         public void ChangeRecipe(int newRecipeIndex)
@@ -97,8 +98,7 @@ namespace Cooking
             if (!IsRecipeComplete()) return;
             
             //enable skillcheck here
-            if(IsServer)
-                CompleteRecipe();
+            CompleteRecipe();
         }
         
         private void OnTriggerExit(Collider other)
@@ -136,7 +136,7 @@ namespace Cooking
                     if (item.TryGetComponent<FoodItem>(out var foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
                         item.gameObject.SetActive(false);
-                        item.GetComponent<NetworkObject>().Despawn(false);
+                        if (IsServer) item.GetComponent<NetworkObject>().Despawn(false);
                         _placedFoodItems.RemoveAt(i);
                         removedCount++;
                     }
