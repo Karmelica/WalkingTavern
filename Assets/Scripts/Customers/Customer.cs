@@ -134,6 +134,12 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public void SecondaryInteract(NetworkBehaviourReference interactor)
     {
+        TakeOrderServerRpc();
+    }
+
+    [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+    private void TakeOrderServerRpc()
+    {
         _blackboardReference.GetVariableValue("Ordering", out CustomerState orderingState);
         if(orderingState == CustomerState.Ordering){
             _blackboardReference.SetVariableValue("Ordered", true);
