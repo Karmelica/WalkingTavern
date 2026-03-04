@@ -112,7 +112,7 @@ namespace Player
             Cursor.visible = false;
             
             foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
-            _networkedPlayer.SetSteamNickname(SteamClient.SteamId.Value);
+            _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
 
             _playerGUI = FindFirstObjectByType<PlayerGUI>();
         
