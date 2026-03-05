@@ -1739,7 +1739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 90b16e35d17c81443ba7cc27321f0c66, type: 3}
       propertyPath: m_Layer
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 90b16e35d17c81443ba7cc27321f0c66, type: 3}
       propertyPath: m_TagString
@@ -2041,7 +2041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
   ShowTopMostFoldoutHeaderGroup: 1
   WalkForce: 200
-  SprintForce: 250
+  SprintForce: 300
   JumpForce: 250
   playerNameCanvas: {fileID: 7498144743461933851}
   localPlayerMesh:
@@ -2172,7 +2172,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

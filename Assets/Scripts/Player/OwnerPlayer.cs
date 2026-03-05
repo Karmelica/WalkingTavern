@@ -341,6 +341,7 @@ namespace Player
             {
                 if(GetHitInfo(out var interactable))
                 {
+                    if (interactable.IsInteractedWith()) return;
                     interactable.SecondaryInteract(this);
                 }
             }
@@ -355,12 +356,21 @@ namespace Player
             }
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
-            if (!Physics.Raycast(ray, out var rayHitInfo, InteractRange, ~LayerMask.NameToLayer("Interactable"))) return false;
-            if (rayHitInfo.collider.TryGetComponent(out interactableComponent))
+            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, ~LayerMask.NameToLayer("Interactable"));
+            Array.Sort(rayHitInfo, CompareDistance);
+            foreach (var hit in rayHitInfo)
             {
-                return true;
+                if (hit.collider.TryGetComponent(out interactableComponent))
+                {
+                    return true;
+                }
             }
             return false;
+        }
+
+        private static int CompareDistance(RaycastHit x, RaycastHit y)
+        {
+            return x.distance.CompareTo(y.distance);
         }
 
         public Transform GetInteractPoint()
