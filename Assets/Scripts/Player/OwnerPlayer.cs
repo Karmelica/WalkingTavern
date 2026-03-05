@@ -139,6 +139,10 @@ namespace Player
                     {
                         _playerGUI.interactText.text = $"Interact with {interactable.GetInteractName()}";
                     }
+                    else
+                    {
+                        _playerGUI.interactText.text = string.Empty;
+                    }
                 }
                 else
                 {
