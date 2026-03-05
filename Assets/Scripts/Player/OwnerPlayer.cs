@@ -185,7 +185,7 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo, InteractRange))
+            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo, InteractRange)) 
             {
                 if(hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
                 {
@@ -235,7 +235,7 @@ namespace Player
             
             if (_networkedPlayer.IsGrounded)
             {
-                _rigidbody.AddForce(Vector3.down * (0.2f * Time.fixedDeltaTime), ForceMode.Force);
+                _rigidbody.AddForce(Vector3.up * (0.2f * Time.fixedDeltaTime), ForceMode.VelocityChange);
             }
             
             if(_canMove){

@@ -19,6 +19,8 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private Animator animator;
 
     public NetworkVariable<DishType> requestedDish;
+    public NetworkVariable<int> selectedEars;
+    public NetworkVariable<bool> isBeingInteracted =  new (true);
     private List<Transform> _waypoints = new();
     private AIManager _aiManager;
 
@@ -27,6 +29,7 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
+        ears[selectedEars.Value].SetActive(true);
         if (!IsOwner) return;
 
         _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
@@ -153,7 +156,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public bool IsInteractedWith()
     {
-        return false;
+        return isBeingInteracted.Value;
     }
 
     #endregion

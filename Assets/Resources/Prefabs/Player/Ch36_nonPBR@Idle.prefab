@@ -152,7 +152,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6478536213147159724, guid: ecb23ecbc2b86ce4b809d52ee78c3c20, type: 3}
+  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -396,7 +396,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3846018093981099296, guid: ecb23ecbc2b86ce4b809d52ee78c3c20, type: 3}
+  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -979,7 +979,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3846018093981099296, guid: ecb23ecbc2b86ce4b809d52ee78c3c20, type: 3}
+  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1136,7 +1136,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3846018093981099296, guid: ecb23ecbc2b86ce4b809d52ee78c3c20, type: 3}
+  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1928220444
+  GlobalObjectIdHash: 1959477017
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2137,7 +2137,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8916158516354675700}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 19639e64af286f24aad7a1c3c9206feb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

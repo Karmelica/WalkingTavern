@@ -817,21 +817,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 143609102277437718, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3404996530997338190, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
       propertyPath: m_Name
       value: PlayerGUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 3404996530997338190, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6047202199840877246, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
       propertyPath: m_Pivot.x
@@ -863,18 +851,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
-      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7529245878679516736, guid: ebb64786d0508224db329a08f8ac3424, type: 3}
@@ -3924,6 +3900,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       propertyPath: m_Name
       value: SM_Caravan
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4053464845481031847, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       propertyPath: m_Mesh

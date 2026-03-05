@@ -14,7 +14,7 @@ public partial class WaitInLineAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> CustomerInFront;
     [SerializeReference] public BlackboardVariable<List<GameObject>> CustomersInLine;
 
-    protected override Status OnUpdate()
+    protected override Status OnStart()
     {
         if (CustomersInLine.Value.Contains(Self))
         {

@@ -138,7 +138,6 @@ namespace Cooking
                         item.gameObject.SetActive(false);
                         _placedFoodItems.RemoveAt(i);
                         removedCount++;
-                        //if (IsServer) item.GetComponent<NetworkObject>().Despawn(false);
                     }
                 }
                 _placedIngredients[ingredientType] -= removedCount;
@@ -180,9 +179,6 @@ namespace Cooking
                 }
             }
             return true;
-
-            //recipe complete
-            //skillCheck.gameObject.SetActive(true);
         }
     }
 }

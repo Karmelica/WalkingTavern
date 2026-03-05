@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 813507898849887444}
   m_Layer: 7
   m_Name: SM_character
-  m_TagString: Untagged
+  m_TagString: Customer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1239,6 +1239,8 @@ MonoBehaviour:
   animator: {fileID: 8098776129283324567}
   requestedDish:
     m_InternalValue: 0
+  selectedEars:
+    m_InternalValue: 0
 --- !u!114 &1011004891925178958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1256,6 +1258,7 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 132139595900649646
   - rid: 132139598532313450
+  - rid: 8296083638193488372
   m_OriginalGraph: {fileID: -7298202207008445116, guid: 5dcb6018d3503b541bb68c608561cf34, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -1279,6 +1282,14 @@ MonoBehaviour:
           m_Value1: 2442367777170334768
         Name: Animator
         m_Value: {fileID: 8098776129283324567}
+    - rid: 8296083638193488372
+      type: {class: 'BlackboardVariable`1[[UnityEngine.BoxCollider, UnityEngine.PhysicsModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 5981335159849729965
+          m_Value1: 791626090045685198
+        Name: FoodCollider
+        m_Value: {fileID: 813507898849887444}
 --- !u!195 &3146721709759610554
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1366,10 +1377,10 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 1, z: 1.1}
+  m_Size: {x: 1, y: 0.054812133, z: 1}
+  m_Center: {x: 0, y: 0.527406, z: 1.1}
 --- !u!1 &8894936559440578979
 GameObject:
   m_ObjectHideFlags: 0
