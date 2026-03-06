@@ -1,7 +1,5 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Cooking.ScriptableObjects;
 using Unity.Behavior;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,21 +9,29 @@ public class Customer : NetworkBehaviour, IInteractable
 {
     [SerializeField] public List<GameObject> ears;
     
-    [SerializeField] private BehaviorGraphAgent behaviorGraphAgent;
+    private BehaviorGraphAgent _behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
     
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private CharacterController controller;
-    [SerializeField] private Animator animator;
+    private NavMeshAgent _agent;
+    private CharacterController _controller;
+    private Animator _animator;
+    private AIManager _aiManager;
 
     public NetworkVariable<DishType> requestedDish;
     public NetworkVariable<int> selectedEars;
     public NetworkVariable<bool> isBeingInteracted =  new (true);
     private List<Transform> _waypoints = new();
-    private AIManager _aiManager;
 
     #region Unity Lifecycle
-    
+
+    private void Awake()
+    {
+        _behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
+        _agent =  GetComponent<NavMeshAgent>();
+        _controller = GetComponent<CharacterController>();
+        _animator = GetComponent<Animator>();
+    }
+
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
@@ -36,7 +42,7 @@ public class Customer : NetworkBehaviour, IInteractable
         _waypoints.Add(GameObject.FindGameObjectWithTag("Entrance").transform);
         _waypoints.Add(GameObject.FindGameObjectWithTag("Waiting").transform);
         
-        _blackboardReference = behaviorGraphAgent.BlackboardReference;
+        _blackboardReference = _behaviorGraphAgent.BlackboardReference;
         _blackboardReference.SetVariableValue("Customer", this);
 
         // Assign waypoints
@@ -77,10 +83,10 @@ public class Customer : NetworkBehaviour, IInteractable
     {
         Gravity();
         
-        animator.SetBool("IsGrounded", controller.isGrounded);
+        _animator.SetBool("IsGrounded", _controller.isGrounded);
         
         if(IsOwner)
-            SetAnimSpeedServerRpc(agent.velocity.magnitude);
+            SetAnimSpeedServerRpc(_agent.velocity.magnitude);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -92,15 +98,15 @@ public class Customer : NetworkBehaviour, IInteractable
     [Rpc(SendTo.Everyone)]
     private void SetAnimSpeedClientRpc(float velocityMagnitude)
     {
-        animator.SetFloat("WalkSpeed", velocityMagnitude);
+        _animator.SetFloat("WalkSpeed", velocityMagnitude);
     }
 
     #endregion
 
     private void Gravity()
     {
-        if (controller.isGrounded) return;
-        controller.Move(Physics.gravity * Time.deltaTime);
+        if (_controller.isGrounded) return;
+        _controller.Move(Physics.gravity * Time.deltaTime);
     }
 
     #region Get/Set
