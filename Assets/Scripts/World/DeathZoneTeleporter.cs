@@ -9,7 +9,11 @@ public class DeathZoneTeleporter : MonoBehaviour
         {
             other.transform.position = hit.point + Vector3.up;
             if(other.attachedRigidbody)
-                other.attachedRigidbody.linearVelocity = Vector3.zero;
+            {
+                var oldDamping = other.attachedRigidbody.linearDamping;
+                other.attachedRigidbody.linearDamping = float.PositiveInfinity;
+                other.attachedRigidbody.linearDamping = oldDamping;
+            }
         }
     }
 }

@@ -61,6 +61,7 @@ namespace Player
         private IInteractable _interactObj;
         private bool _canMove = true;
         private bool _isCrouching;
+        private bool _isCooking;
         private Vector3 lastOffsetFromPortal;
         private Vector3 interactorOffset;
         private NetworkedPlayer _networkedPlayer;
@@ -189,9 +190,11 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo, InteractRange)) 
+            if (_isCooking) return;
+            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
+                    InteractRange))
             {
-                if(hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
+                if (hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
                 {
                     interactorOffset = portalCamera.globalOffset;
                 }
@@ -200,18 +203,18 @@ namespace Player
                     interactorOffset = Vector3.zero;
                 }
             }
-            
+
             var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
             _playerCamera.transform.position = transform.position + Vector3.up * cameraHeight;
-            
+
             var lookVectorY = Mathf.Clamp(
                 NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
                 CameraVerticalClampMin,
                 CameraVerticalClampMax
             );
-            
+
             _playerCamera.transform.rotation = Quaternion.Euler(lookVectorY, transform.rotation.eulerAngles.y, 0f);
-            
+
         }
         
         private void UpdateInteractorPosition()
