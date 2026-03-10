@@ -121,6 +121,11 @@ namespace Managers.Network
             }
         }
         
+        public void OnExitButtonClicked()
+        {
+            Application.Quit();
+        }
+        
         public void OnLeaveButtonClicked()
         {
             SteamCurrentLobby.CurrentLobby?.Leave();

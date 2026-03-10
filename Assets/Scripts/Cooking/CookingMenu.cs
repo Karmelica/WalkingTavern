@@ -43,7 +43,7 @@ namespace Cooking
 
         public void SecondaryInteract(NetworkBehaviourReference interactor)
         {
-            if (!interactor.TryGet(out Player.OwnerPlayer player)) return;
+            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
         
             player.SetCanMove(!player.CanMove());
             cookingUI.SetActive(!player.CanMove());

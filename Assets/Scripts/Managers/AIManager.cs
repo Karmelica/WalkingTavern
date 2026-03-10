@@ -64,7 +64,9 @@ public class AIManager : NetworkBehaviour
         customer.requestedDish = new NetworkVariable<DishType>(randomDish); 
         
         int rand = Random.Range(0, customer.ears.Count);
-        customer.selectedEars = new NetworkVariable<int>(rand);
+        customer.selectedEarsIndex = new NetworkVariable<int>(rand);
+        rand = Random.Range(0, customer.skins.Count);
+        customer.selectedSkinIndex = new NetworkVariable<int>(rand);
         
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }

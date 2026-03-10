@@ -8,7 +8,7 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+namespace PlayerScripts
 {
     /// <summary>
     /// Obsługuje ruch gracza, skakanie i input w środowisku sieciowym
@@ -62,8 +62,9 @@ namespace Player
         private bool _canMove = true;
         private bool _isCrouching;
         private bool _isCooking;
-        private Vector3 lastOffsetFromPortal;
-        private Vector3 interactorOffset;
+        private Vector3 _lastOffsetFromPortal;
+        private Vector3 _interactorOffset;
+        private Transform _minigameCamera;
         private NetworkedPlayer _networkedPlayer;
 
         #endregion
@@ -113,6 +114,7 @@ namespace Player
 
             foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
             _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
+            _networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
 
             _playerGUI = FindFirstObjectByType<PlayerGUI>();
 
@@ -190,36 +192,43 @@ namespace Player
         /// </summary>
         private void UpdateCameraPosition()
         {
-            if (_isCooking) return;
-            if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
-                    InteractRange))
+            if (!_isCooking)
             {
-                if (hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
+                if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
+                        InteractRange))
                 {
-                    interactorOffset = portalCamera.globalOffset;
+                    if (hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
+                    {
+                        _interactorOffset = portalCamera.globalOffset;
+                    }
+                    else
+                    {
+                        _interactorOffset = Vector3.zero;
+                    }
                 }
-                else
-                {
-                    interactorOffset = Vector3.zero;
-                }
+
+                var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
+                _playerCamera.transform.position = transform.position + Vector3.up * cameraHeight;
+
+                var lookVectorY = Mathf.Clamp(
+                    NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
+                    CameraVerticalClampMin,
+                    CameraVerticalClampMax
+                );
+
+                _playerCamera.transform.rotation = Quaternion.Euler(lookVectorY, transform.rotation.eulerAngles.y, 0f);
             }
-
-            var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
-            _playerCamera.transform.position = transform.position + Vector3.up * cameraHeight;
-
-            var lookVectorY = Mathf.Clamp(
-                NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
-                CameraVerticalClampMin,
-                CameraVerticalClampMax
-            );
-
-            _playerCamera.transform.rotation = Quaternion.Euler(lookVectorY, transform.rotation.eulerAngles.y, 0f);
-
+            else
+            {
+                _playerCamera.transform.position = Vector3.Lerp(_playerCamera.transform.position, _minigameCamera.position, 0.5f);
+                _playerCamera.transform.rotation = Quaternion.Lerp(_playerCamera.transform.rotation, _minigameCamera.rotation, 0.5f);
+                
+            }
         }
         
         private void UpdateInteractorPosition()
         {
-            interactor.position = _playerCamera.transform.position - interactorOffset;
+            interactor.position = _playerCamera.transform.position - _interactorOffset;
             interactor.rotation = Quaternion.Euler(_playerCamera.transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
         }
         
@@ -314,6 +323,18 @@ namespace Player
 
         public void OnPrevious(InputAction.CallbackContext context)
         {
+            if (context.started)
+            {
+                if (_interactObj != null)
+                {
+                    _isInteracting = false;
+                    _interactObj.PrimaryInteract(this, false);
+                    _interactObj = null;
+
+                }
+                SetCooking(false);
+                SetCanMove(true);
+            }
         }
 
         public void OnNext(InputAction.CallbackContext context)
@@ -322,6 +343,7 @@ namespace Player
 
         public void OnAttack(InputAction.CallbackContext context)
         {
+            if (!_canMove || _isCooking) return;
             if(context.started)
             {
                 if (GetHitInfo(out var interactObj))
@@ -385,6 +407,11 @@ namespace Player
             return interactor;
         }
 
+        public void SetCameraLocation(Transform cameraLocation)
+        {
+            _minigameCamera = cameraLocation;
+        }
+
         public void SetCanMove(bool canMove)
         {
             _canMove = canMove;
@@ -392,6 +419,11 @@ namespace Player
             _rigidbody.linearDamping = 0f;
             Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !canMove;
+        }
+        
+        public void SetCooking(bool cooking)
+        {
+            _isCooking = cooking;
         }
 
         public bool CanMove()

@@ -8,6 +8,8 @@ using UnityEngine.AI;
 public class Customer : NetworkBehaviour, IInteractable
 {
     [SerializeField] public List<GameObject> ears;
+    [SerializeField] public List<Material> skins;
+    [SerializeField] private SkinnedMeshRenderer[] customerMesh;
     
     private BehaviorGraphAgent _behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
@@ -18,7 +20,8 @@ public class Customer : NetworkBehaviour, IInteractable
     private AIManager _aiManager;
 
     public NetworkVariable<DishType> requestedDish;
-    public NetworkVariable<int> selectedEars;
+    public NetworkVariable<int> selectedEarsIndex;
+    public NetworkVariable<int> selectedSkinIndex;
     public NetworkVariable<bool> isBeingInteracted =  new (true);
     private List<Transform> _waypoints = new();
 
@@ -35,7 +38,12 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
-        ears[selectedEars.Value].SetActive(true);
+        ears[selectedEarsIndex.Value].SetActive(true);
+        foreach (var mesh in customerMesh)
+        {
+            mesh.materials = new[] { skins[selectedSkinIndex.Value] };
+        }
+        
         if (!IsOwner) return;
 
         _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);

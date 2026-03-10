@@ -271,6 +271,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7629877149758220370}
   m_SourcePrefab: {fileID: 100100000, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+--- !u!137 &1978204071456454738 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3671212374419152263, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3219502554328868676 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8850485137052466543, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
@@ -279,6 +284,11 @@ GameObject:
 --- !u!1 &4344263068917000075 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1569739858329748064, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4350422102957923122 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7647402500723458329, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
   m_PrefabInstance: {fileID: 6232636452474116651}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6348949774750871314 stripped
@@ -441,9 +451,23 @@ MonoBehaviour:
   - {fileID: 3219502554328868676}
   - {fileID: 6348949774750871314}
   - {fileID: 4344263068917000075}
+  skins:
+  - {fileID: 2100000, guid: d96bdb2aad1721e43b38e95b0d1a9b59, type: 2}
+  - {fileID: 2100000, guid: 5b57de177f246514e8434635637f11d8, type: 2}
+  - {fileID: 2100000, guid: 6f794694e5df35e4a84fbfd259fc2b67, type: 2}
+  - {fileID: 2100000, guid: 4b5158e6c791f93488bd38fe113a115f, type: 2}
+  - {fileID: 2100000, guid: e0a1667d373bcf643b7a82813d2a0dc5, type: 2}
+  - {fileID: 2100000, guid: 859846b9d5961dd4b84321577e114667, type: 2}
+  customerMesh:
+  - {fileID: 4350422102957923122}
+  - {fileID: 7551658561282319679}
+  - {fileID: 1978204071456454738}
+  - {fileID: 8710667680581862370}
   requestedDish:
     m_InternalValue: 0
-  selectedEars:
+  selectedEarsIndex:
+    m_InternalValue: 0
+  selectedSkinIndex:
     m_InternalValue: 0
   isBeingInteracted:
     m_InternalValue: 1
@@ -596,3 +620,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.054812133, z: 1}
   m_Center: {x: 0, y: 0.527406, z: 1.1}
+--- !u!137 &7551658561282319679 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4705658358393471212, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8710667680581862370 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3358638373715581385, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}

@@ -5,7 +5,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Player
+namespace PlayerScripts
 {
     public class NetworkedPlayer : NetworkBehaviour
     { 
@@ -20,10 +20,14 @@ namespace Player
         #endregion
         
         [SerializeField] private Canvas playerNameCanvas;
+        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
+        [SerializeField] private Material[] skins;
         private TextMeshProUGUI _steamNicknameTMP;
         
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -44,8 +48,11 @@ namespace Player
             _steamNicknameTMP = playerNameCanvas.GetComponentInChildren<TextMeshProUGUI>();
             
             _playerNickname.OnValueChanged += SetNickname;
+            _playerSkinIndex.OnValueChanged += SetSkin;
             SetNickname("Nickname", _playerNickname.Value);
+            SetSkin(0, _playerSkinIndex.Value);
         }
+
 
         private void Update()
         {
@@ -78,10 +85,24 @@ namespace Player
             _steamNicknameTMP.text = _playerNickname.Value.ToString();
         }
         
+        private void SetSkin(int previousValue, int newValue)
+        {
+            foreach (var mesh in networkedPlayerMesh)
+            {
+                mesh.materials = new[] { skins[newValue] };
+            }
+        }
+        
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetSteamNicknameRpc(ulong id)
         {
             _playerNickname.Value = new Friend(id).Name;
+        }
+        
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetSkinRpc(int skinIndex)
+        {
+            _playerSkinIndex.Value = skinIndex;
         }
         
         public void SetJumping()

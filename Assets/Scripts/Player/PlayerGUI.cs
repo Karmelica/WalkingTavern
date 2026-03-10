@@ -2,7 +2,7 @@ using Cooking;
 using TMPro;
 using UnityEngine;
 
-namespace Player
+namespace PlayerScripts
 {
     public class PlayerGUI : MonoBehaviour
     {

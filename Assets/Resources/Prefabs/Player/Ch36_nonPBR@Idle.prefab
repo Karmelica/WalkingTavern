@@ -2491,7 +2491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1959477017
+  GlobalObjectIdHash: 1928220444
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2564,6 +2564,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   playerNameCanvas: {fileID: 7498144743461933851}
+  networkedPlayerMesh:
+  - {fileID: 5970120869399318737}
+  - {fileID: 2277399832522965819}
+  - {fileID: 1879611513397643298}
+  - {fileID: 1896023316716266760}
+  skins:
+  - {fileID: 2100000, guid: d96bdb2aad1721e43b38e95b0d1a9b59, type: 2}
+  - {fileID: 2100000, guid: 5b57de177f246514e8434635637f11d8, type: 2}
+  - {fileID: 2100000, guid: 6f794694e5df35e4a84fbfd259fc2b67, type: 2}
+  - {fileID: 2100000, guid: 4b5158e6c791f93488bd38fe113a115f, type: 2}
+  - {fileID: 2100000, guid: e0a1667d373bcf643b7a82813d2a0dc5, type: 2}
+  - {fileID: 2100000, guid: 859846b9d5961dd4b84321577e114667, type: 2}
 --- !u!114 &3231727551264482569
 MonoBehaviour:
   m_ObjectHideFlags: 0
