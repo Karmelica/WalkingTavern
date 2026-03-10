@@ -18,7 +18,9 @@ namespace PlayerScripts
         private static readonly int Grounded = Animator.StringToHash("IsGrounded");
 
         #endregion
-        
+
+        #region Variables
+
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
         [SerializeField] private Material[] skins;
@@ -33,7 +35,11 @@ namespace PlayerScripts
         
         private Camera _playerCamera;
         private Animator _animator;
+        
 
+        #endregion
+        
+        #region Unity Lifecycle
 
         private void Awake()
         {
@@ -65,11 +71,9 @@ namespace PlayerScripts
             GroundCheck();
         }
 
-        private void GroundCheck()
-        {
-            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
-        }
-
+        #endregion
+        
+        #region Animation and Calculations
 
         private void UpdatePlayerNickRotation()
         {
@@ -77,6 +81,25 @@ namespace PlayerScripts
                 playerNameCanvas.transform.forward = _playerCamera.transform.forward;
         }
         
+        private void GroundCheck()
+        {
+            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
+        }
+        
+        public void SetJumping()
+        {
+            _animator.SetTrigger(Jumping);
+        }
+        
+        private void SetAnimationVariables()
+        {
+            _animator.SetBool(Grounded, IsGrounded);
+        }
+
+        #endregion
+
+        #region Set Customization
+
         /// <summary>
         /// Ustawia nick przy wejściu klienta
         /// </summary>
@@ -105,15 +128,9 @@ namespace PlayerScripts
             _playerSkinIndex.Value = skinIndex;
         }
         
-        public void SetJumping()
-        {
-            _animator.SetTrigger(Jumping);
-        }
+
+        #endregion
         
-        private void SetAnimationVariables()
-        {
-            _animator.SetBool(Grounded, IsGrounded);
-        }
         #region Network RPCs
         
         /// <summary>

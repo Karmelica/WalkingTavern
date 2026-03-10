@@ -279,7 +279,6 @@ namespace PlayerScripts
         
         #endregion
         
-        
         #region Network RPCs
         
         /// <summary>
@@ -292,7 +291,6 @@ namespace PlayerScripts
         }
         
         #endregion
-        
 
         #region Input Callbacks
 

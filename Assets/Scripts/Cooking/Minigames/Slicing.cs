@@ -1,24 +1,26 @@
-using Cooking.Minigames;
 using UnityEngine;
 
-public class Slicing : Minigame
+namespace Cooking.Minigames
 {
-    [Range(1, 10)]
-    [SerializeField] private float requiredSpeed = 4f;
-    private Vector2 _oldMousePos;
-
-    protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
+    public class Slicing : Minigame
     {
-        if (hit.collider.gameObject && hit.collider.gameObject == CurrentFood.gameObject)
+        [Range(1, 10)]
+        [SerializeField] private float requiredSpeed = 4f;
+        private Vector2 _oldMousePos;
+
+        protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
         {
-            var difference = (_oldMousePos.y - mousePos.y) / Screen.height * Time.deltaTime * 1000f;
-            if (mousePos.y < _oldMousePos.y && difference > requiredSpeed)
+            if (hit.collider.gameObject && hit.collider.gameObject == CurrentFood.gameObject)
             {
-                Debug.Log("Tniesz w dół");
-                Debug.Log("Róznica " + difference);
-                CurrentFood.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+                var difference = (_oldMousePos.y - mousePos.y) / Screen.height * Time.deltaTime * 1000f;
+                if (mousePos.y < _oldMousePos.y && difference > requiredSpeed)
+                {
+                    Debug.Log("Tniesz w dół");
+                    Debug.Log("Róznica " + difference);
+                    CurrentFood.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+                }
             }
+            _oldMousePos = mousePos;
         }
-        _oldMousePos = mousePos;
     }
 }
