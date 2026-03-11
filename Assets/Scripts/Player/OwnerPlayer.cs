@@ -20,14 +20,16 @@ namespace PlayerScripts
     
     public class OwnerPlayer : NetworkBehaviour, InputSystem_Actions.IPlayerActions
     {
+        #region Variables
+
         #region Constants
         
         private const float CameraHeight = 1.6f;
         private const float CameraVerticalClampMin = -87f;
         private const float CameraVerticalClampMax = 87f;
-        [SerializeField] private float WalkForce = 20f;
-        [SerializeField] private float SprintForce = 25f;
-        [SerializeField] private float JumpForce = 250f;
+        [SerializeField] private float walkForce = 20f;
+        [SerializeField] private float sprintForce = 25f;
+        [SerializeField] private float jumpForce = 250f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
         
@@ -69,7 +71,9 @@ namespace PlayerScripts
         private NetworkedPlayer _networkedPlayer;
 
         #endregion
-
+        
+        #endregion
+        
         #region Unity Lifecycle
         
         private void Awake()
@@ -265,7 +269,7 @@ namespace PlayerScripts
             }
             
             if(_canMove){
-                var moveForce = _isSprinting ? SprintForce : WalkForce;
+                var moveForce = _isSprinting ? sprintForce : walkForce;
                 var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
                                  (moveForce * Time.fixedDeltaTime);
 
@@ -284,7 +288,7 @@ namespace PlayerScripts
             if (!_networkedPlayer.IsGrounded) return;
 
             _networkedPlayer.SetJumping();
-            _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Force);
+            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Force);
         }
         
         #endregion

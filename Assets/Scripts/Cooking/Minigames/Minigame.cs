@@ -11,36 +11,48 @@ namespace Cooking.Minigames
     [ExecuteInEditMode]
     public class Minigame : MonoBehaviour, IInteractable
     {
-        [SerializeField] private IngredientType[] applicableFood;
         public Transform cameraLocation;
-        private Camera _mainCamera;
-
-        protected FoodItem CurrentFood;
         [SerializeField] private Transform foodPlaceholder;
+        
+        [SerializeField] private IngredientType[] applicableFood;
+        [SerializeField] protected int requiredScore = 10;
+        
+        private Camera _mainCamera;
+        protected FoodItem CurrentFood;
+        protected int Score;
 
         protected virtual void Start()
         {
             _mainCamera = Camera.main;
         }
-        
+
         protected virtual void Update()
         {
+            EditorUpdate();
+
+            if (!(Vector3.Distance(_mainCamera.transform.position, cameraLocation.position) < 0.1f)) return;
             Vector3 mousePos = Mouse.current.position.ReadValue();
-            
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(mousePos), out RaycastHit hit) && hit.collider.gameObject && CurrentFood)
+
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(mousePos), out RaycastHit hit) &&
+                hit.collider.gameObject && CurrentFood)
             {
                 DoMinigame(hit, mousePos);
             }
 
-            EditorUpdate();
+            if (Score == requiredScore)
+            {
+                Score = 0;
+                Debug.Log("Completed");
+                CurrentFood.CompleteMinigame();
+            }
         }
         
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void EditorUpdate()
         {
             cameraLocation.LookAt(foodPlaceholder);
         }
-    #endif
+#endif
 
         private void OnTriggerEnter(Collider other)
         {
@@ -51,7 +63,7 @@ namespace Cooking.Minigames
                 CurrentFood = foodItem;
                 CurrentFood.transform.position = foodPlaceholder.position;
                 if(NetworkManager.Singleton.IsServer)
-                    CurrentFood.PlaceOnMinigameRpc(true);
+                    CurrentFood.PlaceOnMinigameRpc();
             }
         }
 
@@ -60,6 +72,7 @@ namespace Cooking.Minigames
             if (CurrentFood == other.gameObject.GetComponent<FoodItem>())
             {
                 CurrentFood = null;
+                Score = 0;
             }
         }
 
@@ -101,8 +114,9 @@ namespace Cooking.Minigames
             Gizmos.color = Color.red;
             Gizmos.matrix = cameraLocation.localToWorldMatrix;
             Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 60, 16 / 9f);
-            
-            
         }
     }
 }
+
+
+

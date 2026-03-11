@@ -61,10 +61,10 @@ namespace World
         #region RPC Methods
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public void PlaceOnMinigameRpc(bool placedDown = true)
+        public void PlaceOnMinigameRpc()
         {
-            _rigidbody.useGravity = !placedDown;
-            _rigidbody.isKinematic = placedDown;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
         }
         
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]

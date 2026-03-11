@@ -1,0 +1,70 @@
+using UnityEngine;
+
+namespace Cooking.Minigames
+{
+    public class Mixing : Minigame
+    {
+        private Vector2 _screenMiddle;
+        private int _lastSlice = -1;
+        private int _thisSlice = -1;
+
+        protected override void Start()
+        {
+            base.Start();
+            _screenMiddle = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            //_screenMiddle = new Vector2(0.5f, 0.5f);
+        }
+
+        protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
+        {
+            var newSlice = GetSlice(mousePos);
+
+            if (newSlice == _thisSlice || newSlice == -1) return;
+
+            _lastSlice = _thisSlice;
+            _thisSlice = newSlice;
+
+            if (_lastSlice == -1) return;
+
+            if (IsClockwiseTransition(_lastSlice, _thisSlice))
+            {
+                Score++;
+            }
+        }
+
+        private int GetSlice(Vector3 mousePos)
+        {
+            if (mousePos.y > _screenMiddle.y)
+            {
+                if (mousePos.x < _screenMiddle.x)
+                {
+                    return 0;
+                }
+                if (mousePos.x > _screenMiddle.x)
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                if (mousePos.x < _screenMiddle.x)
+                {
+                    return 2;
+                }
+                if (mousePos.x > _screenMiddle.x)
+                {
+                    return 3;
+                }
+            }
+            return -1;
+        }
+        
+        private static bool IsClockwiseTransition(int from, int to)
+        {
+            return (from == 0 && to == 1) ||
+                   (from == 1 && to == 3) ||
+                   (from == 3 && to == 2) ||
+                   (from == 2 && to == 0);
+        }
+    }
+}
