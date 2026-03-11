@@ -44,6 +44,7 @@ namespace PlayerScripts
         #region Components
 
         [SerializeField] private Transform interactor;
+        [SerializeField] private Transform hand;
 
         #endregion
         
@@ -58,7 +59,7 @@ namespace PlayerScripts
         private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
         private bool _isInteracting;
-        private IInteractable _interactObj;
+        private IInteractable _heldObject;
         private bool _canMove = true;
         private bool _isCrouching;
         private bool _isCooking;
@@ -75,8 +76,17 @@ namespace PlayerScripts
         {
             _rigidbody = GetComponent<Rigidbody>();
             _networkedPlayer =  GetComponent<NetworkedPlayer>();
+            NetworkManager.OnClientDisconnectCallback += NetworkManagerOnOnClientDisconnectCallback;
         }
-        
+
+        private void NetworkManagerOnOnClientDisconnectCallback(ulong clientId)
+        {
+            if (clientId != OwnerClientId) return;
+            
+            _heldObject?.PrimaryInteract(this, false);
+            NetworkManager.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
+        }
+
         private void Update()
         {
             if (!_playerCamera) return;
@@ -127,7 +137,7 @@ namespace PlayerScripts
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            _interactObj?.PrimaryInteract(this, false);
+            _heldObject?.PrimaryInteract(this, false);
             _shouldUpdateInterface = false;
             CleanupInput();
         }
@@ -323,11 +333,11 @@ namespace PlayerScripts
         {
             if (context.started)
             {
-                if (_interactObj != null)
+                if (_heldObject != null)
                 {
                     _isInteracting = false;
-                    _interactObj.PrimaryInteract(this, false);
-                    _interactObj = null;
+                    _heldObject.PrimaryInteract(this, false);
+                    _heldObject = null;
 
                 }
                 SetCooking(false);
@@ -342,31 +352,36 @@ namespace PlayerScripts
         public void OnAttack(InputAction.CallbackContext context)
         {
             if (!_canMove || _isCooking) return;
-            if(context.started)
-            {
-                if (GetHitInfo(out var interactObj))
-                {
-                    if (interactObj.IsInteractedWith()) return;
-                    _interactObj = interactObj;
-                    _interactObj.PrimaryInteract(this, true);
-                    _isInteracting = true;
-                }
-            }
             
-            if (context.canceled)
+            if (!context.started) return;
+            if (GetHitInfo(out var interactObj))
             {
-                if (_interactObj == null) return;
-                _isInteracting = false;
-                _interactObj.PrimaryInteract(this, false);
-                _interactObj = null;
+                if (interactObj.IsInteractedWith()) return;
+                _heldObject = interactObj;
+                _heldObject.PrimaryInteract(this, true);
+                _isInteracting = true;
             }
+
+            /*if (context.canceled)
+            {
+                if (_heldObject == null) return;
+                _isInteracting = false;
+                _heldObject.PrimaryInteract(this, false);
+                _heldObject = null;
+            }*/
         }
         
         public void OnInteract(InputAction.CallbackContext context)
         {
             if (context.started)
             {
-                if(GetHitInfo(out var interactable))
+                if (_heldObject != null)
+                {
+                    _isInteracting = false;
+                    _heldObject.PrimaryInteract(this, false);
+                    _heldObject = null;
+                }
+                else if(GetHitInfo(out var interactable))
                 {
                     if (interactable.IsInteractedWith()) return;
                     interactable.SecondaryInteract(this);
@@ -400,6 +415,10 @@ namespace PlayerScripts
             return x.distance.CompareTo(y.distance);
         }
 
+        public Transform GetHandPoint()
+        {
+            return hand;
+        }
         public Transform GetInteractPoint()
         {
             return interactor;

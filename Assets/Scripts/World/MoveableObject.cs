@@ -31,59 +31,85 @@ namespace World
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            _isInteractedWith.OnValueChanged += PickedUpChanged;
+            //_isInteractedWith.OnValueChanged += PickedUpChanged;
             
             _rigidbody.useGravity = true;
             _rigidbody.isKinematic = false;
         }
+        
 
         private void Update()
         {
             if(_isInteractedWith.Value)
             {
-                transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
-
-                transform.position = transform.parent.position + transform.parent.forward * 2f;
+                //transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
+            
+                transform.position = transform.parent.position;
             }
         }
 
-        private void PickedUpChanged(bool previousValue, bool newValue)
+        /*private void PickedUpChanged(bool previousValue, bool newValue)
         {
             if (newValue == false)
             {
                 transform.parent = null;
             }
-        }
+        }*/
 
         #endregion
         
         #region RPC Methods
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool pickingUp = true)
+        public void PlaceOnMinigameRpc(bool placedDown = true)
         {
-            SetParentClientRpc(interactor, pickingUp);
-            _isInteractedWith.Value = pickingUp;
+            _rigidbody.useGravity = !placedDown;
+            _rigidbody.isKinematic = placedDown;
         }
-
+        
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool pickingUp)
+        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool beingPickedUp)
         {
-            _rigidbody.useGravity = !pickingUp;
-            _rigidbody.isKinematic = pickingUp;
-            if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
+            _rigidbody.useGravity = !beingPickedUp;
+            _rigidbody.isKinematic = beingPickedUp;
+
+            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
+            
+            if (beingPickedUp)
             {
-                transform.SetParent(player.GetInteractPoint());
+                transform.SetParent(player.GetHandPoint());
+                transform.position = Vector3.zero;
             }
+            else
+            {
+                var interactPoint = player.GetInteractPoint();
+                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 2f, LayerMask.NameToLayer("Windows")))
+                {
+                    transform.position = hit.point + Vector3.up * 1f;
+                }
+                else
+                {
+                    transform.position = interactPoint.position + interactPoint.forward * 2f;
+                }
+                transform.SetParent(null);
+
+            }
+        }
+        
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        {
+            SetParentClientRpc(interactor, beingPickedUp);
+            _isInteractedWith.Value = beingPickedUp;
         }
 
         #endregion
 
         #region Interface Methods
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
-            SetTransformsServerRpc(interactor, pickingUp);
+            SetTransformsServerRpc(interactor, beingPickedUp);
         }
 
         public void SecondaryInteract(NetworkBehaviourReference interactor)

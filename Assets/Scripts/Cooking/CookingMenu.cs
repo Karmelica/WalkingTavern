@@ -36,7 +36,7 @@ namespace Cooking
         }
 
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
             //nothing
         }

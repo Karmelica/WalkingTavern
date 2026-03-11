@@ -8,22 +8,39 @@ using World;
 
 namespace Cooking.Minigames
 {
+    [ExecuteInEditMode]
     public class Minigame : MonoBehaviour, IInteractable
     {
         [SerializeField] private IngredientType[] applicableFood;
         public Transform cameraLocation;
+        private Camera _mainCamera;
 
         protected FoodItem CurrentFood;
+        [SerializeField] private Transform foodPlaceholder;
 
+        protected virtual void Start()
+        {
+            _mainCamera = Camera.main;
+        }
+        
         protected virtual void Update()
         {
             Vector3 mousePos = Mouse.current.position.ReadValue();
             
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out RaycastHit hit) && hit.collider.gameObject && CurrentFood)
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(mousePos), out RaycastHit hit) && hit.collider.gameObject && CurrentFood)
             {
                 DoMinigame(hit, mousePos);
             }
+
+            EditorUpdate();
         }
+        
+    #if UNITY_EDITOR
+        private void EditorUpdate()
+        {
+            cameraLocation.LookAt(foodPlaceholder);
+        }
+    #endif
 
         private void OnTriggerEnter(Collider other)
         {
@@ -32,6 +49,9 @@ namespace Cooking.Minigames
             if (applicableFood.Any(applicableFoodItem => applicableFoodItem == foodItem.ingredientType))
             {
                 CurrentFood = foodItem;
+                CurrentFood.transform.position = foodPlaceholder.position;
+                if(NetworkManager.Singleton.IsServer)
+                    CurrentFood.PlaceOnMinigameRpc(true);
             }
         }
 
@@ -47,7 +67,7 @@ namespace Cooking.Minigames
         {
         }
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
         }
 
@@ -73,9 +93,16 @@ namespace Cooking.Minigames
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(cameraLocation.transform.position, cameraLocation.transform.position + cameraLocation.transform.forward);
-            Gizmos.DrawWireSphere(cameraLocation.transform.position + cameraLocation.transform.forward, 0.1f);
+            if (!cameraLocation || !foodPlaceholder) return;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(foodPlaceholder.position, 0.1f);
+            
+            Gizmos.color = Color.red;
+            Gizmos.matrix = cameraLocation.localToWorldMatrix;
+            Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 60, 16 / 9f);
+            
+            
         }
     }
 }

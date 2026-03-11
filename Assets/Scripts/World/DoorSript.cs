@@ -7,7 +7,7 @@ public class DoorSript : MonoBehaviour, IInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private Animator otherAnimator;
     
-    public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+    public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
     {
     }
 

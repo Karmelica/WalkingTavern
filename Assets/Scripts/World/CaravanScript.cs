@@ -36,7 +36,7 @@ namespace World
             }
         }
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool pickingUp = true)
+        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
             _shouldRotate = !_shouldRotate;
         }
