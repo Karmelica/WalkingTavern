@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using Unity.Behavior;
 using Unity.Netcode;
 using UnityEngine;
@@ -96,6 +97,10 @@ public class Customer : NetworkBehaviour, IInteractable
         if(IsOwner)
             SetAnimSpeedServerRpc(_agent.velocity.magnitude);
     }
+    
+    #endregion
+
+    #region Animation
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
     private void SetAnimSpeedServerRpc(float velocityMagnitude)
@@ -144,14 +149,15 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Interact
 
-    public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
     {
-        //nothing
+        return null;
     }
 
-    public void SecondaryInteract(NetworkBehaviourReference interactor)
+    public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
     {
         TakeOrderRpc();
+        return null;
     }
 
     [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]

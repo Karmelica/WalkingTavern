@@ -36,14 +36,16 @@ namespace World
             }
         }
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
             _shouldRotate = !_shouldRotate;
+            return null;
         }
 
-        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
         {
             _shouldDrive = !_shouldDrive;
+            return null;
         }
 
         public string GetInteractName()

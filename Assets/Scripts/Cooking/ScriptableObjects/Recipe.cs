@@ -17,7 +17,7 @@ namespace Cooking.ScriptableObjects
         [Serializable]
         public class Ingredients
         {
-                public IngredientType ingredient;
+                public ProcessedIngredientType ingredient;
                 public int quantity;
         }
 }

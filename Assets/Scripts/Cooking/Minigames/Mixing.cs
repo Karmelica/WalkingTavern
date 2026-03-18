@@ -12,7 +12,6 @@ namespace Cooking.Minigames
         {
             base.Start();
             _screenMiddle = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            //_screenMiddle = new Vector2(0.5f, 0.5f);
         }
 
         protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
@@ -29,6 +28,7 @@ namespace Cooking.Minigames
             if (IsClockwiseTransition(_lastSlice, _thisSlice))
             {
                 Score++;
+                Debug.Log("Score: " + Score);
             }
         }
 

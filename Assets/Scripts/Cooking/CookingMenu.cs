@@ -36,17 +36,25 @@ namespace Cooking
         }
 
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
-            //nothing
+            if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
+            {
+                cookingUI.SetActive(!player.CanMove());
+            }
+            
+            return null;
         }
 
-        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
         {
-            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
-        
-            player.SetCanMove(!player.CanMove());
-            cookingUI.SetActive(!player.CanMove());
+            if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
+            {
+                player.SetCanMove(!player.CanMove());
+                cookingUI.SetActive(!player.CanMove());
+            }
+
+            return this;
         }
 
         public string GetInteractName()

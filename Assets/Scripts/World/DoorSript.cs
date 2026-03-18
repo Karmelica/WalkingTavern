@@ -7,17 +7,20 @@ public class DoorSript : MonoBehaviour, IInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private Animator otherAnimator;
     
-    public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
     {
+        return null;
     }
 
-    public void SecondaryInteract(NetworkBehaviourReference interactor)
+    public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
     {
         animator.SetTrigger("Interact");
         if (otherAnimator)
         {
             otherAnimator.SetTrigger("Interact");
         }
+
+        return null;
     }
 
     public string GetInteractName()

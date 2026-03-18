@@ -10,7 +10,7 @@ namespace Cooking
 {
     public class CookingPlace : NetworkBehaviour
     {
-        private readonly Dictionary<IngredientType, int> _placedIngredients = new();
+        private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
         private List<Recipe> _availableRecipes = new ();
         private NetworkVariable<int> _selectedRecipe = new ();
         [SerializeField] private List<GameObject> placedFoodItems = new();
@@ -22,9 +22,9 @@ namespace Cooking
 
         private void Start()
         {
-            foreach (var ingredientType in Enum.GetValues(typeof(IngredientType)))
+            foreach (var ingredientType in Enum.GetValues(typeof(ProcessedIngredientType)))
             {
-                _placedIngredients.TryAdd((IngredientType)ingredientType, 0);
+                _placedIngredients.TryAdd((ProcessedIngredientType)ingredientType, 0);
             }
             UpdateRecipeText();
 
@@ -84,7 +84,7 @@ namespace Cooking
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent<FoodItem>(out var foodItem)) return;
+            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
             if (!_placedIngredients.TryAdd(foodItem.ingredientType, 1))
             {
                 _placedIngredients[foodItem.ingredientType]++;
@@ -103,7 +103,7 @@ namespace Cooking
         
         private void OnTriggerExit(Collider other)
         {
-            if (!other.TryGetComponent<FoodItem>(out var foodItem)) return;
+            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
             if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out var ingredient)) return;
             if (placedFoodItems.Contains(other.gameObject))
             { 
@@ -133,7 +133,7 @@ namespace Cooking
                 for (int i = placedFoodItems.Count - 1; i >= 0 && removedCount < quantity; i--)
                 {
                     var item = placedFoodItems[i];
-                    if (item.TryGetComponent<FoodItem>(out var foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
+                    if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
                         item.gameObject.SetActive(false);
                         placedFoodItems.RemoveAt(i);

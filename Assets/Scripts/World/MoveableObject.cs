@@ -31,7 +31,6 @@ namespace World
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            //_isInteractedWith.OnValueChanged += PickedUpChanged;
             
             _rigidbody.useGravity = true;
             _rigidbody.isKinematic = false;
@@ -42,19 +41,9 @@ namespace World
         {
             if(_isInteractedWith.Value)
             {
-                //transform.rotation = Quaternion.Euler(0, transform.parent.rotation.eulerAngles.y, 0);
-            
                 transform.position = transform.parent.position;
             }
         }
-
-        /*private void PickedUpChanged(bool previousValue, bool newValue)
-        {
-            if (newValue == false)
-            {
-                transform.parent = null;
-            }
-        }*/
 
         #endregion
         
@@ -73,6 +62,11 @@ namespace World
             _rigidbody.useGravity = !beingPickedUp;
             _rigidbody.isKinematic = beingPickedUp;
 
+            if (interactor.Equals(null))
+            {
+                transform.SetParent(null);
+            }
+
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
             if (beingPickedUp)
@@ -83,8 +77,9 @@ namespace World
             else
             {
                 var interactPoint = player.GetInteractPoint();
-                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 2f, LayerMask.NameToLayer("Windows")))
+                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 2f, ~(1<<11)))
                 {
+                    Debug.Log(LayerMask.LayerToName(8));
                     transform.position = hit.point + Vector3.up * 1f;
                 }
                 else
@@ -92,7 +87,6 @@ namespace World
                     transform.position = interactPoint.position + interactPoint.forward * 2f;
                 }
                 transform.SetParent(null);
-
             }
         }
         
@@ -107,13 +101,15 @@ namespace World
 
         #region Interface Methods
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
             SetTransformsServerRpc(interactor, beingPickedUp);
+            return this;
         }
 
-        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
         {
+            return null;
         }
 
         public string GetInteractName()

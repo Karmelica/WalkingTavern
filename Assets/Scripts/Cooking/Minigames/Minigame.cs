@@ -13,9 +13,12 @@ namespace Cooking.Minigames
     {
         public Transform cameraLocation;
         [SerializeField] private Transform foodPlaceholder;
+        private bool _isInteractedWith;
         
         [SerializeField] private IngredientType[] applicableFood;
         [SerializeField] protected int requiredScore = 10;
+
+        private MinigameHelper helper;
         
         private Camera _mainCamera;
         protected FoodItem CurrentFood;
@@ -24,17 +27,17 @@ namespace Cooking.Minigames
         protected virtual void Start()
         {
             _mainCamera = Camera.main;
+            helper = GetComponent<MinigameHelper>();
         }
 
         protected virtual void Update()
         {
             EditorUpdate();
 
-            if (!(Vector3.Distance(_mainCamera.transform.position, cameraLocation.position) < 0.1f)) return;
             Vector3 mousePos = Mouse.current.position.ReadValue();
 
             if (Physics.Raycast(_mainCamera.ScreenPointToRay(mousePos), out RaycastHit hit) &&
-                hit.collider.gameObject && CurrentFood)
+                hit.collider.gameObject && CurrentFood && _isInteractedWith)
             {
                 DoMinigame(hit, mousePos);
             }
@@ -43,7 +46,7 @@ namespace Cooking.Minigames
             {
                 Score = 0;
                 Debug.Log("Completed");
-                CurrentFood.CompleteMinigame();
+                helper.CompleteMinigame(CurrentFood);
             }
         }
         
@@ -80,18 +83,23 @@ namespace Cooking.Minigames
         {
         }
 
-        public void PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
+            _isInteractedWith = false;
+            return null;
         }
 
-        public void SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
         {
             if(interactor.TryGet(out OwnerPlayer player))
             {
                 player.SetCanMove(false);
                 player.SetCooking(true);
                 player.SetCameraLocation(cameraLocation);
+                _isInteractedWith = true;
             }
+
+            return this;
         }
 
         public string GetInteractName()
@@ -101,7 +109,7 @@ namespace Cooking.Minigames
 
         public bool IsInteractedWith()
         {
-            return false;
+            return _isInteractedWith;
         }
 
         private void OnDrawGizmos()

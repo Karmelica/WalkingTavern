@@ -8,40 +8,33 @@ namespace Managers
 {
     public class AudioManager : MonoBehaviour
     {
-        [Header("Audio Events")]
-        public EventReference footsteps;
-        public EventReference jump;
-        public EventReference backgroundMusic;
+        public static AudioManager Instance;
         
         [Header("Event Instances")]
         private EventInstance _backgroundMusicEvent;
     
         private void OnEnable()
         {
-            if(DependencyResolver.Instance.IsRegistered<AudioManager>())
+            if(Instance != null)
             {
                 gameObject.SetActive(false);
                 return;
             }
-            DependencyResolver.Instance.Register(this);
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-
-        private void OnDestroy()
+        
+        private void Start()
         {
-            DependencyResolver.Instance.Unregister<AudioManager>();
-        }
-
-        /*private void Start()
-        {
-            _backgroundMusicEvent = InitializeEventInstance(backgroundMusic);
+            _backgroundMusicEvent = InitializeEventInstance(AudioEvents.Instance.backgroundMusic);
             StartEventInstance(_backgroundMusicEvent);
         }
 
         private void OnDestroy()
         {
             StopEventInstance(_backgroundMusicEvent);
-        }*/
+            Instance = null;
+        }
 
         public void PlayOneShot(EventReference eventReference, Vector3 audioPos = default)
         {

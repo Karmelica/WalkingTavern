@@ -140435,6 +140435,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 2.7912785e-16
       objectReference: {fileID: 0}
+    - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 726450836
+      objectReference: {fileID: 0}
     - target: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_Name
       value: MinigameBase
@@ -140477,6 +140481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8611569127116433159, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+    - {fileID: 1932536434853246168, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -140516,10 +140521,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3a332679224608909cb42425d9dedb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Mixing
-  applicableFood: 0000000001000000020000000300000004000000
-  requiredScore: 8
   cameraLocation: {fileID: 1351143625}
   foodPlaceholder: {fileID: 1351143624}
+  applicableFood: 0000000001000000020000000300000004000000
+  requiredScore: 8
 --- !u!1 &1382876506
 GameObject:
   m_ObjectHideFlags: 0
@@ -143954,6 +143959,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2414053372
+      objectReference: {fileID: 0}
     - target: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_Name
       value: MinigameBase
@@ -143994,11 +144003,47 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.00000012651378
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1932536434853246168, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1462787675}
   m_SourcePrefab: {fileID: 100100000, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+--- !u!4 &1462787672 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2756045895714045244, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 1462787671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1462787673 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 1462787671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1462787674 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 1462787671}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1462787675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462787674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2726c9f1d2f96a149bde84446c53139a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Slicing
+  cameraLocation: {fileID: 1462787673}
+  foodPlaceholder: {fileID: 1462787672}
+  applicableFood: 0000000001000000020000000300000004000000
+  requiredScore: 10
+  requiredSpeed: 4
 --- !u!43 &1502865434
 Mesh:
   m_ObjectHideFlags: 0
@@ -198069,6 +198114,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 988576715
+      objectReference: {fileID: 0}
     - target: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_Name
       value: Slot 2
@@ -198093,11 +198142,59 @@ PrefabInstance:
       propertyPath: 'applicableFood.Array.data[3]'
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.50387377
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0000002188118
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.00000012764116
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1932536434853246168, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 356071996122867050}
   m_SourcePrefab: {fileID: 100100000, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+--- !u!4 &356071996122867047 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2756045895714045244, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 356071996122867046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &356071996122867048 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 356071996122867046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &356071996122867049 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+  m_PrefabInstance: {fileID: 356071996122867046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &356071996122867050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356071996122867049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2726c9f1d2f96a149bde84446c53139a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Slicing
+  cameraLocation: {fileID: 356071996122867048}
+  foodPlaceholder: {fileID: 356071996122867047}
+  applicableFood: 0000000001000000020000000300000004000000
+  requiredScore: 10
+  requiredSpeed: 4
 --- !u!1001 &392785445541421485
 PrefabInstance:
   m_ObjectHideFlags: 0

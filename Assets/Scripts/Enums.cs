@@ -18,6 +18,15 @@ public enum IngredientType
     Bun
 }
 
+public enum ProcessedIngredientType
+{
+    ProcessedLettuce,
+    ProcessedTomato,
+    ProcessedCheese,
+    ProcessedMeat,
+    ProcessedBun
+}
+
 [BlackboardEnum]
 public enum DishType
 {

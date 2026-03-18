@@ -87,7 +87,7 @@ namespace PlayerScripts
         {
             if (clientId != OwnerClientId) return;
             
-            _heldObject?.PrimaryInteract(this, false);
+            _heldObject?.PrimaryInteract(null, false);
             NetworkManager.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
         }
 
@@ -95,7 +95,7 @@ namespace PlayerScripts
         {
             if (!_playerCamera) return;
             
-            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _isInteracting);
+            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _heldObject != null);
             UpdateInteractorPosition();
             UpdateCameraPosition();
         }
@@ -337,15 +337,14 @@ namespace PlayerScripts
         {
             if (context.started)
             {
+                SetCooking(false);
+                SetCanMove(true);
                 if (_heldObject != null)
                 {
                     _isInteracting = false;
                     _heldObject.PrimaryInteract(this, false);
                     _heldObject = null;
-
                 }
-                SetCooking(false);
-                SetCanMove(true);
             }
         }
 
@@ -358,25 +357,18 @@ namespace PlayerScripts
             if (!_canMove || _isCooking) return;
             
             if (!context.started) return;
-            if (GetHitInfo(out var interactObj))
+            if (GetHitInfo(out IInteractable interactObj))
             {
                 if (interactObj.IsInteractedWith()) return;
-                _heldObject = interactObj;
-                _heldObject.PrimaryInteract(this, true);
-                _isInteracting = true;
+                _heldObject = interactObj.PrimaryInteract(this, true);
+                _isInteracting = _heldObject != null;
             }
-
-            /*if (context.canceled)
-            {
-                if (_heldObject == null) return;
-                _isInteracting = false;
-                _heldObject.PrimaryInteract(this, false);
-                _heldObject = null;
-            }*/
         }
         
         public void OnInteract(InputAction.CallbackContext context)
         {
+            if (!_canMove || _isCooking) return;
+            
             if (context.started)
             {
                 if (_heldObject != null)
@@ -388,7 +380,7 @@ namespace PlayerScripts
                 else if(GetHitInfo(out var interactable))
                 {
                     if (interactable.IsInteractedWith()) return;
-                    interactable.SecondaryInteract(this);
+                    _heldObject = interactable.SecondaryInteract(this);
                 }
             }
         }

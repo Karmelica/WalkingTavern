@@ -55,7 +55,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4022241717667640571}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.50387377, y: 0.0000002188118, z: -0.00000012764116, w: -0.8637773}
+  m_LocalRotation: {x: -0.5038738, y: -2.842171e-14, z: 2.842171e-14, w: -0.8637773}
   m_LocalPosition: {x: -0, y: 0.695, z: -0.393}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -71,9 +71,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6040335464829611795}
-  - component: {fileID: 8611569127116433159}
   - component: {fileID: 8307679886485521370}
   - component: {fileID: 6432553761256277856}
+  - component: {fileID: 1932536434853246168}
+  - component: {fileID: 7548264445264350045}
+  - component: {fileID: 4971926403497325910}
   m_Layer: 7
   m_Name: MinigameBase
   m_TagString: Untagged
@@ -98,22 +100,6 @@ Transform:
   - {fileID: 2756045895714045244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &8611569127116433159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7914648482064008887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2726c9f1d2f96a149bde84446c53139a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Slicing
-  applicableFood: 
-  cameraLocation: {fileID: 9209537037356184122}
-  foodPlaceholder: {fileID: 2756045895714045244}
-  requiredSpeed: 4
 --- !u!65 &8307679886485521370
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -156,3 +142,57 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.3032112, y: 0.02562809, z: 0.9693856}
   m_Center: {x: -0.0045200586, y: -0.08308649, z: 0.10065359}
+--- !u!114 &1932536434853246168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7ad38d596632d48bf86ed1906b0f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Minigame
+  cameraLocation: {fileID: 9209537037356184122}
+  foodPlaceholder: {fileID: 2756045895714045244}
+  applicableFood: 
+  requiredScore: 10
+--- !u!114 &7548264445264350045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1899259623
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &4971926403497325910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2eec8c101f2c27459c055b54520e8cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.MinigameHelper
+  ShowTopMostFoldoutHeaderGroup: 1

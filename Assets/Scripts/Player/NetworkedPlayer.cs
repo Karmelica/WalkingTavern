@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using Steamworks;
 using TMPro;
 using Unity.Collections;
@@ -95,6 +96,18 @@ namespace PlayerScripts
         {
             _animator.SetBool(Grounded, IsGrounded);
         }
+
+        public void PlayFootstep()
+        {
+            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.footsteps, transform.position);
+        }
+        
+        public void PlayJumpSound()
+        {
+            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.jump, transform.position);
+        }
+        
+        
 
         #endregion
 
