@@ -24,13 +24,16 @@ namespace PlayerScripts
 
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
+        [SerializeField] private SkinnedMeshRenderer networkedPlayerFace;
         [SerializeField] private Material[] skins;
+        [SerializeField] private Material[] faces;
         private TextMeshProUGUI _steamNicknameTMP;
         
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -56,8 +59,11 @@ namespace PlayerScripts
             
             _playerNickname.OnValueChanged += SetNickname;
             _playerSkinIndex.OnValueChanged += SetSkin;
+            _playerFaceIndex.OnValueChanged += SetFace;
+            
             SetNickname("Nickname", _playerNickname.Value);
             SetSkin(0, _playerSkinIndex.Value);
+            SetSkin(0, _playerFaceIndex.Value);
         }
 
 
@@ -129,6 +135,11 @@ namespace PlayerScripts
             }
         }
         
+        private void SetFace(int previousValue, int newValue)
+        {
+            networkedPlayerFace.materials = new[] { new Material (faces[newValue]) };
+        }
+        
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetSteamNicknameRpc(ulong id)
         {
@@ -139,6 +150,12 @@ namespace PlayerScripts
         public void SetSkinRpc(int skinIndex)
         {
             _playerSkinIndex.Value = skinIndex;
+        }
+        
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetFaceRpc(int skinIndex)
+        {
+            _playerFaceIndex.Value = skinIndex;
         }
         
 

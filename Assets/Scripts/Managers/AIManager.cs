@@ -67,6 +67,10 @@ public class AIManager : NetworkBehaviour
         customer.selectedEarsIndex = new NetworkVariable<int>(rand);
         rand = Random.Range(0, customer.skins.Count);
         customer.selectedSkinIndex = new NetworkVariable<int>(rand);
+        rand = Random.Range(0, customer.faces.Count);
+        customer.selectedFaceIndex = new NetworkVariable<int>(rand);
+
+        customer.customerName = new();
         
         customerInstance.GetComponent<NetworkObject>().Spawn();
     }
