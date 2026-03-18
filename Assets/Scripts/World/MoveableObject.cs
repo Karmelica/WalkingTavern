@@ -79,8 +79,7 @@ namespace World
                 var interactPoint = player.GetInteractPoint();
                 if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 2f, ~(1<<11)))
                 {
-                    Debug.Log(LayerMask.LayerToName(8));
-                    transform.position = hit.point + Vector3.up * 1f;
+                    transform.position = hit.point + Vector3.up * 0.2f;
                 }
                 else
                 {
