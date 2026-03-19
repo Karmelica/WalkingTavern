@@ -58,11 +58,15 @@ Material:
     - _Fresnel_Power: 1.3
     - _Fresnel_Strength: 0.55
     - _Fresnel_Treshhold: 0.764
-    - _Highlight_Intensity: 2
-    - _Highlight_Treshhold: -0.656
+    - _Highlight_Intensity: 0.2
+    - _Highlight_Treshhold: 0.5
+    - _Highlight_Treshhold_Offset: 0
     - _Intensity: 1.177
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shade_Intensity: 0.2
+    - _Shade_Treshhold: 0.5
+    - _Shade_Treshhold_Offset: 0
     - _Treshhold: 0.02
     m_Colors:
     - _Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}

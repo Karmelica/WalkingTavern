@@ -303,7 +303,7 @@ namespace PlayerScripts
         [Rpc(SendTo.Server)]
         private void SetAnimationServerRpc(float walkDir, float velocity, bool isInteracting)
         {
-            _networkedPlayer.SetAnimationRpc(walkDir, velocity, isInteracting);
+            _networkedPlayer.SetAnimationRpc(walkDir, Mathf.RoundToInt(velocity), isInteracting);
         }
         
         #endregion

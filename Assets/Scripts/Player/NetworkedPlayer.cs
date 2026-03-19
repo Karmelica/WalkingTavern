@@ -39,7 +39,8 @@ namespace PlayerScripts
         
         private Camera _playerCamera;
         private Animator _animator;
-        
+
+        private int _newVelocity;
 
         #endregion
         
@@ -167,10 +168,10 @@ namespace PlayerScripts
         /// Synchronizuje animacje dla wszystkich klientów
         /// </summary>
         [Rpc(SendTo.Owner)]
-        public void SetAnimationRpc(float walkDir, float velocity, bool isInteracting)
+        public void SetAnimationRpc(float walkDir, int velocity, bool isInteracting)
         {
-            _animator.SetBool(IsInteracting, isInteracting);
             _animator.SetFloat(WalkSpeed, velocity);
+            _animator.SetBool(IsInteracting, isInteracting);
             _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
         }
 
