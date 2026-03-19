@@ -35,17 +35,16 @@ namespace Managers.Network
             Debug.Log($"Client connected: {clientId}");
         }
 
-        private static void OnClientDisconnectCallback(ulong obj)
+        private static void OnClientDisconnectCallback(ulong clientId)
         {
             if (!NetworkManager.IsServer && NetworkManager.DisconnectReason != string.Empty)
             {
-                Debug.Log($"{obj} Disconnected: {NetworkManager.DisconnectReason}");
+                Debug.Log($"{clientId} Disconnected: {NetworkManager.DisconnectReason}");
             }
 
             if(NetworkManager.IsClient){
                 SceneManager.LoadScene("Menu", LoadSceneMode.Single);
             }
-            SteamClient.Shutdown();
         }
     }
 }

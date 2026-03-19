@@ -138,7 +138,7 @@ namespace Managers.Network
         public void OnStartGameButtonClicked()
         {
             if (!NetworkManager.Singleton.IsHost) return;
-            NetworkManager.Singleton.SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene("MainLevel", LoadSceneMode.Single);
         }
 
         #endregion
