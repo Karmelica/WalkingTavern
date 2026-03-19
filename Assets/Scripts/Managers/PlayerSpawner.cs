@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,7 +24,7 @@ namespace Managers
 
         private void OnSceneLoadedEvent(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
-            if(IsHost && sceneName == "SampleScene") SpawnPlayers(clientsCompleted);
+            if(IsHost && sceneName == "MainLevel") SpawnPlayers(clientsCompleted);
         }
 
         private void SpawnPlayers(List<ulong> clients) 

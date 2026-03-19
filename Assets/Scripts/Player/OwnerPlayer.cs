@@ -7,6 +7,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 namespace PlayerScripts
 {
@@ -336,15 +337,31 @@ namespace PlayerScripts
 
         public void OnPrevious(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.performed)
             {
-                SetCooking(false);
-                SetCanMove(true);
-                if (_heldObject != null)
+                if (context.interaction is HoldInteraction)
                 {
-                    _isInteracting = false;
-                    _heldObject.PrimaryInteract(this, false);
-                    _heldObject = null;
+                    _playerGUI.ShowPause(true);
+                    SetCanMove(false);
+                }
+                else
+                {
+                    if (_playerGUI.IsPaused())
+                    {
+                        _playerGUI.ShowPause(false);
+                        if (!_isCooking) SetCanMove(true);
+                        return;
+                    }
+
+                    SetCooking(false);
+                    SetCanMove(true);
+
+                    if (_heldObject != null)
+                    {
+                        _isInteracting = false;
+                        _heldObject.PrimaryInteract(this, false);
+                        _heldObject = null;
+                    }
                 }
             }
         }
@@ -395,7 +412,7 @@ namespace PlayerScripts
             }
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
-            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, ~LayerMask.NameToLayer("Interactable"));
+            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7);
             Array.Sort(rayHitInfo, CompareDistance);
             foreach (var hit in rayHitInfo)
             {
@@ -416,6 +433,7 @@ namespace PlayerScripts
         {
             return hand;
         }
+        
         public Transform GetInteractPoint()
         {
             return interactor;

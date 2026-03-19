@@ -10,7 +10,7 @@ namespace Managers.Network.Steam
         {
             if (!SteamClient.IsValid)
             {
-                Debug.LogError("Nie udało się zainicjalizować Steam!");
+                Debug.LogError("Couldn't initialize Steam!");
                 return;
             }
 

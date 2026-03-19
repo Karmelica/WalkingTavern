@@ -7,10 +7,8 @@ namespace Cooking.Minigames
 {
     public class MinigameHelper : NetworkBehaviour
     {
-        public override void OnNetworkSpawn()
+        public void Awake()
         {
-            base.OnNetworkSpawn();
-            
             if (!IsServer)
             {
                 enabled = false;
