@@ -62,7 +62,7 @@ namespace World
             _rigidbody.useGravity = !beingPickedUp;
             _rigidbody.isKinematic = beingPickedUp;
 
-            transform.SetParent(null);
+            //transform.SetParent(null);
 
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
