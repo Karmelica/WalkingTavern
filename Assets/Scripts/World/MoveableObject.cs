@@ -60,24 +60,24 @@ namespace World
             }
             else
             {
-                var interactPoint = player.GetInteractPoint();
+                //var interactPoint = player.GetInteractPoint();
                 transform.SetParent(null);
-                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
+                /*if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
                 {
                     transform.position = hit.point + Vector3.up * 0.2f;
                 }
                 else
                 {
                     transform.position = interactPoint.position + interactPoint.forward * 3f;
-                }
+                }*/
             }
         }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
-            SetParentClientRpc(interactor, beingPickedUp);
             _isInteractedWith.Value = beingPickedUp;
+            SetParentClientRpc(interactor, beingPickedUp);
         }
 
         #endregion
