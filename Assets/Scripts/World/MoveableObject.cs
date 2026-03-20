@@ -72,6 +72,7 @@ namespace World
             else
             {
                 var interactPoint = player.GetInteractPoint();
+                transform.SetParent(null);
                 if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
                 {
                     transform.position = hit.point + Vector3.up * 0.2f;
@@ -80,7 +81,6 @@ namespace World
                 {
                     transform.position = interactPoint.position + interactPoint.forward * 3f;
                 }
-                transform.SetParent(null);
             }
         }
         
