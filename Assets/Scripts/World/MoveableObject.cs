@@ -47,6 +47,7 @@ namespace World
         #endregion
         
         #region RPC Methods
+
         
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SetParentClientRpc(NetworkBehaviourReference interactor, bool beingPickedUp)
@@ -56,20 +57,10 @@ namespace World
             if (beingPickedUp)
             {
                 transform.SetParent(player.GetHandPoint());
-                transform.position = Vector3.zero;
             }
             else
             {
-                //var interactPoint = player.GetInteractPoint();
                 transform.SetParent(null);
-                /*if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
-                {
-                    transform.position = hit.point + Vector3.up * 0.2f;
-                }
-                else
-                {
-                    transform.position = interactPoint.position + interactPoint.forward * 3f;
-                }*/
             }
         }
         
@@ -77,7 +68,26 @@ namespace World
         private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
             _isInteractedWith.Value = beingPickedUp;
+            
+            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             SetParentClientRpc(interactor, beingPickedUp);
+            
+            if (beingPickedUp)
+            {
+                transform.localPosition = Vector3.zero;
+            }
+            else
+            {
+                var interactPoint = player.GetInteractPoint();
+                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
+                {
+                    transform.position = hit.point + Vector3.up * 0.2f;
+                }
+                else
+                {
+                    transform.position = interactPoint.position + interactPoint.forward * 3f;
+                }
+            }
         }
 
         #endregion
