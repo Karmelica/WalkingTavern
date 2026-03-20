@@ -27,18 +27,10 @@ namespace World
         {
             _rigidbody = GetComponent<Rigidbody>();
         }
-        
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-            
-            _rigidbody.useGravity = true;
-            //_rigidbody.isKinematic = false;
-        }
-        
 
         private void Update()
         {
+            _rigidbody.useGravity = !transform.parent;
             if(_isInteractedWith.Value && transform.parent)
             {
                 transform.position = transform.parent.position;
@@ -47,7 +39,9 @@ namespace World
         
         public void PlaceOnMinigame()
         {
-            _rigidbody.useGravity = false;
+            _rigidbody.linearDamping = Single.PositiveInfinity;
+            _rigidbody.linearDamping = 0.1f;
+            transform.rotation = Quaternion.identity;
         }
 
         #endregion
@@ -57,11 +51,6 @@ namespace World
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SetParentClientRpc(NetworkBehaviourReference interactor, bool beingPickedUp)
         {
-            _rigidbody.useGravity = !beingPickedUp;
-            //_rigidbody.isKinematic = beingPickedUp;
-
-            transform.SetParent(null);
-
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
             if (beingPickedUp)
