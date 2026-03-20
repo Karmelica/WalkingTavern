@@ -1,12 +1,26 @@
-using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine;
 using World;
 
 namespace Cooking.Minigames.Helpers
 {
     public class DishHelper : Helper
     {
-        public override void CompleteMinigame(List<MoveableObject> objectsToChange)
+        [SerializeField] private DishType dishPrefab;
+        
+        public override void DespawnObject(MoveableObject objectToDespawn)
         {
+            if (objectToDespawn is ProcessedFoodItem processedFoodItem)
+            {
+                processedFoodItem.NetworkObject.Despawn();
+            }
+        }
+
+        public override void SpawnObject(string path = null)
+        {
+            var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishPrefab);
+            var dish = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
+            dish.GetComponent<NetworkObject>().Spawn();
         }
     }
 }

@@ -7,20 +7,22 @@ namespace Cooking.Minigames.Helpers
 {
     public class IngredientHelper : Helper
     {
-        public override void CompleteMinigame(List<MoveableObject> objectsToChange)
+        public override void DespawnObject(MoveableObject objectToDespawn)
         {
-            if(objectsToChange[0] is FoodItem)
+            if(objectToDespawn is FoodItem foodItem)
             {
-                var foodItem = objectsToChange[0] as FoodItem;
                 var type = (ProcessedIngredientType)foodItem.ingredientType;
-
                 foodItem.NetworkObject.Despawn();
-
-                var prefab = Resources.Load<GameObject>("Prefabs/Food/ProcessedIngredients/" + type);
-                var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
-                ingredient.GetComponent<NetworkObject>().Spawn();
+                
+                SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);
             }
         }
 
+        public override void SpawnObject(string path)
+        {
+            var prefab = Resources.Load<GameObject>(path);
+            var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
+            ingredient.GetComponent<NetworkObject>().Spawn();
+        }
     }
 }

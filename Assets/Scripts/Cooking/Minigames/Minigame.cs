@@ -11,25 +11,25 @@ using World;
 
 namespace Cooking.Minigames
 {
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     [RequireComponent(typeof(Helper))]
     public abstract class Minigame : MonoBehaviour, IInteractable {
         
+        public Transform cameraLocation;
+        [SerializeField] protected Transform foodPlaceholder;
         [SerializeField] protected int requiredScore = 10;
         protected int Score;
         private bool _isInteractedWith;
         private Camera _mainCamera;
-        private Helper _helper;
-        public Transform cameraLocation;
-        [SerializeField] protected Transform foodPlaceholder;
+        protected Helper Helper;
         [SerializeField] private TextMeshProUGUI instructions;
         protected List<MoveableObject> CurrentFood = new();
 
         protected virtual void Start()
         {
             _mainCamera = Camera.main;
-            _helper = GetComponent<Helper>();
-            _helper.spawnLocation = foodPlaceholder;
+            Helper = GetComponent<Helper>();
+            Helper.spawnLocation = foodPlaceholder;
         }
 
         protected virtual void Update()
@@ -46,7 +46,7 @@ namespace Cooking.Minigames
             
             if (Score == requiredScore)
             {
-                _helper.CompleteMinigame(CurrentFood);
+                CompleteMinigame();
                 RemoveFood();
                 AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
             }
@@ -54,12 +54,8 @@ namespace Cooking.Minigames
 
         protected abstract bool CheckForIngredients();
         
-        
-        protected void RemoveFood()
-        {
-            CurrentFood.Clear();
-            Score = 0;
-        }
+        protected abstract void RemoveFood();
+        protected abstract void CompleteMinigame();
         
         protected abstract void DoMinigame(RaycastHit hit, Vector3 mousePos);
 

@@ -36,5 +36,16 @@ namespace Cooking.Minigames
         {
             return CurrentFood.Any();
         }
+
+        protected override void CompleteMinigame()
+        {
+            Helper.DespawnObject(CurrentFood[0]);
+        }
+
+        protected override void RemoveFood()
+        {
+            CurrentFood.Clear();
+            Score = 0;
+        }
     }
 }
