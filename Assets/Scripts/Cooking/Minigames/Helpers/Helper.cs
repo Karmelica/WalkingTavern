@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using World;
@@ -15,7 +14,6 @@ namespace Cooking.Minigames.Helpers
             if (!IsServer)
             {
                 enabled = false;
-                Debug.Log("Not server, disabling");
             }
         }
 

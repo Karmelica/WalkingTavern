@@ -12,6 +12,7 @@ namespace Cooking.Minigames.Helpers
             if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
             {
                 var type = (ProcessedIngredientType)foodItem.ingredientType;
+                if (!IsServer) return;
                 foodItem.NetworkObject.Despawn();
                 
                 SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);

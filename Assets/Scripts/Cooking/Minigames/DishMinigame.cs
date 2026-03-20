@@ -23,6 +23,7 @@ namespace Cooking.Minigames
             }
             UpdateRecipeText();
             
+            if (!IsServer) return;
             Helper.SpawnSomeIngredients();
         }
 
