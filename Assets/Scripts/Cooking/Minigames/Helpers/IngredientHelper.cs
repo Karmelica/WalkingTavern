@@ -18,7 +18,7 @@ namespace Cooking.Minigames.Helpers
             }
         }
 
-        public override void SpawnObject(string path)
+        public override void SpawnObject(string path = null)
         {
             var prefab = Resources.Load<GameObject>(path);
             var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);

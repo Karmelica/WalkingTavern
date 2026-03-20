@@ -19,7 +19,7 @@ namespace Cooking.Minigames.Helpers
         public override void SpawnObject(string path = null)
         {
             var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishPrefab);
-            var dish = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
+            var dish = Instantiate(prefab, spawnLocation.position + Vector3.up, Quaternion.identity);
             dish.GetComponent<NetworkObject>().Spawn();
         }
     }
