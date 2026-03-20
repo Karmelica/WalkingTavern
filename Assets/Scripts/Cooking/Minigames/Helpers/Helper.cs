@@ -9,18 +9,13 @@ namespace Cooking.Minigames.Helpers
     public abstract class Helper : NetworkBehaviour
     {
         public Transform spawnLocation;
-        
-        protected override void OnNetworkPostSpawn()
-        {
-            base.OnNetworkPostSpawn();
-            if (!IsServer)
-            {
-                enabled = false;
-            }
-        }
 
         public abstract void DespawnObject(MoveableObject objectToDespawn);
-        public abstract void SpawnObject(string path = null);
+        
+        public abstract void SpawnObjectRpc(string path = null);
+        
+        public abstract void DespawnObjectRpc(NetworkObjectReference objectReference);
+        
         
         public void SpawnSomeIngredients()
         {

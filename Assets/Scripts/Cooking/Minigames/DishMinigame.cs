@@ -71,7 +71,7 @@ namespace Cooking.Minigames
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
-            Helper.SpawnObject();
+            Helper.SpawnObjectRpc();
             
             UpdateRecipeText();
         }

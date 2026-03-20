@@ -9,20 +9,30 @@ namespace Cooking.Minigames.Helpers
     {
         public override void DespawnObject(MoveableObject objectToDespawn)
         {
-            if(objectToDespawn is FoodItem foodItem)
+            if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
             {
                 var type = (ProcessedIngredientType)foodItem.ingredientType;
-                foodItem.NetworkObject.Despawn();
+                DespawnObjectRpc(foodItem.NetworkObject);
                 
-                SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);
+                SpawnObjectRpc("Prefabs/Food/ProcessedIngredients/" + type);
             }
         }
 
-        public override void SpawnObject(string path = null)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public override void SpawnObjectRpc(string path = null)
         {
             var prefab = Resources.Load<GameObject>(path);
             var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        public override void DespawnObjectRpc(NetworkObjectReference objectReference)
+        {
+            if(objectReference.TryGet(out var networkObject))
+            {
+                networkObject.Despawn();
+            }
         }
     }
 }

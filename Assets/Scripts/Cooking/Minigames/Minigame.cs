@@ -55,6 +55,7 @@ namespace Cooking.Minigames
         protected abstract bool CheckForIngredients();
         
         protected abstract void RemoveFood();
+        
         protected abstract void CompleteMinigame();
         
         protected abstract void DoMinigame(RaycastHit hit, Vector3 mousePos);
