@@ -19,6 +19,7 @@ namespace Cooking.Minigames.Helpers
         
         public void SpawnSomeIngredients()
         {
+            if (!IsServer) return;
             var ingredientTypes = Enum.GetValues(typeof(IngredientType));
             foreach (var type in ingredientTypes)
             {
