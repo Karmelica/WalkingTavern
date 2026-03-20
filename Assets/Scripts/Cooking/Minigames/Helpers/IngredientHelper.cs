@@ -12,27 +12,17 @@ namespace Cooking.Minigames.Helpers
             if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
             {
                 var type = (ProcessedIngredientType)foodItem.ingredientType;
-                DespawnObjectRpc(foodItem.NetworkObject);
+                foodItem.NetworkObject.Despawn();
                 
-                SpawnObjectRpc("Prefabs/Food/ProcessedIngredients/" + type);
+                SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);
             }
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public override void SpawnObjectRpc(string path = null)
+        public override void SpawnObject(string path = null)
         {
             var prefab = Resources.Load<GameObject>(path);
             var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public override void DespawnObjectRpc(NetworkObjectReference objectReference)
-        {
-            if(objectReference.TryGet(out var networkObject))
-            {
-                networkObject.Despawn();
-            }
         }
     }
 }

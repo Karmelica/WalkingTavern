@@ -1,8 +1,6 @@
 using System.Linq;
-using Managers;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using World;
 
 namespace Cooking.Minigames

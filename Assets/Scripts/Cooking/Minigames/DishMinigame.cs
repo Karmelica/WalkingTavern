@@ -64,14 +64,14 @@ namespace Cooking.Minigames
                     var item = CurrentFood[i];
                     if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
-                        CurrentFood.RemoveAt(i);
+                        CurrentFood.Remove(item);
                         Helper.DespawnObject(item);
                         removedCount++;
                     }
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
-            Helper.SpawnObjectRpc();
+            Helper.SpawnObject();
             
             UpdateRecipeText();
         }

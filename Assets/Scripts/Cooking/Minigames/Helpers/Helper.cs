@@ -10,16 +10,20 @@ namespace Cooking.Minigames.Helpers
     {
         public Transform spawnLocation;
 
+        private void Start()
+        {
+            if (!IsServer)
+            {
+                enabled = false;
+            }
+        }
+
         public abstract void DespawnObject(MoveableObject objectToDespawn);
         
-        public abstract void SpawnObjectRpc(string path = null);
-        
-        public abstract void DespawnObjectRpc(NetworkObjectReference objectReference);
-        
+        public abstract void SpawnObject(string path = null);
         
         public void SpawnSomeIngredients()
         {
-            if (!IsServer) return;
             var ingredientTypes = Enum.GetValues(typeof(IngredientType));
             foreach (var type in ingredientTypes)
             {
