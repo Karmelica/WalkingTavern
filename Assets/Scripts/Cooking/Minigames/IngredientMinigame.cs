@@ -17,7 +17,7 @@ namespace Cooking.Minigames
             {
                 CurrentFood.Add(foodItem);
                 CurrentFood[0].transform.position = foodPlaceholder.position;
-                if (NetworkManager.Singleton.IsServer) CurrentFood[0].PlaceOnMinigameRpc();
+                CurrentFood[0].PlaceOnMinigame();
             }
         }
 

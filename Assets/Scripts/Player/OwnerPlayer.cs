@@ -268,7 +268,7 @@ namespace PlayerScripts
             
             if (_networkedPlayer.IsGrounded)
             {
-                _rigidbody.AddForce(Vector3.up * (0.2f * Time.fixedDeltaTime), ForceMode.VelocityChange);
+                _rigidbody.AddForce(Vector3.up * (-0.2f * Time.fixedDeltaTime), ForceMode.VelocityChange);
             }
             
             if(_canMove){

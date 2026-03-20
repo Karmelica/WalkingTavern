@@ -13,7 +13,7 @@ namespace World
     public class MoveableObject : NetworkBehaviour, IInteractable
     {
         #region Variables
-
+        
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
         
@@ -33,7 +33,7 @@ namespace World
             base.OnNetworkSpawn();
             
             _rigidbody.useGravity = true;
-            _rigidbody.isKinematic = false;
+            //_rigidbody.isKinematic = false;
         }
         
 
@@ -44,25 +44,23 @@ namespace World
                 transform.position = transform.parent.position;
             }
         }
+        
+        public void PlaceOnMinigame()
+        {
+            _rigidbody.useGravity = false;
+        }
 
         #endregion
         
         #region RPC Methods
         
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        public void PlaceOnMinigameRpc()
-        {
-            _rigidbody.useGravity = false;
-            _rigidbody.isKinematic = true;
-        }
-        
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void SetParentClientRpc(NetworkBehaviourReference interactor, bool beingPickedUp)
         {
             _rigidbody.useGravity = !beingPickedUp;
-            _rigidbody.isKinematic = beingPickedUp;
+            //_rigidbody.isKinematic = beingPickedUp;
 
-            //transform.SetParent(null);
+            transform.SetParent(null);
 
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
