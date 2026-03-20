@@ -7,7 +7,13 @@ namespace Cooking.Minigames.Helpers
     public class DishHelper : Helper
     {
         [SerializeField] private DishType dishPrefab;
-        
+
+        public void OnEnable()
+        {
+            base.OnNetworkSpawn();
+            SpawnSomeIngredients();
+        }
+
         public override void DespawnObject(MoveableObject objectToDespawn)
         {
             if (objectToDespawn.TryGetComponent(out ProcessedFoodItem processedFoodItem))

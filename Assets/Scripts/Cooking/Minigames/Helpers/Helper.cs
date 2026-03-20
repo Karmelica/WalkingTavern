@@ -10,11 +10,12 @@ namespace Cooking.Minigames.Helpers
     {
         public Transform spawnLocation;
 
-        private void Start()
+        private void Awake()
         {
             if (!IsServer)
             {
                 enabled = false;
+                Debug.Log("Not server, disabling");
             }
         }
 
