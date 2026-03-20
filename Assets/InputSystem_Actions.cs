@@ -531,7 +531,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f2ff8bcd-4561-446f-9b8f-8bddb59894bc"",
                     ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold,Press"",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Previous"",

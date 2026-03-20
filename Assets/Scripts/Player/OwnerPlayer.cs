@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Steamworks;
-using TMPro;
-using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 namespace PlayerScripts
 {
@@ -61,7 +61,7 @@ namespace PlayerScripts
         private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
         private bool _isInteracting;
-        private IInteractable _heldObject;
+        [CanBeNull] private IInteractable _heldObject;
         private bool _canMove = true;
         private bool _isCrouching;
         private bool _isCooking;
@@ -112,8 +112,10 @@ namespace PlayerScripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            
-            if(!IsOwner) enabled = false;
+
+            if (IsOwner) return;
+            enabled = false;
+            _shouldUpdateInterface = false;
         }
 
         protected override void OnNetworkPostSpawn()
@@ -129,6 +131,7 @@ namespace PlayerScripts
             foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
             _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
             _networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
+            _networkedPlayer.SetFaceRpc(PlayerPrefs.GetInt("PlayerFace", 0));
 
             _playerGUI = FindFirstObjectByType<PlayerGUI>();
 
@@ -152,7 +155,7 @@ namespace PlayerScripts
             {
                 if(GetHitInfo(out IInteractable interactable))
                 {
-                    if (!interactable.IsInteractedWith())
+                    if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking)
                     {
                         _playerGUI.interactText.text = $"Interact with {interactable.GetInteractName()}";
                     }
@@ -301,7 +304,7 @@ namespace PlayerScripts
         [Rpc(SendTo.Server)]
         private void SetAnimationServerRpc(float walkDir, float velocity, bool isInteracting)
         {
-            _networkedPlayer.SetAnimationRpc(walkDir, velocity, isInteracting);
+            _networkedPlayer.SetAnimationRpc(walkDir, Mathf.RoundToInt(velocity), isInteracting);
         }
         
         #endregion
@@ -335,15 +338,31 @@ namespace PlayerScripts
 
         public void OnPrevious(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.performed)
             {
-                SetCooking(false);
-                SetCanMove(true);
-                if (_heldObject != null)
+                if (context.interaction is HoldInteraction)
                 {
-                    _isInteracting = false;
-                    _heldObject.PrimaryInteract(this, false);
-                    _heldObject = null;
+                    _playerGUI.ShowPause(true);
+                    SetCanMove(false);
+                }
+                else
+                {
+                    if (_playerGUI.IsPaused())
+                    {
+                        _playerGUI.ShowPause(false);
+                        if (!_isCooking) SetCanMove(true);
+                        return;
+                    }
+
+                    SetCooking(false);
+                    SetCanMove(true);
+
+                    if (_heldObject != null)
+                    {
+                        _isInteracting = false;
+                        _heldObject.PrimaryInteract(this, false);
+                        _heldObject = null;
+                    }
                 }
             }
         }
@@ -394,7 +413,7 @@ namespace PlayerScripts
             }
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
-            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, ~LayerMask.NameToLayer("Interactable"));
+            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7);
             Array.Sort(rayHitInfo, CompareDistance);
             foreach (var hit in rayHitInfo)
             {
@@ -415,6 +434,7 @@ namespace PlayerScripts
         {
             return hand;
         }
+        
         public Transform GetInteractPoint()
         {
             return interactor;

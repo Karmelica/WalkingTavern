@@ -39,7 +39,7 @@ namespace World
 
         private void Update()
         {
-            if(_isInteractedWith.Value)
+            if(_isInteractedWith.Value && transform.parent)
             {
                 transform.position = transform.parent.position;
             }
@@ -62,10 +62,7 @@ namespace World
             _rigidbody.useGravity = !beingPickedUp;
             _rigidbody.isKinematic = beingPickedUp;
 
-            if (interactor.Equals(null))
-            {
-                transform.SetParent(null);
-            }
+            transform.SetParent(null);
 
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
@@ -79,8 +76,7 @@ namespace World
                 var interactPoint = player.GetInteractPoint();
                 if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
                 {
-                    Debug.Log(LayerMask.LayerToName(8));
-                    transform.position = hit.point + Vector3.up * 1f;
+                    transform.position = hit.point + Vector3.up * 0.2f;
                 }
                 else
                 {

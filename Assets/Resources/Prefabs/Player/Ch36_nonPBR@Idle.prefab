@@ -543,6 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4836480250200350503}
   - component: {fileID: 7428401400178926891}
+  - component: {fileID: 6935451532328400437}
   m_Layer: 0
   m_Name: SM_Face
   m_TagString: Untagged
@@ -590,7 +591,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c18a26c94e001da40bdeb06da924d9a3, type: 2}
+  - {fileID: 2100000, guid: cf10930bc1013734a8da2542f372f9be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -655,6 +656,21 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000029802322, y: 0.7876479, z: 0.22189942}
     m_Extent: {x: 0.20843858, y: 0.20522678, z: 0.052281313}
   m_DirtyAABB: 0
+--- !u!114 &6935451532328400437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426267323063180402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1660cd76b8ec1ea46b65ad302f1ff848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FaceAnimation
+  originalBlinkTimer: 7.5
+  blinkOffset: 2.5
+  blinkDuration: 0.2
 --- !u!1 &2172440650805855128
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,7 +2507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1928220444
+  GlobalObjectIdHash: 1959477017
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2569,6 +2585,7 @@ MonoBehaviour:
   - {fileID: 2277399832522965819}
   - {fileID: 1879611513397643298}
   - {fileID: 1896023316716266760}
+  networkedPlayerFace: {fileID: 7428401400178926891}
   skins:
   - {fileID: 2100000, guid: d96bdb2aad1721e43b38e95b0d1a9b59, type: 2}
   - {fileID: 2100000, guid: 5b57de177f246514e8434635637f11d8, type: 2}
@@ -2576,6 +2593,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4b5158e6c791f93488bd38fe113a115f, type: 2}
   - {fileID: 2100000, guid: e0a1667d373bcf643b7a82813d2a0dc5, type: 2}
   - {fileID: 2100000, guid: 859846b9d5961dd4b84321577e114667, type: 2}
+  faces:
+  - {fileID: 2100000, guid: 4fcdf6b93e158c64483c650f59f8ec63, type: 2}
+  - {fileID: 2100000, guid: 3dadabe0b76f1384b8358cf5a9729df8, type: 2}
+  - {fileID: 2100000, guid: cf10930bc1013734a8da2542f372f9be, type: 2}
 --- !u!114 &3231727551264482569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2622,9 +2643,16 @@ MonoBehaviour:
     Layer: 0
     OriginatingState: 2081823275
     DestinationState: 1999428109
-    TransitionDuration: 0.25
+    TransitionDuration: 0
     TriggerNameHash: 1137391654
     TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 545781641
+    DestinationState: 1999428109
+    TransitionDuration: 0
+    TriggerNameHash: 1137391654
+    TransitionIndex: 1
   AnimatorParameterEntries:
     ParameterEntries:
     - name: WalkSpeed

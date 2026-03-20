@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using Unity.Behavior;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,7 +11,9 @@ public class Customer : NetworkBehaviour, IInteractable
 {
     [SerializeField] public List<GameObject> ears;
     [SerializeField] public List<Material> skins;
+    [SerializeField] public List<Material> faces;
     [SerializeField] private SkinnedMeshRenderer[] customerMesh;
+    [SerializeField] private SkinnedMeshRenderer faceRenderer;
     
     private BehaviorGraphAgent _behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
@@ -20,9 +23,11 @@ public class Customer : NetworkBehaviour, IInteractable
     private Animator _animator;
     private AIManager _aiManager;
 
+    public NetworkVariable<FixedString32Bytes> customerName;
     public NetworkVariable<DishType> requestedDish;
     public NetworkVariable<int> selectedEarsIndex;
     public NetworkVariable<int> selectedSkinIndex;
+    public NetworkVariable<int> selectedFaceIndex;
     public NetworkVariable<bool> isBeingInteracted =  new (true);
     private List<Transform> _waypoints = new();
 
@@ -40,6 +45,7 @@ public class Customer : NetworkBehaviour, IInteractable
     {
         base.OnNetworkPostSpawn();
         ears[selectedEarsIndex.Value].SetActive(true);
+        faceRenderer.materials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
         foreach (var mesh in customerMesh)
         {
             mesh.materials = new[] { skins[selectedSkinIndex.Value] };

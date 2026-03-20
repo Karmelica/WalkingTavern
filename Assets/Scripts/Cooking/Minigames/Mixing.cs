@@ -2,11 +2,13 @@ using UnityEngine;
 
 namespace Cooking.Minigames
 {
-    public class Mixing : Minigame
+    public class Mixing : IngredientMinigame
     {
         private Vector2 _screenMiddle;
         private int _lastSlice = -1;
         private int _thisSlice = -1;
+        private int _mixStreak;
+        
 
         protected override void Start()
         {
@@ -24,11 +26,17 @@ namespace Cooking.Minigames
             _thisSlice = newSlice;
 
             if (_lastSlice == -1) return;
+            
+            if (IsClockwiseTransition(_lastSlice, _thisSlice)) {
+                _mixStreak++;
+            }
+            else {
+                _mixStreak = 0;
+            }
 
-            if (IsClockwiseTransition(_lastSlice, _thisSlice))
-            {
+            if (_mixStreak == 4) {
                 Score++;
-                Debug.Log("Score: " + Score);
+                _mixStreak = 0;
             }
         }
 
@@ -65,6 +73,11 @@ namespace Cooking.Minigames
                    (from == 1 && to == 3) ||
                    (from == 3 && to == 2) ||
                    (from == 2 && to == 0);
+        }
+
+        public override string GetInteractName()
+        {
+            return "Mixing";
         }
     }
 }

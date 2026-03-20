@@ -55,11 +55,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Highlight_Intensity: 1.192
-    - _Highlight_Treshhold: -0.799
+    - _Highlight_Intensity: 0.212
+    - _Highlight_Treshhold: 0.641
+    - _Highlight_Treshhold_Offset: 0
     - _Intensity: 1.439
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shade_Intensity: 0.286
+    - _Shade_Treshhold: 0.552
+    - _Shade_Treshhold_Offset: 0.05
     - _Treshhold: 0.341
     m_Colors:
     - _Color: {r: 0.092521295, g: 0.8962264, b: 0, a: 1}

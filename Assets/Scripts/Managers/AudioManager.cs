@@ -15,11 +15,6 @@ namespace Managers
     
         private void OnEnable()
         {
-            if(Instance != null)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }

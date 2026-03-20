@@ -199,7 +199,7 @@ PrefabInstance:
     - target: {fileID: 1427995175458225962, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 8a01dec6be5dd0945b3e4f478c2bd2c1, type: 2}
+      objectReference: {fileID: 2100000, guid: 4fcdf6b93e158c64483c650f59f8ec63, type: 2}
     - target: {fileID: 2715566404302941441, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -270,6 +270,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7629877149758220370}
+    - targetCorrespondingSourceObject: {fileID: 48034722023319488, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4165489979388750283}
   m_SourcePrefab: {fileID: 100100000, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
 --- !u!137 &1978204071456454738 stripped
 SkinnedMeshRenderer:
@@ -291,6 +294,31 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7647402500723458329, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
   m_PrefabInstance: {fileID: 6232636452474116651}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &5021381502294189313 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1427995175458225962, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6256734117988892139 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 48034722023319488, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
+  m_PrefabInstance: {fileID: 6232636452474116651}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4165489979388750283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256734117988892139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1660cd76b8ec1ea46b65ad302f1ff848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  originalBlinkTimer: 7.5
+  blinkOffset: 2.5
+  blinkDuration: 0.2
 --- !u!1 &6348949774750871314 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8186763493076323015, guid: b376098490c2f204ebb4fa486f5c8fa5, type: 3}
@@ -313,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2123001157
+  GlobalObjectIdHash: 3207264658
   InScenePlacedSourceGlobalObjectIdHash: 3955190912
   DeferredDespawnTick: 0
   Ownership: 1
@@ -458,16 +486,58 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4b5158e6c791f93488bd38fe113a115f, type: 2}
   - {fileID: 2100000, guid: e0a1667d373bcf643b7a82813d2a0dc5, type: 2}
   - {fileID: 2100000, guid: 859846b9d5961dd4b84321577e114667, type: 2}
+  faces:
+  - {fileID: 2100000, guid: 4fcdf6b93e158c64483c650f59f8ec63, type: 2}
+  - {fileID: 2100000, guid: 3dadabe0b76f1384b8358cf5a9729df8, type: 2}
+  - {fileID: 2100000, guid: cf10930bc1013734a8da2542f372f9be, type: 2}
   customerMesh:
   - {fileID: 4350422102957923122}
   - {fileID: 7551658561282319679}
   - {fileID: 1978204071456454738}
   - {fileID: 8710667680581862370}
+  faceRenderer: {fileID: 5021381502294189313}
+  customerName:
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0016: 0
+        byte0017: 0
+        byte0018: 0
+        byte0019: 0
+        byte0020: 0
+        byte0021: 0
+        byte0022: 0
+        byte0023: 0
+        byte0024: 0
+        byte0025: 0
+        byte0026: 0
+        byte0027: 0
+        byte0028: 0
+        byte0029: 0
   requestedDish:
     m_InternalValue: 0
   selectedEarsIndex:
     m_InternalValue: 0
   selectedSkinIndex:
+    m_InternalValue: 0
+  selectedFaceIndex:
     m_InternalValue: 0
   isBeingInteracted:
     m_InternalValue: 1

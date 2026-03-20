@@ -200,9 +200,9 @@ MonoBehaviour:
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 1
-  SyncRotAngleX: 0
+  SyncRotAngleX: 1
   SyncRotAngleY: 1
-  SyncRotAngleZ: 0
+  SyncRotAngleZ: 1
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkRigidbodyBaseExpanded: 1
-  UseRigidBodyForMotion: 0
+  UseRigidBodyForMotion: 1
   AutoUpdateKinematicState: 0
   AutoSetKinematicOnDespawn: 1
 --- !u!114 &3627821309990568500

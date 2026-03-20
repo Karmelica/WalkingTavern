@@ -1,8 +1,9 @@
+using Managers;
 using UnityEngine;
 
 namespace Cooking.Minigames
 {
-    public class Slicing : Minigame
+    public class Slicing : IngredientMinigame
     {
         [Range(1, 10)]
         [SerializeField] private float requiredSpeed = 4f;
@@ -11,16 +12,20 @@ namespace Cooking.Minigames
 
         protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
         {
-            if (hit.collider.gameObject && hit.collider.gameObject == CurrentFood.gameObject)
+            if (hit.collider.gameObject && hit.collider.gameObject == CurrentFood[0].gameObject)
             {
                 var difference = (_oldMousePos.y - mousePos.y) / Screen.height * Time.deltaTime * 1000f;
                 if (mousePos.y < _oldMousePos.y && difference > requiredSpeed)
                 {
-                    CurrentFood.GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
                     Score++;
                 }
             }
             _oldMousePos = mousePos;
+        }
+
+        public override string GetInteractName()
+        {
+            return "Slicing";
         }
     }
 }

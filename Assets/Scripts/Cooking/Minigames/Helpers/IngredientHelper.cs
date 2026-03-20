@@ -1,0 +1,29 @@
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine;
+using World;
+
+namespace Cooking.Minigames.Helpers
+{
+    public class IngredientHelper : Helper
+    {
+        public override void DespawnObject(MoveableObject objectToDespawn)
+        {
+            if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
+            {
+                var type = (ProcessedIngredientType)foodItem.ingredientType;
+                if (!IsServer) return;
+                foodItem.NetworkObject.Despawn();
+                
+                SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);
+            }
+        }
+
+        public override void SpawnObject(string path = null)
+        {
+            var prefab = Resources.Load<GameObject>(path);
+            var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
+            ingredient.GetComponent<NetworkObject>().Spawn();
+        }
+    }
+}
