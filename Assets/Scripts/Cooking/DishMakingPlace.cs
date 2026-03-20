@@ -8,50 +8,25 @@ using World;
 
 namespace Cooking
 {
-    public class CookingPlace : NetworkBehaviour
+    public class DishMakingPlace : NetworkBehaviour
     {
         private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
-        private List<Recipe> _availableRecipes = new ();
-        private NetworkVariable<int> _selectedRecipe = new ();
-        [SerializeField] private List<GameObject> placedFoodItems = new();
+        private readonly List<ProcessedFoodItem> _placedFoodItems = new();
         [SerializeField] private Recipe recipe;
         
         [SerializeField] private TextMeshProUGUI ingredientListText;
-        [SerializeField] private TMP_Dropdown dropdown;
-        [SerializeField] private Collider triggerCollider;
 
         private void Start()
         {
-            foreach (var ingredientType in Enum.GetValues(typeof(ProcessedIngredientType)))
+            foreach (var processedIngredientType in Enum.GetValues(typeof(ProcessedIngredientType)))
             {
-                _placedIngredients.TryAdd((ProcessedIngredientType)ingredientType, 0);
+                _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
             }
             UpdateRecipeText();
-
+            
             if (IsServer)
                 SpawnSomeIngredients();
             
-            _selectedRecipe.OnValueChanged += UpdateSelectedRecipe;
-        }
-
-        private void UpdateSelectedRecipe(int previousValue, int newValue)
-        {
-            recipe = _availableRecipes[newValue];
-            dropdown.value = newValue;
-            UpdateRecipeText();
-        }
-
-        private void Awake()
-        {
-            LoadRecipes();
-        }
-
-        private void LoadRecipes()
-        {
-            var recipes = Resources.LoadAll<Recipe>("ScriptableObjects/Cooking");
-            _availableRecipes.AddRange(recipes);
-            recipe = _availableRecipes[0];
-            UpdateRecipeText();
         }
 
         private void SpawnSomeIngredients()
@@ -68,30 +43,13 @@ namespace Cooking
                 }
             }
         }
-        
-        public void ChangeRecipe(int newRecipeIndex)
-        {
-            ChangeRecipeServerRpc(newRecipeIndex);
-            recipe = _availableRecipes[newRecipeIndex];
-            UpdateRecipeText();
-        }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void ChangeRecipeServerRpc(int newRecipeIndex)
+        protected void TryAddIngredient(ProcessedFoodItem foodItem)
         {
-            _selectedRecipe.Value = newRecipeIndex;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
-            if (!_placedIngredients.TryAdd(foodItem.ingredientType, 1))
+            _placedIngredients[foodItem.ingredientType]++;
+            if (!_placedFoodItems.Contains(foodItem))
             {
-                _placedIngredients[foodItem.ingredientType]++;
-                if (!placedFoodItems.Contains(other.gameObject))
-                {
-                    placedFoodItems.Add(other.gameObject);
-                }
+                _placedFoodItems.Add(foodItem);
             }
             UpdateRecipeText();
             
@@ -100,19 +58,13 @@ namespace Cooking
             //enable skillcheck here
             CompleteRecipe();
         }
-        
-        private void OnTriggerExit(Collider other)
+
+        protected void TryRemoveIngredient(ProcessedFoodItem foodItem)
         {
-            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
-            if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out var ingredient)) return;
-            if (placedFoodItems.Contains(other.gameObject))
+            if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out _)) return;
+            if (_placedFoodItems.Contains(foodItem))
             { 
-                placedFoodItems.Remove(other.gameObject);
-            }
-            if (ingredient <= 0)
-            {
-                _placedIngredients.Remove(foodItem.ingredientType);
-                return;
+                _placedFoodItems.Remove(foodItem);
             }
             _placedIngredients[foodItem.ingredientType]--;
                 
@@ -130,24 +82,19 @@ namespace Cooking
                 if (placedCount < quantity) continue;
 
                 int removedCount = 0;
-                for (int i = placedFoodItems.Count - 1; i >= 0 && removedCount < quantity; i--)
+                for (int i = _placedFoodItems.Count - 1; i >= 0 && removedCount < quantity; i--)
                 {
-                    var item = placedFoodItems[i];
+                    var item = _placedFoodItems[i];
                     if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
                     {
                         item.gameObject.SetActive(false);
-                        placedFoodItems.RemoveAt(i);
+                        _placedFoodItems.RemoveAt(i);
                         removedCount++;
                     }
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
             
-            if(IsServer){
-                var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + recipe.dishType);
-                var dish = Instantiate(prefab, transform.position + Vector3.up * 5.0f, Quaternion.identity);
-                dish.GetComponent<NetworkObject>().Spawn();
-            }
             UpdateRecipeText();
         }
         
@@ -160,7 +107,7 @@ namespace Cooking
                 var ingredientQuantity = ingredient.quantity;
 
                 if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
-                ingredientListText.text += $"{placedCount}/{ingredientQuantity} of {ingredientType}\n";
+                ingredientListText.text += $"{ingredientType} {ingredientQuantity}/{placedCount}\n";
             }
         }
         

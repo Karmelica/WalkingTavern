@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Steamworks;
-using TMPro;
-using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -62,7 +61,7 @@ namespace PlayerScripts
         private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
         private bool _isInteracting;
-        private IInteractable _heldObject;
+        [CanBeNull] private IInteractable _heldObject;
         private bool _canMove = true;
         private bool _isCrouching;
         private bool _isCooking;
@@ -154,7 +153,7 @@ namespace PlayerScripts
             {
                 if(GetHitInfo(out IInteractable interactable))
                 {
-                    if (!interactable.IsInteractedWith())
+                    if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking)
                     {
                         _playerGUI.interactText.text = $"Interact with {interactable.GetInteractName()}";
                     }

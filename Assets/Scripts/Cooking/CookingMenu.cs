@@ -8,23 +8,24 @@ namespace Cooking
 {
     public class CookingMenu : MonoBehaviour, IInteractable
     {
-    
-        [SerializeField] private List<Recipe> availableRecipes = new ();
+        private readonly List<Recipe> _availableRecipes = new ();
+        [SerializeField] private List<Recipe> selectedRecipes = new ();
         [SerializeField] private TMP_Dropdown recipeDropdown;
-        [SerializeField] private CookingPlace cookingPlace;
+        [SerializeField] private DishMakingPlace dishMakingPlace;
         [SerializeField] private GameObject cookingUI;
     
         private void Awake()
         {
+            if(!dishMakingPlace) dishMakingPlace = GetComponentInParent<DishMakingPlace>();
             LoadRecipes();
         }
 
         private void LoadRecipes()
         {
-            var recipes = Resources.LoadAll<Recipe>("ScriptableObjects/Cooking");
-            availableRecipes.AddRange(recipes);
+            _availableRecipes.AddRange(selectedRecipes);
+            //dishMakingPlace.AddRecipes(selectedRecipes);
 
-            foreach (var recipe in availableRecipes)
+            foreach (var recipe in _availableRecipes)
             {
                 recipeDropdown.options.Add(new TMP_Dropdown.OptionData(recipe.recipeName));
             }
@@ -32,17 +33,14 @@ namespace Cooking
     
         public void OnRecipeSelected()
         {
-            cookingPlace.ChangeRecipe(recipeDropdown.value);
+            //dishMakingPlace.ChangeRecipe(recipeDropdown.value);
         }
 
 
         public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
         {
-            if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
-            {
-                cookingUI.SetActive(!player.CanMove());
-            }
-            
+            if(!beingPickedUp)
+                recipeDropdown.Hide();
             return null;
         }
 
@@ -51,7 +49,6 @@ namespace Cooking
             if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
             {
                 player.SetCanMove(!player.CanMove());
-                cookingUI.SetActive(!player.CanMove());
             }
 
             return this;

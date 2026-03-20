@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 647003611250690505}
   - component: {fileID: 4705376763541865569}
+  - component: {fileID: 4969101935834421834}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -44,24 +45,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67497b079b46f30418ed7084036849c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!114 &4969101935834421834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826314656455357769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 694c87ea5a975ba47b91f9343836d55a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
   footsteps:
     Guid:
       Data1: -206750194
       Data2: 1325523904
       Data3: -651345247
       Data4: 483126379
-    Path: event:/Player/walk
+    Path: event:/Locomotion/walk
   jump:
     Guid:
-      Data1: -206750194
-      Data2: 1325523904
-      Data3: -651345247
-      Data4: 483126379
-    Path: event:/Player/walk
+      Data1: 458418548
+      Data2: 1267569603
+      Data3: -755858015
+      Data4: -522748051
+    Path: event:/Locomotion/jump
   backgroundMusic:
     Guid:
-      Data1: -206750194
-      Data2: 1325523904
-      Data3: -651345247
-      Data4: 483126379
-    Path: event:/Player/walk
+      Data1: 751754059
+      Data2: 1126559815
+      Data3: -1549087819
+      Data4: 303933651
+    Path: event:/Ambient/backgroundNoise
+  minigameComplete:
+    Guid:
+      Data1: -1235584029
+      Data2: 1310313515
+      Data3: -332678272
+      Data4: 191707103
+    Path: event:/Cooking/success

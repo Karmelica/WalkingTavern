@@ -283,49 +283,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6826314656455357769, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1231658806}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
---- !u!1 &1231658805 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6826314656455357769, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
-  m_PrefabInstance: {fileID: 1231658804}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1231658806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1231658805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 694c87ea5a975ba47b91f9343836d55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  footsteps:
-    Guid:
-      Data1: -206750194
-      Data2: 1325523904
-      Data3: -651345247
-      Data4: 483126379
-    Path: event:/Locomotion/walk
-  jump:
-    Guid:
-      Data1: 458418548
-      Data2: 1267569603
-      Data3: -755858015
-      Data4: -522748051
-    Path: event:/Locomotion/jump
-  backgroundMusic:
-    Guid:
-      Data1: 751754059
-      Data2: 1126559815
-      Data3: -1549087819
-      Data4: 303933651
-    Path: event:/Ambient/backgroundNoise
 --- !u!1001 &1795385762
 PrefabInstance:
   m_ObjectHideFlags: 0
