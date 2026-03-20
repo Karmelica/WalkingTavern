@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 2998941501729818945}
   - component: {fileID: 5559782508645443392}
   - component: {fileID: 4538284803273507309}
-  - component: {fileID: 8918052440901983175}
   - component: {fileID: -7662152194406712407}
+  - component: {fileID: 8918052440901983175}
   m_Layer: 7
   m_Name: ProcessedLettuce
   m_TagString: Ingredient
@@ -200,9 +200,9 @@ MonoBehaviour:
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 1
-  SyncRotAngleX: 0
+  SyncRotAngleX: 1
   SyncRotAngleY: 1
-  SyncRotAngleZ: 0
+  SyncRotAngleZ: 1
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -233,6 +233,20 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 0
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &-7662152194406712407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200837471173810449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5422938561187864d944e2ddbee33212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.ProcessedFoodItem
+  ShowTopMostFoldoutHeaderGroup: 1
+  ingredientType: 0
 --- !u!208 &8918052440901983175
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -249,17 +263,3 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 3
---- !u!114 &-7662152194406712407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3200837471173810449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5422938561187864d944e2ddbee33212, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::World.ProcessedFoodItem
-  ShowTopMostFoldoutHeaderGroup: 1
-  ingredientType: 0

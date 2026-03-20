@@ -39,7 +39,7 @@ namespace World
 
         private void Update()
         {
-            if(_isInteractedWith.Value)
+            if(_isInteractedWith.Value && transform.parent)
             {
                 transform.position = transform.parent.position;
             }
@@ -62,10 +62,7 @@ namespace World
             _rigidbody.useGravity = !beingPickedUp;
             _rigidbody.isKinematic = beingPickedUp;
 
-            if (interactor.Equals(null))
-            {
-                transform.SetParent(null);
-            }
+            transform.SetParent(null);
 
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             

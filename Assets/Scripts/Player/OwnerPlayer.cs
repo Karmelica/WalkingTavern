@@ -112,8 +112,10 @@ namespace PlayerScripts
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            
-            if(!IsOwner) enabled = false;
+
+            if (IsOwner) return;
+            enabled = false;
+            _shouldUpdateInterface = false;
         }
 
         protected override void OnNetworkPostSpawn()
