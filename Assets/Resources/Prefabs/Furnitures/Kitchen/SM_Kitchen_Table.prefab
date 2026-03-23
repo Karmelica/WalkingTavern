@@ -48,6 +48,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: df852e889569d4a4aa02deb9b0689158, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: df852e889569d4a4aa02deb9b0689158, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4459625b187fa4746be9d25418190d91, type: 2}
+    - target: {fileID: -7511558181221131132, guid: df852e889569d4a4aa02deb9b0689158, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4459625b187fa4746be9d25418190d91, type: 2}
     - target: {fileID: 919132149155446097, guid: df852e889569d4a4aa02deb9b0689158, type: 3}
       propertyPath: m_Name
       value: SM_Kitchen_Table
