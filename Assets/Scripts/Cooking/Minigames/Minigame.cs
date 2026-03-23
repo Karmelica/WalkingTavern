@@ -15,7 +15,7 @@ namespace Cooking.Minigames
     public abstract class Minigame : NetworkBehaviour, IInteractable {
         
         public Transform cameraLocation;
-        [SerializeField] protected Transform foodPlaceholder;
+        public Transform foodPlaceholder;
         [SerializeField] protected int requiredScore = 10;
         protected int Score;
         private bool _isInteractedWith;
@@ -33,8 +33,6 @@ namespace Cooking.Minigames
 
         protected virtual void Update()
         {
-            EditorUpdate();
-            
             if (!CheckForIngredients()) return;
             
             if (Score == requiredScore)
@@ -93,28 +91,6 @@ namespace Cooking.Minigames
         {
             return _isInteractedWith;
         }
-
-#if UNITY_EDITOR
-        private void EditorUpdate()
-        {
-            cameraLocation.LookAt(foodPlaceholder);
-        }
-        
-        private void OnDrawGizmos()
-        {
-            if (foodPlaceholder)
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(foodPlaceholder.position, 0.1f);
-            }
-            if (cameraLocation)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.matrix = cameraLocation.localToWorldMatrix;
-                Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 60, 16 / 9f);
-            }
-        }
-#endif
     }
 }
 

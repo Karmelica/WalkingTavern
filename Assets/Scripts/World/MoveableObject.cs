@@ -1,4 +1,5 @@
 using System;
+using PlayerScripts;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -79,14 +80,21 @@ namespace World
             else
             {
                 var interactPoint = player.GetInteractPoint();
-                if (Physics.Raycast(interactPoint.position, interactPoint.forward, out var hit, 3f, ~(1<<11)))
-                {
-                    transform.position = hit.point + Vector3.up * 0.2f;
+                var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11));
+                Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
+                if(hitObjects.Length > 0) {
+                    foreach (var hit in hitObjects) {
+                        if (hit.collider.gameObject == gameObject) {
+                            continue;
+                        } 
+                        transform.position = hit.point + Vector3.up * 0.2f;
+                        return;
+                    }
                 }
-                else
-                {
+                else {
                     transform.position = interactPoint.position + interactPoint.forward * 3f;
                 }
+                
             }
         }
 
@@ -105,7 +113,7 @@ namespace World
             return null;
         }
 
-        public string GetInteractName()
+        public virtual string GetInteractName()
         {
             return gameObject.name;
         }

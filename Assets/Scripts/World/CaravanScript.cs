@@ -5,7 +5,6 @@ namespace World
 {
     public class CaravanScript : MonoBehaviour, IInteractable
     {
-        [SerializeField] private Transform room;
         private bool _shouldDrive = false;
         private bool _shouldRotate = false;
         
@@ -16,7 +15,6 @@ namespace World
             if(_shouldRotate)
             {
                 transform.Rotate(transform.up, 5f * Time.fixedDeltaTime);
-                room.Rotate(transform.up, 5f * Time.fixedDeltaTime);
             }
         }
 

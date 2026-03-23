@@ -18,5 +18,10 @@ namespace World
         {
             NetworkObject.Despawn();
         }
+        
+        public override string GetInteractName()
+        {
+            return dishType.ToString();
+        }
     }
 }

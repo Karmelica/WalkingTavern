@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Steamworks;
 using Unity.Netcode;
@@ -10,7 +11,12 @@ namespace Managers
 {
     public class PlayerSpawner : NetworkBehaviour
     {
+        [SerializeField] private GameObject loadingCanvas;
+        [SerializeField] private GameObject blackScreen;
         [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private List<string> scenesToSpawnPlayersIn;
+        private Vector3 _spawnPos;
+        private bool _isLoaded;
 
         private void Awake()
         {
@@ -20,18 +26,52 @@ namespace Managers
         public override void OnNetworkSpawn()
         {
             NetworkManager.SceneManager.OnLoadEventCompleted += OnSceneLoadedEvent;
+            NetworkManager.SceneManager.OnLoad += OnSceneLoaded;
         }
 
-        private void OnSceneLoadedEvent(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+        public override void OnNetworkDespawn()
         {
-            if(IsHost && sceneName == "MainLevel") SpawnPlayers(clientsCompleted);
+            NetworkManager.SceneManager.OnLoadEventCompleted -= OnSceneLoadedEvent;
+            NetworkManager.SceneManager.OnLoad -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
+        {
+            _isLoaded = false;
+            StartCoroutine(ScreenFadeout());
+        }
+
+
+        private void OnSceneLoadedEvent(string currentSceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+        {
+            _isLoaded = true;
+            if (!IsHost || scenesToSpawnPlayersIn.Count == 0) return;
+            _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
+            foreach (var sceneName in scenesToSpawnPlayersIn)
+            {
+                if(currentSceneName == sceneName) SpawnPlayers(clientsCompleted);
+                return;
+            }
+            Debug.Log("No scene to spawn players found");
+        }
+        
+        private IEnumerator ScreenFadeout()
+        {
+            loadingCanvas.SetActive(true);
+            while (!_isLoaded)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(1f);
+            loadingCanvas.SetActive(false);
         }
 
         private void SpawnPlayers(List<ulong> clients) 
         {
             foreach (var clientId in clients)
             {
-                var playerInstance = Instantiate(playerPrefab, new Vector3(Random.Range(0f, 5), 1, Random.Range(0f, 5)), Quaternion.identity);
+                var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
                 playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
             }
         }

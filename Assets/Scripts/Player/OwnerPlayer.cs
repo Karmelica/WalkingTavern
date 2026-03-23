@@ -66,9 +66,9 @@ namespace PlayerScripts
         private bool _isCrouching;
         private bool _isCooking;
         private Vector3 _lastOffsetFromPortal;
-        private Vector3 _interactorOffset;
         private Transform _minigameCamera;
         private NetworkedPlayer _networkedPlayer;
+        private Matrix4x4 windowMatrix;
 
         #endregion
         
@@ -124,6 +124,7 @@ namespace PlayerScripts
             if (!IsOwner) return;
             
             _playerCamera = Camera.main;
+            windowMatrix = _playerCamera.transform.localToWorldMatrix;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -211,16 +212,14 @@ namespace PlayerScripts
         {
             if (!_isCooking)
             {
+                windowMatrix = _playerCamera.transform.localToWorldMatrix;
                 if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
                         InteractRange))
                 {
-                    if (hitInfo.collider.TryGetComponent(out PortalCamera portalCamera))
+                    if (hitInfo.collider.TryGetComponent(out PortalCamera portal))
                     {
-                        _interactorOffset = portalCamera.globalOffset;
-                    }
-                    else
-                    {
-                        _interactorOffset = Vector3.zero;
+                        windowMatrix = portal.otherPortal.transform.localToWorldMatrix * portal.transform.worldToLocalMatrix *
+                                        _playerCamera.transform.localToWorldMatrix;
                     }
                 }
 
@@ -245,8 +244,7 @@ namespace PlayerScripts
         
         private void UpdateInteractorPosition()
         {
-            interactor.position = _playerCamera.transform.position - _interactorOffset;
-            interactor.rotation = Quaternion.Euler(_playerCamera.transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
+            interactor.transform.SetPositionAndRotation(windowMatrix.GetColumn(3), windowMatrix.rotation);
         }
         
         /// <summary>
@@ -265,21 +263,15 @@ namespace PlayerScripts
         private void Move()
         {
             _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
-            
-            if (_networkedPlayer.IsGrounded)
-            {
-                //_rigidbody.AddForce(Vector3.up * (0.2f * Time.fixedDeltaTime), ForceMode.VelocityChange);
-            }
-            
-            if(_canMove){
-                var moveForce = _isSprinting ? sprintForce : walkForce;
-                var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
-                                 (moveForce * Time.fixedDeltaTime);
 
-                if (_rigidbody.linearVelocity.magnitude < moveForce)
-                {
-                    _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
-                }
+            if (!_canMove) return;
+            var moveForce = _isSprinting ? sprintForce : walkForce;
+            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
+                             (moveForce * Time.fixedDeltaTime);
+
+            if (_rigidbody.linearVelocity.magnitude < moveForce)
+            {
+                _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
             }
         }
         
@@ -425,7 +417,7 @@ namespace PlayerScripts
             return false;
         }
 
-        private static int CompareDistance(RaycastHit x, RaycastHit y)
+        public static int CompareDistance(RaycastHit x, RaycastHit y)
         {
             return x.distance.CompareTo(y.distance);
         }

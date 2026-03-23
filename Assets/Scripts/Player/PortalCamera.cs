@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PortalCamera : MonoBehaviour
 {
-    public Vector3 globalOffset { get; private set; }
 
     private MeshRenderer portalRenderer;
     private RenderTexture viewTexture;
@@ -68,9 +67,7 @@ public class PortalCamera : MonoBehaviour
         SetNearClipPlane();
         
         portalCam.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
-
-        globalOffset = transform.position - otherPortal.transform.position;
-
+        
         portalCam.Render();
 
         portalRenderer.enabled = true;

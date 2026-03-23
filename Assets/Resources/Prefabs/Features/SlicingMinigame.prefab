@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1909754915
+      value: 1536627731
       objectReference: {fileID: 0}
     - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -90,19 +90,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.8637773
+      value: -0.8637772
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.5038738
+      value: -0.5038739
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -2.842171e-14
+      value: -0.000000010447778
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.842171e-14
+      value: 0.000000006094581
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1932536434853246168, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
@@ -154,9 +154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2726c9f1d2f96a149bde84446c53139a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Slicing
-  requiredScore: 10
+  ShowTopMostFoldoutHeaderGroup: 1
   cameraLocation: {fileID: 7314362239099978407}
   foodPlaceholder: {fileID: 4355119051510091169}
+  requiredScore: 10
   instructions: {fileID: 7899075767086435906}
   applicableFood: 0000000001000000020000000300000004000000
   requiredSpeed: 4
