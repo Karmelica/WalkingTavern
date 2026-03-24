@@ -37,9 +37,9 @@ namespace Cooking
         }
 
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
         {
-            if(!beingPickedUp)
+            if(!startedInteraction)
                 recipeDropdown.Hide();
             return null;
         }

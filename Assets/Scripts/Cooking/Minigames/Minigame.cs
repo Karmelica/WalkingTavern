@@ -65,7 +65,7 @@ namespace Cooking.Minigames
         
         protected abstract void DoMinigame(RaycastHit hit, Vector3 mousePos);
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
         {
             _isInteractedWith = false;
             instructions.enabled = false;

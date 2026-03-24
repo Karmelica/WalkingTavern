@@ -7,6 +7,7 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using World;
 
 namespace PlayerScripts
 {
@@ -61,14 +62,16 @@ namespace PlayerScripts
         private bool _shouldUpdateInterface = true;
         private bool _isSprinting;
         private bool _isInteracting;
-        [CanBeNull] private IInteractable _heldObject;
+        [CanBeNull] private IInteractable _lastInteractedObject;
         private bool _canMove = true;
         private bool _isCrouching;
         private bool _isCooking;
+        private bool _isDriving;
         private Vector3 _lastOffsetFromPortal;
         private Transform _minigameCamera;
         private NetworkedPlayer _networkedPlayer;
-        private Matrix4x4 windowMatrix;
+        private CaravanControlScript _caravanControl;
+        private Matrix4x4 _windowMatrix;
 
         #endregion
         
@@ -87,7 +90,7 @@ namespace PlayerScripts
         {
             if (clientId != OwnerClientId) return;
             
-            _heldObject?.PrimaryInteract(null, false);
+            _lastInteractedObject?.PrimaryInteract(null, false);
             NetworkManager.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
         }
 
@@ -95,7 +98,7 @@ namespace PlayerScripts
         {
             if (!_playerCamera) return;
             
-            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _heldObject != null);
+            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _lastInteractedObject != null);
             UpdateInteractorPosition();
             UpdateCameraPosition();
         }
@@ -124,7 +127,7 @@ namespace PlayerScripts
             if (!IsOwner) return;
             
             _playerCamera = Camera.main;
-            windowMatrix = _playerCamera.transform.localToWorldMatrix;
+            _windowMatrix = _playerCamera.transform.localToWorldMatrix;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -145,7 +148,7 @@ namespace PlayerScripts
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            _heldObject?.PrimaryInteract(this, false);
+            _lastInteractedObject?.PrimaryInteract(this, false);
             _shouldUpdateInterface = false;
             CleanupInput();
         }
@@ -212,13 +215,13 @@ namespace PlayerScripts
         {
             if (!_isCooking)
             {
-                windowMatrix = _playerCamera.transform.localToWorldMatrix;
+                _windowMatrix = _playerCamera.transform.localToWorldMatrix;
                 if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
                         InteractRange))
                 {
                     if (hitInfo.collider.TryGetComponent(out PortalCamera portal))
                     {
-                        windowMatrix = portal.otherPortal.transform.localToWorldMatrix * portal.transform.worldToLocalMatrix *
+                        _windowMatrix = portal.otherPortal.transform.localToWorldMatrix * portal.transform.worldToLocalMatrix *
                                         _playerCamera.transform.localToWorldMatrix;
                     }
                 }
@@ -244,7 +247,7 @@ namespace PlayerScripts
         
         private void UpdateInteractorPosition()
         {
-            interactor.transform.SetPositionAndRotation(windowMatrix.GetColumn(3), windowMatrix.rotation);
+            interactor.transform.SetPositionAndRotation(_windowMatrix.GetColumn(3), _windowMatrix.rotation);
         }
         
         /// <summary>
@@ -267,14 +270,22 @@ namespace PlayerScripts
             if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f) {
                 transform.rotation = Quaternion.identity;
             }
-            
-            if (!_canMove) return;
-            var moveForce = _isSprinting ? sprintForce : walkForce;
-            var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
-                             (moveForce * Time.fixedDeltaTime);
 
-            if (_rigidbody.linearVelocity.magnitude < moveForce) {
-                _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
+            if (_canMove)
+            {
+                var moveForce = _isSprinting ? sprintForce : walkForce;
+                var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
+                                 (moveForce * Time.fixedDeltaTime);
+
+                if (_rigidbody.linearVelocity.magnitude < moveForce)
+                {
+                    _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
+                }
+            }
+
+            if (_caravanControl)
+            {
+                _caravanControl.Drive(_inputVector);
             }
         }
         
@@ -308,7 +319,7 @@ namespace PlayerScripts
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || _playerCamera == null || !_canMove) return;
+            if (!Application.isFocused || _playerCamera == null || (!_canMove && !_isDriving)) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
@@ -352,11 +363,11 @@ namespace PlayerScripts
                     SetCooking(false);
                     SetCanMove(true);
 
-                    if (_heldObject != null)
+                    if (_lastInteractedObject != null)
                     {
                         _isInteracting = false;
-                        _heldObject.PrimaryInteract(this, false);
-                        _heldObject = null;
+                        _lastInteractedObject.PrimaryInteract(this, false);
+                        _lastInteractedObject = null;
                     }
                 }
             }
@@ -374,8 +385,8 @@ namespace PlayerScripts
             if (GetHitInfo(out IInteractable interactObj))
             {
                 if (interactObj.IsInteractedWith()) return;
-                _heldObject = interactObj.PrimaryInteract(this, true);
-                _isInteracting = _heldObject != null;
+                _lastInteractedObject = interactObj.PrimaryInteract(this, true);
+                _isInteracting = _lastInteractedObject != null;
             }
         }
         
@@ -385,18 +396,22 @@ namespace PlayerScripts
             
             if (context.started)
             {
-                if (_heldObject != null)
+                if (_lastInteractedObject != null)
                 {
                     _isInteracting = false;
-                    _heldObject.PrimaryInteract(this, false);
-                    _heldObject = null;
+                    _lastInteractedObject.PrimaryInteract(this, false);
+                    _lastInteractedObject = null;
                 }
-                else if(GetHitInfo(out var interactable))
+                else if(GetHitInfo(out IInteractable interactObj))
                 {
-                    if (interactable.IsInteractedWith()) return;
-                    _heldObject = interactable.SecondaryInteract(this);
+                    if (interactObj.IsInteractedWith()) return;
+                    _lastInteractedObject = interactObj.SecondaryInteract(this);
                 }
             }
+        }
+        
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
         }
 
         private bool GetHitInfo(out IInteractable interactableComponent)
@@ -439,28 +454,37 @@ namespace PlayerScripts
         {
             _minigameCamera = cameraLocation;
         }
-
-        public void SetCanMove(bool canMove)
+        
+        public void SetCanMove(bool canMove, bool changeCursorState = true)
         {
             _canMove = canMove;
             _rigidbody.linearDamping = float.PositiveInfinity;
             _rigidbody.linearDamping = 0f;
-            Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
-            Cursor.visible = !canMove;
+            if(changeCursorState){
+                Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
+                Cursor.visible = !canMove;
+            }
         }
         
         public void SetCooking(bool cooking)
         {
             _isCooking = cooking;
         }
+        
+        public void SetDriving(bool driving)
+        {
+            _isDriving = driving;
+            SetCanMove(!driving, false);
+        }
+
+        public void SetCaravanControl(CaravanControlScript caravanControl)
+        {
+            _caravanControl = caravanControl;
+        }
 
         public bool CanMove()
         {
             return _canMove;
-        }
-
-        public void OnCrouch(InputAction.CallbackContext context)
-        {
         }
 
         #endregion

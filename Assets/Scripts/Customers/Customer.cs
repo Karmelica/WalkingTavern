@@ -155,7 +155,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Interact
 
-    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
     {
         return null;
     }

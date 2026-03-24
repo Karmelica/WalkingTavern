@@ -1,40 +1,94 @@
+using System;
+using JetBrains.Annotations;
+using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace World
 {
-    public class CaravanControlScript : MonoBehaviour, IInteractable
+    public class CaravanControlScript : NetworkBehaviour, IInteractable
     {
-        private bool _shouldDrive = false;
-        private bool _shouldRotate = false;
-        [SerializeField] private GameObject _caravan;
-        [SerializeField] private GameObject _room;
-        
-        private void FixedUpdate()
+        private OwnerPlayer _drivingPlayer;
+        private Rigidbody _rb;
+        private const float Speed = 50f;
+        private NetworkVariable<bool> _isDriven = new NetworkVariable<bool>();
+        [SerializeField] private GameObject caravan;
+        [SerializeField] private GameObject room;
+        [SerializeField] private Transform sitLocation;
+
+        private void Awake()
         {
-            _caravan.transform.position = Vector3.Lerp(_caravan.transform.position, transform.position, 0.2f);
-            _caravan.transform.rotation = Quaternion.Lerp(_caravan.transform.rotation, transform.rotation, 0.2f);
+            _rb = GetComponent<Rigidbody>();
+        }
+
+        private void Update()
+        {
+            caravan.transform.position = Vector3.Lerp(caravan.transform.position, transform.position, 0.5f);
+            caravan.transform.rotation = Quaternion.Lerp(caravan.transform.rotation, transform.rotation, 0.5f);
             
             var roomTargetRot = Quaternion.Euler(-transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
-            _room.transform.localRotation = Quaternion.Lerp(_room.transform.rotation, roomTargetRot, 0.2f);
-            
-            if(_shouldDrive)
-                transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime), Space.World);
-            if(_shouldRotate) {
-                transform.Rotate(transform.up, 5f * Time.fixedDeltaTime);
+            room.transform.localRotation = Quaternion.Lerp(room.transform.rotation, roomTargetRot, 0.5f);
+
+            if (_drivingPlayer)
+            {
+                _drivingPlayer.transform.position = sitLocation.position;
+                _drivingPlayer.transform.rotation = sitLocation.rotation;
             }
         }
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public void Drive(Vector2 inputVector)
         {
-            _shouldRotate = !_shouldRotate;
+            DriveServerRpc(inputVector);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void DriveServerRpc(Vector2 inputVector)
+        {
+            _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);
+
+            if(_rb.linearVelocity.magnitude < Speed){
+                var forward = transform.forward;
+                forward.y = 0;
+                forward.Normalize();
+                _rb.AddForce(forward * (inputVector.y * Time.fixedDeltaTime * Speed), ForceMode.VelocityChange);
+            }
+            
+            transform.Rotate(transform.up, inputVector.x * inputVector.y * 25f * Time.fixedDeltaTime);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void DriveCarRpc(NetworkBehaviourReference interactor)
+        {
+            _isDriven.Value = true;
+            if(interactor.TryGet(out _drivingPlayer))
+            {
+                _drivingPlayer.SetDriving(false);
+                _drivingPlayer.transform.position = sitLocation.position;
+                _drivingPlayer.transform.rotation = sitLocation.rotation;
+                _drivingPlayer.SetCaravanControl(this);
+            }
+        }
+
+        
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void StopDrivingCarRpc()
+        {
+            _isDriven.Value = false;
+            _drivingPlayer.SetDriving(true);
+            _drivingPlayer.SetCaravanControl(null);
+            _drivingPlayer = null;
+        }
+
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        {
+            StopDrivingCarRpc();
             return null;
         }
 
         public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
         {
-            _shouldDrive = !_shouldDrive;
-            return null;
+            DriveCarRpc(interactor);
+            return this;
         }
 
         public string GetInteractName()
@@ -44,7 +98,8 @@ namespace World
 
         public bool IsInteractedWith()
         {
-            return false;
+            return _isDriven.Value;
         }
+
     }
 }

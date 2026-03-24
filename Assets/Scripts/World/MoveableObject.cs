@@ -60,11 +60,11 @@ namespace World
 
         
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool beingPickedUp)
+        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool startedInteraction)
         {
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
             
-            if (beingPickedUp)
+            if (startedInteraction)
             {
                 transform.SetParent(player.GetHandPoint());
             }
@@ -75,14 +75,14 @@ namespace World
         }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool startedInteraction = true)
         {
-            _isInteractedWith.Value = beingPickedUp;
+            _isInteractedWith.Value = startedInteraction;
             
             if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
-            SetParentClientRpc(interactor, beingPickedUp);
+            SetParentClientRpc(interactor, startedInteraction);
             
-            if (beingPickedUp)
+            if (startedInteraction)
             {
                 transform.localPosition = Vector3.zero;
             }
@@ -111,9 +111,9 @@ namespace World
 
         #region Interface Methods
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool beingPickedUp = true)
+        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
         {
-            SetTransformsServerRpc(interactor, beingPickedUp);
+            SetTransformsServerRpc(interactor, startedInteraction);
             return this;
         }
 
