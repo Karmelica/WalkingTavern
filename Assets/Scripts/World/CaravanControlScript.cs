@@ -62,7 +62,7 @@ namespace World
             _isDriven.Value = true;
             if(interactor.TryGet(out _drivingPlayer))
             {
-                _drivingPlayer.SetDriving(false);
+                _drivingPlayer.SetDriving(true);
                 _drivingPlayer.transform.position = sitLocation.position;
                 _drivingPlayer.transform.rotation = sitLocation.rotation;
                 _drivingPlayer.SetCaravanControl(this);
@@ -74,7 +74,7 @@ namespace World
         private void StopDrivingCarRpc()
         {
             _isDriven.Value = false;
-            _drivingPlayer.SetDriving(true);
+            _drivingPlayer.SetDriving(false);
             _drivingPlayer.SetCaravanControl(null);
             _drivingPlayer = null;
         }
