@@ -5,6 +5,7 @@ using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Managers
@@ -12,7 +13,7 @@ namespace Managers
     public class PlayerSpawner : NetworkBehaviour
     {
         [SerializeField] private GameObject loadingCanvas;
-        [SerializeField] private GameObject blackScreen;
+        [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private List<string> scenesToSpawnPlayersIn;
         private Vector3 _spawnPos;
@@ -37,7 +38,6 @@ namespace Managers
 
         private void OnSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
         {
-            _isLoaded = false;
             StartCoroutine(ScreenFadeout());
         }
 
@@ -57,13 +57,22 @@ namespace Managers
         
         private IEnumerator ScreenFadeout()
         {
+            _isLoaded = false;
+            blackScreen.color = Color.black;
             loadingCanvas.SetActive(true);
             while (!_isLoaded)
             {
                 yield return null;
             }
-
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
+            
+            while (blackScreen.color.a > 0)
+            {
+                var colorA = blackScreen.color;
+                colorA.a -= 0.01f;
+                blackScreen.color = colorA;
+                yield return new WaitForSeconds(0.01f);
+            }
             loadingCanvas.SetActive(false);
         }
 

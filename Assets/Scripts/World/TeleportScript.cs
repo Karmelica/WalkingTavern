@@ -13,7 +13,8 @@ public class TeleportScript : MonoBehaviour
     {
         if (other.TryGetComponent(out _traveller))
         {
-            _traveller.Teleport(target.targetTeleportPosition.position);
+            var m = target.targetTeleportPosition.transform.localToWorldMatrix * transform.worldToLocalMatrix * _traveller.transform.localToWorldMatrix;
+            _traveller.Teleport(m.GetColumn(3), m.rotation);
         }
     }
 

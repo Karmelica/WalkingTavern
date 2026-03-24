@@ -264,7 +264,7 @@ namespace PlayerScripts
         {
             _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
 
-            if(MathF.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f) {
+            if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f) {
                 transform.rotation = Quaternion.identity;
             }
             

@@ -15,7 +15,8 @@ namespace World
             _caravan.transform.position = Vector3.Lerp(_caravan.transform.position, transform.position, 0.2f);
             _caravan.transform.rotation = Quaternion.Lerp(_caravan.transform.rotation, transform.rotation, 0.2f);
             
-            _room.transform.rotation = Quaternion.Lerp(_room.transform.rotation, transform.rotation, 0.2f);
+            var roomTargetRot = Quaternion.Euler(-transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
+            _room.transform.localRotation = Quaternion.Lerp(_room.transform.rotation, roomTargetRot, 0.2f);
             
             if(_shouldDrive)
                 transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime), Space.World);
