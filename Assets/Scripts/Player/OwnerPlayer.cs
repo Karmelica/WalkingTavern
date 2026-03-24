@@ -169,7 +169,7 @@ namespace PlayerScripts
                 {
                     _playerGUI.interactText.text = string.Empty;
                 }
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.1f);
             }
         }
         
@@ -264,13 +264,16 @@ namespace PlayerScripts
         {
             _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
 
+            if(MathF.Abs(transform.rotation.x) > 0.1f || Mathf.Abs(transform.rotation.z) > 0.1f) {
+                transform.rotation = Quaternion.identity;
+            }
+            
             if (!_canMove) return;
             var moveForce = _isSprinting ? sprintForce : walkForce;
             var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
                              (moveForce * Time.fixedDeltaTime);
 
-            if (_rigidbody.linearVelocity.magnitude < moveForce)
-            {
+            if (_rigidbody.linearVelocity.magnitude < moveForce) {
                 _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
             }
         }

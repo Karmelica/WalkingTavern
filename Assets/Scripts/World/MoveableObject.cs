@@ -14,6 +14,8 @@ namespace World
     public class MoveableObject : NetworkBehaviour, IInteractable
     {
         #region Variables
+
+        private Vector3 _floorTransformLastFrame;
         
         private Transform _interactTransform;
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
@@ -35,6 +37,13 @@ namespace World
             if(_isInteractedWith.Value && transform.parent)
             {
                 transform.position = transform.parent.position;
+            }
+            else
+            {
+                if(Physics.Raycast(transform.position, Vector3.down, out var hitInfo, 1f))
+                {
+                    transform.position = hitInfo.point + hitInfo.distance * Vector3.up;;
+                }
             }
         }
         

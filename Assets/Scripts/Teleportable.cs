@@ -4,8 +4,8 @@ public class Teleportable : MonoBehaviour
 {
     public Vector3 lastOffsetFromPortal;
     
-    public void Teleport(Vector3 position, Quaternion rotation)
+    public void Teleport(Vector3 position)
     {
-        transform.SetPositionAndRotation(position, rotation);
+        transform.position = position;
     }
 }

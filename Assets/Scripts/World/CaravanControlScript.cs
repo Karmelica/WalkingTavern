@@ -3,34 +3,24 @@ using UnityEngine;
 
 namespace World
 {
-    public class CaravanScript : MonoBehaviour, IInteractable
+    public class CaravanControlScript : MonoBehaviour, IInteractable
     {
         private bool _shouldDrive = false;
         private bool _shouldRotate = false;
+        [SerializeField] private GameObject _caravan;
+        [SerializeField] private GameObject _room;
         
         private void FixedUpdate()
         {
+            _caravan.transform.position = Vector3.Lerp(_caravan.transform.position, transform.position, 0.2f);
+            _caravan.transform.rotation = Quaternion.Lerp(_caravan.transform.rotation, transform.rotation, 0.2f);
+            
+            _room.transform.rotation = Quaternion.Lerp(_room.transform.rotation, transform.rotation, 0.2f);
+            
             if(_shouldDrive)
-                transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime));
-            if(_shouldRotate)
-            {
+                transform.Translate(transform.forward * (0.5f * Time.fixedDeltaTime), Space.World);
+            if(_shouldRotate) {
                 transform.Rotate(transform.up, 5f * Time.fixedDeltaTime);
-            }
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            if(other.transform.parent == null)
-            {
-                other.transform.SetParent(transform);
-            }
-        }
-
-        private void OnCollisionExit(Collision other)
-        {
-            if(other.transform.parent == transform)
-            {
-                other.transform.SetParent(null);
             }
         }
 
@@ -48,7 +38,7 @@ namespace World
 
         public string GetInteractName()
         {
-            return gameObject.name;
+            return "Caravan";
         }
 
         public bool IsInteractedWith()
