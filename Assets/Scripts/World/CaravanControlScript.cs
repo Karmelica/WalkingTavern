@@ -79,13 +79,13 @@ namespace World
             _drivingPlayer = null;
         }
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
             StopDrivingCarRpc();
             return null;
         }
 
-        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
             DriveCarRpc(interactor);
             return this;

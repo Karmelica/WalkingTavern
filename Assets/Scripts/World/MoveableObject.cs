@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PlayerScripts;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -7,20 +8,16 @@ using UnityEngine;
 namespace World
 {
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkTransform))]
-    [RequireComponent(typeof(NetworkRigidbody))]
     
     public class MoveableObject : NetworkBehaviour, IInteractable
     {
         #region Variables
-
-        private Vector3 _floorTransformLastFrame;
         
-        private Transform _interactTransform;
+        private Collider _collider;
+        
+        private Dictionary<ulong, Transform> _interactTransform = new();
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
-        
-        private Rigidbody _rigidbody;
 
         #endregion
 
@@ -28,96 +25,113 @@ namespace World
 
         protected virtual void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _collider = GetComponent<Collider>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            _isInteractedWith.OnValueChanged += OnInteractedValueChanged;
+        }
+
+        protected override void OnNetworkPostSpawn()
+        {
+            base.OnNetworkPostSpawn();
+            foreach (var client in NetworkManager.Singleton.ConnectedClients)
+            {
+                client.Value.PlayerObject.TryGetComponent(out OwnerPlayer player);
+                {
+                    _interactTransform.Add(client.Key, player.GetHandPoint());
+                }
+            }
+        }
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            _isInteractedWith.OnValueChanged -= OnInteractedValueChanged;
+        }
+
+        private void OnInteractedValueChanged(bool previousValue, bool newValue)
+        {
+            _collider.enabled = !newValue;
         }
 
         private void Update()
         {
-            _rigidbody.useGravity = !transform.parent;
-            if(_isInteractedWith.Value && transform.parent)
-            {
+            if(transform.parent) {
                 transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
             }
             else
             {
-                if(Physics.Raycast(transform.position, Vector3.down, out var hitInfo, 1f))
-                {
-                    transform.position = hitInfo.point + hitInfo.distance * Vector3.up;;
-                }
+                transform.rotation = Quaternion.identity;
             }
         }
-        
+
         public void PlaceOnMinigame()
         {
-            _rigidbody.linearDamping = Single.PositiveInfinity;
-            _rigidbody.linearDamping = 0.1f;
             transform.rotation = Quaternion.identity;
         }
 
         #endregion
         
         #region RPC Methods
-
-        
-        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void SetParentClientRpc(NetworkBehaviourReference interactor, bool startedInteraction)
-        {
-            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
-            
-            if (startedInteraction)
-            {
-                transform.SetParent(player.GetHandPoint());
-            }
-            else
-            {
-                transform.SetParent(null);
-            }
-        }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetTransformsServerRpc(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        private void SetTransformsServerRpc(Vector3 placePoint, bool startedInteraction = true, RpcParams rpcParams = default)
         {
+            ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
-            
-            if (!interactor.TryGet(out PlayerScripts.OwnerPlayer player)) return;
-            SetParentClientRpc(interactor, startedInteraction);
-            
-            if (startedInteraction)
-            {
-                transform.localPosition = Vector3.zero;
-            }
-            else
-            {
-                var interactPoint = player.GetInteractPoint();
-                var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11));
-                Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
-                if(hitObjects.Length > 0) {
-                    foreach (var hit in hitObjects) {
-                        if (hit.collider.gameObject == gameObject) {
-                            continue;
-                        } 
-                        transform.position = hit.point + Vector3.up * 0.2f;
-                        return;
-                    }
-                }
-                else {
-                    transform.position = interactPoint.position + interactPoint.forward * 3f;
-                }
-                
-            }
+
+            transform.SetParent(startedInteraction ? _interactTransform[clientId] : null);
+
+            transform.localPosition = placePoint;
         }
 
         #endregion
 
         #region Interface Methods
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
-            SetTransformsServerRpc(interactor, startedInteraction);
+            Vector3 placePoint = Vector3.zero;
+            
+            if (startedInteraction)
+            {
+                SetTransformsServerRpc(placePoint, true);
+            }
+            else
+            {
+                var interactPoint = interactor.GetInteractPoint();
+                var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
+                Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
+                if (hitObjects.Length > 0) {
+                    foreach (var hit in hitObjects) {
+                        if (hit.collider.gameObject == gameObject) {
+                            continue;
+                        }
+
+                        if(Mathf.Abs(hit.normal.y) > 0.5) {
+                            placePoint = hit.point + Vector3.up * 0.1f;
+                            SetTransformsServerRpc(placePoint, false);
+                            return this;
+                        }
+                        Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var wallHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
+                        placePoint = wallHit.point + Vector3.up * 0.1f;
+                        SetTransformsServerRpc(placePoint, false);
+                        return this;
+                        
+                    }
+                }
+                Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
+                placePoint = groundHit.point +  Vector3.up * 0.1f;
+                SetTransformsServerRpc(placePoint, false);
+            }
+            
             return this;
         }
 
-        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
             return null;
         }

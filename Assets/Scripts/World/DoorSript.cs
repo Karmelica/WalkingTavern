@@ -1,4 +1,5 @@
 using System;
+using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,12 +8,12 @@ public class DoorSript : MonoBehaviour, IInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private Animator otherAnimator;
     
-    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+    public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
     {
         return null;
     }
 
-    public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
+    public IInteractable SecondaryInteract(OwnerPlayer interactor)
     {
         animator.SetTrigger("Interact");
         if (otherAnimator)

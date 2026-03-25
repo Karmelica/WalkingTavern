@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cooking.ScriptableObjects;
+using PlayerScripts;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -37,19 +38,16 @@ namespace Cooking
         }
 
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
             if(!startedInteraction)
                 recipeDropdown.Hide();
             return null;
         }
 
-        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
+        public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            if (interactor.TryGet(out PlayerScripts.OwnerPlayer player))
-            {
-                player.SetCanMove(!player.CanMove());
-            }
+            interactor.SetCanMove(!interactor.CanMove());
 
             return this;
         }

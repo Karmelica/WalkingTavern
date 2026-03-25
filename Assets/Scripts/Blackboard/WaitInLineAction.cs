@@ -6,12 +6,12 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "Wait In Line", story: "[Self] sets CustomerInFront", category: "Action", id: "2bdeb3e76f0baa557b164b7b3b20f45e")]
+[NodeDescription(name: "Wait In Line", story: "[Self] waits in line", category: "Action", id: "2bdeb3e76f0baa557b164b7b3b20f45e")]
 public partial class WaitInLineAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
-    [SerializeReference] public BlackboardVariable<Vector3> CustomerInFrontLocation;
-    [SerializeReference] public BlackboardVariable<GameObject> CustomerInFront;
+    [SerializeReference] public BlackboardVariable<Vector3> LinePlace;
+    //[SerializeReference] public BlackboardVariable<GameObject> CustomerInFront;
     [SerializeReference] public BlackboardVariable<List<GameObject>> CustomersInLine;
 
     protected override Status OnStart()
@@ -19,20 +19,9 @@ public partial class WaitInLineAction : Action
         if (CustomersInLine.Value.Contains(Self))
         {
             var index = CustomersInLine.Value.IndexOf(Self);
-            if (index == 0)
-            {
-                var customer = CustomersInLine.Value[^1];
-                var customerTransform = customer.transform;
-                CustomerInFront.Value = customer;
-                CustomerInFrontLocation.Value = customerTransform.position - customerTransform.forward;
-            }
-            else
-            {
-                var customer = CustomersInLine.Value[index - 1];
-                var customerTransform = customer.transform;
-                CustomerInFront.Value = customer;
-                CustomerInFrontLocation.Value = customerTransform.position - customerTransform.forward;
-            }
+            var orderingCustomer = CustomersInLine.Value[0];
+            var customerTransform = orderingCustomer.transform;
+            LinePlace.Value = customerTransform.position - customerTransform.forward * index * 1.5f;
 
             return Status.Success;
         }

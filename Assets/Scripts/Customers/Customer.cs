@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Managers;
+using PlayerScripts;
 using Unity.Behavior;
 using Unity.Collections;
 using Unity.Netcode;
@@ -155,12 +156,12 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Interact
 
-    public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+    public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
     {
         return null;
     }
 
-    public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
+    public IInteractable SecondaryInteract(OwnerPlayer interactor)
     {
         TakeOrderRpc();
         return null;

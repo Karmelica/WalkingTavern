@@ -39,6 +39,7 @@ namespace Cooking.Minigames
             {
                 FinishMinigameRpc();
                 AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
+                return;
             }
             
             Vector3 mousePos = Mouse.current.position.ReadValue();
@@ -65,23 +66,21 @@ namespace Cooking.Minigames
         
         protected abstract void DoMinigame(RaycastHit hit, Vector3 mousePos);
 
-        public IInteractable PrimaryInteract(NetworkBehaviourReference interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
             _isInteractedWith = false;
             instructions.enabled = false;
             return null;
         }
 
-        public IInteractable SecondaryInteract(NetworkBehaviourReference interactor)
-        {
-            if (interactor.TryGet(out OwnerPlayer player))
-            {
-                player.SetCanMove(false);
-                player.SetCooking(true);
-                player.SetCameraLocation(cameraLocation);
-                _isInteractedWith = true;
-                instructions.enabled = true;
-            }
+        public IInteractable SecondaryInteract(OwnerPlayer interactor){
+            
+            interactor.SetCanMove(false);
+            interactor.SetCooking(true);
+            interactor.SetCameraLocation(cameraLocation);
+            _isInteractedWith = true;
+            instructions.enabled = true;
+            
             return this;
         }
 

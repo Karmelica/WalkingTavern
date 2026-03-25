@@ -6,7 +6,7 @@ namespace Cooking.Minigames
     public class Slicing : IngredientMinigame
     {
         [Range(1, 10)]
-        [SerializeField] private float requiredSpeed = 4f;
+        [SerializeField] private float requiredSpeed = 3.5f;
         
         private Vector2 _oldMousePos;
 
