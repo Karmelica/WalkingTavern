@@ -32,7 +32,7 @@ namespace World
             if (_drivingPlayer)
             {
                 _drivingPlayer.transform.position = sitLocation.position;
-                _drivingPlayer.transform.rotation = sitLocation.rotation;
+                //_drivingPlayer.transform.rotation = sitLocation.rotation;
             }
         }
 
@@ -60,13 +60,6 @@ namespace World
         private void DriveCarRpc(NetworkBehaviourReference interactor)
         {
             _isDriven.Value = true;
-            if(interactor.TryGet(out _drivingPlayer))
-            {
-                _drivingPlayer.SetDriving(true);
-                _drivingPlayer.transform.position = sitLocation.position;
-                _drivingPlayer.transform.rotation = sitLocation.rotation;
-                _drivingPlayer.SetCaravanControl(this);
-            }
         }
 
         
@@ -87,6 +80,11 @@ namespace World
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
+            _drivingPlayer = interactor;
+            _drivingPlayer.SetDriving(true);
+            _drivingPlayer.transform.position = sitLocation.position;
+            _drivingPlayer.transform.rotation = sitLocation.rotation;
+            _drivingPlayer.SetCaravanControl(this);
             DriveCarRpc(interactor);
             return this;
         }
