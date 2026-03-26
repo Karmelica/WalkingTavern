@@ -85,8 +85,9 @@ namespace Managers
             foreach (var clientId in clients)
             {
                 var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
-                
-                handTransforms.Add(clientId, playerInstance.GetComponent<OwnerPlayer>().GetHandPoint());
+
+                var trans = playerInstance.GetComponent<OwnerPlayer>().GetHandPoint();
+                handTransforms.TryAdd(clientId, trans);
                 
                 playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
             }

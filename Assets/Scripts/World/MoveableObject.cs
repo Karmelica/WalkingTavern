@@ -49,7 +49,7 @@ namespace World
         {
             if (!IsServer) return;
             if(transform.parent) {
-                transform.position = transform.parent.position;
+                //transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
             }
             else
