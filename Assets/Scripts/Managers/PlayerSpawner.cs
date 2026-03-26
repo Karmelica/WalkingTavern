@@ -15,8 +15,6 @@ namespace Managers
     public class PlayerSpawner : NetworkBehaviour
     {
         private Dictionary<ulong, NetworkObject> _clientIdToPlayerObject = new();
-        private Dictionary<ulong, NetworkObject> _steamToPlayerObject = new();
-        private Dictionary<ulong, ulong> _ClientIdToSteamId = new();
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
@@ -54,18 +52,11 @@ namespace Managers
         {
             _isLoaded = true;
             
-            ulong steamId = 0;
-
-            if (SteamClient.IsValid)
-            {
-                steamId = SteamClient.SteamId.Value;
-            }
-            
             if (scenesToSpawnPlayersIn.Count == 0) return;
             _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
             foreach (var sceneName in scenesToSpawnPlayersIn)
             {
-                if (currentSceneName == sceneName) RequestSpawnPlayerRpc(steamId);
+                if (currentSceneName == sceneName) RequestSpawnPlayerRpc();
                 return;
             }
             Debug.Log("No scene to spawn players found");
@@ -93,34 +84,21 @@ namespace Managers
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void RequestSpawnPlayerRpc(ulong steamId, RpcParams rpcParams = default)
+        private void RequestSpawnPlayerRpc(RpcParams rpcParams = default)
         {
             var clientId = rpcParams.Receive.SenderClientId;
 
-            if (steamId != 0 && _steamToPlayerObject.TryGetValue(steamId, out var playerObject) && playerObject != null &&
-                playerObject.IsSpawned)
-            {
-                playerObject.ChangeOwnership(clientId);
-                _ClientIdToSteamId[clientId] = steamId;
-                _clientIdToPlayerObject[clientId] =  playerObject;
-                _steamToPlayerObject[steamId] = playerObject;
-                return;
-            }
-            
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
             
-            _ClientIdToSteamId.TryAdd(clientId, steamId);
             _clientIdToPlayerObject.TryAdd(clientId, networkObject);
-            if(steamId != 0) _steamToPlayerObject.TryAdd(steamId, networkObject);
         }
         
         private void OnClientDisconnected(ulong clientId)
         {
-            if (!_ClientIdToSteamId.TryGetValue(clientId, out var steamId)) return;
-            if (!_clientIdToPlayerObject.TryGetValue(steamId, out var networkObject)) return;
-            
+            if (!IsServer) return;
+            if (!_clientIdToPlayerObject.TryGetValue(clientId, out var networkObject)) return;
             if (networkObject.IsSpawned)
             {
                 networkObject.Despawn();
@@ -129,13 +107,8 @@ namespace Managers
             {
                 Destroy(networkObject.gameObject);
             }
-            if (steamId != 0)
-            {
-                _steamToPlayerObject.Remove(steamId);
-            }
             
             _clientIdToPlayerObject.Remove(clientId);
-            _ClientIdToSteamId.Remove(clientId);
                 
         }
     }
