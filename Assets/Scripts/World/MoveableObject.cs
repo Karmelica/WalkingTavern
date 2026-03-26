@@ -47,7 +47,7 @@ namespace World
 
         private void Update()
         {
-            if (!IsServer) return;
+            if (!IsOwner) return;
             UpdatePosition();
         }
 
