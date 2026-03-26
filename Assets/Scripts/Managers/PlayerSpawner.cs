@@ -86,6 +86,7 @@ namespace Managers
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void RequestSpawnPlayerRpc(RpcParams rpcParams = default)
         {
+            if (!IsServer) return;
             var clientId = rpcParams.Receive.SenderClientId;
 
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
