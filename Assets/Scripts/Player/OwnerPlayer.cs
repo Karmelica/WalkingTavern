@@ -97,10 +97,12 @@ namespace PlayerScripts
         private void Update()
         {
             if (!_playerCamera) return;
-            
-            SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _lastInteractedObject != null);
             UpdateInteractorPosition();
             UpdateCameraPosition();
+            if(!_isDriving){
+                SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude,
+                    _lastInteractedObject != null);
+            }
         }
 
         private void FixedUpdate()
@@ -474,6 +476,7 @@ namespace PlayerScripts
         public void SetDriving(bool driving)
         {
             _isDriving = driving;
+            _networkedPlayer.SetDriving(driving);
             SetCanMove(!driving, false);
         }
 

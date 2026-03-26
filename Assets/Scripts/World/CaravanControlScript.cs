@@ -31,8 +31,7 @@ namespace World
 
             if (_drivingPlayer)
             {
-                _drivingPlayer.transform.position = sitLocation.position;
-                //_drivingPlayer.transform.rotation = sitLocation.rotation;
+                _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
             }
         }
 
@@ -57,7 +56,7 @@ namespace World
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void DriveCarRpc(NetworkBehaviourReference interactor)
+        private void DriveCarRpc()
         {
             _isDriven.Value = true;
         }
@@ -67,14 +66,23 @@ namespace World
         private void StopDrivingCarRpc()
         {
             _isDriven.Value = false;
-            _drivingPlayer.SetDriving(false);
-            _drivingPlayer.SetCaravanControl(null);
-            _drivingPlayer = null;
+            if(_drivingPlayer){
+                _drivingPlayer.SetDriving(false);
+                _drivingPlayer.SetCaravanControl(null);
+                _drivingPlayer = null;
+            }
         }
 
         public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
-            StopDrivingCarRpc();
+            if(!startedInteraction)
+            {
+                StopDrivingCarRpc();
+                var right = sitLocation.right;
+                right.y = 0;
+                right.Normalize();
+                interactor.transform.position = sitLocation.position + right * 3f;
+            }
             return null;
         }
 
@@ -82,10 +90,10 @@ namespace World
         {
             _drivingPlayer = interactor;
             _drivingPlayer.SetDriving(true);
-            _drivingPlayer.transform.position = sitLocation.position;
+            _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
             _drivingPlayer.transform.rotation = sitLocation.rotation;
             _drivingPlayer.SetCaravanControl(this);
-            DriveCarRpc(interactor);
+            DriveCarRpc();
             return this;
         }
 

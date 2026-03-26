@@ -17,6 +17,8 @@ namespace PlayerScripts
         private static readonly int Jumping = Animator.StringToHash("Jumping");
         private static readonly int IsInteracting = Animator.StringToHash("IsInteracting");
         private static readonly int Grounded = Animator.StringToHash("IsGrounded");
+        private static readonly int IsSitting = Animator.StringToHash("IsSitting");
+        private static readonly int StoppedSitting = Animator.StringToHash("StoppedSitting");
 
         #endregion
 
@@ -99,6 +101,11 @@ namespace PlayerScripts
             _animator.SetTrigger(Jumping);
         }
         
+        public void SetDriving(bool isDriving)
+        {
+            _animator.SetTrigger(isDriving ? IsSitting : StoppedSitting);
+        }
+        
         private void SetAnimationVariables()
         {
             _animator.SetBool(Grounded, IsGrounded);
@@ -113,8 +120,6 @@ namespace PlayerScripts
         {
             AudioManager.Instance.PlayOneShot(AudioEvents.Instance.jump, transform.position);
         }
-        
-        
 
         #endregion
 
