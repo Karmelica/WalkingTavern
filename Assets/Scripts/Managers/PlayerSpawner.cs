@@ -13,8 +13,6 @@ namespace Managers
 {
     public class PlayerSpawner : NetworkBehaviour
     {
-        public static Dictionary<ulong, Transform> handTransforms = new();
-
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
@@ -85,10 +83,6 @@ namespace Managers
             foreach (var clientId in clients)
             {
                 var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
-
-                var trans = playerInstance.GetComponent<OwnerPlayer>().GetHandPoint();
-                handTransforms.TryAdd(clientId, trans);
-                
                 playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
             }
         }
