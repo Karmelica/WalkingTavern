@@ -87,7 +87,6 @@ namespace Managers
         private void RequestSpawnPlayerRpc(ulong clientId, RpcParams rpcParams = default)
         {
             if (!IsServer) return;
-            //var clientId = rpcParams.Receive.SenderClientId;
 
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
