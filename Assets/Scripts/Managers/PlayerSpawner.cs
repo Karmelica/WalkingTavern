@@ -53,10 +53,10 @@ namespace Managers
             _isLoaded = true;
             
             if (scenesToSpawnPlayersIn.Count == 0) return;
-            _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
             foreach (var sceneName in scenesToSpawnPlayersIn)
             {
-                if (currentSceneName == sceneName) RequestSpawnPlayerRpc();
+                _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
+                if (currentSceneName == sceneName) RequestSpawnPlayerServerRpc();
                 return;
             }
             Debug.Log("No scene to spawn players found");
@@ -83,8 +83,8 @@ namespace Managers
             loadingCanvas.SetActive(false);
         }
 
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void RequestSpawnPlayerRpc(RpcParams rpcParams = default)
+        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+        private void RequestSpawnPlayerServerRpc(ServerRpcParams rpcParams = default)
         {
             if (!IsServer) return;
             var clientId = rpcParams.Receive.SenderClientId;
@@ -93,24 +93,17 @@ namespace Managers
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
             
-            _clientIdToPlayerObject.TryAdd(clientId, networkObject);
+            Debug.Log("Spawned player object for " + clientId + " Player");
         }
         
         private void OnClientDisconnected(ulong clientId)
         {
-            if (!IsServer) return;
-            if (!_clientIdToPlayerObject.TryGetValue(clientId, out var networkObject)) return;
-            if (networkObject.IsSpawned)
-            {
-                networkObject.Despawn();
-            }
-            if (networkObject.gameObject != null)
-            {
-                Destroy(networkObject.gameObject);
-            }
-            
-            _clientIdToPlayerObject.Remove(clientId);
-                
+            //if (!IsServer) return;
+            //if (!_clientIdToPlayerObject.Remove(clientId, out var networkObject)) return;
+            //if (networkObject.IsSpawned)
+            //{
+            //    networkObject.Despawn();
+            //}
         }
     }
 }
