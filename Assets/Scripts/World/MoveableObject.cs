@@ -47,7 +47,6 @@ namespace World
 
         private void Update()
         {
-            if (!IsOwner) return;
             UpdatePosition();
         }
 
@@ -74,15 +73,11 @@ namespace World
         }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetTransformsServerRpc(Vector3 placePoint, bool startedInteraction = true, RpcParams rpcParams = default)
+        private void ChangeOwnerServerRpc(bool startedInteraction = true, RpcParams rpcParams = default)
         {
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
-
             NetworkObject.ChangeOwnership(startedInteraction ? clientId : 0);
-            transform.SetParent(startedInteraction ? PlayerSpawner.handTransforms[clientId] : null);
-            transform.position = placePoint;
-
         }
 
         #endregion
@@ -95,10 +90,13 @@ namespace World
             
             if (startedInteraction)
             {
-                SetTransformsServerRpc(placePoint, true);
+                ChangeOwnerServerRpc(true);
+                transform.SetParent(interactor.GetHandPoint());
             }
             else
             {
+                ChangeOwnerServerRpc(false);
+                transform.SetParent(null);
                 var interactPoint = interactor.GetInteractPoint();
                 var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
                 Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
@@ -110,21 +108,21 @@ namespace World
 
                         if(Mathf.Abs(hit.normal.y) > 0.5) {
                             placePoint = hit.point + Vector3.up * 0.1f;
-                            SetTransformsServerRpc(placePoint, false);
+                            transform.position = placePoint;
                             return this;
                         }
                         Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var wallHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
                         placePoint = wallHit.point + Vector3.up * 0.1f;
-                        SetTransformsServerRpc(placePoint, false);
+                        transform.position = placePoint;
                         return this;
                         
                     }
                 }
                 Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
                 placePoint = groundHit.point +  Vector3.up * 0.1f;
-                SetTransformsServerRpc(placePoint, false);
             }
-            
+
+            transform.position = placePoint;
             return this;
         }
 
