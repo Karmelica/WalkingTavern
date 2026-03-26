@@ -48,7 +48,7 @@ namespace World
         private void Update()
         {
             if (!IsServer) return;
-            UpdatePositionServerRpc();
+            UpdatePosition();
         }
 
 
@@ -61,8 +61,7 @@ namespace World
         
         #region RPC Methods
         
-        [Rpc(SendTo.Server)]
-        private void UpdatePositionServerRpc()
+        private void UpdatePosition()
         {
             if(transform.parent) {
                 transform.position = transform.parent.position;
@@ -80,6 +79,7 @@ namespace World
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
 
+            NetworkObject.ChangeOwnership(startedInteraction ? clientId : 0);
             transform.SetParent(startedInteraction ? PlayerSpawner.handTransforms[clientId] : null);
             transform.position = placePoint;
 
