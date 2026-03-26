@@ -49,7 +49,7 @@ namespace World
         {
             if (!IsServer) return;
             if(transform.parent) {
-                //transform.position = transform.parent.position;
+                transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
             }
             else
@@ -73,9 +73,9 @@ namespace World
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
 
+            transform.position = placePoint;
             transform.SetParent(startedInteraction ? PlayerSpawner.handTransforms[clientId] : null);
 
-            transform.localPosition = placePoint;
         }
 
         #endregion
