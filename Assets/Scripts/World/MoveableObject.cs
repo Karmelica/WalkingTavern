@@ -77,7 +77,7 @@ namespace World
         {
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
-            NetworkObject.ChangeOwnership(startedInteraction ? clientId : 0);
+            NetworkObject.ChangeOwnership(clientId);
         }
 
         #endregion
