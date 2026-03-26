@@ -56,7 +56,7 @@ namespace Managers
             foreach (var sceneName in scenesToSpawnPlayersIn)
             {
                 _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
-                if (currentSceneName == sceneName) RequestSpawnPlayerServerRpc();
+                if (currentSceneName == sceneName) RequestSpawnPlayerRpc(clientId);
                 return;
             }
             Debug.Log("No scene to spawn players found");
@@ -83,11 +83,11 @@ namespace Managers
             loadingCanvas.SetActive(false);
         }
 
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
-        private void RequestSpawnPlayerServerRpc(ServerRpcParams rpcParams = default)
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void RequestSpawnPlayerRpc(ulong clientId, RpcParams rpcParams = default)
         {
             if (!IsServer) return;
-            var clientId = rpcParams.Receive.SenderClientId;
+            //var clientId = rpcParams.Receive.SenderClientId;
 
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
