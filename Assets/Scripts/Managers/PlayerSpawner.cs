@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerScripts;
 using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Managers
 {
     public class PlayerSpawner : NetworkBehaviour
     {
+        public static Dictionary<ulong, Transform> handTransforms = new();
+
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
@@ -45,11 +48,12 @@ namespace Managers
         private void OnSceneLoadedEvent(string currentSceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
             _isLoaded = true;
+            
             if (!IsHost || scenesToSpawnPlayersIn.Count == 0) return;
             _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
             foreach (var sceneName in scenesToSpawnPlayersIn)
             {
-                if(currentSceneName == sceneName) SpawnPlayers(clientsCompleted);
+                if (currentSceneName == sceneName) SpawnPlayers(clientsCompleted);
                 return;
             }
             Debug.Log("No scene to spawn players found");
@@ -81,6 +85,9 @@ namespace Managers
             foreach (var clientId in clients)
             {
                 var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
+                
+                handTransforms.Add(clientId, playerInstance.GetComponent<OwnerPlayer>().GetHandPoint());
+                
                 playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
             }
         }

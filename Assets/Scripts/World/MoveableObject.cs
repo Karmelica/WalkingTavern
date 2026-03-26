@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using PlayerScripts;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -16,7 +17,6 @@ namespace World
         
         private Collider _collider;
         
-        private Dictionary<ulong, Transform> _interactTransform = new();
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
 
         #endregion
@@ -34,17 +34,6 @@ namespace World
             _isInteractedWith.OnValueChanged += OnInteractedValueChanged;
         }
 
-        protected override void OnNetworkPostSpawn()
-        {
-            base.OnNetworkPostSpawn();
-            foreach (var client in NetworkManager.Singleton.ConnectedClients)
-            {
-                client.Value.PlayerObject.TryGetComponent(out OwnerPlayer player);
-                {
-                    _interactTransform.Add(client.Key, player.GetHandPoint());
-                }
-            }
-        }
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
@@ -58,6 +47,7 @@ namespace World
 
         private void Update()
         {
+            if (!IsServer) return;
             if(transform.parent) {
                 transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
@@ -83,7 +73,7 @@ namespace World
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
 
-            transform.SetParent(startedInteraction ? _interactTransform[clientId] : null);
+            transform.SetParent(startedInteraction ? PlayerSpawner.handTransforms[clientId] : null);
 
             transform.localPosition = placePoint;
         }
