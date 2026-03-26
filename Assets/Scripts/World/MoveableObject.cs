@@ -48,15 +48,9 @@ namespace World
         private void Update()
         {
             if (!IsServer) return;
-            if(transform.parent) {
-                transform.position = transform.parent.position;
-                transform.rotation = transform.parent.rotation;
-            }
-            else
-            {
-                transform.rotation = Quaternion.identity;
-            }
+            UpdatePositionServerRpc();
         }
+
 
         public void PlaceOnMinigame()
         {
@@ -67,14 +61,27 @@ namespace World
         
         #region RPC Methods
         
+        [Rpc(SendTo.Server)]
+        private void UpdatePositionServerRpc()
+        {
+            if(transform.parent) {
+                transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+            }
+            else
+            {
+                transform.rotation = Quaternion.identity;
+            }
+        }
+        
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetTransformsServerRpc(Vector3 placePoint, bool startedInteraction = true, RpcParams rpcParams = default)
         {
             ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
 
-            transform.position = placePoint;
             transform.SetParent(startedInteraction ? PlayerSpawner.handTransforms[clientId] : null);
+            transform.position = placePoint;
 
         }
 
