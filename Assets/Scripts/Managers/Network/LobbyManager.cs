@@ -75,8 +75,7 @@ namespace Managers.Network
             facepunchTransport.targetSteamId = lobby.Owner.Id;
             NetworkManager.Singleton.StartClient();
         }
-
-
+        
         private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
         {
             try

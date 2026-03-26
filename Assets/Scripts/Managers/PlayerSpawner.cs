@@ -37,24 +37,22 @@ namespace Managers
             NetworkManager.SceneManager.OnLoad -= OnSceneLoaded;
         }
 
-        private void OnSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
+        private void OnSceneLoaded(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
         {
-            StartCoroutine(ScreenFadeout());
+            StartCoroutine(ScreenFadeout());if (scenesToSpawnPlayersIn.Count == 0) return;
+            _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
+            foreach (var sceneName in scenesToSpawnPlayersIn)
+            {
+                if (currentSceneName == sceneName) RequestSpawnPlayerRpc(clientId);
+                return;
+            }
+            Debug.Log("No scene to spawn players found");
         }
 
 
         private void OnSceneLoadedEvent(string currentSceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
             _isLoaded = true;
-            
-            if (!IsHost || scenesToSpawnPlayersIn.Count == 0) return;
-            _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
-            foreach (var sceneName in scenesToSpawnPlayersIn)
-            {
-                if (currentSceneName == sceneName) SpawnPlayers(clientsCompleted);
-                return;
-            }
-            Debug.Log("No scene to spawn players found");
         }
         
         private IEnumerator ScreenFadeout()
@@ -78,13 +76,12 @@ namespace Managers
             loadingCanvas.SetActive(false);
         }
 
-        private void SpawnPlayers(List<ulong> clients) 
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void RequestSpawnPlayerRpc(ulong clientId) 
         {
-            foreach (var clientId in clients)
-            {
-                var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
-                playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
-            }
+            var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
+            playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+            
         }
     }
 }
