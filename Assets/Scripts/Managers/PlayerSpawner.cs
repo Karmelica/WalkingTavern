@@ -27,19 +27,26 @@ namespace Managers
 
         public override void OnNetworkSpawn()
         {
-            NetworkManager.SceneManager.OnLoadEventCompleted += OnSceneLoadedEvent;
-            NetworkManager.SceneManager.OnLoad += OnSceneLoaded;
+            NetworkManager.SceneManager.OnLoadComplete += OnSceneLoaded;
+            NetworkManager.SceneManager.OnLoad += OnSceneLoadStarted;
         }
+
 
         public override void OnNetworkDespawn()
         {
-            NetworkManager.SceneManager.OnLoadEventCompleted -= OnSceneLoadedEvent;
-            NetworkManager.SceneManager.OnLoad -= OnSceneLoaded;
+            NetworkManager.SceneManager.OnLoadComplete -= OnSceneLoaded;
+            NetworkManager.SceneManager.OnLoad -= OnSceneLoadStarted;
         }
 
-        private void OnSceneLoaded(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
+        private void OnSceneLoadStarted(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
         {
-            StartCoroutine(ScreenFadeout());if (scenesToSpawnPlayersIn.Count == 0) return;
+            StartCoroutine(ScreenFadeout());
+        }
+
+        private void OnSceneLoaded(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode)
+        {
+            _isLoaded = true;
+            if (scenesToSpawnPlayersIn.Count == 0) return;
             _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
             foreach (var sceneName in scenesToSpawnPlayersIn)
             {
@@ -47,12 +54,6 @@ namespace Managers
                 return;
             }
             Debug.Log("No scene to spawn players found");
-        }
-
-
-        private void OnSceneLoadedEvent(string currentSceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-        {
-            _isLoaded = true;
         }
         
         private IEnumerator ScreenFadeout()
