@@ -29,9 +29,11 @@ namespace Cooking
             TryRemoveIngredient(foodItem);
         }
 
-        protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
+        protected override void DoMinigame()
         {
-            var newSlice = GetSlice(mousePos);
+            base.DoMinigame();
+            if (!DidHit) return;
+            var newSlice = GetSlice(MousePos);
 
             if (newSlice == _thisSlice || newSlice == -1) return;
 

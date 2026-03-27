@@ -11,7 +11,6 @@ namespace Cooking.Minigames.Helpers
         public void OnEnable()
         {
             base.OnNetworkSpawn();
-            SpawnSomeIngredients();
         }
 
         public override void DespawnObject(MoveableObject objectToDespawn)
@@ -23,11 +22,11 @@ namespace Cooking.Minigames.Helpers
             }
         }
 
-        public override void SpawnObject(string path = null)
+        public override void SpawnObject(GameObject prefab = null)
         {
             if (!IsServer) return;
-            var prefab = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishPrefab);
-            var dish = Instantiate(prefab, spawnLocation.position + Vector3.up, Quaternion.identity);
+            var original = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishPrefab);
+            var dish = Instantiate(original, spawnLocation.position + Vector3.up, Quaternion.identity);
             dish.GetComponent<NetworkObject>().Spawn();
         }
     }

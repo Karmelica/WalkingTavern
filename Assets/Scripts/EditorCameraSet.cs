@@ -10,7 +10,8 @@ public class EditorCameraSet : MonoBehaviour
     private Transform foodPlaceholder;
     
 #if UNITY_EDITOR
-    private void Start()
+
+    private void OnValidate()
     {
         if (!TryGetComponent(out _minigame)) return;
         cameraLocation = _minigame.cameraLocation;
@@ -33,13 +34,13 @@ public class EditorCameraSet : MonoBehaviour
         if (foodPlaceholder)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(foodPlaceholder.position, 0.1f);
+            Gizmos.DrawWireSphere(foodPlaceholder.position, 0.05f);
         }
         if (cameraLocation)
         {
             Gizmos.color = Color.red;
             Gizmos.matrix = cameraLocation.localToWorldMatrix;
-            Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 60, 16 / 9f);
+            Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 200, 16 / 9f);
         }
     }
 #endif

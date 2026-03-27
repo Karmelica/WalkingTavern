@@ -142,8 +142,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4022241717667640571}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5038738, y: -2.842171e-14, z: 2.842171e-14, w: -0.8637773}
-  m_LocalPosition: {x: -0, y: 0.695, z: -0.393}
+  m_LocalRotation: {x: -0.60145575, y: 0.00000020237867, z: -0.0000001523606, w: -0.79890615}
+  m_LocalPosition: {x: -0, y: 0.855, z: -0.246}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -159,10 +159,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6040335464829611795}
-  - component: {fileID: 8307679886485521370}
+  - component: {fileID: 3639036545079916541}
+  - component: {fileID: 706508275765779051}
+  - component: {fileID: 2771533729095824594}
   - component: {fileID: 6432553761256277856}
   - component: {fileID: 7548264445264350045}
   - component: {fileID: 685786974412662885}
+  - component: {fileID: 8421329600383711637}
+  - component: {fileID: 5908786242103272689}
   m_Layer: 7
   m_Name: MinigameBase
   m_TagString: Untagged
@@ -178,7 +182,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7914648482064008887}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000002533197}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 1.16, z: 0.723}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -187,8 +191,65 @@ Transform:
   - {fileID: 2756045895714045244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!65 &8307679886485521370
-BoxCollider:
+--- !u!33 &3639036545079916541
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Mesh: {fileID: -1119309933170883810, guid: 0263c9cbaba104d46b9352684b9b72d2, type: 3}
+--- !u!23 &706508275765779051
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2771533729095824594
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -205,9 +266,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.3032112, y: 0.21180105, z: 0.9693856}
-  m_Center: {x: -0.0045200586, y: -0.20730472, z: 0.10065359}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1119309933170883810, guid: 0263c9cbaba104d46b9352684b9b72d2, type: 3}
 --- !u!65 &6432553761256277856
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -227,8 +289,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.3032112, y: 0.02562809, z: 0.9693856}
-  m_Center: {x: -0.0045200586, y: -0.08308649, z: 0.10065359}
+  m_Size: {x: 0.39936638, y: 0.16035843, z: 0.39817476}
+  m_Center: {x: 0.0023621917, y: -0.008840561, z: -0.0014307797}
 --- !u!114 &7548264445264350045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1899259623
+  GlobalObjectIdHash: 21845534
   InScenePlacedSourceGlobalObjectIdHash: 21845534
   DeferredDespawnTick: 0
   Ownership: 1
@@ -266,6 +328,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891a9c62a42a89d47b99b114b2aee7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+--- !u!114 &8421329600383711637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db3a332679224608909cb42425d9dedb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Mixing
+  ShowTopMostFoldoutHeaderGroup: 1
+  cameraLocation: {fileID: 9209537037356184122}
+  foodPlaceholder: {fileID: 2756045895714045244}
+  requiredScore: 8
+  instructions: {fileID: 8633447898793361119}
+  applicableFood: 00000000
+--- !u!114 &5908786242103272689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914648482064008887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2eec8c101f2c27459c055b54520e8cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Helpers.IngredientHelper
+  ShowTopMostFoldoutHeaderGroup: 1
+  spawnLocation: {fileID: 0}
 --- !u!1 &8415079742205548994
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +425,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Instructions
+  m_text: Move your mouse clockwise
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}

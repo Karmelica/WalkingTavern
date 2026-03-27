@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 2695178038820369530}
   - component: {fileID: -3618665134630110743}
   - component: {fileID: 3482190085790779429}
-  - component: {fileID: 7649954538974719058}
   m_Layer: 7
   m_Name: Meat
   m_TagString: Ingredient
@@ -198,7 +197,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World.FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
+  isOnMinigame: 0
   ingredientType: 3
+  ingredientProducts:
+  - {fileID: 4901630527041624475, guid: 656914087e400c341b2ede058f697ac5, type: 3}
 --- !u!54 &-3618665134630110743
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -247,19 +249,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!208 &7649954538974719058
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4901630527041624475}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 3

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Cooking.Minigames.Helpers;
 using Managers;
 using PlayerScripts;
@@ -18,15 +17,21 @@ namespace Cooking.Minigames
         public Transform foodPlaceholder;
         [SerializeField] protected int requiredScore = 10;
         protected int Score;
-        private bool _isInteractedWith;
-        private Camera _mainCamera;
+        protected bool Interacted;
+        protected Camera MainCamera;
         protected Helper Helper;
         [SerializeField] private TextMeshProUGUI instructions;
         protected List<MoveableObject> CurrentFood = new();
 
+        protected Vector2 MousePos;
+        protected RaycastHit RayHit;
+        protected bool DidHit;
+        
+        protected OwnerPlayer OwnerPlayer;
+
         protected virtual void Start()
         {
-            _mainCamera = Camera.main;
+            MainCamera = Camera.main;
             Helper = GetComponent<Helper>();
             Helper.spawnLocation = foodPlaceholder;
         }
@@ -41,14 +46,7 @@ namespace Cooking.Minigames
                 AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
                 return;
             }
-            
-            Vector3 mousePos = Mouse.current.position.ReadValue();
-            
-            if (Physics.Raycast(_mainCamera.ScreenPointToRay(mousePos), out RaycastHit hit) &&
-                hit.collider.gameObject && _isInteractedWith)
-            {
-                DoMinigame(hit, mousePos);
-            }
+            DoMinigame();
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
@@ -63,22 +61,28 @@ namespace Cooking.Minigames
         protected abstract void RemoveFood();
         
         protected abstract void CompleteMinigame();
-        
-        protected abstract void DoMinigame(RaycastHit hit, Vector3 mousePos);
+
+        protected virtual void DoMinigame()
+        {
+            MousePos = Mouse.current.position.ReadValue();
+            DidHit = Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit) &&
+                RayHit.collider.gameObject && Interacted;
+        }
 
         public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
-            _isInteractedWith = false;
+            OwnerPlayer = null;
+            Interacted = false;
             instructions.enabled = false;
             return null;
         }
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor){
-            
-            interactor.SetCanMove(false);
-            interactor.SetCooking(true);
-            interactor.SetCameraLocation(cameraLocation);
-            _isInteractedWith = true;
+            OwnerPlayer =  interactor;
+            OwnerPlayer.SetCanMove(false);
+            OwnerPlayer.SetCooking(true);
+            OwnerPlayer.SetCameraLocation(cameraLocation);
+            Interacted = true;
             instructions.enabled = true;
             
             return this;
@@ -88,7 +92,7 @@ namespace Cooking.Minigames
 
         public bool IsInteractedWith()
         {
-            return _isInteractedWith;
+            return Interacted;
         }
     }
 }

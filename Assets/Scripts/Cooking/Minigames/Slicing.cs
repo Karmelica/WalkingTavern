@@ -10,17 +10,19 @@ namespace Cooking.Minigames
         
         private Vector2 _oldMousePos;
 
-        protected override void DoMinigame(RaycastHit hit, Vector3 mousePos)
+        protected override void DoMinigame()
         {
-            if (hit.collider.gameObject && hit.collider.gameObject == CurrentFood[0].gameObject)
+            base.DoMinigame();
+            if (!DidHit) return;
+            if (RayHit.collider.gameObject /*&& hit.collider.gameObject == CurrentFood[0].gameObject*/)
             {
-                var difference = (_oldMousePos.y - mousePos.y) / Screen.height * Time.deltaTime * 1000f;
-                if (mousePos.y < _oldMousePos.y && difference > requiredSpeed)
+                var difference = (_oldMousePos.y - MousePos.y) / Screen.height * Time.deltaTime * 1000f;
+                if (MousePos.y < _oldMousePos.y && difference > requiredSpeed)
                 {
                     Score++;
                 }
             }
-            _oldMousePos = mousePos;
+            _oldMousePos = MousePos;
         }
 
         public override string GetInteractName()

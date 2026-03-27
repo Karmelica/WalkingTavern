@@ -3,16 +3,11 @@ using UnityEngine;
 
 public class DeathZoneTeleporter : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (Physics.Raycast(other.transform.position, Vector3.up * 300f, out RaycastHit hit))
+        if (Physics.Raycast(other.transform.position, Vector3.up, out RaycastHit hit, Single.PositiveInfinity))
         {
             other.transform.position = hit.point + Vector3.up;
-            if(other.attachedRigidbody)
-            {
-                other.attachedRigidbody.linearDamping = Single.PositiveInfinity;
-                other.attachedRigidbody.linearDamping = 0.1f;
-            }
         }
     }
 }

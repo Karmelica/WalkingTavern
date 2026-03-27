@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Managers;
 using PlayerScripts;
@@ -14,9 +15,9 @@ namespace World
     public class MoveableObject : NetworkBehaviour, IInteractable
     {
         #region Variables
-        
+
+        public bool isOnMinigame = false;
         private Collider _collider;
-        
         private readonly NetworkVariable<bool> _isInteractedWith = new (false);
 
         #endregion
@@ -40,37 +41,42 @@ namespace World
             _isInteractedWith.OnValueChanged -= OnInteractedValueChanged;
         }
 
-        private void OnInteractedValueChanged(bool previousValue, bool newValue)
-        {
-            _collider.enabled = !newValue;
-        }
-
         private void Update()
         {
-            UpdatePosition();
+            if (transform.parent)
+            {
+                transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+            }
+            else
+            {
+                if (isOnMinigame) return;
+                if (!IsOwner) return;
+                Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
+                    QueryTriggerInteraction.Ignore);
+                transform.up = hit.normal;
+                transform.position = hit.point + transform.up * _collider.bounds.extents.y;
+            }
         }
 
-
-        public void PlaceOnMinigame()
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void PlaceDownRpc()
         {
-            transform.rotation = Quaternion.identity;
+            Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
+                QueryTriggerInteraction.Ignore);
+            transform.up = hit.normal;
+            transform.position = hit.point + transform.up * _collider.bounds.extents.y;
+        }
+
+        private void OnInteractedValueChanged(bool previousValue, bool newValue)
+        {
+            //_collider.enabled = !newValue;
         }
 
         #endregion
         
         #region RPC Methods
         
-        private void UpdatePosition()
-        {
-            if(transform.parent) {
-                transform.position = transform.parent.position;
-                transform.rotation = transform.parent.rotation;
-            }
-            else
-            {
-                transform.rotation = Quaternion.identity;
-            }
-        }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void ChangeOwnerServerRpc(bool startedInteraction = true, RpcParams rpcParams = default)
@@ -80,6 +86,17 @@ namespace World
             NetworkObject.ChangeOwnership(clientId);
         }
 
+        public void MoveOnMinigame(Vector3 position)
+        {
+            MoveOnMinigameRpc(position);
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        private void MoveOnMinigameRpc(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         #endregion
 
         #region Interface Methods
@@ -87,6 +104,7 @@ namespace World
         public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
             Vector3 placePoint = Vector3.zero;
+            Vector3 placeRotation = Vector3.up;
             
             if (startedInteraction)
             {
@@ -107,22 +125,29 @@ namespace World
                         }
 
                         if(Mathf.Abs(hit.normal.y) > 0.5) {
-                            placePoint = hit.point + Vector3.up * 0.1f;
-                            transform.position = placePoint;
-                            return this;
+                            placePoint = hit.point;
+                            placeRotation = hit.normal;
                         }
-                        Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var wallHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
-                        placePoint = wallHit.point + Vector3.up * 0.1f;
-                        transform.position = placePoint;
+                        else
+                        {
+                            Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var floorHit,
+                                Single.PositiveInfinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
+                            placePoint = floorHit.point;
+                            placeRotation = floorHit.normal;
+                        }
+
+                        transform.up = placeRotation;
+                        transform.position = placePoint + transform.up * _collider.bounds.extents.y;
                         return this;
-                        
                     }
                 }
                 Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
-                placePoint = groundHit.point +  Vector3.up * 0.1f;
+                placeRotation = groundHit.normal;
+                placePoint = groundHit.point;
             }
 
-            transform.position = placePoint;
+            transform.up = placeRotation;
+            transform.position = placePoint + transform.up * _collider.bounds.extents.y;
             return this;
         }
 
@@ -142,6 +167,7 @@ namespace World
         }
 
         #endregion
+
     }
 }
 

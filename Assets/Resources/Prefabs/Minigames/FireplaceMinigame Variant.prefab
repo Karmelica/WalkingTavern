@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6569613499225803113
+--- !u!1001 &8943210504143703678
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,19 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6040335464829611795, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.064
+      value: -0.572
       objectReference: {fileID: 0}
     - target: {fileID: 6040335464829611795, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.166
+      value: 0.85899925
       objectReference: {fileID: 0}
     - target: {fileID: 6040335464829611795, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.076
+      value: -0.555
       objectReference: {fileID: 0}
     - target: {fileID: 6040335464829611795, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.0000002533197
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6040335464829611795, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.x
@@ -48,95 +48,98 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6432553761256277856, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6432553761256277856, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6432553761256277856, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6432553761256277856, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6432553761256277856, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3611285187
+      value: 2766156604
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548264445264350045, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1882799499
       objectReference: {fileID: 0}
     - target: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_Name
-      value: MixingMinigame
+      value: FireplaceMinigame Variant
       objectReference: {fileID: 0}
-    - target: {fileID: 8633447898793361119, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-      propertyPath: m_text
-      value: Move your mouse clockwise
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.077
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.901
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.032
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.8860071
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.50387377
+      value: -0.2468244
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000000022598527
+      value: -0.37811828
       objectReference: {fileID: 0}
     - target: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000013182557
+      value: 0.10533642
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3639036545079916541, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+    - {fileID: 706508275765779051, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+    - {fileID: 2771533729095824594, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+    - {fileID: 8421329600383711637, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2420336633489938000}
-    - targetCorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -4130617327748238503}
+      addedObject: {fileID: 901883320959180662}
   m_SourcePrefab: {fileID: 100100000, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
---- !u!4 &2658581250416851795 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9209537037356184122, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-  m_PrefabInstance: {fileID: 6569613499225803113}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3241430323939817398 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8633447898793361119, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-  m_PrefabInstance: {fileID: 6569613499225803113}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!1 &3962479892321636318 stripped
+--- !u!1 &1282066078918609097 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7914648482064008887, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-  m_PrefabInstance: {fileID: 6569613499225803113}
+  m_PrefabInstance: {fileID: 8943210504143703678}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2420336633489938000
+--- !u!114 &901883320959180662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3962479892321636318}
+  m_GameObject: {fileID: 1282066078918609097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db3a332679224608909cb42425d9dedb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ab87170c21ee5548aa060fdfba29f6c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Mixing
-  requiredScore: 8
-  cameraLocation: {fileID: 2658581250416851795}
-  foodPlaceholder: {fileID: 9012975574548902997}
-  instructions: {fileID: 3241430323939817398}
-  applicableFood: 00000000
---- !u!114 &-4130617327748238503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3962479892321636318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2eec8c101f2c27459c055b54520e8cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Helpers.IngredientHelper
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.FireplaceMinigame
   ShowTopMostFoldoutHeaderGroup: 1
-  spawnLocation: {fileID: 0}
---- !u!4 &9012975574548902997 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2756045895714045244, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
-  m_PrefabInstance: {fileID: 6569613499225803113}
-  m_PrefabAsset: {fileID: 0}
+  cameraLocation: {fileID: 0}
+  foodPlaceholder: {fileID: 0}
+  requiredScore: 10
+  instructions: {fileID: 0}
+  applicableFood: 

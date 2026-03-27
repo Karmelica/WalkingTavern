@@ -16,8 +16,8 @@ namespace Cooking.Minigames
             if (applicableFood.Any(applicableFoodItem => applicableFoodItem == foodItem.ingredientType))
             {
                 CurrentFood.Add(foodItem);
-                CurrentFood[0].transform.position = foodPlaceholder.position;
-                CurrentFood[0].PlaceOnMinigame();
+                CurrentFood[0].transform.position = new Vector3(foodPlaceholder.position.x, CurrentFood[0].transform.position.y, foodPlaceholder.position.z);
+                CurrentFood[0].isOnMinigame = true;
             }
         }
 
@@ -26,6 +26,7 @@ namespace Cooking.Minigames
             if (!CheckForIngredients()) return;
             if (CurrentFood[0] == other.gameObject.GetComponent<FoodItem>())
             {
+                CurrentFood[0].isOnMinigame = false;
                 RemoveFood();
             }
         }

@@ -67,6 +67,7 @@ namespace PlayerScripts
         private bool _isCrouching;
         private bool _isCooking;
         private bool _isDriving;
+        private bool _isHoldingMouseButton;
         private Vector3 _lastOffsetFromPortal;
         private Transform _minigameCamera;
         private NetworkedPlayer _networkedPlayer;
@@ -381,31 +382,34 @@ namespace PlayerScripts
 
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (!_canMove || _isCooking) return;
-            
-            if (!context.started) return;
-            if (GetHitInfo(out IInteractable interactObj))
-            {
-                if (interactObj.IsInteractedWith()) return;
-                _lastInteractedObject = interactObj.PrimaryInteract(this, true);
-                _isInteracting = _lastInteractedObject != null;
+            if (context.started) {
+                _isHoldingMouseButton = true;
             }
+            
+            if(context.canceled) {
+                _isHoldingMouseButton = false;
+            }
+            
+            if (!_canMove || _isCooking) return;
+
+            if (!context.started) return;
+            if (!GetHitInfo(out IInteractable interactObj, QueryTriggerInteraction.Ignore)) return;
+            if (interactObj.IsInteractedWith()) return;
+            _lastInteractedObject = interactObj.PrimaryInteract(this, true);
+            _isInteracting = _lastInteractedObject != null;
         }
         
         public void OnInteract(InputAction.CallbackContext context)
         {
             if (!_canMove || _isCooking) return;
             
-            if (context.started)
-            {
-                if (_lastInteractedObject != null)
-                {
+            if (context.started) {
+                if (_lastInteractedObject != null) {
                     _isInteracting = false;
                     _lastInteractedObject.PrimaryInteract(this, false);
                     _lastInteractedObject = null;
                 }
-                else if(GetHitInfo(out IInteractable interactObj))
-                {
+                else if(GetHitInfo(out IInteractable interactObj)) {
                     if (interactObj.IsInteractedWith()) return;
                     _lastInteractedObject = interactObj.SecondaryInteract(this);
                 }
@@ -416,7 +420,7 @@ namespace PlayerScripts
         {
         }
 
-        private bool GetHitInfo(out IInteractable interactableComponent)
+        private bool GetHitInfo(out IInteractable interactableComponent, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             interactableComponent = null;
             if (_isInteracting)
@@ -425,7 +429,7 @@ namespace PlayerScripts
             }
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
-            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7);
+            var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7, triggerInteraction);
             Array.Sort(rayHitInfo, CompareDistance);
             foreach (var hit in rayHitInfo)
             {
@@ -450,6 +454,11 @@ namespace PlayerScripts
         public Transform GetInteractPoint()
         {
             return interactor;
+        }
+        
+        public bool IsHoldingLMB()
+        {
+            return _isHoldingMouseButton;
         }
 
         public void SetCameraLocation(Transform cameraLocation)

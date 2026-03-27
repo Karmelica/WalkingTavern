@@ -33,6 +33,7 @@ namespace Cooking.Minigames
             if (!CurrentFood.Contains(foodItem))
             {
                 CurrentFood.Add(foodItem);
+                foodItem.isOnMinigame = true;
             }
             UpdateRecipeText();
         }
@@ -43,6 +44,7 @@ namespace Cooking.Minigames
             if (CurrentFood.Contains(foodItem))
             { 
                 CurrentFood.Remove(foodItem);
+                foodItem.isOnMinigame = false;
             }
             _placedIngredients[foodItem.ingredientType]--;
                 

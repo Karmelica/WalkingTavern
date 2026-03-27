@@ -1,30 +1,25 @@
 using Unity.Behavior;
-using UnityEngine;
-
-public enum SkillCheckResult
-{
-    Completed,
-    Fail,
-    Success,
-    Perfect
-}
 
 public enum IngredientType
 {
     Lettuce,
-    Tomato,
+    Raspberry,
     Cheese,
     Meat,
-    Bun
+    Toast,
+    Baguette
 }
 
 public enum ProcessedIngredientType
 {
     ProcessedLettuce,
-    ProcessedTomato,
+    ProcessedRaspberry,
     ProcessedCheese,
     ProcessedMeat,
-    ProcessedBun
+    ProcessedToastTop,
+    ProcessedToastBottom,
+    ProcessedBaguetteTop,
+    ProcessedBaguetteBottom
 }
 
 [BlackboardEnum]
@@ -33,7 +28,7 @@ public enum DishType
     Hamburger,
     LettuceSoup,
     CheeseCake,
-    Sandwich
+    Casserole
 }
 
 [BlackboardEnum]

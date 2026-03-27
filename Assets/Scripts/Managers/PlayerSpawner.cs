@@ -91,8 +91,6 @@ namespace Managers
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
-            
-            Debug.Log("Spawned player object for " + clientId + " Player");
         }
         
         private void OnClientDisconnected(ulong clientId)

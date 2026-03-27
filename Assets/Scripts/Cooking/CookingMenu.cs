@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cooking.Minigames;
 using Cooking.ScriptableObjects;
 using PlayerScripts;
 using TMPro;
@@ -12,12 +13,12 @@ namespace Cooking
         private readonly List<Recipe> _availableRecipes = new ();
         [SerializeField] private List<Recipe> selectedRecipes = new ();
         [SerializeField] private TMP_Dropdown recipeDropdown;
-        [SerializeField] private DishMakingPlace dishMakingPlace;
+        [SerializeField] private DishMinigame dishMakingPlace;
         [SerializeField] private GameObject cookingUI;
     
         private void Awake()
         {
-            if(!dishMakingPlace) dishMakingPlace = GetComponentInParent<DishMakingPlace>();
+            if(!dishMakingPlace) dishMakingPlace = GetComponentInParent<DishMinigame>();
             LoadRecipes();
         }
 

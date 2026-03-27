@@ -10,18 +10,20 @@ namespace Cooking.Minigames.Helpers
         {
             if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
             {
-                var type = (ProcessedIngredientType)foodItem.ingredientType;
+                var types = foodItem.ingredientProducts;
                 if (!IsServer) return;
                 foodItem.NetworkObject.Despawn();
-                
-                SpawnObject("Prefabs/Food/ProcessedIngredients/" + type);
+
+                foreach (var type in types)
+                {
+                    SpawnObject(type);
+                }
             }
         }
 
-        public override void SpawnObject(string path = null)
+        public override void SpawnObject(GameObject prefab = null)
         {
-            var prefab = Resources.Load<GameObject>(path);
-            var ingredient = Instantiate(prefab, spawnLocation.position, Quaternion.identity);
+            var ingredient = Instantiate(prefab, spawnLocation.position + Vector3.up, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
         }
     }
