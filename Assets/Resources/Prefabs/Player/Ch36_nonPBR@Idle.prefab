@@ -1014,7 +1014,7 @@ SkinnedMeshRenderer:
   m_RootBone: {fileID: 4061438641069411729}
   m_AABB:
     m_Center: {x: -0.000079602, y: 0.083262265, z: 0.045582473}
-    m_Extent: {x: 0.75537336, y: 0.9875013, z: 0.36134154}
+    m_Extent: {x: 0.3566762, y: 0.7988236, z: 0.263659}
   m_DirtyAABB: 0
 --- !u!1 &3357137732333018383
 GameObject:
@@ -2539,7 +2539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1928220444
+  GlobalObjectIdHash: 1959477017
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2642,6 +2642,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerMovement
   ShowTopMostFoldoutHeaderGroup: 1
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 6.161636
+      outSlope: 6.161636
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.11080773
+    - serializedVersion: 3
+      time: 0.2325937
+      value: 1.0023322
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.6099344
+    - serializedVersion: 3
+      time: 0.632967
+      value: 0.99999994
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.119834565
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   walkForce: 200
   sprintForce: 300
   jumpForce: 250
@@ -2761,7 +2803,7 @@ CapsuleCollider:
   m_Radius: 0.25
   m_Height: 1.85
   m_Direction: 1
-  m_Center: {x: 0, y: 0.925, z: -0.07}
+  m_Center: {x: 0, y: 0.925, z: 0}
 --- !u!54 &7060892746062609844
 Rigidbody:
   m_ObjectHideFlags: 0

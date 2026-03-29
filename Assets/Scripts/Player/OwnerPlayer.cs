@@ -130,7 +130,7 @@ namespace PlayerScripts
             if (!IsOwner) return;
             
             _playerCamera = Camera.main;
-            _windowMatrix = _playerCamera.transform.localToWorldMatrix;
+            _windowMatrix = _playerCamera!.transform.localToWorldMatrix;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -270,13 +270,17 @@ namespace PlayerScripts
         {
             _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
 
-            if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f) {
-                transform.rotation = Quaternion.identity;
+            if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f)
+            {
+                var rot = Quaternion.identity;
+                transform.rotation = new Quaternion(rot.x, transform.rotation.eulerAngles.y, rot.z, rot.w);
             }
 
             if (_canMove)
             {
                 var moveForce = _isSprinting ? sprintForce : walkForce;
+
+                
                 var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
                                  (moveForce * Time.fixedDeltaTime);
 
