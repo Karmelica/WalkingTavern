@@ -75,7 +75,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 01fecfd92aee6db449f74d0edac37a15, type: 2}
+  - {fileID: 2100000, guid: 9926d948acf6e8a41b8bf778d27fac18, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4199856423
+  GlobalObjectIdHash: 3341444144
   InScenePlacedSourceGlobalObjectIdHash: 3493842248
   DeferredDespawnTick: 0
   Ownership: 1
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Minigames.Helpers.DishHelper
   ShowTopMostFoldoutHeaderGroup: 1
+  shouldSpawnSomeIngredients: 1
   spawnLocation: {fileID: 6215958971858892260}
   dishPrefab: 1
 --- !u!64 &8588358569864495664
@@ -192,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891a9c62a42a89d47b99b114b2aee7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EditorCameraSet
+  spawnLocation: {fileID: 0}
 --- !u!64 &7552029399807121553
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -658,7 +660,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -5497.076, y: -5976.492}
+  m_AnchoredPosition: {x: 0, y: 0.186}
   m_SizeDelta: {x: 480, y: 63.9791}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1826460065908820433
@@ -758,7 +760,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8968467398352742767}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.79518527, z: -0.6063665, w: 0}
+  m_LocalRotation: {x: -0.00000074505806, y: 0.7951852, z: -0.6063667, w: -0.0000009983778}
   m_LocalPosition: {x: 0, y: 0.4528, z: 0.1118}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0

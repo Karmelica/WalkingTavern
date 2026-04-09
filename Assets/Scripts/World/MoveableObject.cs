@@ -77,7 +77,6 @@ namespace World
         
         #region RPC Methods
         
-        
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void ChangeOwnerServerRpc(bool startedInteraction = true, RpcParams rpcParams = default)
         {

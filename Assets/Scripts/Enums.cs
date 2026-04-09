@@ -7,7 +7,8 @@ public enum IngredientType
     Cheese,
     Meat,
     Toast,
-    Baguette
+    Baguette,
+    Mushroom
 }
 
 public enum ProcessedIngredientType
@@ -19,7 +20,8 @@ public enum ProcessedIngredientType
     ProcessedToastTop,
     ProcessedToastBottom,
     ProcessedBaguetteTop,
-    ProcessedBaguetteBottom
+    ProcessedBaguetteBottom,
+    ProcessedMushroom
 }
 
 [BlackboardEnum]
@@ -28,7 +30,8 @@ public enum DishType
     Hamburger,
     LettuceSoup,
     CheeseCake,
-    Casserole
+    Casserole,
+    MushroomSoup
 }
 
 [BlackboardEnum]

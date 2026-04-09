@@ -33,7 +33,6 @@ namespace Cooking.Minigames
         {
             MainCamera = Camera.main;
             Helper = GetComponent<Helper>();
-            Helper.spawnLocation = foodPlaceholder;
         }
 
         protected virtual void Update()

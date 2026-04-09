@@ -14,7 +14,7 @@ namespace Cooking.Minigames
         {
             base.DoMinigame();
             if (!DidHit) return;
-            if (RayHit.collider.gameObject /*&& hit.collider.gameObject == CurrentFood[0].gameObject*/)
+            if (RayHit.collider.gameObject)
             {
                 var difference = (_oldMousePos.y - MousePos.y) / Screen.height * Time.deltaTime * 1000f;
                 if (MousePos.y < _oldMousePos.y && difference > requiredSpeed)

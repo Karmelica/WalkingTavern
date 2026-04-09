@@ -7,6 +7,7 @@ public class EditorCameraSet : MonoBehaviour
 {
     private Minigame _minigame;
     private Transform cameraLocation;
+    [SerializeField] private Transform spawnLocation;
     private Transform foodPlaceholder;
     
 #if UNITY_EDITOR
@@ -31,6 +32,11 @@ public class EditorCameraSet : MonoBehaviour
             
     private void OnDrawGizmos()
     {
+        if (spawnLocation)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(spawnLocation.position, 0.05f);
+        }
         if (foodPlaceholder)
         {
             Gizmos.color = Color.green;

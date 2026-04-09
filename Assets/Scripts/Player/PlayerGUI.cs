@@ -5,6 +5,7 @@ using Unity.AppUI.UI;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using World;
 
 namespace PlayerScripts
 {
@@ -23,6 +24,7 @@ namespace PlayerScripts
 
         public void LeaveToMenu()
         {
+            if(FoodStorage.Instance != null) Destroy(FoodStorage.Instance.gameObject);
             NetworkManager.Singleton.Shutdown();
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;

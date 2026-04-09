@@ -7,6 +7,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Customer : NetworkBehaviour, IInteractable
 {
@@ -15,6 +16,7 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] public List<Material> faces;
     [SerializeField] private SkinnedMeshRenderer[] customerMesh;
     [SerializeField] private SkinnedMeshRenderer faceRenderer;
+    [SerializeField] private Image foodIcon;
     
     private BehaviorGraphAgent _behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
@@ -45,6 +47,11 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
+        requestedDish.OnValueChanged += ChangeFoodIcon;
+        foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
+        {
+            mainTexture = Resources.Load<Texture>("Icons/Food/" + requestedDish.Value)
+        };
         ears[selectedEarsIndex.Value].SetActive(true);
         faceRenderer.materials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
         foreach (var mesh in customerMesh)
@@ -70,6 +77,14 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if (!customerList.Contains(gameObject)) customerList.Add(gameObject);
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
+    }
+
+    private void ChangeFoodIcon(DishType previousValue, DishType newValue)
+    {
+        foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
+        {
+            mainTexture = Resources.Load<Texture>("Icons/Food/" + newValue)
+        };
     }
 
     public override void OnNetworkDespawn()
