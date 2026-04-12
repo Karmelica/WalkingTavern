@@ -26,7 +26,7 @@ namespace World
             caravan.transform.position = Vector3.Lerp(caravan.transform.position, transform.position, 0.5f);
             caravan.transform.rotation = Quaternion.Lerp(caravan.transform.rotation, transform.rotation, 0.5f);
             
-            var roomTargetRot = Quaternion.Euler(-transform.localEulerAngles.x, 0, transform.localEulerAngles.z);
+            var roomTargetRot = Quaternion.Euler(transform.localEulerAngles.x, 0, -transform.localEulerAngles.z);
             room.transform.localRotation = Quaternion.Lerp(room.transform.rotation, roomTargetRot, 0.5f);
 
             if (_drivingPlayer)
@@ -45,7 +45,7 @@ namespace World
         {
             _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);
 
-            if(_rb.linearVelocity.magnitude < Speed){
+            if(_rb.linearVelocity.magnitude < Speed && inputVector.y > 0){
                 var forward = transform.forward;
                 forward.y = 0;
                 forward.Normalize();
@@ -72,6 +72,12 @@ namespace World
                 _drivingPlayer = null;
             }
         }
+        
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void SetUprightPositionRpc()
+        {
+            transform.rotation = Quaternion.identity;
+        }
 
         public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
         {
@@ -82,6 +88,12 @@ namespace World
                 right.y = 0;
                 right.Normalize();
                 interactor.transform.position = sitLocation.position + right * 3f;
+            }
+            else
+            {
+                if(!_isDriven.Value){
+                    SetUprightPositionRpc();
+                }
             }
             return null;
         }

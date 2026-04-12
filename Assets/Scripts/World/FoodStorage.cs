@@ -22,6 +22,11 @@ namespace World
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
+            //GenerateFood();
+        }
+
+        private void GenerateFood()
+        {
             foreach (IngredientType ingredientType in Enum.GetValues(typeof(IngredientType)))
             {
                 for(int i = 0; i < ingredientQuantity; i++){

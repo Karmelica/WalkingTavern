@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PlayerScripts;
 using Steamworks;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -18,7 +19,7 @@ namespace Managers
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
-        [SerializeField] private List<string> scenesToSpawnPlayersIn;
+        [SerializeField] private List<SceneAsset> scenesToSpawnPlayersIn;
         private Vector3 _spawnPos;
         private bool _isLoaded;
 
@@ -33,8 +34,6 @@ namespace Managers
             NetworkManager.SceneManager.OnLoad += OnSceneLoadStarted;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
-
-
 
         public override void OnNetworkDespawn()
         {
@@ -53,10 +52,11 @@ namespace Managers
             _isLoaded = true;
             
             if (scenesToSpawnPlayersIn.Count == 0) return;
-            foreach (var sceneName in scenesToSpawnPlayersIn)
+            foreach (var scene in scenesToSpawnPlayersIn)
             {
+                if (currentSceneName != scene.name) continue;
                 _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
-                if (currentSceneName == sceneName) RequestSpawnPlayerRpc(clientId);
+                if (currentSceneName == scene.name) RequestSpawnPlayerRpc(clientId);
                 return;
             }
             Debug.Log("No scene to spawn players found");

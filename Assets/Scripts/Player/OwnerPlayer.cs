@@ -31,6 +31,8 @@ namespace PlayerScripts
         [SerializeField] private float walkForce = 20f;
         [SerializeField] private float sprintForce = 25f;
         [SerializeField] private float jumpForce = 250f;
+        [Range(0f, 90f)]
+        [SerializeField] private float walkableAngle = 45f;
         private const float LookSensitivity = 0.1f;
         private const float InteractRange = 3f;
         
@@ -286,6 +288,10 @@ namespace PlayerScripts
 
                 if (_rigidbody.linearVelocity.magnitude < moveForce)
                 {
+                    if (Physics.Raycast(transform.position + Vector3.up * 0.05f, moveVector + Vector3.up * -1, out var hit, 0.4f))
+                    {
+                        if (Vector3.Angle(hit.normal, Vector3.up) > walkableAngle) return;
+                    }
                     _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
                 }
             }
@@ -295,7 +301,7 @@ namespace PlayerScripts
                 _caravanControl.Drive(_inputVector);
             }
         }
-        
+
         /// <summary>
         /// Wykonuje skok
         /// </summary>
@@ -305,6 +311,12 @@ namespace PlayerScripts
 
             _networkedPlayer.SetJumping();
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+        }
+
+        public void Unstuck()
+        {
+            transform.position = Vector3.zero;
+            transform.rotation = Quaternion.identity;
         }
         
         #endregion
@@ -351,32 +363,30 @@ namespace PlayerScripts
 
         public void OnPrevious(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (!context.performed) return;
+            
+            if (context.interaction is HoldInteraction)
             {
-                if (context.interaction is HoldInteraction)
+                _playerGUI.ShowPause(true);
+                SetCanMove(false);
+            }
+            else
+            {
+                if (_playerGUI.IsPaused())
                 {
-                    _playerGUI.ShowPause(true);
-                    SetCanMove(false);
+                    _playerGUI.ShowPause(false);
+                    if (!_isCooking) SetCanMove(true);
+                    return;
                 }
-                else
-                {
-                    if (_playerGUI.IsPaused())
-                    {
-                        _playerGUI.ShowPause(false);
-                        if (!_isCooking) SetCanMove(true);
-                        return;
-                    }
 
-                    SetCooking(false);
-                    SetCanMove(true);
+                SetCooking(false);
+                SetCanMove(true);
 
-                    if (_lastInteractedObject != null)
-                    {
-                        _isInteracting = false;
-                        _lastInteractedObject.PrimaryInteract(this, false);
-                        _lastInteractedObject = null;
-                    }
-                }
+                if (_lastInteractedObject == null) return;
+                
+                _isInteracting = false;
+                _lastInteractedObject.PrimaryInteract(this, false);
+                _lastInteractedObject = null;
             }
         }
 
@@ -422,6 +432,7 @@ namespace PlayerScripts
         
         public void OnCrouch(InputAction.CallbackContext context)
         {
+            Unstuck();
         }
 
         private bool GetHitInfo(out IInteractable interactableComponent, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.UseGlobal)

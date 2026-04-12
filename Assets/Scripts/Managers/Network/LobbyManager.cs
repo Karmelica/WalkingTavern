@@ -5,6 +5,7 @@ using Steamworks;
 using Steamworks.Data;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +19,7 @@ namespace Managers.Network
         [SerializeField] private GameObject waitingForPlayersText;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
+        [SerializeField] private SceneAsset firstScene;
         
         private TMP_InputField _clientSteamIdInputField;
 
@@ -137,7 +139,7 @@ namespace Managers.Network
         public void OnStartGameButtonClicked()
         {
             if (!NetworkManager.Singleton.IsHost) return;
-            NetworkManager.Singleton.SceneManager.LoadScene("MainLevel", LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(firstScene.name, LoadSceneMode.Single);
         }
 
         #endregion
