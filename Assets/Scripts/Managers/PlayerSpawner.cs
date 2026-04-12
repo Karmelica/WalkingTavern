@@ -19,7 +19,7 @@ namespace Managers
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
-        [SerializeField] private List<SceneAsset> scenesToSpawnPlayersIn;
+        [SerializeField] private List<string> scenesToSpawnPlayersIn;
         private Vector3 _spawnPos;
         private bool _isLoaded;
 
@@ -54,9 +54,9 @@ namespace Managers
             if (scenesToSpawnPlayersIn.Count == 0) return;
             foreach (var scene in scenesToSpawnPlayersIn)
             {
-                if (currentSceneName != scene.name) continue;
+                if (currentSceneName != scene) continue;
                 _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
-                if (currentSceneName == scene.name) RequestSpawnPlayerRpc(clientId);
+                if (currentSceneName == scene) RequestSpawnPlayerRpc(clientId);
                 return;
             }
             Debug.Log("No scene to spawn players found");

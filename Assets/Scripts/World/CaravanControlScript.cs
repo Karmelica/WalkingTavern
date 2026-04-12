@@ -10,7 +10,7 @@ namespace World
     {
         private OwnerPlayer _drivingPlayer;
         private Rigidbody _rb;
-        private const float Speed = 50f;
+        private const float Speed = 100f;
         private NetworkVariable<bool> _isDriven = new NetworkVariable<bool>();
         [SerializeField] private GameObject caravan;
         [SerializeField] private GameObject room;

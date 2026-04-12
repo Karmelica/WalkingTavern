@@ -19,7 +19,7 @@ namespace Managers.Network
         [SerializeField] private GameObject waitingForPlayersText;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
-        [SerializeField] private SceneAsset firstScene;
+        [SerializeField] private string firstScene;
         
         private TMP_InputField _clientSteamIdInputField;
 
@@ -139,7 +139,7 @@ namespace Managers.Network
         public void OnStartGameButtonClicked()
         {
             if (!NetworkManager.Singleton.IsHost) return;
-            NetworkManager.Singleton.SceneManager.LoadScene(firstScene.name, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(firstScene, LoadSceneMode.Single);
         }
 
         #endregion

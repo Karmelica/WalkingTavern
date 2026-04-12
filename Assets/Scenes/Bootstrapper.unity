@@ -338,12 +338,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 792899241466710047, guid: 99dfda1b364aea842a859ab0a6fc7505, type: 3}
       propertyPath: 'scenesToSpawnPlayersIn.Array.data[0]'
-      value: 
-      objectReference: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+      value: MainLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 792899241466710047, guid: 99dfda1b364aea842a859ab0a6fc7505, type: 3}
       propertyPath: 'scenesToSpawnPlayersIn.Array.data[1]'
-      value: 
-      objectReference: {fileID: 102900000, guid: bb49e6c949901584d854b6680aaeddfb, type: 3}
+      value: GatheringLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 7555510722352210310, guid: 99dfda1b364aea842a859ab0a6fc7505, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

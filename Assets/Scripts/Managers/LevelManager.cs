@@ -8,14 +8,14 @@ namespace Managers
 {
     public class LevelManager : NetworkBehaviour
     {
-        [SerializeField] private SceneAsset nextScene;
+        [SerializeField] private string nextScene;
         
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player")) return;
             if (IsServer)
             {
-                NetworkManager.SceneManager.LoadScene(nextScene.name, LoadSceneMode.Single);
+                NetworkManager.SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
             }
         }
     }
