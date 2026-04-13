@@ -16,9 +16,9 @@ namespace World
     {
         #region Variables
 
-        public bool isOnMinigame = false;
+        public bool isOnMinigame;
         private Collider _collider;
-        private readonly NetworkVariable<bool> _isInteractedWith = new (false);
+        private readonly NetworkVariable<bool> _isInteractedWith = new ();
 
         #endregion
 
@@ -32,18 +32,13 @@ namespace World
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            _isInteractedWith.OnValueChanged += OnInteractedValueChanged;
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-            _isInteractedWith.OnValueChanged -= OnInteractedValueChanged;
+            NetworkObject.DontDestroyWithOwner = true;
         }
 
         private void Update()
         {
-            if (transform.parent)
+            if (!IsOwner) return;
+            if (transform.parent && _isInteractedWith.Value)
             {
                 transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
@@ -51,7 +46,6 @@ namespace World
             else
             {
                 if (isOnMinigame) return;
-                if (!IsOwner) return;
                 Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
                     QueryTriggerInteraction.Ignore);
                 transform.up = hit.normal;
@@ -59,6 +53,10 @@ namespace World
             }
         }
 
+        #endregion
+        
+        #region RPC Methods
+        
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void PlaceDownRpc()
         {
@@ -67,21 +65,14 @@ namespace World
             transform.up = hit.normal;
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
         }
-
-        private void OnInteractedValueChanged(bool previousValue, bool newValue)
-        {
-            //_collider.enabled = !newValue;
-        }
-
-        #endregion
-        
-        #region RPC Methods
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void ChangeOwnerServerRpc(bool startedInteraction = true, RpcParams rpcParams = default)
         {
-            ulong clientId = rpcParams.Receive.SenderClientId;
             _isInteractedWith.Value = startedInteraction;
+            
+            if (!startedInteraction) return;
+            var clientId = rpcParams.Receive.SenderClientId;
             NetworkObject.ChangeOwnership(clientId);
         }
 
@@ -134,7 +125,7 @@ namespace World
                             placePoint = floorHit.point;
                             placeRotation = floorHit.normal;
                         }
-
+                        
                         transform.up = placeRotation;
                         transform.position = placePoint + transform.up * _collider.bounds.extents.y;
                         return this;
@@ -144,7 +135,7 @@ namespace World
                 placeRotation = groundHit.normal;
                 placePoint = groundHit.point;
             }
-
+            
             transform.up = placeRotation;
             transform.position = placePoint + transform.up * _collider.bounds.extents.y;
             return this;

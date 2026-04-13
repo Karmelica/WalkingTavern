@@ -50,7 +50,8 @@ namespace Managers
         private void OnSceneLoaded(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode)
         {
             _isLoaded = true;
-            
+
+            if (clientId != NetworkManager.Singleton.LocalClientId) return;
             if (scenesToSpawnPlayersIn.Count == 0) return;
             foreach (var scene in scenesToSpawnPlayersIn)
             {
@@ -86,8 +87,6 @@ namespace Managers
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void RequestSpawnPlayerRpc(ulong clientId, RpcParams rpcParams = default)
         {
-            if (!IsServer) return;
-
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
