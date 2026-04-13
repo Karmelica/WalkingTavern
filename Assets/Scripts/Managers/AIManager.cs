@@ -33,6 +33,7 @@ public class AIManager : NetworkBehaviour
             _availableSeats.Enqueue(seat);
         }
 
+        if (!IsServer) return;
         StartCoroutine(SpawnCustomer());
     }
     
@@ -54,7 +55,6 @@ public class AIManager : NetworkBehaviour
     
     public IEnumerator SpawnCustomer()
     {
-        if (!IsServer) yield return null;
         for(int i = 0; i < totalCustomers; i++)
         {
             var customerInstance = Instantiate(customerPrefab,
@@ -83,6 +83,5 @@ public class AIManager : NetworkBehaviour
     {
         if (!IsServer) return;
         customer.NetworkObject.Despawn();
-        SpawnCustomer();
     }
 }

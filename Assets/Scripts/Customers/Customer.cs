@@ -107,7 +107,6 @@ public class Customer : NetworkBehaviour, IInteractable
     private void DespawnServerRpc()
     {
         NetworkObject.Despawn();
-        //_aiManager.SpawnCustomer();
     }
 
     private void Update()
