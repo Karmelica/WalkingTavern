@@ -15,6 +15,7 @@ namespace World
         [SerializeField] private GameObject caravan;
         [SerializeField] private GameObject room;
         [SerializeField] private Transform sitLocation;
+        [SerializeField] private float caravanHeight = 0.6f;
 
         private void Awake()
         {
@@ -25,22 +26,34 @@ namespace World
         {
             if(Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f))
             {
-                transform.position = hit.point + Vector3.up * 0.724f;
+                transform.position = hit.point + Vector3.up * 0.6f;
             }
             
             //snail control
-            if(caravan){
-                if(Vector3.Distance(caravan.transform.position, sitLocation.position) > 6f){
-                    caravan.transform.position = Vector3.MoveTowards(caravan.transform.position, sitLocation.position, Time.deltaTime);
+            if(caravan)
+            {
+                var d = Vector3.Distance(caravan.transform.position, sitLocation.position);
+                if(d > 3f){
+                    var movement = Vector3.MoveTowards(caravan.transform.position, sitLocation.position, (d - 3f) * Time.deltaTime);
+                    Vector3 point = default;
+                    if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit caravanRay, 3f))
+                    {
+                         point = caravanRay.point + Vector3.up * caravanHeight;
+                    }
+                    caravan.transform.position = new Vector3(movement.x, point.y, movement.z);
                 }
-                caravan.transform.LookAt(sitLocation.position, Vector3.up);
+
+                var rot = Quaternion.LookRotation(sitLocation.position - caravan.transform.position);
+                caravan.transform.rotation = Quaternion.Euler(caravan.transform.eulerAngles.x, rot.eulerAngles.y, caravan.transform.eulerAngles.z);
             }
 
+            //room rotation
             if(room){
-                var roomTargetRot = Quaternion.Euler(transform.localEulerAngles.x, 0, -transform.localEulerAngles.z);
+                var roomTargetRot = Quaternion.Euler(-caravan.transform.localEulerAngles.x, 0, caravan.transform.localEulerAngles.z);
                 room.transform.localRotation = Quaternion.Lerp(room.transform.rotation, roomTargetRot, 0.5f);
             }
 
+            //player position
             if (_drivingPlayer)
             {
                 _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
