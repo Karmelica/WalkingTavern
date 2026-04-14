@@ -10,7 +10,7 @@ namespace World
     {
         private OwnerPlayer _drivingPlayer;
         private Rigidbody _rb;
-        private const float Speed = 100f;
+        private const float Speed = 80f;
         private NetworkVariable<bool> _isDriven = new NetworkVariable<bool>();
         [SerializeField] private GameObject caravan;
         [SerializeField] private GameObject room;
@@ -33,14 +33,14 @@ namespace World
             if(caravan)
             {
                 var d = Vector3.Distance(caravan.transform.position, sitLocation.position);
-                if(d > 3f){
-                    var movement = Vector3.MoveTowards(caravan.transform.position, sitLocation.position, (d - 3f) * Time.deltaTime);
+                if(d > 4){
                     Vector3 point = default;
                     if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit caravanRay, 3f))
                     {
                          point = caravanRay.point + Vector3.up * caravanHeight;
                     }
-                    caravan.transform.position = new Vector3(movement.x, point.y, movement.z);
+                    var vector3 = new Vector3(sitLocation.position.x, point.y, sitLocation.position.z);
+                    caravan.transform.position = Vector3.Lerp(caravan.transform.position, vector3, 0.01f);
                 }
 
                 var rot = Quaternion.LookRotation(sitLocation.position - caravan.transform.position);

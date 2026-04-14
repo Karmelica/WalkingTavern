@@ -38,7 +38,7 @@ namespace World
         private void Update()
         {
             if (!IsOwner) return;
-            if (transform.parent && _isInteractedWith.Value)
+            if (transform.parent)
             {
                 transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
@@ -118,26 +118,25 @@ namespace World
                             placePoint = hit.point;
                             placeRotation = hit.normal;
                         }
-                        else
-                        {
+                        else {
                             Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var floorHit,
                                 Single.PositiveInfinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
                             placePoint = floorHit.point;
                             placeRotation = floorHit.normal;
                         }
-                        
-                        transform.up = placeRotation;
-                        transform.position = placePoint + transform.up * _collider.bounds.extents.y;
-                        return this;
+                        break;
                     }
                 }
-                Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
-                placeRotation = groundHit.normal;
-                placePoint = groundHit.point;
+                else {
+                    Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
+                    placeRotation = groundHit.normal;
+                    placePoint = groundHit.point;
+                }
             }
             
             transform.up = placeRotation;
             transform.position = placePoint + transform.up * _collider.bounds.extents.y;
+            Physics.SyncTransforms();
             return this;
         }
 
