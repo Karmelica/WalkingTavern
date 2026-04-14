@@ -23,11 +23,17 @@ namespace World
 
         private void Update()
         {
-            Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f);
-            transform.position = hit.point + Vector3.up;
+            if(Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f))
+            {
+                transform.position = hit.point + Vector3.up * 0.724f;
+            }
+            
+            //snail control
             if(caravan){
-                caravan.transform.position = Vector3.Lerp(caravan.transform.position, transform.position, 0.5f);
-                caravan.transform.rotation = Quaternion.Lerp(caravan.transform.rotation, transform.rotation, 0.5f);
+                if(Vector3.Distance(caravan.transform.position, sitLocation.position) > 6f){
+                    caravan.transform.position = Vector3.MoveTowards(caravan.transform.position, sitLocation.position, Time.deltaTime);
+                }
+                caravan.transform.LookAt(sitLocation.position, Vector3.up);
             }
 
             if(room){
@@ -125,5 +131,13 @@ namespace World
             return _isDriven.Value;
         }
 
+        private void OnDrawGizmos()
+        {
+            if (sitLocation)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(sitLocation.position, 0.5f);
+            }
+        }
     }
 }
