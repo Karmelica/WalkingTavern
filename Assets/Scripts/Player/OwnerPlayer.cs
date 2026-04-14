@@ -103,8 +103,7 @@ namespace PlayerScripts
             UpdateInteractorPosition();
             UpdateCameraPosition();
             if(!_isDriving){
-                SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude,
-                    _lastInteractedObject != null);
+                SetAnimationServerRpc(_inputVector.y, _rigidbody.linearVelocity.magnitude, _lastInteractedObject != null);
             }
         }
 
@@ -153,7 +152,7 @@ namespace PlayerScripts
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            _lastInteractedObject?.PrimaryInteract(this, false);
+            _lastInteractedObject?.PrimaryInteract(null, false);
             _shouldUpdateInterface = false;
             CleanupInput();
         }
@@ -396,13 +395,8 @@ namespace PlayerScripts
 
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (context.started) {
-                _isHoldingMouseButton = true;
-            }
-            
-            if(context.canceled) {
-                _isHoldingMouseButton = false;
-            }
+            if (context.started) { _isHoldingMouseButton = true; }
+            if(context.canceled) { _isHoldingMouseButton = false; }
             
             if (!_canMove || _isCooking) return;
 
