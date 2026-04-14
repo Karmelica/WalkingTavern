@@ -23,11 +23,17 @@ namespace World
 
         private void Update()
         {
-            caravan.transform.position = Vector3.Lerp(caravan.transform.position, transform.position, 0.5f);
-            caravan.transform.rotation = Quaternion.Lerp(caravan.transform.rotation, transform.rotation, 0.5f);
-            
-            var roomTargetRot = Quaternion.Euler(transform.localEulerAngles.x, 0, -transform.localEulerAngles.z);
-            room.transform.localRotation = Quaternion.Lerp(room.transform.rotation, roomTargetRot, 0.5f);
+            Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f);
+            transform.position = hit.point + Vector3.up;
+            if(caravan){
+                caravan.transform.position = Vector3.Lerp(caravan.transform.position, transform.position, 0.5f);
+                caravan.transform.rotation = Quaternion.Lerp(caravan.transform.rotation, transform.rotation, 0.5f);
+            }
+
+            if(room){
+                var roomTargetRot = Quaternion.Euler(transform.localEulerAngles.x, 0, -transform.localEulerAngles.z);
+                room.transform.localRotation = Quaternion.Lerp(room.transform.rotation, roomTargetRot, 0.5f);
+            }
 
             if (_drivingPlayer)
             {
@@ -52,7 +58,7 @@ namespace World
                 _rb.AddForce(forward * (inputVector.y * Time.fixedDeltaTime * Speed), ForceMode.VelocityChange);
             }
             
-            transform.Rotate(transform.up, inputVector.x * inputVector.y * 25f * Time.fixedDeltaTime);
+            transform.Rotate(transform.up, inputVector.x * inputVector.y * 50f * Time.fixedDeltaTime);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
