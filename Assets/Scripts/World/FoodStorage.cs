@@ -50,7 +50,8 @@ namespace World
 
         public int GetIngredientCount(IngredientType requestedIngredient)
         {
-            return _gatheredIngredients[requestedIngredient];
+            _gatheredIngredients.TryGetValue(requestedIngredient, out var value);
+            return value;
         }
 
         public void ReturnIngredient(IngredientType returnedIngredient)
