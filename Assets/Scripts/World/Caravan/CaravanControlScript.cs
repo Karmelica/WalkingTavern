@@ -81,9 +81,11 @@ namespace World
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void DriveCarRpc()
+        private void SetDriveRpc(RpcParams rpcParams = default)
         {
             _isDriven.Value = true;
+            var id = rpcParams.Receive.SenderClientId;
+            NetworkObject.ChangeOwnership(id);
         }
 
         
@@ -91,11 +93,6 @@ namespace World
         private void StopDrivingCarRpc()
         {
             _isDriven.Value = false;
-            if(_drivingPlayer){
-                _drivingPlayer.SetDriving(false);
-                _drivingPlayer.SetCaravanControl(null);
-                _drivingPlayer = null;
-            }
         }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -109,6 +106,11 @@ namespace World
             if(!startedInteraction)
             {
                 StopDrivingCarRpc();
+                if(_drivingPlayer && _drivingPlayer == interactor){
+                    _drivingPlayer.SetDriving(false);
+                    _drivingPlayer.SetCaravanControl(null);
+                    _drivingPlayer = null;
+                }
                 var right = sitLocation.right;
                 right.y = 0;
                 right.Normalize();
@@ -130,7 +132,7 @@ namespace World
             _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
             _drivingPlayer.transform.rotation = sitLocation.rotation;
             _drivingPlayer.SetCaravanControl(this);
-            DriveCarRpc();
+            SetDriveRpc();
             return this;
         }
 
