@@ -18,6 +18,8 @@ namespace World
             {
                 mainTexture = Resources.Load<Texture>("Icons/Food/" + ingredientBox)
             };
+            
+            if(IsServer) _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
         }
 
         private void OnTriggerEnter(Collider other)
