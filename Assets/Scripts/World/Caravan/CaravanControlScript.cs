@@ -1,10 +1,8 @@
-using System;
-using JetBrains.Annotations;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace World
+namespace World.Caravan
 {
     public class CaravanControlScript : NetworkBehaviour, IInteractable
     {
@@ -14,8 +12,11 @@ namespace World
         private NetworkVariable<bool> _isDriven = new NetworkVariable<bool>();
         [SerializeField] private GameObject caravan;
         [SerializeField] private GameObject room;
+        [SerializeField] private Transform followLocation;
         [SerializeField] private Transform sitLocation;
-        [SerializeField] private float caravanHeight = 0.6f;
+        [SerializeField] private Transform snail;
+        [SerializeField] private float caravanHeight = 0.3f;
+        [SerializeField] private float distance = 3f;
 
         private void Awake()
         {
@@ -24,26 +25,27 @@ namespace World
 
         private void Update()
         {
-            if(Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f))
+            if(Physics.Raycast(snail.position, Vector3.down, out RaycastHit hit, 5f))
             {
-                transform.position = hit.point + Vector3.up * caravanHeight;
+                var p = hit.point + Vector3.up * 1.2f;
+                transform.position = new Vector3(transform.position.x, p.y, transform.position.z);
             }
             
             //snail control
             if(caravan)
             {
-                var d = Vector3.Distance(caravan.transform.position, sitLocation.position);
-                if(d > 4){
+                var d = Vector3.Distance(caravan.transform.position, followLocation.position);
+                if(d > distance){
                     Vector3 point = default;
-                    if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit caravanRay, 3f))
+                    if (Physics.Raycast(caravan.transform.position, Vector3.down, out RaycastHit caravanRay, float.PositiveInfinity))
                     {
                          point = caravanRay.point + Vector3.up * caravanHeight;
                     }
-                    var vector3 = new Vector3(sitLocation.position.x, point.y, sitLocation.position.z);
+                    var vector3 = new Vector3(followLocation.position.x, point.y, followLocation.position.z);
                     caravan.transform.position = Vector3.Lerp(caravan.transform.position, vector3, 0.01f);
                 }
 
-                var rot = Quaternion.LookRotation(sitLocation.position - caravan.transform.position);
+                var rot = Quaternion.LookRotation(followLocation.position - caravan.transform.position);
                 caravan.transform.rotation = Quaternion.Euler(caravan.transform.eulerAngles.x, rot.eulerAngles.y, caravan.transform.eulerAngles.z);
             }
 
@@ -56,7 +58,7 @@ namespace World
             //player position
             if (_drivingPlayer)
             {
-                _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
+                _drivingPlayer.transform.position = sitLocation.position;
             }
         }
 
@@ -105,10 +107,10 @@ namespace World
                     _drivingPlayer.SetCaravanControl(null);
                     _drivingPlayer = null;
                 }
-                var right = sitLocation.right;
+                var right = followLocation.right;
                 right.y = 0;
                 right.Normalize();
-                interactor.transform.position = sitLocation.position + right * 3f;
+                interactor.transform.position = followLocation.position + right * 3f;
             }
             else
             {
@@ -123,8 +125,8 @@ namespace World
         {
             _drivingPlayer = interactor;
             _drivingPlayer.SetDriving(true);
-            _drivingPlayer.transform.position = sitLocation.position + Vector3.down * 0.5f;
-            _drivingPlayer.transform.rotation = sitLocation.rotation;
+            _drivingPlayer.transform.position = followLocation.position + Vector3.down * 0.5f;
+            _drivingPlayer.transform.rotation = followLocation.rotation;
             _drivingPlayer.SetCaravanControl(this);
             SetDriveRpc();
             return this;
@@ -142,10 +144,10 @@ namespace World
 
         private void OnDrawGizmos()
         {
-            if (sitLocation)
+            if (followLocation)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(sitLocation.position, 0.5f);
+                Gizmos.DrawWireSphere(followLocation.position, 0.5f);
             }
         }
     }

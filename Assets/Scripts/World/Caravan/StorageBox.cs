@@ -1,16 +1,16 @@
-using System;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace World
+namespace World.Caravan
 {
     public class StorageBox : NetworkBehaviour, IInteractable
     {
         [SerializeField] private IngredientType ingredientBox;
         [SerializeField] private Image foodIcon;
         private NetworkVariable<int> _quantity = new();
+        private int _localQuantity;
 
         private void Start()
         {
@@ -18,8 +18,24 @@ namespace World
             {
                 mainTexture = Resources.Load<Texture>("Icons/Food/" + ingredientBox)
             };
-            
-            if(IsServer) _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+        }
+
+        protected override void OnNetworkPostSpawn()
+        {
+            base.OnNetworkPostSpawn();
+            _quantity.OnValueChanged += OnQuantityChanged;
+            if(IsServer && FoodStorage.Instance) _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            _quantity.OnValueChanged -= OnQuantityChanged;
+        }
+
+        private void OnQuantityChanged(int previousValue, int newValue)
+        {
+            _localQuantity = newValue;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -47,6 +63,8 @@ namespace World
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SpawnIngredientServerRpc(IngredientType ingredientType)
         {
+            if (!IsServer) return;
+            if (!FoodStorage.Instance) return;
             if (!FoodStorage.Instance.GetIngredient(ingredientType)) return;
             var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
@@ -55,7 +73,7 @@ namespace World
 
         public string GetInteractName()
         {
-            return "\nStorage (" + ingredientBox + ": " + _quantity.Value + ")";
+            return "\nStorage (" + ingredientBox + ": " + _localQuantity + ")";
         }
 
         public bool IsInteractedWith()

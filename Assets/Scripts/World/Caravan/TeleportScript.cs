@@ -1,28 +1,28 @@
-using System;
-using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
-public class TeleportScript : MonoBehaviour
+namespace World.Caravan
 {
-    public Transform targetTeleportPosition;
-    [SerializeField] private TeleportScript target;
-    private Teleportable _traveller;
-
-    private void OnTriggerEnter(Collider other)
+    public class TeleportScript : MonoBehaviour
     {
-        if (other.TryGetComponent(out _traveller))
+        public Transform targetTeleportPosition;
+        [SerializeField] private TeleportScript target;
+        private Teleportable _traveller;
+
+        private void OnTriggerEnter(Collider other)
         {
-            var m = target.targetTeleportPosition.transform.localToWorldMatrix * transform.worldToLocalMatrix * _traveller.transform.localToWorldMatrix;
-            _traveller.Teleport(m.GetColumn(3), m.rotation);
+            if (other.TryGetComponent(out _traveller))
+            {
+                var m = target.targetTeleportPosition.transform.localToWorldMatrix * transform.worldToLocalMatrix * _traveller.transform.localToWorldMatrix;
+                _traveller.Teleport(m.GetColumn(3), m.rotation);
+            }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if(_traveller)
+        private void OnTriggerExit(Collider other)
         {
-            _traveller = null;
+            if(_traveller)
+            {
+                _traveller = null;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using World;
+using World.Caravan;
 
 namespace PlayerScripts
 {

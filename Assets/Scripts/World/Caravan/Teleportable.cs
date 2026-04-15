@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class Teleportable : MonoBehaviour
+namespace World.Caravan
 {
-    public void Teleport(Vector3 position, Quaternion rotation)
+    public class Teleportable : MonoBehaviour
     {
-        transform.SetPositionAndRotation(position, rotation);
-        Physics.SyncTransforms();
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            transform.SetPositionAndRotation(position, rotation);
+            Physics.SyncTransforms();
+        }
     }
 }
