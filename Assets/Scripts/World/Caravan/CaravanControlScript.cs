@@ -26,7 +26,7 @@ namespace World
         {
             if(Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 3f))
             {
-                transform.position = hit.point + Vector3.up * 0.6f;
+                transform.position = hit.point + Vector3.up * caravanHeight;
             }
             
             //snail control
@@ -61,12 +61,6 @@ namespace World
         }
 
         public void Drive(Vector2 inputVector)
-        {
-            DriveServerRpc(inputVector);
-        }
-
-        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void DriveServerRpc(Vector2 inputVector)
         {
             _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);
 

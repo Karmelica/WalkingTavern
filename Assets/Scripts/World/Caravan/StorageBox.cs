@@ -10,6 +10,7 @@ namespace World
     {
         [SerializeField] private IngredientType ingredientBox;
         [SerializeField] private Image foodIcon;
+        private NetworkVariable<int> _quantity = new();
 
         private void Start()
         {
@@ -26,6 +27,7 @@ namespace World
             {
                 FoodStorage.Instance.ReturnIngredient(ingredientBox);
                 foodItem.NetworkObject.Despawn();
+                _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
             }
         }
 
@@ -36,24 +38,22 @@ namespace World
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            if (FoodStorage.Instance.GetIngredient(ingredientBox))
-            {
-                SpawnIngredientServerRpc(ingredientBox);
-            }
-            
+            SpawnIngredientServerRpc(ingredientBox);
             return null;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SpawnIngredientServerRpc(IngredientType ingredientType)
         {
+            if (!FoodStorage.Instance.GetIngredient(ingredientType)) return;
             var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
+            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
         }
 
         public string GetInteractName()
         {
-            return "\nStorage ("+ ingredientBox +")";
+            return "\nStorage (" + ingredientBox + ": " + _quantity.Value + ")";
         }
 
         public bool IsInteractedWith()

@@ -401,7 +401,7 @@ namespace PlayerScripts
             if (!_canMove || _isCooking) return;
 
             if (!context.started) return;
-            if (!GetHitInfo(out IInteractable interactObj, QueryTriggerInteraction.Ignore)) return;
+            if (!GetHitInfo(out IInteractable interactObj, true, QueryTriggerInteraction.Ignore)) return;
             if (interactObj.IsInteractedWith()) return;
             _lastInteractedObject = interactObj.PrimaryInteract(this, true);
             _isInteracting = _lastInteractedObject != null;
@@ -412,6 +412,13 @@ namespace PlayerScripts
             if (!_canMove || _isCooking) return;
             
             if (context.started) {
+
+                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractName() == "Door")
+                {
+                    interactable.SecondaryInteract(this);
+                    return;
+                }
+                
                 if (_lastInteractedObject != null) {
                     _isInteracting = false;
                     _lastInteractedObject.PrimaryInteract(this, false);
@@ -429,10 +436,10 @@ namespace PlayerScripts
             Unstuck();
         }
 
-        private bool GetHitInfo(out IInteractable interactableComponent, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.UseGlobal)
+        private bool GetHitInfo(out IInteractable interactableComponent, bool checkForInteracting = true, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             interactableComponent = null;
-            if (_isInteracting)
+            if (checkForInteracting && _isInteracting)
             {
                 return false;
             }

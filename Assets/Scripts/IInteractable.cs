@@ -1,4 +1,5 @@
 using PlayerScripts;
+using UnityEngine;
 
 public interface IInteractable
 {

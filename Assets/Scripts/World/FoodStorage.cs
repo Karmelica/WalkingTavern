@@ -48,6 +48,11 @@ namespace World
             return false;
         }
 
+        public int GetIngredientCount(IngredientType requestedIngredient)
+        {
+            return _gatheredIngredients[requestedIngredient];
+        }
+
         public void ReturnIngredient(IngredientType returnedIngredient)
         {
             if(!_gatheredIngredients.TryAdd(returnedIngredient, 1))
