@@ -25,7 +25,6 @@ namespace World.Caravan
         {
             if(Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity, groundLayer))
             {
-                if (!hit.collider.TryGetComponent(out Terrain terrain)) return;
                 tables.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
                 NetworkObject.Despawn();
             }

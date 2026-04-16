@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace Managers.Network
 {
-    public class LobbyManager : MonoBehaviour, IConnectionManager
+    public class LobbyManager : MonoBehaviour
     {
         [SerializeField] private GameObject loginUI;
         [SerializeField] private GameObject lobbyUI;
@@ -196,24 +196,5 @@ namespace Managers.Network
         }
 
         #endregion
-
-        public void OnConnecting(ConnectionInfo info)
-        {
-            Debug.Log(info.State);
-        }
-
-        public void OnConnected(ConnectionInfo info)
-        {
-            Debug.Log(info.State);
-        }
-
-        public void OnDisconnected(ConnectionInfo info)
-        {
-            Debug.Log(info.EndReason);
-        }
-
-        public void OnMessage(IntPtr data, int size, long messageNum, long recvTime, int channel)
-        {
-        }
     }
 }

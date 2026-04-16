@@ -40,6 +40,7 @@ namespace World
             {
                 transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
+                Physics.SyncTransforms();
             }
             else
             {

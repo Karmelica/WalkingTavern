@@ -44,7 +44,6 @@ namespace Player
             else _selectedFace = 0;
             facePreviewImage.material = playerFaceMaterial[_selectedFace];
             PlayerPrefs.SetInt("PlayerFace",  _selectedFace);
-            Debug.Log(PlayerPrefs.GetInt("PlayerFace", 0));
         }
 
         public void PreviousFace()
@@ -53,7 +52,6 @@ namespace Player
             else _selectedFace = playerFaceMaterial.Length - 1;
             facePreviewImage.material = playerFaceMaterial[_selectedFace];
             PlayerPrefs.SetInt("PlayerFace",  _selectedFace);
-            Debug.Log(PlayerPrefs.GetInt("PlayerFace", 0));
         }
     }
 }

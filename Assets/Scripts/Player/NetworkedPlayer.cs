@@ -164,8 +164,6 @@ namespace PlayerScripts
         private void FaceChanged(int newValue)
         {
             networkedPlayerFace.materials = new[] { new Material (faces[newValue]) };
-            Debug.Log("PlayerPrefs value: " + PlayerPrefs.GetInt("PlayerFace", 0));
-            Debug.Log("NetVar value: " + newValue);
         }
 
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
