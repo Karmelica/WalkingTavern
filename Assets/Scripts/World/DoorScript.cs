@@ -19,11 +19,12 @@ namespace World
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            OpenDoor();
+            OpenDoorServerRpc();
             return null;
         }
         
-        private void OpenDoor()
+        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+        private void OpenDoorServerRpc()
         {
             animator.SetTrigger(trigger);
             if (!otherAnimator) return;
