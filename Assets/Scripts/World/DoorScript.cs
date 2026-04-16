@@ -23,7 +23,7 @@ namespace World
             return null;
         }
         
-        [ServerRpc(InvokePermission = RpcInvokePermission.Everyone)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void OpenDoorServerRpc()
         {
             animator.SetTrigger(trigger);
