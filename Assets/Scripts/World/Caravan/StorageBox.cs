@@ -12,14 +12,21 @@ namespace World.Caravan
         [SerializeField] private Image foodIcon;
         private NetworkVariable<int> _quantity = new();
 
-        private void Start()
+        private void Awake()
         {
             foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
             {
                 mainTexture = Resources.Load<Texture>("Icons/Food/" + ingredientBox)
             };
         }
-        
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer) return;
+            base.OnNetworkSpawn();
+            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!IsServer) return;
@@ -45,18 +52,11 @@ namespace World.Caravan
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SpawnIngredientServerRpc(IngredientType ingredientType)
         {
-            try
-            {
-                if (!FoodStorage.Instance.GetIngredient(ingredientType)) return;
-                var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
-                ingredient.GetComponent<NetworkObject>().Spawn();
-                _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
-            }
-            catch (Exception e)
-            { 
-                Debug.LogError(e.Message);
-                throw;
-            }
+            if (!FoodStorage.Instance.GetIngredient(ingredientType)) return;
+            var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
+            ingredient.GetComponent<NetworkObject>().Spawn();
+            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+            
         }
 
         public string GetInteractName()

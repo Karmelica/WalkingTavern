@@ -1,19 +1,18 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace World.Caravan
 {
-    public class FoodStorage : NetworkBehaviour
+    public class FoodStorage : MonoBehaviour
     {
         public static FoodStorage Instance;
         private Dictionary<IngredientType, int> _gatheredIngredients = new();
 
-        public override void OnNetworkSpawn()
+        private void Awake()
         {
-            base.OnNetworkSpawn();
-            if (Instance != null || !IsServer)
-            {
+            if(Instance != null){
                 Destroy(gameObject);
             }
             else{
@@ -34,18 +33,18 @@ namespace World.Caravan
             }
             return false;
         }
-
-        public int GetIngredientCount(IngredientType requestedIngredient)
-        {
-            return _gatheredIngredients.GetValueOrDefault(requestedIngredient, 0);
-        }
-
+        
         public void ReturnIngredient(IngredientType returnedIngredient)
         {
             if(!_gatheredIngredients.TryAdd(returnedIngredient, 1))
             {
                 _gatheredIngredients[returnedIngredient]++;
             }
+        }
+
+        public int GetIngredientCount(IngredientType requestedIngredient)
+        {
+            return _gatheredIngredients.GetValueOrDefault(requestedIngredient, 0);
         }
     }
 }
