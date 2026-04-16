@@ -495,6 +495,9 @@ PrefabInstance:
       addedObject: {fileID: 4303926355784753256}
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6616828825830417082}
+    - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 6987792053196497362}
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
@@ -535,6 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7b257e59252e4b89f8193aa1b65d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   animator: {fileID: 3099751333795714650}
   otherAnimator: {fileID: 0}
   trigger: 
@@ -680,6 +684,31 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
   m_PrefabInstance: {fileID: 5009322150144432071}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6616828825830417082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8330946591842590177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 0
+  SyncOwnerTransformWhenParented: 0
+  AllowOwnerToParent: 0
 --- !u!114 &6987792053196497362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,6 +721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7b257e59252e4b89f8193aa1b65d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   animator: {fileID: 5074583994257846255}
   otherAnimator: {fileID: 0}
   trigger: Interact
