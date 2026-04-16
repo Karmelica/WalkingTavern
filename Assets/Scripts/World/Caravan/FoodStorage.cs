@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace World
+namespace World.Caravan
 {
-    [DefaultExecutionOrder(-50)]
     public class FoodStorage : NetworkBehaviour
     {
         public static FoodStorage Instance;

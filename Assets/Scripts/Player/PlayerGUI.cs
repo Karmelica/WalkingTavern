@@ -6,6 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using World;
+using World.Caravan;
 
 namespace PlayerScripts
 {
