@@ -140,6 +140,7 @@ namespace Managers.Network
         public void OnStartGameButtonClicked()
         {
             if (!NetworkManager.Singleton.IsHost) return;
+            SteamCurrentLobby.CurrentLobby?.SetJoinable(false);
             NetworkManager.Singleton.SceneManager.LoadScene(firstScene, LoadSceneMode.Single);
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
         }

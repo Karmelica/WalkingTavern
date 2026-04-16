@@ -17,9 +17,8 @@ using Random = UnityEngine.Random;
 
 namespace Managers
 {
-    public class PlayerSpawner : NetworkBehaviour, ISocketManager
+    public class PlayerSpawner : NetworkBehaviour
     {
-        private Dictionary<ulong, NetworkObject> _clientIdToPlayerObject = new();
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
@@ -37,14 +36,12 @@ namespace Managers
         {
             NetworkManager.SceneManager.OnLoad += OnSceneLoadStarted;
             NetworkManager.SceneManager.OnLoadComplete += OnSceneLoaded;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
 
         public override void OnNetworkDespawn()
         {
             NetworkManager.SceneManager.OnLoad -= OnSceneLoadStarted;
             NetworkManager.SceneManager.OnLoadComplete -= OnSceneLoaded;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
 
         private void OnSceneLoadStarted(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode, AsyncOperation asyncOperation)
@@ -95,37 +92,6 @@ namespace Managers
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
-        }
-        
-        private void OnClientDisconnected(ulong clientId)
-        {
-            //if (!IsServer) return;
-            //if (!_clientIdToPlayerObject.Remove(clientId, out var networkObject)) return;
-            //if (networkObject.IsSpawned)
-            //{
-            //    networkObject.Despawn();
-            //}
-        }
-
-        public void OnConnecting(Connection connection, ConnectionInfo info)
-        {
-            Debug.Log(info);
-        }
-
-        public void OnConnected(Connection connection, ConnectionInfo info)
-        {
-            Debug.Log(info);
-        }
-
-        public void OnDisconnected(Connection connection, ConnectionInfo info)
-        {
-            Debug.Log(info);
-        }
-
-        public void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime,
-            int channel)
-        {
-            
         }
     }
 }

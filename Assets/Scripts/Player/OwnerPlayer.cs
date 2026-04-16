@@ -87,15 +87,15 @@ namespace PlayerScripts
         {
             _rigidbody = GetComponent<Rigidbody>();
             _networkedPlayer =  GetComponent<NetworkedPlayer>();
-            NetworkManager.OnClientDisconnectCallback += NetworkManagerOnOnClientDisconnectCallback;
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnOnClientDisconnectCallback;
         }
 
         private void NetworkManagerOnOnClientDisconnectCallback(ulong clientId)
         {
             if (clientId != OwnerClientId) return;
             
-            _lastInteractedObject?.PrimaryInteract(null, false);
-            NetworkManager.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
+            _lastInteractedObject?.PrimaryInteract(this, false);
+            NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
         }
 
         private void Update()

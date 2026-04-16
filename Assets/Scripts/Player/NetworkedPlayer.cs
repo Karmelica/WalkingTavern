@@ -35,6 +35,7 @@ namespace PlayerScripts
         private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
