@@ -87,15 +87,6 @@ namespace PlayerScripts
         {
             _rigidbody = GetComponent<Rigidbody>();
             _networkedPlayer =  GetComponent<NetworkedPlayer>();
-            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerOnOnClientDisconnectCallback;
-        }
-
-        private void NetworkManagerOnOnClientDisconnectCallback(ulong clientId)
-        {
-            if (clientId != OwnerClientId) return;
-            
-            _lastInteractedObject?.PrimaryInteract(this, false);
-            NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManagerOnOnClientDisconnectCallback;
         }
 
         private void Update()
@@ -121,33 +112,39 @@ namespace PlayerScripts
         {
             base.OnNetworkSpawn();
 
-            if (IsOwner) return;
-            enabled = false;
-            _shouldUpdateInterface = false;
+            if (!IsOwner)
+            {
+                enabled = false;
+                _shouldUpdateInterface = false;
+            }
+            else
+            {
+                _playerCamera = Camera.main;
+                _windowMatrix = _playerCamera!.transform.localToWorldMatrix;
+
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+                foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
+                _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
+                _networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
+                _networkedPlayer.SetFaceRpc(PlayerPrefs.GetInt("PlayerFace", 0));
+
+                _playerGUI = FindFirstObjectByType<PlayerGUI>();
+
+                InitializeInput();
+                playerNameCanvas.enabled = false;
+
+                StartCoroutine(UpdateInterface());
+                
+                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+            }
         }
 
-        protected override void OnNetworkPostSpawn()
+        private void OnClientDisconnect(ulong clientId)
         {
-            base.OnNetworkPostSpawn();
-            if (!IsOwner) return;
-            
-            _playerCamera = Camera.main;
-            _windowMatrix = _playerCamera!.transform.localToWorldMatrix;
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
-            _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
-            _networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
-            _networkedPlayer.SetFaceRpc(PlayerPrefs.GetInt("PlayerFace", 0));
-
-            _playerGUI = FindFirstObjectByType<PlayerGUI>();
-
-            InitializeInput();
-            playerNameCanvas.enabled = false;
-
-            StartCoroutine(UpdateInterface());
+            if (clientId != OwnerClientId) return;
+            _lastInteractedObject?.PrimaryInteract(this, false);
         }
 
         public override void OnNetworkDespawn()
@@ -156,6 +153,7 @@ namespace PlayerScripts
             _lastInteractedObject?.PrimaryInteract(null, false);
             _shouldUpdateInterface = false;
             CleanupInput();
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
         }
 
         private IEnumerator UpdateInterface()

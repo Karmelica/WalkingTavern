@@ -31,12 +31,9 @@ namespace PlayerScripts
         [SerializeField] private Material[] faces;
         private TextMeshProUGUI _steamNicknameTMP;
         
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -61,16 +58,23 @@ namespace PlayerScripts
             _playerCamera = Camera.main;
             _steamNicknameTMP = playerNameCanvas.GetComponentInChildren<TextMeshProUGUI>();
             
-            _playerNickname.OnValueChanged += SetNickname;
-            _playerSkinIndex.OnValueChanged += SetSkin;
-            _playerFaceIndex.OnValueChanged += SetFace;
+            _playerNickname.OnValueChanged += OnNicknameChanged;
+            _playerSkinIndex.OnValueChanged += OnSkinChanged;
+            _playerFaceIndex.OnValueChanged += OnFaceChanged;
             
-            //SetNickname("Nickname", _playerNickname.Value);
-            //SetSkin(0, _playerSkinIndex.Value);
-            //SetSkin(0, _playerFaceIndex.Value);
+            NicknameChanged(_playerNickname.Value);
+            SkinChanged(_playerSkinIndex.Value);
+            FaceChanged(_playerFaceIndex.Value);
         }
 
-
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            _playerNickname.OnValueChanged -= OnNicknameChanged;
+            _playerSkinIndex.OnValueChanged -= OnSkinChanged;
+            _playerFaceIndex.OnValueChanged -= OnFaceChanged;
+        }
+        
         private void Update()
         {
             UpdatePlayerNickRotation();
@@ -129,24 +133,41 @@ namespace PlayerScripts
         /// <summary>
         /// Ustawia nick przy wejściu klienta
         /// </summary>
-        private void SetNickname(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+        private void OnNicknameChanged(FixedString64Bytes previousValue, FixedString64Bytes newValue)
         {
-            _steamNicknameTMP.text = _playerNickname.Value.ToString();
+            NicknameChanged(newValue);
         }
-        
-        private void SetSkin(int previousValue, int newValue)
+
+        private void NicknameChanged(FixedString64Bytes newValue)
+        {
+            _steamNicknameTMP.text = newValue.ToString();
+        }
+
+        private void OnSkinChanged(int previousValue, int newValue)
+        {
+            SkinChanged(newValue);
+        }
+
+        private void SkinChanged(int newValue)
         {
             foreach (var mesh in networkedPlayerMesh)
             {
                 mesh.materials = new[] { skins[newValue] };
             }
         }
-        
-        private void SetFace(int previousValue, int newValue)
+
+        private void OnFaceChanged(int previousValue, int newValue)
+        {
+            FaceChanged(newValue);
+        }
+
+        private void FaceChanged(int newValue)
         {
             networkedPlayerFace.materials = new[] { new Material (faces[newValue]) };
+            Debug.Log("PlayerPrefs value: " + PlayerPrefs.GetInt("PlayerFace", 0));
+            Debug.Log("NetVar value: " + newValue);
         }
-        
+
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetSteamNicknameRpc(ulong id)
         {
