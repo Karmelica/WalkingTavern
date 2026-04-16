@@ -40,7 +40,6 @@ namespace World
             {
                 transform.position = transform.parent.position;
                 transform.rotation = transform.parent.rotation;
-                Physics.SyncTransforms();
             }
             else
             {
@@ -50,6 +49,8 @@ namespace World
                 transform.up = hit.normal;
                 transform.position = hit.point + transform.up * _collider.bounds.extents.y;
             }
+
+            Physics.SyncTransforms();
         }
 
         #endregion
@@ -84,6 +85,7 @@ namespace World
         private void MoveOnMinigameRpc(Vector3 position)
         {
             transform.position = position;
+            Physics.SyncTransforms();
         }
 
         #endregion

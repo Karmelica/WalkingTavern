@@ -34,6 +34,7 @@ namespace Cooking.Minigames
 
         protected override void DoMinigame()
         {
+            Debug.Log("Moving on minigame");
             var distance = 0f;
             MousePos = Mouse.current.position.ReadValue();
             var mouseRay = MainCamera.ScreenPointToRay(MousePos);
@@ -41,25 +42,25 @@ namespace Cooking.Minigames
             DidHit = Interacted && plane.Raycast(mouseRay, out distance);
             if (!DidHit) return;
 
-            if (OwnerPlayer.IsHoldingLMB() && lastInteractedObject) {
-                lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance)); 
-            }
-            if(OwnerPlayer.IsHoldingLMB() && !lastInteractedObject) {
-                if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity, 1<<7, QueryTriggerInteraction.Ignore) &&
-                    RayHit.collider.gameObject) {
-                    if (RayHit.collider.gameObject.TryGetComponent(out ProcessedFoodItem foodItem)) {
-                        lastInteractedObject = foodItem;
-                    }
+            if (OwnerPlayer.IsHoldingLMB()) {
+                if (lastInteractedObject)
+                {
+                    lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance)); 
+                    Debug.Log("Moving on minigame");
+                }
+                else if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity, 1<<7, QueryTriggerInteraction.Ignore) &&
+                         RayHit.collider.gameObject && RayHit.collider.gameObject.TryGetComponent(out ProcessedFoodItem foodItem)) {
+                    lastInteractedObject = foodItem;
+                    Debug.Log("Moving on minigame");
                 }
             }
-
             if (!OwnerPlayer.IsHoldingLMB()) {
                 if(lastInteractedObject)
                 {
+                    Debug.Log("Moving on minigame");
                     lastInteractedObject.PlaceDownRpc();
                     lastInteractedObject = null;
                 }
-
                 if (CheckForRecipe())
                 {
                     Score = requiredScore;
