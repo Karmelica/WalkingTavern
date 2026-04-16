@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PlayerScripts
+namespace Player
 {
     public class SkinSelector : MonoBehaviour
     {

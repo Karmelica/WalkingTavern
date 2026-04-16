@@ -65,9 +65,9 @@ namespace PlayerScripts
             _playerSkinIndex.OnValueChanged += SetSkin;
             _playerFaceIndex.OnValueChanged += SetFace;
             
-            SetNickname("Nickname", _playerNickname.Value);
-            SetSkin(0, _playerSkinIndex.Value);
-            SetSkin(0, _playerFaceIndex.Value);
+            //SetNickname("Nickname", _playerNickname.Value);
+            //SetSkin(0, _playerSkinIndex.Value);
+            //SetSkin(0, _playerFaceIndex.Value);
         }
 
 
