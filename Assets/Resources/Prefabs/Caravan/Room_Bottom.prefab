@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6675153352092298388}
   - component: {fileID: 2208759272369298797}
   - component: {fileID: 4918434626863141547}
+  - component: {fileID: 495610512504219497}
   m_Layer: 7
   m_Name: SM_Door_1
   m_TagString: Untagged
@@ -127,9 +128,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7b257e59252e4b89f8193aa1b65d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
   animator: {fileID: 4918434626863141547}
   otherAnimator: {fileID: 0}
-  trigger: 
+  trigger: Interact
 --- !u!95 &4918434626863141547
 Animator:
   serializedVersion: 7
@@ -152,6 +154,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &495610512504219497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221971825705790981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
+  m_Animator: {fileID: 4918434626863141547}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 744161737
+    DestinationState: 207596745
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 207596745
+    DestinationState: 744161737
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1459219776
+    DestinationState: 207596745
+    TransitionDuration: 0
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Interact
+      NameHash: -662453572
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &1462156096331103934
 GameObject:
   m_ObjectHideFlags: 0
@@ -43265,6 +43312,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8635764344723675495, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3321549617553477354}
+    - targetCorrespondingSourceObject: {fileID: 8635764344723675495, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 869243492497699221}
     - targetCorrespondingSourceObject: {fileID: 5730745421677876336, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4213657363225300641}
@@ -43339,9 +43389,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7b257e59252e4b89f8193aa1b65d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorSript
+  ShowTopMostFoldoutHeaderGroup: 1
   animator: {fileID: 7017582415229853886}
   otherAnimator: {fileID: 0}
-  trigger: 
+  trigger: Interact
 --- !u!114 &3321549617553477354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63963,6 +64014,51 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &869243492497699221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5033408579442836787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
+  m_Animator: {fileID: 7017582415229853886}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1459219776
+    DestinationState: 1674909226
+    TransitionDuration: 0
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 432441974
+    DestinationState: 1674909226
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1674909226
+    DestinationState: 432441974
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Interact
+      NameHash: -662453572
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!4 &5661467576180957065 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8976717795765863389, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
@@ -73871,6 +73967,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8635764344723675495, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5083815049934828240}
+    - targetCorrespondingSourceObject: {fileID: 8635764344723675495, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3153994524316080287}
     - targetCorrespondingSourceObject: {fileID: 5730745421677876336, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2453919779903466210}
@@ -73945,9 +74044,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7b257e59252e4b89f8193aa1b65d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorSript
+  ShowTopMostFoldoutHeaderGroup: 1
   animator: {fileID: 8414547539502826065}
   otherAnimator: {fileID: 0}
-  trigger: 
+  trigger: Interact
 --- !u!114 &5083815049934828240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94569,6 +94669,51 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &3153994524316080287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217481127557662589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
+  m_Animator: {fileID: 8414547539502826065}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1459219776
+    DestinationState: 1674909226
+    TransitionDuration: 0
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 432441974
+    DestinationState: 1674909226
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1674909226
+    DestinationState: 432441974
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Interact
+      NameHash: -662453572
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!4 &598826203735743943 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8976717795765863389, guid: 1b392f136201eb64db95d7848e30bb80, type: 3}

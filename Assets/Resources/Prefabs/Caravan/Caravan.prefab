@@ -502,6 +502,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3279843110109020676}
+    - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6723256938823918803}
     - targetCorrespondingSourceObject: {fileID: -884107597194977452, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5323456776365220450}
@@ -691,7 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   animator: {fileID: 5074583994257846255}
   otherAnimator: {fileID: 0}
-  trigger: 
+  trigger: Interact
 --- !u!95 &5074583994257846255
 Animator:
   serializedVersion: 7
@@ -736,3 +739,48 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3313284728127638575, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+--- !u!114 &6723256938823918803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8330946591842590177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 0
+  m_Animator: {fileID: 5074583994257846255}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 744161737
+    DestinationState: 207596745
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 207596745
+    DestinationState: 744161737
+    TransitionDuration: 0.25
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1459219776
+    DestinationState: 207596745
+    TransitionDuration: 0
+    TriggerNameHash: -662453572
+    TransitionIndex: 0
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Interact
+      NameHash: -662453572
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace World
 {
-    public class DoorScript : MonoBehaviour, IInteractable
+    public class DoorScript : NetworkBehaviour, IInteractable
     {
         [SerializeField] private Animator animator;
         [SerializeField] private Animator otherAnimator;
@@ -19,22 +19,15 @@ namespace World
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            OpenDoorRpc();
+            OpenDoor();
             return null;
         }
         
-        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
-        private void OpenDoorRpc()
+        private void OpenDoor()
         {
             animator.SetTrigger(trigger);
-            if (otherAnimator)
-            {
-                otherAnimator.SetTrigger(trigger);
-            }
-            else
-            {
-                Debug.LogWarning("No other Animator Set", this);
-            }
+            if (!otherAnimator) return;
+            otherAnimator.SetTrigger(trigger);
         }
 
         public string GetInteractName()
