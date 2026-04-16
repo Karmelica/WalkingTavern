@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6675153352092298388}
   - component: {fileID: 2208759272369298797}
   - component: {fileID: 4918434626863141547}
-  - component: {fileID: 6277828333857618784}
   m_Layer: 7
   m_Name: SM_Door_1
   m_TagString: Untagged
@@ -130,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   animator: {fileID: 4918434626863141547}
   otherAnimator: {fileID: 0}
+  trigger: 
 --- !u!95 &4918434626863141547
 Animator:
   serializedVersion: 7
@@ -152,51 +152,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6277828333857618784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1221971825705790981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkAnimatorExpanded: 0
-  AuthorityMode: 0
-  m_Animator: {fileID: 4918434626863141547}
-  TransitionStateInfoList:
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 744161737
-    DestinationState: 207596745
-    TransitionDuration: 0.25
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 207596745
-    DestinationState: 744161737
-    TransitionDuration: 0.25
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: -1459219776
-    DestinationState: 207596745
-    TransitionDuration: 0
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  AnimatorParameterEntries:
-    ParameterEntries:
-    - name: Interact
-      NameHash: -662453572
-      Synchronize: 1
-      ParameterType: 9
-  AnimatorParametersExpanded: 0
 --- !u!1 &1462156096331103934
 GameObject:
   m_ObjectHideFlags: 0
@@ -43386,6 +43341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorSript
   animator: {fileID: 7017582415229853886}
   otherAnimator: {fileID: 0}
+  trigger: 
 --- !u!114 &3321549617553477354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73991,6 +73947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorSript
   animator: {fileID: 8414547539502826065}
   otherAnimator: {fileID: 0}
+  trigger: 
 --- !u!114 &5083815049934828240
 MonoBehaviour:
   m_ObjectHideFlags: 0

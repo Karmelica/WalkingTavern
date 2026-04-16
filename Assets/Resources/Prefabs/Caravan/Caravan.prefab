@@ -498,9 +498,6 @@ PrefabInstance:
       addedObject: {fileID: 6987792053196497362}
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5496267215227836039}
-    - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5074583994257846255}
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
@@ -537,6 +534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   animator: {fileID: 3099751333795714650}
   otherAnimator: {fileID: 0}
+  trigger: 
 --- !u!114 &8845292089069910348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,51 +691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   animator: {fileID: 5074583994257846255}
   otherAnimator: {fileID: 0}
---- !u!114 &5496267215227836039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8330946591842590177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a5705b6bffa46644bd8e0af543dc3ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Server.NetworkAnimatorClient
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkAnimatorExpanded: 0
-  AuthorityMode: 0
-  m_Animator: {fileID: 5074583994257846255}
-  TransitionStateInfoList:
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 744161737
-    DestinationState: 207596745
-    TransitionDuration: 0.25
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 207596745
-    DestinationState: 744161737
-    TransitionDuration: 0.25
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: -1459219776
-    DestinationState: 207596745
-    TransitionDuration: 0
-    TriggerNameHash: -662453572
-    TransitionIndex: 0
-  AnimatorParameterEntries:
-    ParameterEntries:
-    - name: Interact
-      NameHash: -662453572
-      Synchronize: 1
-      ParameterType: 9
-  AnimatorParametersExpanded: 0
+  trigger: 
 --- !u!95 &5074583994257846255
 Animator:
   serializedVersion: 7
