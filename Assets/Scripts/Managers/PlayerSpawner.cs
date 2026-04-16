@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using Netcode.Transports.Facepunch;
 using PlayerScripts;
 using Steamworks;
 using Unity.Netcode;

@@ -6,14 +6,8 @@ namespace Managers.Network.Steam
 {
     public class SteamBootstrapper : MonoBehaviour
     {
-        private void Start()
+        /*private void OnEnable()
         {
-            if (!SteamClient.IsValid)
-            {
-                Debug.LogError("Couldn't initialize Steam!");
-                return;
-            }
-
             try
             {
                 SteamClient.Init( 480 );
@@ -21,7 +15,7 @@ namespace Managers.Network.Steam
             }
             catch ( Exception e )
             {
-                if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
+                //if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
                 Debug.LogWarning( $"Steam initialization failed: {e.Message}" );
             }
             
@@ -35,6 +29,6 @@ namespace Managers.Network.Steam
         private void OnDisable()
         {
             SteamClient.Shutdown();
-        }
+        }*/
     }
 }
