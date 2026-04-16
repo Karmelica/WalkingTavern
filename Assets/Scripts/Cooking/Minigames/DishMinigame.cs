@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cooking.ScriptableObjects;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using World;
@@ -9,7 +10,8 @@ namespace Cooking.Minigames
 {
     public abstract class DishMinigame : Minigame
     {
-        protected Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
+        private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
+        [Expandable]
         [SerializeField] protected Recipe recipe;
         
         [SerializeField] private TextMeshProUGUI ingredientListText;

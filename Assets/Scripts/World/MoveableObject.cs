@@ -9,9 +9,7 @@ using UnityEngine;
 
 namespace World
 {
-    [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(NetworkTransform))]
-    
+    [RequireComponent(typeof(Collider), typeof(NetworkTransform))]
     public class MoveableObject : NetworkBehaviour, IInteractable
     {
         #region Variables
@@ -107,8 +105,8 @@ namespace World
                 transform.SetParent(null);
                 var interactPoint = interactor.GetInteractPoint();
                 var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
-                Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
                 if (hitObjects.Length > 0) {
+                    Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
                     foreach (var hit in hitObjects) {
                         if (hit.collider.gameObject == gameObject) {
                             continue;
@@ -140,7 +138,7 @@ namespace World
             return this;
         }
 
-        public IInteractable SecondaryInteract(OwnerPlayer interactor)
+        public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
             return null;
         }

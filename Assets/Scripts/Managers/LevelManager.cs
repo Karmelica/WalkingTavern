@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Managers
 {
     public class LevelManager : NetworkBehaviour
     {
+        [Scene]
         [SerializeField] private string nextScene;
         
         private void OnTriggerEnter(Collider other)

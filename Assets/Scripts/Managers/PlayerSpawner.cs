@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using PlayerScripts;
 using Steamworks;
 using Unity.Netcode;
@@ -19,6 +20,7 @@ namespace Managers
         [SerializeField] private GameObject loadingCanvas;
         [SerializeField] private Image blackScreen;
         [SerializeField] private GameObject playerPrefab;
+        [Scene]
         [SerializeField] private List<string> scenesToSpawnPlayersIn;
         private Vector3 _spawnPos;
         private bool _isLoaded;
@@ -30,15 +32,15 @@ namespace Managers
 
         public override void OnNetworkSpawn()
         {
-            NetworkManager.SceneManager.OnLoadComplete += OnSceneLoaded;
             NetworkManager.SceneManager.OnLoad += OnSceneLoadStarted;
+            NetworkManager.SceneManager.OnLoadComplete += OnSceneLoaded;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
 
         public override void OnNetworkDespawn()
         {
-            NetworkManager.SceneManager.OnLoadComplete -= OnSceneLoaded;
             NetworkManager.SceneManager.OnLoad -= OnSceneLoadStarted;
+            NetworkManager.SceneManager.OnLoadComplete -= OnSceneLoaded;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
 
@@ -52,15 +54,14 @@ namespace Managers
             _isLoaded = true;
 
             if (clientId != NetworkManager.Singleton.LocalClientId) return;
-            if (scenesToSpawnPlayersIn.Count == 0) return;
+            if (scenesToSpawnPlayersIn.Count == 0) throw new Exception("Scenes to spawn players in not set");
             foreach (var scene in scenesToSpawnPlayersIn)
             {
                 if (currentSceneName != scene) continue;
                 _spawnPos = Camera.main ? Camera.main.transform.position : Vector3.up;
-                if (currentSceneName == scene) RequestSpawnPlayerRpc(clientId);
+                if (currentSceneName == scene) RequestSpawnPlayerRpc();
                 return;
             }
-            Debug.Log("No scene to spawn players found");
         }
         
         private IEnumerator ScreenFadeout()
@@ -85,8 +86,9 @@ namespace Managers
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void RequestSpawnPlayerRpc(ulong clientId, RpcParams rpcParams = default)
+        private void RequestSpawnPlayerRpc(RpcParams rpcParams = default)
         {
+            var clientId = rpcParams.Receive.SenderClientId;
             var playerInstance = Instantiate(playerPrefab, _spawnPos + Random.insideUnitSphere, Quaternion.identity);
             var networkObject = playerInstance.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);

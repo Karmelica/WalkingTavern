@@ -1,11 +1,10 @@
 using System;
-using System.Threading.Tasks;
+using NaughtyAttributes;
 using Netcode.Transports.Facepunch;
 using Steamworks;
 using Steamworks.Data;
 using TMPro;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +18,7 @@ namespace Managers.Network
         [SerializeField] private GameObject waitingForPlayersText;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
+        [Scene]
         [SerializeField] private string firstScene;
         
         private TMP_InputField _clientSteamIdInputField;
