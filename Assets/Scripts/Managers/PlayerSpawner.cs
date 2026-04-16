@@ -5,17 +5,19 @@ using NaughtyAttributes;
 using Netcode.Transports.Facepunch;
 using PlayerScripts;
 using Steamworks;
+using Steamworks.Data;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Color = UnityEngine.Color;
 using Image = UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
 namespace Managers
 {
-    public class PlayerSpawner : NetworkBehaviour
+    public class PlayerSpawner : NetworkBehaviour, ISocketManager
     {
         private Dictionary<ulong, NetworkObject> _clientIdToPlayerObject = new();
         [SerializeField] private GameObject loadingCanvas;
@@ -103,6 +105,27 @@ namespace Managers
             //{
             //    networkObject.Despawn();
             //}
+        }
+
+        public void OnConnecting(Connection connection, ConnectionInfo info)
+        {
+            Debug.Log(info);
+        }
+
+        public void OnConnected(Connection connection, ConnectionInfo info)
+        {
+            Debug.Log(info);
+        }
+
+        public void OnDisconnected(Connection connection, ConnectionInfo info)
+        {
+            Debug.Log(info);
+        }
+
+        public void OnMessage(Connection connection, NetIdentity identity, IntPtr data, int size, long messageNum, long recvTime,
+            int channel)
+        {
+            
         }
     }
 }
