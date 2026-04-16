@@ -5,10 +5,10 @@ public enum IngredientType
     Lettuce,
     Raspberry,
     Cheese,
-    Meat,
     Toast,
     Baguette,
-    Mushroom
+    Mushroom,
+    Karambola
 }
 
 public enum ProcessedIngredientType
@@ -16,22 +16,20 @@ public enum ProcessedIngredientType
     ProcessedLettuce,
     ProcessedRaspberry,
     ProcessedCheese,
-    ProcessedMeat,
-    ProcessedToastTop,
-    ProcessedToastBottom,
+    ProcessedToast,
     ProcessedBaguetteTop,
     ProcessedBaguetteBottom,
-    ProcessedMushroom
+    ProcessedMushroom,
+    ProcessedKarambola
 }
 
 [BlackboardEnum]
 public enum DishType
 {
-    Hamburger,
-    LettuceSoup,
-    CheeseCake,
     Casserole,
-    MushroomSoup
+    MushroomSoup,
+    ToastCheese,
+    ToastKarambola
 }
 
 [BlackboardEnum]

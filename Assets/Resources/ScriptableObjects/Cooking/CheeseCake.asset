@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
   m_Name: CheeseCake
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
-  recipeName: CheeseCake
   dishType: 2
   ingredients:
   - ingredientType: 2
-    quantity: 4
+    quantity: 2
+  - ingredientType: 3
+    quantity: 1

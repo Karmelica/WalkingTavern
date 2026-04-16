@@ -12,14 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
   m_Name: Hamburger
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Scriptable_Objects.Recipe
-  recipeName: Hamburger
-  dishType: 0
+  dishType: 3
   ingredients:
-  - ingredientType: 4
+  - ingredientType: 7
     quantity: 1
-  - ingredientType: 2
-    quantity: 2
   - ingredientType: 3
-    quantity: 1
-  - ingredientType: 5
     quantity: 1

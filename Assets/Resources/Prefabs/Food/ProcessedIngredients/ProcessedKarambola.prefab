@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6999748936547527744
+--- !u!1 &334130725774046693
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,52 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 373230479485226838}
-  - component: {fileID: 297710283272648260}
-  - component: {fileID: 787080681959539137}
-  - component: {fileID: 7978890670001398082}
-  - component: {fileID: 5756588831723488359}
-  - component: {fileID: 5434701605931802318}
-  - component: {fileID: 3383664883253846902}
-  - component: {fileID: 6564119485025936911}
-  - component: {fileID: 3091555316476194601}
-  - component: {fileID: -6525468109884743508}
+  - component: {fileID: 5717416456756687578}
+  - component: {fileID: 3880904485051651154}
+  - component: {fileID: 4274807626576686577}
+  - component: {fileID: 8634137047512349750}
+  - component: {fileID: 7274458179122887954}
+  - component: {fileID: 8634367887441747928}
+  - component: {fileID: 8410761127984807573}
+  - component: {fileID: 520447416244318553}
+  - component: {fileID: 8666862448189143184}
   m_Layer: 7
-  m_Name: CheeseCake
-  m_TagString: Dish
+  m_Name: ProcessedKarambola
+  m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &373230479485226838
+--- !u!4 &5717416456756687578
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.119, y: 0.3899914, z: -0.502}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: -4.3915124, y: 0.3899914, z: 5.525}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &297710283272648260
+--- !u!33 &3880904485051651154
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
-  m_Mesh: {fileID: -6250804512344804428, guid: 271ed3049118056498ca94bca8a58497, type: 3}
---- !u!23 &787080681959539137
+  m_GameObject: {fileID: 334130725774046693}
+  m_Mesh: {fileID: 1330660836772100339, guid: e5f417cf32c36dd438edc689ab86bed9, type: 3}
+--- !u!23 &4274807626576686577
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -73,7 +72,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0d45762731bdf5b439bde83255ecd75d, type: 2}
+  - {fileID: 2100000, guid: c7920c0d1d6929f4daf9db9b1410219c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,19 +96,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7978890670001398082
+--- !u!114 &8634137047512349750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3038604869
+  GlobalObjectIdHash: 360073330
   InScenePlacedSourceGlobalObjectIdHash: 2022091753
   DeferredDespawnTick: 0
   Ownership: 1
@@ -122,13 +121,13 @@ MonoBehaviour:
   AutoObjectParentSync: 0
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &5756588831723488359
+--- !u!114 &7274458179122887954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
@@ -168,13 +167,13 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &5434701605931802318
+--- !u!114 &8634367887441747928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
@@ -183,31 +182,30 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkRigidbodyBaseExpanded: 1
   UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
+  AutoUpdateKinematicState: 0
   AutoSetKinematicOnDespawn: 1
---- !u!114 &3383664883253846902
+--- !u!114 &8410761127984807573
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f27e5f901fa28045b100b19cae1603d, type: 3}
+  m_Script: {fileID: 11500000, guid: 5422938561187864d944e2ddbee33212, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::World.DishItem
+  m_EditorClassIdentifier: Assembly-CSharp::World.ProcessedFoodItem
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  dishType: 2
-  canBeCooked: 0
---- !u!54 &6564119485025936911
+  ingredientType: 7
+--- !u!54 &520447416244318553
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0.1
@@ -228,29 +226,13 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!208 &3091555316476194601
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 3
---- !u!64 &-6525468109884743508
+--- !u!64 &8666862448189143184
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999748936547527744}
+  m_GameObject: {fileID: 334130725774046693}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -265,4 +247,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -6250804512344804428, guid: 271ed3049118056498ca94bca8a58497, type: 3}
+  m_Mesh: {fileID: 1330660836772100339, guid: e5f417cf32c36dd438edc689ab86bed9, type: 3}

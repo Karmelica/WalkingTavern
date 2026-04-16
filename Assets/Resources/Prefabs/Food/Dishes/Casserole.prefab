@@ -117,9 +117,9 @@ MonoBehaviour:
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
-  SyncOwnerTransformWhenParented: 1
+  SyncOwnerTransformWhenParented: 0
   AllowOwnerToParent: 0
 --- !u!114 &5756588831723488359
 MonoBehaviour:
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World.DishItem
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  dishType: 3
+  dishType: 0
   canBeCooked: 1
 --- !u!54 &6564119485025936911
 Rigidbody:

@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
   m_Name: Casserole
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
-  recipeName: Casserole
-  dishType: 3
+  dishType: 0
   ingredients:
-  - ingredientType: 6
+  - ingredientType: 4
     quantity: 1
   - ingredientType: 2
     quantity: 3
   - ingredientType: 0
     quantity: 3
-  - ingredientType: 7
+  - ingredientType: 5
     quantity: 1
