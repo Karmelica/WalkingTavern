@@ -31,8 +31,8 @@ public class Customer : NetworkBehaviour, IInteractable
     public NetworkVariable<int> selectedEarsIndex;
     public NetworkVariable<int> selectedSkinIndex;
     public NetworkVariable<int> selectedFaceIndex;
-    public NetworkVariable<bool> isBeingInteracted =  new (true);
-    private List<Transform> _waypoints = new();
+    public NetworkVariable<bool> orderTaken =  new (true);
+    private readonly List<Transform> _waypoints = new();
 
     #region Unity Lifecycle
 
@@ -47,18 +47,8 @@ public class Customer : NetworkBehaviour, IInteractable
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
-        requestedDish.OnValueChanged += ChangeFoodIcon;
-        foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
-        {
-            mainTexture = Resources.Load<Texture>("Icons/Food/" + requestedDish.Value)
-        };
-        ears[selectedEarsIndex.Value].SetActive(true);
-        faceRenderer.materials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
-        foreach (var mesh in customerMesh)
-        {
-            mesh.materials = new[] { skins[selectedSkinIndex.Value] };
-        }
-        
+        CustomerSetup();
+
         if (!IsServer) return;
 
         _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
@@ -79,7 +69,18 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.SetVariableValue("CustomersInLine", customerList);
     }
 
-    private void ChangeFoodIcon(DishType previousValue, DishType newValue)
+    private void CustomerSetup()
+    {
+        ChangeFoodIcon(requestedDish.Value);
+        ears[selectedEarsIndex.Value].SetActive(true);
+        faceRenderer.materials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
+        foreach (var mesh in customerMesh)
+        {
+            mesh.materials = new[] { skins[selectedSkinIndex.Value] };
+        }
+    }
+
+    private void ChangeFoodIcon(DishType newValue)
     {
         foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
         {
@@ -157,7 +158,6 @@ public class Customer : NetworkBehaviour, IInteractable
         {
             return true;
         }
-
         return false;
     }
     
@@ -184,11 +184,9 @@ public class Customer : NetworkBehaviour, IInteractable
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void TakeOrderRpc()
     {
-        _blackboardReference.GetVariableValue("Ordering", out CustomerState orderingState);
-        if(orderingState == CustomerState.Ordering){
-            _blackboardReference.SetVariableValue("Ordered", true);
-            _aiManager.AddDish(requestedDish.Value);
-        }
+        _blackboardReference.SetVariableValue("Ordered", true);
+        _aiManager.AddDish(requestedDish.Value);
+        orderTaken.Value = true;
     }
 
     public void RemoveDish()
@@ -203,7 +201,7 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public bool IsInteractedWith()
     {
-        return isBeingInteracted.Value;
+        return orderTaken.Value;
     }
 
     #endregion

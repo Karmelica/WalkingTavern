@@ -33,7 +33,7 @@ namespace World
             NetworkObject.DontDestroyWithOwner = true;
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
             if (!IsOwner) return;
             if (transform.parent)

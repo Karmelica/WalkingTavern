@@ -86,13 +86,13 @@ namespace Managers
             info += $"\nRequested Dishes:";
             foreach (var dish in _dishes)
             {
-                info += $"\n{dish.Key.ToString()} x{dish.Value.ToString()}";
+                info += $"\n  {dish.Key.ToString()} x{dish.Value.ToString()}";
             }
             SendUpdatedScoreRpc(info);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void SendUpdatedScoreRpc(FixedString128Bytes info)
+        private void SendUpdatedScoreRpc(FixedString512Bytes info)
         {
             PlayerGUI.OnGameInfoChanged?.Invoke(info);
         }

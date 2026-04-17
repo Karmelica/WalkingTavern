@@ -12,6 +12,7 @@ public partial class TryGetSeatCondition : Condition
     public override void OnStart()
     {
         base.OnStart();
+        if (Seat.Value != null) return;
         if (Customer.Value.TryGetSeat(out var seat))
         {
             Seat.Value = seat;

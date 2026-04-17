@@ -288,7 +288,7 @@ namespace PlayerScripts
                 {
                     if (Physics.Raycast(transform.position + Vector3.up * 0.05f, moveVector + Vector3.up * -1, out var hit, 0.4f))
                     {
-                        if (Vector3.Angle(hit.normal, Vector3.up) > walkableAngle) return;
+                        if (Vector3.Angle(hit.normal, Vector3.up) > walkableAngle && !_networkedPlayer.IsGrounded) return;
                     }
                     _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
                 }

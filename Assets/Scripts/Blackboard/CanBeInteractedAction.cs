@@ -13,7 +13,7 @@ public partial class CanBeInteractedAction : Action
 
     protected override Status OnStart()
     {
-        Customer.Value.isBeingInteracted.Value = !Bool.Value;
+        Customer.Value.orderTaken.Value = !Bool.Value;
         return Status.Success;
     }
 }
