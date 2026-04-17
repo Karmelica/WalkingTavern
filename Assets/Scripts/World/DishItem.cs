@@ -16,11 +16,10 @@ namespace World
         
         public void Despawn()
         {
-            if (!IsOwner) return;
             DespawnItemServerRpc();
         }
 
-        [Rpc(SendTo.Server)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void DespawnItemServerRpc()
         {
             NetworkObject.Despawn();

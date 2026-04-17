@@ -27,11 +27,17 @@ namespace World.Caravan
         {
             if(Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity, groundLayer))
             {
-                tables.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+                MoveTablesRpc();
                 
                 aiManager.StartSpawningCustomers();
                 NetworkObject.Despawn();
             }
+        }
+
+        [Rpc(SendTo.Everyone)]
+        private void MoveTablesRpc()
+        {
+            tables.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         }
 
         public override string GetInteractName()

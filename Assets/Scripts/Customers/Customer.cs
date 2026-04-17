@@ -90,7 +90,7 @@ public class Customer : NetworkBehaviour, IInteractable
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        
+        if (!IsServer) return;
         // Remove from waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
         if(customerList.Contains(gameObject)) customerList.Remove(gameObject);
