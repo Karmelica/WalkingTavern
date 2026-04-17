@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Managers;
 using NaughtyAttributes;
 using PlayerScripts;
@@ -17,6 +18,7 @@ namespace World.Caravan
         [SerializeField] private GameObject previewTables;
         [SerializeField] private AIManager aiManager;
         [SerializeField] private GameObject particle;
+        [SerializeField] private TableCollisionTest[] colliders;
 
         protected override void Update()
         {
@@ -40,6 +42,7 @@ namespace World.Caravan
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void UnpackTablesRpc()
         {
+            if (colliders.Any(table => table.IsColliding)) return;
             if (!Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity,
                     groundLayer)) return;
             MoveTablesRpc();
@@ -58,12 +61,6 @@ namespace World.Caravan
         public override string GetInteractName()
         {
             return "\nPlace down and press E to setup tables";
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(transform.position, new Vector3(9, 2, 9));
         }
     }
 }
