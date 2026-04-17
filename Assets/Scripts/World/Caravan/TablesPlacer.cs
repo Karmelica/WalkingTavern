@@ -15,11 +15,19 @@ namespace World.Caravan
         [SerializeField] private int groundLayer;
         [SerializeField] private GameObject tables;
         [SerializeField] private AIManager aiManager;
-
+        
+        
+        
         public override IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
             UnpackTablesRpc();
             return null;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            gameObject.SetActive(false);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -30,7 +38,7 @@ namespace World.Caravan
                 MoveTablesRpc();
                 
                 aiManager.StartSpawningCustomers();
-                NetworkObject.Despawn();
+                NetworkObject.Despawn(false);
             }
         }
 

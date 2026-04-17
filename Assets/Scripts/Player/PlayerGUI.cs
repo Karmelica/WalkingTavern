@@ -12,7 +12,7 @@ namespace PlayerScripts
 {
     public class PlayerGUI : MonoBehaviour
     {
-        public static Action<FixedString512Bytes> OnGameInfoChanged;
+        public static Action<FixedString128Bytes> OnGameInfoChanged;
         
         [SerializeField] private GameObject gameUI;
         [SerializeField] private GameObject pauseUI;
@@ -30,7 +30,7 @@ namespace PlayerScripts
             OnGameInfoChanged -= UpdateScoreText;
         }
 
-        private void UpdateScoreText(FixedString512Bytes newInfo)
+        private void UpdateScoreText(FixedString128Bytes newInfo)
         {
             gameInfoText.text = newInfo.ToString();
         }

@@ -19,7 +19,7 @@ namespace Managers
         [SerializeField] private int streak;
         [SerializeField] private int totalCustomers = 12;
         [SerializeField] private float spawnTime = 30f;
-        private List<DishType> _dishes = new();
+        private Dictionary<DishType, int> _dishes = new();
 
         [SerializeField] private GameObject customerPrefab;
         [SerializeField] private Transform spawnPoint;
@@ -59,33 +59,40 @@ namespace Managers
 
         public void AddDish(DishType dish)
         {
-            _dishes.Add(dish);
+            if (!_dishes.TryAdd(dish, 1))
+            {
+                _dishes[dish]++;
+            }
             UpdateGUI();
         }
         
         public void RemoveDish(DishType dish)
         {
-            if (_dishes.Contains(dish))
+            if(_dishes.ContainsKey(dish))
             {
-                _dishes.Remove(dish);
+                _dishes[dish]--;
+                if (_dishes[dish] <= 0)
+                {
+                    _dishes.Remove(dish);
+                }
             }
             UpdateGUI();
         }
 
         private void UpdateGUI()
         {
-            FixedString512Bytes info = new();
+            string info = "";
             info += $"Score: {totalScore}";
             info += $"\nRequested Dishes:";
             foreach (var dish in _dishes)
             {
-                info += $"\n{dish.ToString()}";
+                info += $"\n{dish.Key.ToString()} x{dish.Value.ToString()}";
             }
             SendUpdatedScoreRpc(info);
         }
 
         [Rpc(SendTo.Everyone)]
-        private void SendUpdatedScoreRpc(FixedString512Bytes info)
+        private void SendUpdatedScoreRpc(FixedString128Bytes info)
         {
             PlayerGUI.OnGameInfoChanged?.Invoke(info);
         }

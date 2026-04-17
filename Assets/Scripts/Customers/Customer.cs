@@ -59,7 +59,7 @@ public class Customer : NetworkBehaviour, IInteractable
             mesh.materials = new[] { skins[selectedSkinIndex.Value] };
         }
         
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         _waypoints.Add(GameObject.FindGameObjectWithTag("Ordering").transform);
         _waypoints.Add(GameObject.FindGameObjectWithTag("Entrance").transform);
