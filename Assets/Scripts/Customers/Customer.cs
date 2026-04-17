@@ -181,13 +181,19 @@ public class Customer : NetworkBehaviour, IInteractable
         return null;
     }
 
-    [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     private void TakeOrderRpc()
     {
         _blackboardReference.GetVariableValue("Ordering", out CustomerState orderingState);
         if(orderingState == CustomerState.Ordering){
             _blackboardReference.SetVariableValue("Ordered", true);
+            _aiManager.AddDish(requestedDish.Value);
         }
+    }
+
+    public void RemoveDish()
+    {
+        _aiManager.RemoveDish(requestedDish.Value);
     }
 
     public string GetInteractName()

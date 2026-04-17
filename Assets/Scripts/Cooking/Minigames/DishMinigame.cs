@@ -93,14 +93,15 @@ namespace Cooking.Minigames
 
         private void UpdateRecipeText()
         {
-            ingredientListText.text = "Ingredients:\n";
+            ingredientListText.text = $"Recipe: {recipe.dishType.ToString()}";
+            ingredientListText.text += "\nIngredients:";
             foreach (var ingredient in recipe.ingredients)
             {
                 var ingredientType = ingredient.ingredientType;
                 var ingredientQuantity = ingredient.quantity;
 
                 if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
-                ingredientListText.text += $"{ingredientType} {ingredientQuantity}/{placedCount}\n";
+                ingredientListText.text += $"\n   {ingredientType} {ingredientQuantity}/{placedCount}";
             }
         }
         

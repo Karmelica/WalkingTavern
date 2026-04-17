@@ -29,7 +29,9 @@ public enum DishType
     Casserole,
     MushroomSoup,
     ToastCheese,
-    ToastKarambola
+    ToastKarambola,
+    FruitSoup,
+    AppleTart
 }
 
 [BlackboardEnum]

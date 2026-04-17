@@ -1,5 +1,6 @@
 using Cooking.ScriptableObjects;
 using System;
+using Managers;
 using Unity.Behavior;
 using UnityEngine;
 using World;
@@ -15,8 +16,14 @@ public partial class IsCorrectDishCondition : Condition
     {
         if (Dish.Value.TryGetComponent<DishItem>(out var dishItem))
         {
-            return dishItem.dishType == Self.Value.requestedDish.Value;
+            if(dishItem.dishType == Self.Value.requestedDish.Value){
+                AIManager.OnScoreChanged?.Invoke(100);
+                Self.Value.RemoveDish();
+                return true;
+            }
         }
+        AIManager.OnScoreChanged?.Invoke(-50);
+        Self.Value.RemoveDish();
         return false;
     }
 }

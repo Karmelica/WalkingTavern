@@ -34,7 +34,6 @@ namespace Cooking.Minigames
 
         protected override void DoMinigame()
         {
-            Debug.Log("Moving on minigame");
             var distance = 0f;
             MousePos = Mouse.current.position.ReadValue();
             var mouseRay = MainCamera.ScreenPointToRay(MousePos);
@@ -46,18 +45,15 @@ namespace Cooking.Minigames
                 if (lastInteractedObject)
                 {
                     lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance)); 
-                    Debug.Log("Moving on minigame");
                 }
                 else if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity, 1<<7, QueryTriggerInteraction.Ignore) &&
                          RayHit.collider.gameObject && RayHit.collider.gameObject.TryGetComponent(out ProcessedFoodItem foodItem)) {
                     lastInteractedObject = foodItem;
-                    Debug.Log("Moving on minigame");
                 }
             }
             if (!OwnerPlayer.IsHoldingLMB()) {
                 if(lastInteractedObject)
                 {
-                    Debug.Log("Moving on minigame");
                     lastInteractedObject.PlaceDownRpc();
                     lastInteractedObject = null;
                 }
@@ -97,35 +93,18 @@ namespace Cooking.Minigames
             }
 
             ProcessedFoodItem lastFoodItem = null;
-            string message = "";
-
-            message += "RecipeQueue: \n";
-            foreach (var foodItem in recipeQueue)
-            {
-                message += foodItem.ingredientType + "\n";
-            }
-
-            message += "\n";
-
+            
             foreach (var foodItem in recipeQueue) {
                 if (!lastFoodItem) {
                     lastFoodItem = foodItem;
                     continue;
                 }
                 
-                message += "Comparing " + foodItem.ingredientType + " to " + lastFoodItem.ingredientType + "\n";
-                message += foodItem.transform.localPosition.y + " " + lastFoodItem.transform.localPosition.y + "\n";
-                
                 if (foodItem.transform.localPosition.y > lastFoodItem.transform.localPosition.y) {
-                    message += "! " + foodItem.ingredientType + " is higher than " + lastFoodItem.ingredientType + "\n";
-                    Debug.Log(message);
                     return false;
                 }
                 lastFoodItem = foodItem;
             }
-
-            message += "All good";
-            Debug.Log(message);
             return true;
         }
 

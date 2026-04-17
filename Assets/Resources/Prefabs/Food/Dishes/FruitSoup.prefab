@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 912968161635430177}
   - component: {fileID: 9093246474480355307}
   m_Layer: 7
-  m_Name: MushroomSoup
+  m_Name: FruitSoup
   m_TagString: Dish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338176272568123566}
-  m_Mesh: {fileID: 370615503471828185, guid: e9c98afe73f088943a0d917f80feaf19, type: 3}
+  m_Mesh: {fileID: 708902690857223096, guid: a5db5abed57d977438214d3bba478912, type: 3}
 --- !u!23 &8467791214968434957
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2093526362
+  GlobalObjectIdHash: 4024426174
   InScenePlacedSourceGlobalObjectIdHash: 2370954167
   DeferredDespawnTick: 0
   Ownership: 1
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  dishType: 1
+  dishType: 4
   canBeCooked: 0
 --- !u!54 &5858893382463307456
 Rigidbody:
@@ -238,7 +238,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.16, y: 0.12, z: 0.16}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -265,4 +265,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 370615503471828185, guid: e9c98afe73f088943a0d917f80feaf19, type: 3}
+  m_Mesh: {fileID: 708902690857223096, guid: a5db5abed57d977438214d3bba478912, type: 3}
