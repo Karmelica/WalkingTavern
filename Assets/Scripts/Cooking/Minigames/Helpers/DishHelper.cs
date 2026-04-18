@@ -6,8 +6,6 @@ namespace Cooking.Minigames.Helpers
 {
     public class DishHelper : Helper
     {
-        [SerializeField] private DishType dishPrefab;
-
         public void OnEnable()
         {
             base.OnNetworkSpawn();
@@ -22,10 +20,10 @@ namespace Cooking.Minigames.Helpers
             }
         }
 
-        public override void SpawnObject(GameObject prefab = null)
+        public override void SpawnObject(DishType dishType)
         {
             if (!IsServer) return;
-            var original = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishPrefab);
+            var original = Resources.Load<GameObject>("Prefabs/Food/Dishes/" + dishType);
             var dish = Instantiate(original, spawnLocation.position + Vector3.up, Quaternion.identity);
             dish.GetComponent<NetworkObject>().Spawn();
         }

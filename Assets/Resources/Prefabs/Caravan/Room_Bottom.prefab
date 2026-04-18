@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1368316725
+  GlobalObjectIdHash: 4135291895
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -8821,7 +8821,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8255060825510755264, guid: 934aed72c167938428cfd2eaa5217b1c, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2768599819
+      value: 1903304577
       objectReference: {fileID: 0}
     - target: {fileID: 8618049432803112490, guid: 934aed72c167938428cfd2eaa5217b1c, type: 3}
       propertyPath: m_Name
@@ -8852,7 +8852,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 803068769
+      value: 1840335022
       objectReference: {fileID: 0}
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: SpawnWithObservers
@@ -9049,7 +9049,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1660937373
+      value: 4247663442
       objectReference: {fileID: 0}
     - target: {fileID: 2691056211273752639, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9167,7 +9167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1503208416916948259, guid: a25a7a646df3b55448e92974388872f3, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 390056467
+      value: 3268254656
       objectReference: {fileID: 0}
     - target: {fileID: 3445042094020485485, guid: a25a7a646df3b55448e92974388872f3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9259,7 +9259,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   shouldSpawnSomeIngredients: 0
   spawnLocation: {fileID: 8711539617208965823}
-  dishPrefab: 3
 --- !u!4 &8711539617208965823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6495276644439323458, guid: a25a7a646df3b55448e92974388872f3, type: 3}
@@ -9275,7 +9274,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2135437271
+      value: 3020573153
       objectReference: {fileID: 0}
     - target: {fileID: 2691056211273752639, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9353,7 +9352,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1878046437
+      value: 1087889222
       objectReference: {fileID: 0}
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: SpawnWithObservers
@@ -71193,7 +71192,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 803068769
+      value: 1130098292
       objectReference: {fileID: 0}
     - target: {fileID: 1161282747762568933, guid: f3d1335e3d6b022499c6383c2c5c1c11, type: 3}
       propertyPath: SpawnWithObservers
@@ -71291,7 +71290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1378780225243528039, guid: 11b13325c83357d4085c5afd47d60fd8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3098804500
+      value: 3898409509
       objectReference: {fileID: 0}
     - target: {fileID: 3505057498834109759, guid: 11b13325c83357d4085c5afd47d60fd8, type: 3}
       propertyPath: m_VersionIndex
@@ -71407,6 +71406,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: bff5706359711364db16acfa93cb37d5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1f88dd0f8de680945be56689dc24d751, type: 2}
     - target: {fileID: -5754084199372789682, guid: bff5706359711364db16acfa93cb37d5, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -73377,7 +73380,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8255060825510755264, guid: 934aed72c167938428cfd2eaa5217b1c, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2609834923
+      value: 2119579803
       objectReference: {fileID: 0}
     - target: {fileID: 8255060825510755264, guid: 934aed72c167938428cfd2eaa5217b1c, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
@@ -73512,7 +73515,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8472190745101517001, guid: 19ed7e436076878408b879a6c4afb011, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2316510799
+      value: 1126883220
       objectReference: {fileID: 0}
     - target: {fileID: 7130158206428899830, guid: 19ed7e436076878408b879a6c4afb011, type: 3}
       propertyPath: m_Name
@@ -73670,7 +73673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9166418288593053944, guid: 3cba3a979f032c84695c77af7285cbda, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2906705275
+      value: 1547135748
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -73713,7 +73716,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: d00cfd4ee7547024cb7bcbf50bd08674, type: 2}
     - target: {fileID: 4596050126324631453, guid: bf8f8e6d2f9ccc74fa0c6ee1f42c5c48, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4171472309
+      value: 3149225230
       objectReference: {fileID: 0}
     - target: {fileID: 4596050126324631453, guid: bf8f8e6d2f9ccc74fa0c6ee1f42c5c48, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash

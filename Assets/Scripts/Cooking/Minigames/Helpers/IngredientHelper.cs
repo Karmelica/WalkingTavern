@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Unity.Netcode;
 using UnityEngine;
 using World;
@@ -8,23 +9,23 @@ namespace Cooking.Minigames.Helpers
     {
         public override void DespawnObject(MoveableObject objectToDespawn)
         {
-            if(objectToDespawn.TryGetComponent(out FoodItem foodItem))
-            {
-                var types = foodItem.ingredientProducts;
-                if (!IsServer) return;
-                foodItem.NetworkObject.Despawn();
+            if (!IsServer) return;
+            if (!objectToDespawn.TryGetComponent(out FoodItem foodItem)) return;
+            var products = foodItem.ingredientProducts;
+            foodItem.NetworkObject.Despawn();
 
-                foreach (var type in types)
-                {
-                    SpawnObject(type);
-                }
-            }
+            foreach (var product in products) SpawnObject(product);
         }
 
-        public override void SpawnObject(GameObject prefab = null)
+        protected virtual void SpawnObject(GameObject prefab)
         {
             var ingredient = Instantiate(prefab, spawnLocation.position + Vector3.up, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
+        }
+
+        public override void SpawnObject(DishType dishType)
+        {
+            //unused
         }
     }
 }

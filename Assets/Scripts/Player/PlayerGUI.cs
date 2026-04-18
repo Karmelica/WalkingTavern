@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using World.Caravan;
@@ -19,6 +20,8 @@ namespace PlayerScripts
         
         public TextMeshProUGUI interactText;
         public TextMeshProUGUI gameInfoText;
+        [SerializeField] private TMP_Dropdown dropdown;
+
 
         private void OnEnable()
         {
@@ -53,6 +56,11 @@ namespace PlayerScripts
         public bool IsPaused()
         {
             return pauseUI.activeSelf;
+        }
+        
+        public void ChangeGraphics()
+        {
+            QualitySettings.SetQualityLevel(dropdown.value);
         }
     }
 }

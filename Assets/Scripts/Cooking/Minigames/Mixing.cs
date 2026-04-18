@@ -10,9 +10,9 @@ namespace Cooking.Minigames
         private int _mixStreak;
         
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             _screenMiddle = new Vector2(Screen.width / 2f, Screen.height / 2f);
         }
 

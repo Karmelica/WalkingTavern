@@ -14,9 +14,9 @@ namespace Cooking.Minigames
         private ProcessedFoodItem lastInteractedObject;
         private List<ProcessedFoodItem> recipeQueue;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             plane = new Plane(foodPlaceholder.forward * -1, foodPlaceholder.position);
         }
 
@@ -70,7 +70,7 @@ namespace Cooking.Minigames
             Debug.ClearDeveloperConsole();
             recipeQueue = new();
             //tylko jeśli wszystkie składniki są na miejscu
-            foreach (var ingredient in recipe.ingredients)
+            foreach (var ingredient in Recipe.ingredients)
             {
                 ProcessedFoodItem food = null;
                 var quantity = 0;

@@ -4,29 +4,40 @@ using Cooking.ScriptableObjects;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using World;
 
 namespace Cooking.Minigames
 {
     public abstract class DishMinigame : Minigame
     {
-        private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
+        [Header("Minigame Properties")]
+        [SerializeField] protected DishType dishType;
         [Expandable]
-        [SerializeField] protected Recipe recipe;
-        
+        protected Recipe Recipe;
+        private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
+        [Header("Components")]
         [SerializeField] private TextMeshProUGUI ingredientListText;
-
-        protected override void Start()
+        
+        protected override void Awake()
         {
-            base.Start();
             foreach (var processedIngredientType in Enum.GetValues(typeof(ProcessedIngredientType)))
             {
                 _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
             }
+
+            Recipe = GetRecipe.GetRecipeByDishType(dishType);
             UpdateRecipeText();
             
             if (!IsServer) return;
             Helper.SpawnSomeIngredients();
+        }
+        
+        public void DishTypeChanged(DishType type)
+        {
+            dishType = type;
+            Recipe = GetRecipe.GetRecipeByDishType(type);
+            UpdateRecipeText();
         }
 
         protected void TryAddIngredient(ProcessedFoodItem foodItem)
@@ -55,7 +66,7 @@ namespace Cooking.Minigames
 
         private void CompleteRecipe()
         {
-            foreach (var ingredient in recipe.ingredients)
+            foreach (var ingredient in Recipe.ingredients)
             {
                 var ingredientType = ingredient.ingredientType;
                 var quantity = ingredient.quantity;
@@ -76,7 +87,7 @@ namespace Cooking.Minigames
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
-            Helper.SpawnObject();
+            Helper.SpawnObject(dishType);
             
             UpdateRecipeText();
         }
@@ -93,21 +104,20 @@ namespace Cooking.Minigames
 
         private void UpdateRecipeText()
         {
-            ingredientListText.text = $"Recipe: {recipe.dishType.ToString()}";
-            ingredientListText.text += "\nIngredients:";
-            foreach (var ingredient in recipe.ingredients)
+            ingredientListText.text = "Ingredients:";
+            foreach (var ingredient in Recipe.ingredients)
             {
                 var ingredientType = ingredient.ingredientType;
                 var ingredientQuantity = ingredient.quantity;
 
                 if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
-                ingredientListText.text += $"\n   {ingredientType} {ingredientQuantity}/{placedCount}";
+                ingredientListText.text += $"\n{ingredientQuantity}/{placedCount} {ingredientType}   ";
             }
         }
         
         protected override bool CheckForIngredients()
         {
-            foreach (var ingredient in recipe.ingredients)
+            foreach (var ingredient in Recipe.ingredients)
             {
                 var ingredientType = ingredient.ingredientType;
                 var ingredientQuantity = ingredient.quantity;

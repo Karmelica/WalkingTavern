@@ -13,23 +13,25 @@ namespace Cooking.Minigames
     [RequireComponent(typeof(Helper))]
     public abstract class Minigame : NetworkBehaviour, IInteractable {
         
-        public Transform cameraLocation;
-        public Transform foodPlaceholder;
+        [Header("Minigame Properties")]
         [SerializeField] protected int requiredScore = 10;
         protected int Score;
-        protected bool Interacted;
-        protected Camera MainCamera;
-        protected Helper Helper;
-        [SerializeField] private TextMeshProUGUI instructions;
-        protected List<MoveableObject> CurrentFood = new();
-
         protected Vector2 MousePos;
         protected RaycastHit RayHit;
         protected bool DidHit;
+        protected List<MoveableObject> CurrentFood = new();
         
+        [Header("Components")]
+        [SerializeField] private TextMeshProUGUI instructions;
+        public Transform cameraLocation;
+        public Transform foodPlaceholder;
+        protected Camera MainCamera;
+        protected Helper Helper;
         protected OwnerPlayer OwnerPlayer;
-
-        protected virtual void Start()
+        
+        protected bool Interacted;
+        
+        protected virtual void Awake()
         {
             MainCamera = Camera.main;
             Helper = GetComponent<Helper>();

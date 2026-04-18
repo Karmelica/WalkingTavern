@@ -20,9 +20,8 @@ namespace Cooking.Minigames.Helpers
         }
 
         public abstract void DespawnObject(MoveableObject objectToDespawn);
-        
-        public abstract void SpawnObject(GameObject prefab = null);
-        
+        public abstract void SpawnObject(DishType dishType);
+
         public void SpawnSomeIngredients()
         {
             if (!shouldSpawnSomeIngredients) return;

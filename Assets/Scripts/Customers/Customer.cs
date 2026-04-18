@@ -35,7 +35,7 @@ public class Customer : NetworkBehaviour, IInteractable
     private readonly List<Transform> _waypoints = new();
 
     #region Unity Lifecycle
-
+    
     private void Awake()
     {
         _behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
