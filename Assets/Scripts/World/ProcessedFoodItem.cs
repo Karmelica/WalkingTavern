@@ -13,7 +13,7 @@ namespace World
 
         public override string GetInteractText()
         {
-            return ingredientType.ToString();
+            return $"Pick up {ingredientType.ToString()}";
         }
 
     }

@@ -60,7 +60,7 @@ namespace World.Caravan
 
         public override string GetInteractText()
         {
-            return "\nPlace down and press E to setup tables";
+            return "Setup tables";
         }
     }
 }

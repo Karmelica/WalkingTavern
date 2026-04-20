@@ -34,7 +34,7 @@ namespace World
         
         public override string GetInteractText()
         {
-            return dishType.ToString();
+            return $"Pick up {dishType.ToString()}";
         }
 
     }
