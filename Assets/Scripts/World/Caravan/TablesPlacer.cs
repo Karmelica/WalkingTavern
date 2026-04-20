@@ -58,7 +58,7 @@ namespace World.Caravan
             Instantiate(particle, transform.position, Quaternion.identity);
         }
 
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return "\nPlace down and press E to setup tables";
         }

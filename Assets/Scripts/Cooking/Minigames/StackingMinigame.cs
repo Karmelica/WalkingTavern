@@ -108,9 +108,9 @@ namespace Cooking.Minigames
             return true;
         }
 
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
-            return "Stacking Minigame";
+            return "Stacking";
         }
     }
 }

@@ -31,9 +31,9 @@ namespace World
             otherAnimator.SetTrigger(trigger);
         }
 
-        public string GetInteractName()
+        public string GetInteractText()
         {
-            return "Door";
+            return "Open/Close Door";
         }
 
         public bool IsInteractedWith()

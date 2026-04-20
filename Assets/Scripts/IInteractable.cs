@@ -5,6 +5,6 @@ public interface IInteractable
 {
     public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true);
     public IInteractable SecondaryInteract(OwnerPlayer interactor);
-    public string GetInteractName();
+    public string GetInteractText();
     public bool IsInteractedWith();
 }

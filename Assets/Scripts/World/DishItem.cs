@@ -32,7 +32,7 @@ namespace World
                 _cookingProgress.Value += Time.deltaTime;
         }
         
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return dishType.ToString();
         }

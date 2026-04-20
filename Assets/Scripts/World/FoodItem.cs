@@ -12,7 +12,7 @@ namespace World
             gameObject.name = ingredientType.ToString();
         }
         
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return ingredientType.ToString();
         }

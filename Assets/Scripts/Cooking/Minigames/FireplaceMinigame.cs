@@ -56,7 +56,7 @@ namespace Cooking.Minigames
         {
         }
 
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return "Fireplace";
         }

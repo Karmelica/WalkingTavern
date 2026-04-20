@@ -13,7 +13,6 @@ namespace Managers
     public class AIManager : NetworkBehaviour
     {
         public static Action<int> OnScoreChanged;
-        public static Action<DishType> OnDishChanged;
     
         [SerializeField] private int totalScore;
         [SerializeField] private int streak;
@@ -21,6 +20,9 @@ namespace Managers
         [SerializeField] private float spawnTime = 30f;
         private Dictionary<DishType, int> _dishes = new();
 
+        
+        [SerializeField] private List<string> firstNames = new();
+        [SerializeField] private List<string> secondNames = new();
         [SerializeField] private GameObject customerPrefab;
         [SerializeField] private Transform spawnPoint;
         private Customer _orderingCustomer;
@@ -134,17 +136,20 @@ namespace Managers
                 rand = Random.Range(0, customer.faces.Count);
                 customer.selectedFaceIndex = new NetworkVariable<int>(rand);
 
-                customer.customerName = new();
+                customer.customerName = new(GenerateName());
 
                 customerInstance.GetComponent<NetworkObject>().Spawn();
                 yield return new WaitForSeconds(spawnTime);
             }
         }
-    
-        public void DespawnCustomer(Customer customer)
+
+        private string GenerateName()
         {
-            if (!IsServer) return;
-            customer.NetworkObject.Despawn();
+            if (firstNames.Count == 0 || secondNames.Count == 0)
+            {
+                return "Noname";
+            }
+            return $"{firstNames?[Random.Range(0, firstNames.Count)]} {secondNames?[Random.Range(0, secondNames.Count)]}";
         }
     }
 }

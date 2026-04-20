@@ -164,7 +164,7 @@ namespace PlayerScripts
                 {
                     if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking)
                     {
-                        _playerGUI.interactText.text = $"Interact with {interactable.GetInteractName()}";
+                        _playerGUI.interactText.text = interactable.GetInteractText();
                     }
                     else
                     {
@@ -412,7 +412,7 @@ namespace PlayerScripts
             
             if (context.started) {
 
-                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractName() == "Door")
+                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractText() == "Door")
                 {
                     interactable.SecondaryInteract(this);
                     return;
@@ -445,7 +445,7 @@ namespace PlayerScripts
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
             var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7, triggerInteraction);
-            Array.Sort(rayHitInfo, CompareDistance);
+            Array.Sort(rayHitInfo, Utilis.CompareRaycastDistance);
             foreach (var hit in rayHitInfo)
             {
                 if (hit.collider.TryGetComponent(out interactableComponent))
@@ -454,11 +454,6 @@ namespace PlayerScripts
                 }
             }
             return false;
-        }
-
-        public static int CompareDistance(RaycastHit x, RaycastHit y)
-        {
-            return x.distance.CompareTo(y.distance);
         }
 
         public Transform GetHandPoint()

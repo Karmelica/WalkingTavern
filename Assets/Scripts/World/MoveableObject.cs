@@ -97,48 +97,43 @@ namespace World
             Vector3 placePoint = Vector3.zero;
             Vector3 placeRotation = Vector3.up;
             
-            if (startedInteraction)
-            {
+            if (startedInteraction) {
                 ChangeOwnerServerRpc(true);
                 transform.SetParent(interactor.GetHandPoint());
             }
-            else
-            {
+            else {
                 ChangeOwnerServerRpc(false);
                 transform.SetParent(null);
                 var interactPoint = interactor.GetInteractPoint();
                 var hitObjects = Physics.RaycastAll(interactPoint.position, interactPoint.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
                 if (hitObjects.Length > 0) {
-                    Array.Sort(hitObjects, OwnerPlayer.CompareDistance);
+                    Array.Sort(hitObjects, Utilis.CompareRaycastDistance);
                     foreach (var hit in hitObjects) {
                         if (hit.collider.gameObject == gameObject) {
                             continue;
                         }
 
-                        if(Mathf.Abs(hit.normal.y) > 0.5) {
-                            placePoint = hit.point;
-                            placeRotation = hit.normal;
-                        }
-                        else {
-                            Physics.Raycast(hit.point + hit.normal * 0.2f, Vector3.down, out var floorHit,
-                                Single.PositiveInfinity, ~(1 << 2), QueryTriggerInteraction.Ignore);
-                            placePoint = floorHit.point;
-                            placeRotation = floorHit.normal;
-                        }
-                        break;
+                        placePoint = hit.point + hit.normal * 0.2f;
+                        placeRotation = hit.normal;
+                        return TargetLocation(placeRotation, placePoint);
                     }
                 }
-                else {
-                    Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
-                    placeRotation = groundHit.normal;
-                    placePoint = groundHit.point;
-                }
+                
+                //drop on ground if nothing or only held object was hit
+                Physics.Raycast(transform.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1<<2), QueryTriggerInteraction.Ignore);
+                placeRotation = groundHit.normal;
+                placePoint = groundHit.point;
             }
-            
-            transform.up = placeRotation;
-            transform.position = placePoint + transform.up * _collider.bounds.extents.y;
-            Physics.SyncTransforms();
-            return this;
+
+            return TargetLocation(placeRotation, placePoint);
+
+            IInteractable TargetLocation(Vector3 vector3, Vector3 placePoint1)
+            {
+                transform.up = vector3;
+                transform.position = placePoint1 + transform.up * _collider.bounds.extents.y;
+                Physics.SyncTransforms();
+                return this;
+            }
         }
 
         public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)
@@ -146,9 +141,9 @@ namespace World
             return null;
         }
 
-        public virtual string GetInteractName()
+        public virtual string GetInteractText()
         {
-            return gameObject.name;
+            return $"Pick up {gameObject.name}";
         }
 
         public bool IsInteractedWith()

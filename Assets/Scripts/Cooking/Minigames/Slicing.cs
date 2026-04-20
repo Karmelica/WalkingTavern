@@ -25,7 +25,7 @@ namespace Cooking.Minigames
             _oldMousePos = MousePos;
         }
 
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return "Slicing";
         }

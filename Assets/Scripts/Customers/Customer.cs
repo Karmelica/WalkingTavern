@@ -26,7 +26,7 @@ public class Customer : NetworkBehaviour, IInteractable
     private Animator _animator;
     private AIManager _aiManager;
 
-    public NetworkVariable<FixedString32Bytes> customerName;
+    public NetworkVariable<FixedString64Bytes> customerName;
     public NetworkVariable<DishType> requestedDish;
     public NetworkVariable<int> selectedEarsIndex;
     public NetworkVariable<int> selectedSkinIndex;
@@ -194,9 +194,9 @@ public class Customer : NetworkBehaviour, IInteractable
         _aiManager.RemoveDish(requestedDish.Value);
     }
 
-    public string GetInteractName()
+    public string GetInteractText()
     {
-        return $"Customer\nRequested Dish: {requestedDish.Value}";
+        return $"Take order from\n{customerName.Value}";
     }
 
     public bool IsInteractedWith()

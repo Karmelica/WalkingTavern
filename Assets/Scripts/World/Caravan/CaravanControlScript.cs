@@ -132,9 +132,9 @@ namespace World.Caravan
             return this;
         }
 
-        public string GetInteractName()
+        public string GetInteractText()
         {
-            return "Caravan";
+            return "Control Caravan";
         }
 
         public bool IsInteractedWith()

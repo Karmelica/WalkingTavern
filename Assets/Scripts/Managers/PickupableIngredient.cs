@@ -26,7 +26,7 @@ namespace Managers
             return null;
         }
 
-        public string GetInteractName()
+        public string GetInteractText()
         {
             return ingredientType.ToString();
         }

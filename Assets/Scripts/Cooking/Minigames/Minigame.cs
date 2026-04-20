@@ -89,7 +89,7 @@ namespace Cooking.Minigames
             return this;
         }
 
-        public abstract string GetInteractName();
+        public abstract string GetInteractText();
 
         public bool IsInteractedWith()
         {

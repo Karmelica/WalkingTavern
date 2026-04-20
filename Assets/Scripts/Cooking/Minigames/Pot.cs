@@ -90,7 +90,7 @@ namespace Cooking
                    (from == 2 && to == 0);
         }
 
-        public override string GetInteractName()
+        public override string GetInteractText()
         {
             return "Mixing Pot";
         }

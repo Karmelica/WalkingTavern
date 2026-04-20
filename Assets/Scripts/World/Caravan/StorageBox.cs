@@ -59,7 +59,7 @@ namespace World.Caravan
             
         }
 
-        public string GetInteractName()
+        public string GetInteractText()
         {
             return "\nStorage (" + ingredientBox + ": " + _quantity.Value + ")";
         }
