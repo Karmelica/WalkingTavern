@@ -412,7 +412,7 @@ namespace PlayerScripts
             
             if (context.started) {
 
-                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractText() == "Door")
+                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractText() == "Open/Close Door")
                 {
                     interactable.SecondaryInteract(this);
                     return;

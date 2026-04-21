@@ -31,7 +31,7 @@ namespace World.Caravan
                 transform.position = new Vector3(transform.position.x, p.y, transform.position.z);
             }
             
-            //snail control
+            //caravan control
             if(caravan)
             {
                 var d = Vector3.Distance(caravan.transform.position, followLocation.position);
@@ -62,6 +62,7 @@ namespace World.Caravan
             }
         }
 
+        //driving
         public void Drive(Vector2 inputVector)
         {
             _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);

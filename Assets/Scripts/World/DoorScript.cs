@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace World
 {
+    [RequireComponent(typeof(NetworkObject))]
     public class DoorScript : NetworkBehaviour, IInteractable
     {
         [SerializeField] private Animator animator;

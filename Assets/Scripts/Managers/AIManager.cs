@@ -58,14 +58,6 @@ namespace Managers
             OnScoreChanged -= UpdateScore;
         }
 
-        private void UpdateScore(int scoreChange)
-        {
-            totalScore = Mathf.RoundToInt(Math.Max(0, (totalScore + scoreChange) * streak));
-            streak = scoreChange > 0 ? streak + 0.5f : 1f;
-            streak = Mathf.Min(streak, 5.5f);
-            UpdateGUI();
-        }
-
         public void AddDish(DishType dish)
         {
             if (!_dishes.TryAdd(dish, 1))
@@ -85,6 +77,14 @@ namespace Managers
                     _dishes.Remove(dish);
                 }
             }
+            UpdateGUI();
+        }
+
+        private void UpdateScore(int scoreChange)
+        {
+            totalScore = Mathf.RoundToInt(Math.Max(0, (totalScore + scoreChange) * streak));
+            streak = scoreChange > 0 ? streak + 0.5f : 1f;
+            streak = Mathf.Min(streak, 5.5f);
             UpdateGUI();
         }
 
