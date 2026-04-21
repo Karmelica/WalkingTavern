@@ -6,11 +6,11 @@ namespace World
 {
     public class MainCamera : MonoBehaviour
     {
-        private PortalCamera[] portalCameras;
+        private PortalCamera[] _portalCameras;
     
         private void Awake()
         {
-            portalCameras = FindObjectsByType<PortalCamera>(FindObjectsSortMode.None);
+            _portalCameras = FindObjectsByType<PortalCamera>(FindObjectsSortMode.None);
             RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
         }
 
@@ -22,9 +22,9 @@ namespace World
         private void OnBeginCameraRendering(ScriptableRenderContext context, Camera contextCamera)
         {
             if (contextCamera != Camera.main) return;
-            foreach (var c in portalCameras)
+            foreach (var portalCamera in _portalCameras)
             {
-                c.Render();
+                portalCamera.Render();
             }
         }
     }

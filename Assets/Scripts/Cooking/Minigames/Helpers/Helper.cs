@@ -10,19 +10,33 @@ namespace Cooking.Minigames.Helpers
     {
         [SerializeField] protected bool shouldSpawnSomeIngredients = true;
         public Transform spawnLocation;
+        [SerializeField] protected GameObject particles;
 
-        private void Awake()
+        public override void OnNetworkSpawn()
         {
             if (!IsServer)
             {
                 enabled = false;
             }
+            SpawnSomeIngredients();
         }
 
-        public abstract void DespawnObject(MoveableObject objectToDespawn);
-        public abstract void SpawnObject(DishType dishType);
+        public virtual void DespawnObject<T>(T objectToDespawn) where T : MoveableObject { }
 
-        public void SpawnSomeIngredients()
+        public virtual void SpawnObject(DishType dishType)
+        {
+            if(particles){
+                Instantiate(particles, spawnLocation.position, Quaternion.identity);
+            }
+        }
+
+        protected virtual void SpawnObject(GameObject prefab) { 
+            if(particles){
+                Instantiate(particles, spawnLocation.position, Quaternion.identity);
+            }
+        }
+
+        private void SpawnSomeIngredients()
         {
             if (!shouldSpawnSomeIngredients) return;
             var ingredientTypes = Enum.GetValues(typeof(IngredientType));

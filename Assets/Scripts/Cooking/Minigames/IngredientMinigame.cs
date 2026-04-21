@@ -13,7 +13,7 @@ namespace Cooking.Minigames
         {
             if (CurrentFood.Any()) return;
             if (!other.gameObject.TryGetComponent(out FoodItem foodItem)) return;
-            if (applicableFood.Any(applicableFoodItem => applicableFoodItem == foodItem.ingredientType))
+            if (applicableFood.Any(ingredientType => ingredientType == foodItem.ingredientType))
             {
                 CurrentFood.Add(foodItem);
                 CurrentFood[0].transform.position = new Vector3(foodPlaceholder.position.x, CurrentFood[0].transform.position.y, foodPlaceholder.position.z);
@@ -44,7 +44,6 @@ namespace Cooking.Minigames
         protected override void RemoveFood()
         {
             CurrentFood.Clear();
-            Score = 0;
         }
     }
 }

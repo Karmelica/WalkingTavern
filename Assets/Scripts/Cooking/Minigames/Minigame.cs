@@ -45,6 +45,7 @@ namespace Cooking.Minigames
             {
                 FinishMinigameRpc();
                 AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
+                Score = 0;
                 return;
             }
             DoMinigame();
@@ -58,9 +59,9 @@ namespace Cooking.Minigames
         }
 
         protected abstract bool CheckForIngredients();
-        
-        protected abstract void RemoveFood();
-        
+
+        protected virtual void RemoveFood() { }
+
         protected abstract void CompleteMinigame();
 
         protected virtual void DoMinigame()

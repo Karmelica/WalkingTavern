@@ -18,12 +18,10 @@ public partial class IsCorrectDishCondition : Condition
         {
             if(dishItem.dishType == Self.Value.requestedDish.Value){
                 AIManager.OnScoreChanged?.Invoke(100);
-                Self.Value.RemoveDish();
                 return true;
             }
         }
         AIManager.OnScoreChanged?.Invoke(-50);
-        Self.Value.RemoveDish();
         return false;
     }
 }

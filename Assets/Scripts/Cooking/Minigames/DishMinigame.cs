@@ -21,6 +21,7 @@ namespace Cooking.Minigames
         
         protected override void Awake()
         {
+            base.Awake();
             foreach (var processedIngredientType in Enum.GetValues(typeof(ProcessedIngredientType)))
             {
                 _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
@@ -28,9 +29,6 @@ namespace Cooking.Minigames
 
             Recipe = GetRecipe.GetRecipeByDishType(dishType);
             UpdateRecipeText();
-            
-            if (!IsServer) return;
-            Helper.SpawnSomeIngredients();
         }
         
         public void DishTypeChanged(DishType type)
@@ -95,11 +93,6 @@ namespace Cooking.Minigames
         protected override void CompleteMinigame()
         {
             CompleteRecipe();
-        }
-
-        protected override void RemoveFood()
-        {
-            Score = 0;
         }
 
         private void UpdateRecipeText()

@@ -1,5 +1,133 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1161176578627376006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6489496225857479820}
+  - component: {fileID: 4251799998079816663}
+  - component: {fileID: 2139599200799975517}
+  m_Layer: 0
+  m_Name: OutsideCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6489496225857479820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161176578627376006}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.0000057220454, z: -0, w: -1}
+  m_LocalPosition: {x: -3.038904, y: 25.443, z: -2.2925432}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7677308705446485405}
+  m_LocalEulerAnglesHint: {x: 0, y: -359.999, z: 0}
+--- !u!20 &4251799998079816663
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161176578627376006}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 60
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -2
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 5111
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &2139599200799975517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161176578627376006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1221971825705790981
 GameObject:
   m_ObjectHideFlags: 0
@@ -3422,6 +3550,134 @@ Transform:
   - {fileID: 2793684155203712244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2718479410750133909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6939855795955689671}
+  - component: {fileID: 4348389922545070520}
+  - component: {fileID: 2047717966700232254}
+  m_Layer: 0
+  m_Name: OutsideCamera_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6939855795955689671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718479410750133909}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071112, z: -0, w: 0.7071025}
+  m_LocalPosition: {x: -0.08626021, y: 12.929942, z: -95.191765}
+  m_LocalScale: {x: 20, y: 0.5, z: 1.0860096}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 943030642469462996}
+  m_LocalEulerAnglesHint: {x: 0, y: -359.999, z: 0}
+--- !u!20 &4348389922545070520
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718479410750133909}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 60
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -2
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 5111
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &2047717966700232254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718479410750133909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &3672295543269509098
 GameObject:
   m_ObjectHideFlags: 0
@@ -8326,6 +8582,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1776227573609124259}
+  - {fileID: 6939855795955689671}
   m_Father: {fileID: 6916572113268480780}
   m_LocalEulerAnglesHint: {x: 0, y: -360, z: 0}
 --- !u!33 &5770875470343034725
@@ -8418,8 +8675,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  otherPortal: {fileID: 0}
   portalCam: {fileID: 0}
+  portalRenderer: {fileID: 0}
+  otherPortal: {fileID: 0}
 --- !u!114 &5152886506271964364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8714,6 +8972,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2168851689679470642}
+  - {fileID: 6489496225857479820}
   m_Father: {fileID: 6916572113268480780}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &8134232826461669000
@@ -8728,8 +8987,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c26ab597a44a140bd59b47562c5f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalCamera
-  otherPortal: {fileID: 0}
   portalCam: {fileID: 0}
+  portalRenderer: {fileID: 0}
+  otherPortal: {fileID: 0}
 --- !u!65 &3248957160742287192
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9259,6 +9519,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   shouldSpawnSomeIngredients: 0
   spawnLocation: {fileID: 8711539617208965823}
+  particles: {fileID: 0}
 --- !u!4 &8711539617208965823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6495276644439323458, guid: a25a7a646df3b55448e92974388872f3, type: 3}
@@ -73663,6 +73924,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5188300387433892317, guid: 3cba3a979f032c84695c77af7285cbda, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3156334141
+      objectReference: {fileID: 0}
     - target: {fileID: 6141933823121526757, guid: 3cba3a979f032c84695c77af7285cbda, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -73777,6 +74042,10 @@ PrefabInstance:
     - target: {fileID: 5441081681648956668, guid: bf8f8e6d2f9ccc74fa0c6ee1f42c5c48, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6169319583226089088, guid: bf8f8e6d2f9ccc74fa0c6ee1f42c5c48, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3314927229
       objectReference: {fileID: 0}
     - target: {fileID: 6215958971858892260, guid: bf8f8e6d2f9ccc74fa0c6ee1f42c5c48, type: 3}
       propertyPath: m_LocalScale.x

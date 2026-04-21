@@ -15,7 +15,7 @@ namespace Managers
         public static Action<int> OnScoreChanged;
     
         [SerializeField] private int totalScore;
-        [SerializeField] private int streak;
+        [SerializeField] private float streak;
         [SerializeField] private int totalCustomers = 12;
         [SerializeField] private float spawnTime = 30f;
         private Dictionary<DishType, int> _dishes = new();
@@ -31,6 +31,12 @@ namespace Managers
         private Queue<Transform> _availableSeats = new();
     
         private List<Recipe> _availableRecipes = new ();
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            UpdateScore(0);
+        }
 
         private void OnEnable()
         {
@@ -54,8 +60,9 @@ namespace Managers
 
         private void UpdateScore(int scoreChange)
         {
-            totalScore = Math.Max(0, (totalScore + scoreChange) * streak);
-            streak = scoreChange > 0 ? streak + 1 : 1;
+            totalScore = Mathf.RoundToInt(Math.Max(0, (totalScore + scoreChange) * streak));
+            streak = scoreChange > 0 ? streak + 0.5f : 1f;
+            streak = Mathf.Min(streak, 5.5f);
             UpdateGUI();
         }
 
@@ -85,10 +92,11 @@ namespace Managers
         {
             string info = "";
             info += $"Score: {totalScore}";
-            info += $"\nRequested Dishes:";
-            foreach (var dish in _dishes)
-            {
-                info += $"\n  {dish.Key.ToString()} x{dish.Value.ToString()}";
+            info += "\nRequested Dishes:";
+            if (_dishes.Count != 0) {
+                foreach (var dish in _dishes) {
+                    info += $"\n  {dish.Key.ToString()} x{dish.Value.ToString()}";
+                }
             }
             SendUpdatedScoreRpc(info);
         }

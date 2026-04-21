@@ -1,95 +1,91 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace World.Caravan
 {
     public class PortalCamera : MonoBehaviour
     {
-
-        private MeshRenderer portalRenderer;
-        private RenderTexture viewTexture;
-        private Camera playerCam;
+        private Camera _portalCam;
+        [SerializeField] private MeshRenderer portalRenderer;
+        private Camera _playerCam;
+        private RenderTexture _viewTexture;
         public PortalCamera otherPortal;
-        [SerializeField] private Camera portalCam;
-        private float nearClipLimit = 0.1f;
-        private float nearClipOffset = 0.03f;
+        private const float NearClipLimit = 0.1f;
+        private const float NearClipOffset = 0.03f;
+        private Plane[] _planes;
+        private Collider _objCollider;
+        private bool _isVisible;
 
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            portalCam.enabled = false;
+            if (Camera.main == null) throw new Exception("MainCamera not found");
+            _playerCam = Camera.main;
+            _portalCam = GetComponentInChildren<Camera>();
+            _portalCam.enabled = false;
         
-            if (Camera.main == null)
-            {
-                Debug.LogError("MainCamera not found");
-                return;
-            }
-            playerCam = Camera.main;
-        
-            portalCam.fieldOfView = playerCam.fieldOfView;
-        
-            portalRenderer = GetComponentInChildren<MeshRenderer>();
-
-            RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
-            portalCam.targetTexture = rt;
+            _portalCam.fieldOfView = _playerCam.fieldOfView;
+            
+            RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 0);
+            _portalCam.targetTexture = rt;
             portalRenderer.material.mainTexture = rt;
         }
 
         private void OnValidate()
         {
-            if (otherPortal)
-            {
-                otherPortal.otherPortal = this;
-            }
+            if (otherPortal) otherPortal.otherPortal = this;
         }
 
-        void CreateViewTexture () {
-            if (viewTexture == null || viewTexture.width != Screen.width || viewTexture.height != Screen.height) {
-                if (viewTexture != null) {
-                    viewTexture.Release ();
-                }
-                viewTexture = new RenderTexture (Screen.width, Screen.height, 24);
-            
+        private void CreateViewTexture ()
+        {
+            if (_viewTexture == null || _viewTexture.width != Screen.width || _viewTexture.height != Screen.height)
+            {
+                if (_viewTexture != null) _viewTexture.Release();
+                _viewTexture = new RenderTexture(Screen.width, Screen.height, 24);
+
                 // Render the view from the portal camera to the view texture
-                portalCam.targetTexture = viewTexture;
-            
+                _portalCam.targetTexture = _viewTexture;
+
                 // Display the view texture on the screen of the linked portal
-                otherPortal.portalRenderer.material.mainTexture = viewTexture;
+                otherPortal.portalRenderer.material.SetTexture("_MainTex", _viewTexture);
             }
         }
     
-        public void Render(){ 
-     
-            portalRenderer.enabled = false;
+        public void Render()
+        {
+            if (!IsObjectVisible()) return;
             CreateViewTexture ();
             
-            var m = transform.localToWorldMatrix * otherPortal.transform.worldToLocalMatrix * playerCam.transform.localToWorldMatrix;
-
+            var m = transform.localToWorldMatrix * otherPortal.transform.worldToLocalMatrix * _playerCam.transform.localToWorldMatrix;
+            _portalCam.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
+            
             SetNearClipPlane();
-        
-            portalCam.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
-        
-            portalCam.Render();
-
-            portalRenderer.enabled = true;
+            _portalCam.Render();
         }
     
         void SetNearClipPlane () {
             Transform clipPlane = transform;
-            int dot = System.Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - portalCam.transform.position));
+            int dot = Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - _portalCam.transform.position));
 
-            Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
-            Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
-            float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + nearClipOffset;
+            Vector3 camSpacePos = _portalCam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
+            Vector3 camSpaceNormal = _portalCam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
+            float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + NearClipOffset;
 
-            if (Mathf.Abs (camSpaceDst) > nearClipLimit) {
+            if (Mathf.Abs (camSpaceDst) > NearClipLimit) {
                 Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
 
-                portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
-            } else 
-            {
-                portalCam.projectionMatrix = playerCam.projectionMatrix;
+                _portalCam.projectionMatrix = _playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
             }
+            else {
+                _portalCam.projectionMatrix = _playerCam.projectionMatrix;
+            }
+        }
+        
+        private bool IsObjectVisible()
+        {
+            _planes =  GeometryUtility.CalculateFrustumPlanes(_playerCam);
+            var meshRenderer = otherPortal.portalRenderer;
+            return GeometryUtility.TestPlanesAABB(_planes, meshRenderer.bounds);
         }
     }
 }
