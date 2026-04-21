@@ -11,8 +11,8 @@ namespace World.Caravan
         private Camera _playerCam;
         private RenderTexture _viewTexture;
         public PortalCamera otherPortal;
-        private const float NearClipLimit = 0.1f;
-        private const float NearClipOffset = 0.03f;
+        private const float NearClipLimit = 0.2f;
+        private const float NearClipOffset = 0.05f;
         private Plane[] _planes;
         private Collider _objCollider;
         private bool _isVisible;
@@ -86,6 +86,22 @@ namespace World.Caravan
             _planes =  GeometryUtility.CalculateFrustumPlanes(_playerCam);
             var meshRenderer = otherPortal.portalRenderer;
             return GeometryUtility.TestPlanesAABB(_planes, meshRenderer.bounds);
+        }
+
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.matrix = _portalCam.transform.localToWorldMatrix;
+            
+            Transform clipPlane = transform;
+            int dot = Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - _portalCam.transform.position));
+
+            Vector3 camSpacePos = _portalCam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
+            Vector3 camSpaceNormal = _portalCam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
+            float camSpaceDst = Vector3.Dot (camSpacePos, camSpaceNormal) + NearClipOffset;
+            
+            Gizmos.DrawFrustum(Vector3.zero, _portalCam.fieldOfView, camSpaceDst, _portalCam.farClipPlane, 16/9f);
         }
     }
 }
