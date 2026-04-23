@@ -20,15 +20,14 @@ namespace PlayerScripts
         
         public TextMeshProUGUI interactText;
         public TextMeshProUGUI gameInfoText;
-        [SerializeField] private TMP_Dropdown dropdown;
 
 
-        private void OnEnable()
+        private void Awake()
         {
             OnGameInfoChanged += UpdateScoreText;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             OnGameInfoChanged -= UpdateScoreText;
         }
@@ -56,11 +55,6 @@ namespace PlayerScripts
         public bool IsPaused()
         {
             return pauseUI.activeSelf;
-        }
-        
-        public void ChangeGraphics()
-        {
-            QualitySettings.SetQualityLevel(dropdown.value);
         }
     }
 }

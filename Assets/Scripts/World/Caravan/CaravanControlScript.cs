@@ -42,7 +42,7 @@ namespace World.Caravan
                          point = caravanRay.point + Vector3.up * caravanHeight;
                     }
                     var vector3 = new Vector3(followLocation.position.x, point.y, followLocation.position.z);
-                    caravan.transform.position = Vector3.Lerp(caravan.transform.position, vector3, 0.01f);
+                    caravan.transform.position = Vector3.Lerp(caravan.transform.position, vector3, 0.3f * Time.deltaTime);
                 }
 
                 var rot = Quaternion.LookRotation(followLocation.position - caravan.transform.position);
@@ -67,14 +67,16 @@ namespace World.Caravan
         {
             _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);
 
-            if(_rb.linearVelocity.magnitude < Speed && inputVector.y > 0){
+            if (_rb.linearVelocity.magnitude < Speed && inputVector.y > 0)
+            {
                 var forward = transform.forward;
                 forward.y = 0;
                 forward.Normalize();
                 _rb.AddForce(forward * (inputVector.y * Time.fixedDeltaTime * Speed), ForceMode.VelocityChange);
             }
-            
-            transform.Rotate(transform.up, inputVector.x * inputVector.y * 50f * Time.fixedDeltaTime);
+
+            if(Vector3.Dot(transform.forward, caravan.transform.forward) > 0)
+                transform.Rotate(transform.up, inputVector.x * inputVector.y * 50f * Time.fixedDeltaTime);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -90,6 +92,7 @@ namespace World.Caravan
         private void StopDrivingCarRpc()
         {
             _isDriven.Value = false;
+            Drive(new Vector2(0, 0));
         }
         
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

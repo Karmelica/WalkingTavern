@@ -10,6 +10,7 @@ namespace World.Caravan
     {
         [SerializeField] private IngredientType ingredientBox;
         [SerializeField] private Image foodIcon;
+        [SerializeField] private bool unlimited;
         private NetworkVariable<int> _quantity = new();
 
         private void Awake()
@@ -24,7 +25,7 @@ namespace World.Caravan
         {
             if (!IsServer) return;
             base.OnNetworkSpawn();
-            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -32,9 +33,9 @@ namespace World.Caravan
             if (!IsServer) return;
             if(other.TryGetComponent(out FoodItem foodItem) && !foodItem.IsInteractedWith() && foodItem.ingredientType == ingredientBox)
             {
-                FoodStorage.Instance.ReturnIngredient(ingredientBox);
+                FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
                 foodItem.NetworkObject.Despawn();
-                _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
+                _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
             }
         }
 
@@ -52,16 +53,16 @@ namespace World.Caravan
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
         private void SpawnIngredientServerRpc(IngredientType ingredientType)
         {
-            if (!FoodStorage.Instance.GetIngredient(ingredientType)) return;
+            if (!FoodStorage.Instance.GetIngredient(ingredientType, unlimited)) return;
             var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
-            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox);
-            
+            _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
         }
 
         public string GetInteractText()
         {
-            return "\nStorage (" + ingredientBox + ": " + _quantity.Value + ")";
+            if(unlimited) return $"\nStorage ({ingredientBox})";
+            return $"\nStorage ({ingredientBox}: {_quantity.Value})";
         }
 
         public bool IsInteractedWith()

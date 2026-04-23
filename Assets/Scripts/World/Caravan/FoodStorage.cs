@@ -21,8 +21,9 @@ namespace World.Caravan
             }
         }
 
-        public bool GetIngredient(IngredientType requestedIngredient)
+        public bool GetIngredient(IngredientType requestedIngredient, bool isUnlimited)
         {
+            if (isUnlimited) return true;
             if(_gatheredIngredients.TryGetValue(requestedIngredient, out var value))
             {
                 if (value > 0)
@@ -34,17 +35,18 @@ namespace World.Caravan
             return false;
         }
         
-        public void ReturnIngredient(IngredientType returnedIngredient)
+        public void ReturnIngredient(IngredientType returnedIngredient, bool isUnlimited)
         {
+            if (isUnlimited) return;
             if(!_gatheredIngredients.TryAdd(returnedIngredient, 1))
             {
                 _gatheredIngredients[returnedIngredient]++;
             }
         }
 
-        public int GetIngredientCount(IngredientType requestedIngredient)
+        public int GetIngredientCount(IngredientType requestedIngredient, bool isUnlimited)
         {
-            return _gatheredIngredients.GetValueOrDefault(requestedIngredient, 0);
+            return isUnlimited ? 0 : _gatheredIngredients.GetValueOrDefault(requestedIngredient, 0);
         }
     }
 }
