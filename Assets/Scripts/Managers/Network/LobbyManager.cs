@@ -5,6 +5,7 @@ using Steamworks;
 using Steamworks.Data;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,10 +19,15 @@ namespace Managers.Network
         [SerializeField] private GameObject waitingForPlayersText;
         [SerializeField] private TextMeshProUGUI playersInLobby;
         [SerializeField] private TextMeshProUGUI lobbyId;
+        private TMP_InputField _clientSteamIdInputField;
         [Scene]
         [SerializeField] private string firstScene;
         
-        private TMP_InputField _clientSteamIdInputField;
+        [Header("Camera Action")]
+        [SerializeField] private Transform menuCamera;
+        [SerializeField] private Transform menuLocation;
+        [SerializeField] private Transform lobbyLocation;
+        private Transform _targetLocation;
 
         #region Unity Methods
 
@@ -30,6 +36,14 @@ namespace Managers.Network
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
+            _targetLocation = menuLocation;
+        }
+
+        private void Update()
+        {
+            if (menuCamera == null) return;
+            menuCamera.position = Vector3.Lerp(menuCamera.position, _targetLocation.position, 0.1f);
+            menuCamera.rotation = Quaternion.Lerp(menuCamera.rotation, _targetLocation.rotation, 0.1f);
         }
 
         private void OnEnable()
@@ -68,15 +82,19 @@ namespace Managers.Network
         private void LobbyEntered(Lobby lobby)
         {
             SteamCurrentLobby.CurrentLobby = lobby;
+
+            if (!NetworkManager.Singleton.IsHost)
+            {
+                var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
+                facepunchTransport.targetSteamId = lobby.Owner.Id;
+                var startClient = NetworkManager.Singleton.StartClient();
+                if (!startClient) return;
+            }
+            
             lobbyId.text = lobby.Id.ToString();
             ShowPlayers(lobby);
             SetUI();
-
-            if(NetworkManager.Singleton.IsHost) return;
-            
-            var facepunchTransport = NetworkManager.Singleton.GetComponent<FacepunchTransport>();
-            facepunchTransport.targetSteamId = lobby.Owner.Id;
-            NetworkManager.Singleton.StartClient();
+            _targetLocation = lobbyLocation;
         }
         
         private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
@@ -126,6 +144,7 @@ namespace Managers.Network
         public void OnExitButtonClicked()
         {
             Application.Quit();
+            EditorApplication.isPlaying = false;
         }
         
         public void OnLeaveButtonClicked()
@@ -135,6 +154,7 @@ namespace Managers.Network
             SetUI();
             NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+            _targetLocation = menuLocation;
         }
 
         public void OnStartGameButtonClicked()

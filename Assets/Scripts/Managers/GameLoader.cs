@@ -9,19 +9,41 @@ namespace Managers
     public class GameLoader : MonoBehaviour
     {
         [SerializeField] private Slider loadingBar;
-        private float _loadingTime = 1f;
-        private float _currentLoadingTime = 0f;
-        
-        private IEnumerator Start()
+        private float _loadingProgress;
+        private AsyncOperation _loading;
+
+        private void Start()
         {
-            yield return new WaitForSeconds(_loadingTime);
-            SceneManager.LoadScene("Menu");
+            try
+            {
+                _loading = SceneManager.LoadSceneAsync("Menu");
+                _loading.allowSceneActivation = false;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                throw;
+            }
         }
 
         private void Update()
         {
-            _currentLoadingTime += Time.deltaTime;
-            loadingBar.value = _currentLoadingTime / _loadingTime;
+            if (_loading == null) return;
+            //1. jeśli (loading < prawdziwy progress) loading++
+            //2. jeśli prawdziwy progress >= 0.9 zezwól na aktywacje
+            
+            if (_loadingProgress < 1f)
+            {
+                if(_loadingProgress < _loading.progress){
+                    _loadingProgress +=  Time.deltaTime;
+                }
+                
+                if (_loadingProgress >= 0.9f)
+                {
+                    _loading.allowSceneActivation = true;
+                }
+            }
+            loadingBar.value = _loadingProgress / 1f;
         }
     }
 }

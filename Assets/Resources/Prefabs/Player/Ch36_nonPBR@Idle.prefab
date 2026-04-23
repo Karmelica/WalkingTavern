@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &528117586463540469
 Transform:
   m_ObjectHideFlags: 0
@@ -1487,7 +1487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7712097293814279625
 Transform:
   m_ObjectHideFlags: 0
@@ -2687,6 +2687,10 @@ MonoBehaviour:
   playerNameCanvas: {fileID: 7498144743461933851}
   networkedPlayerMesh:
   - {fileID: 5970120869399318737}
+  - {fileID: 2277399832522965819}
+  - {fileID: 1879611513397643298}
+  - {fileID: 1896023316716266760}
+  networkedPlayerEars:
   - {fileID: 2277399832522965819}
   - {fileID: 1879611513397643298}
   - {fileID: 1896023316716266760}

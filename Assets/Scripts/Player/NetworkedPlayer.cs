@@ -26,6 +26,7 @@ namespace PlayerScripts
 
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
+        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerEars;
         [SerializeField] private SkinnedMeshRenderer networkedPlayerFace;
         [SerializeField] private Material[] skins;
         [SerializeField] private Material[] faces;
@@ -34,6 +35,7 @@ namespace PlayerScripts
         private readonly NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -61,10 +63,12 @@ namespace PlayerScripts
             _playerNickname.OnValueChanged += OnNicknameChanged;
             _playerSkinIndex.OnValueChanged += OnSkinChanged;
             _playerFaceIndex.OnValueChanged += OnFaceChanged;
+            _playerEarsIndex.OnValueChanged += OnEarsChanged;
             
             NicknameChanged(_playerNickname.Value);
             SkinChanged(_playerSkinIndex.Value);
             FaceChanged(_playerFaceIndex.Value);
+            EarsChanged(_playerEarsIndex.Value);
         }
 
         public override void OnNetworkDespawn()
@@ -73,6 +77,7 @@ namespace PlayerScripts
             _playerNickname.OnValueChanged -= OnNicknameChanged;
             _playerSkinIndex.OnValueChanged -= OnSkinChanged;
             _playerFaceIndex.OnValueChanged -= OnFaceChanged;
+            _playerEarsIndex.OnValueChanged -= OnEarsChanged;
         }
         
         private void Update()
@@ -155,7 +160,21 @@ namespace PlayerScripts
                 mesh.materials = new[] { skins[newValue] };
             }
         }
-
+        
+        private void OnEarsChanged(int previousValue, int newValue)
+        {
+            EarsChanged(newValue);
+        }
+        
+        private void EarsChanged(int newValue)
+        {
+            if (IsOwner) return;
+            for (var i = 0; i < networkedPlayerEars.Length; i++)
+            {
+                networkedPlayerEars[i].enabled = newValue == i;
+            }
+        }
+        
         private void OnFaceChanged(int previousValue, int newValue)
         {
             FaceChanged(newValue);
@@ -184,7 +203,12 @@ namespace PlayerScripts
             _playerFaceIndex.Value = skinIndex;
         }
         
-
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetEarsRpc(int earsIndex)
+        {
+            _playerEarsIndex.Value = earsIndex;
+        }
+        
         #endregion
         
         #region Network RPCs
@@ -201,6 +225,5 @@ namespace PlayerScripts
         }
 
         #endregion
-
     }
 }
