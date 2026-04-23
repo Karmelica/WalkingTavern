@@ -91,6 +91,7 @@ namespace World.Caravan
 
         private void OnDrawGizmosSelected()
         {
+            if (!_portalCam) return;
             Gizmos.color = Color.blue;
             Gizmos.matrix = _portalCam.transform.localToWorldMatrix;
             

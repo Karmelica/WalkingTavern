@@ -34,8 +34,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -72,7 +72,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4a300fc7a532e18449807bd466b03d26, type: 2}
+  - {fileID: 2100000, guid: 52ca777300fe45b44a6398f7e398e13c, type: 2}
+  - {fileID: 2100000, guid: 468e5d12466bb494e8ebcc918f86b2f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -198,9 +199,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World.FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  ingredientType: 1
+  ingredientType: 3
   ingredientProducts:
-  - {fileID: 4901630527041624475, guid: 9b9be4e28eb256d48861e21bcd3536ba, type: 3}
+  - {fileID: 4901630527041624475, guid: 14499a89e0d23ef469512c646b6082ab, type: 3}
+  - {fileID: 4901630527041624475, guid: 14499a89e0d23ef469512c646b6082ab, type: 3}
+  - {fileID: 4901630527041624475, guid: 14499a89e0d23ef469512c646b6082ab, type: 3}
 --- !u!54 &-8589990323169165160
 Rigidbody:
   m_ObjectHideFlags: 0

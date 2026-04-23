@@ -8,7 +8,7 @@ namespace Managers
     public class PickupsGenerator : NetworkBehaviour
     {
         [SerializeField] private GameObject[] pickupPrefab;
-        private List<NetworkObject> _spawnedObjects = new List<NetworkObject>();
+        private List<NetworkObject> _spawnedObjects = new();
     
         public override void OnNetworkSpawn()
         {
@@ -16,7 +16,7 @@ namespace Managers
             if (!IsServer) return;
             foreach (var item in pickupPrefab)
             {
-                var random = Random.Range(5, 35);
+                var random = Random.Range(10, 35);
                 for (var i = 0; i < random; i++){
                     var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
                     var prefab = Instantiate(item, pos, Quaternion.identity);

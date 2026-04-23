@@ -73,6 +73,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4d71c843f76b3984aa4f0996420c08e9, type: 2}
+  - {fileID: 2100000, guid: 468e5d12466bb494e8ebcc918f86b2f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -198,7 +199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World.FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  ingredientType: 0
+  ingredientType: 6
   ingredientProducts:
   - {fileID: 3200837471173810449, guid: 77cd48f9e91faf24282b585c40d2e15f, type: 3}
   - {fileID: 3200837471173810449, guid: 77cd48f9e91faf24282b585c40d2e15f, type: 3}

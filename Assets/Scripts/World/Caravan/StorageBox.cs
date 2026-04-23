@@ -54,7 +54,7 @@ namespace World.Caravan
         private void SpawnIngredientServerRpc(IngredientType ingredientType)
         {
             if (!FoodStorage.Instance.GetIngredient(ingredientType, unlimited)) return;
-            var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward, Quaternion.identity);
+            var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward * 0.5f, Quaternion.identity);
             ingredient.GetComponent<NetworkObject>().Spawn();
             _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
         }

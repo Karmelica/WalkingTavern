@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -8589990323169165160}
   - component: {fileID: 5972577363828036986}
   m_Layer: 7
-  m_Name: Mushroom
+  m_Name: Grape
   m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,8 +34,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46,7 +46,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4901630527041624475}
-  m_Mesh: {fileID: 7386890195319105199, guid: a8651cd0942a2734998b730b5fb7fe90, type: 3}
+  m_Mesh: {fileID: 3646438743158647656, guid: 82d3bafbfba83eb45a367c496e87f5f0, type: 3}
 --- !u!23 &7992703769691932927
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -72,7 +72,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c3396e1c8ec642842ae2e55861e2a3af, type: 2}
+  - {fileID: 2100000, guid: 52ca777300fe45b44a6398f7e398e13c, type: 2}
+  - {fileID: 2100000, guid: 468e5d12466bb494e8ebcc918f86b2f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2709233727
+  GlobalObjectIdHash: 4283361311
   InScenePlacedSourceGlobalObjectIdHash: 2370954167
   DeferredDespawnTick: 0
   Ownership: 1
@@ -198,11 +199,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::World.FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
   isOnMinigame: 0
-  ingredientType: 5
+  ingredientType: 4
   ingredientProducts:
-  - {fileID: 3200837471173810449, guid: 4e0beb8613321354b9b0d24772d54b39, type: 3}
-  - {fileID: 3200837471173810449, guid: 4e0beb8613321354b9b0d24772d54b39, type: 3}
-  - {fileID: 3200837471173810449, guid: 4e0beb8613321354b9b0d24772d54b39, type: 3}
+  - {fileID: 4901630527041624475, guid: 9b9be4e28eb256d48861e21bcd3536ba, type: 3}
+  - {fileID: 4901630527041624475, guid: 9b9be4e28eb256d48861e21bcd3536ba, type: 3}
+  - {fileID: 4901630527041624475, guid: 9b9be4e28eb256d48861e21bcd3536ba, type: 3}
 --- !u!54 &-8589990323169165160
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -251,4 +252,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 7386890195319105199, guid: a8651cd0942a2734998b730b5fb7fe90, type: 3}
+  m_Mesh: {fileID: 3646438743158647656, guid: 82d3bafbfba83eb45a367c496e87f5f0, type: 3}

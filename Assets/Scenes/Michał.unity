@@ -1385,6 +1385,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bag_02
       objectReference: {fileID: 0}
+    - target: {fileID: 5844024451801310383, guid: 47498ef1105b04449be999de85979999, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5844024451801310383, guid: 47498ef1105b04449be999de85979999, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3343,6 +3351,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Raspberry_02
       objectReference: {fileID: 0}
+    - target: {fileID: 3872739336293004692, guid: df6cd3903e40d4b41a15720f7683a1c0, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872739336293004692, guid: df6cd3903e40d4b41a15720f7683a1c0, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 52ca777300fe45b44a6398f7e398e13c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4609,6 +4625,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2273804047352837237, guid: 7a778effbdf346343a9f809be0eb2024, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273804047352837237, guid: 7a778effbdf346343a9f809be0eb2024, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 468e5d12466bb494e8ebcc918f86b2f0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

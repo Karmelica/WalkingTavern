@@ -2,36 +2,42 @@ using Unity.Behavior;
 
 public enum IngredientType
 {
-    Lettuce,
+    MushroomBlue,
+    MushroomRed,
+    MushroomWhite,
     Raspberry,
+    Grape,
+    Apple,
+    Lettuce,
     Cheese,
     Toast,
     Baguette,
-    Mushroom,
-    Karambola
+    Karambola,
 }
 
 public enum ProcessedIngredientType
 {
-    ProcessedLettuce,
+    ProcessedMushroom,
     ProcessedRaspberry,
+    ProcessedGrape,
+    ProcessedApple,
+    ProcessedLettuce,
     ProcessedCheese,
     ProcessedToast,
-    ProcessedBaguetteTop,
     ProcessedBaguetteBottom,
-    ProcessedMushroom,
-    ProcessedKarambola
+    ProcessedBaguetteTop,
+    ProcessedKarambola,
 }
 
 [BlackboardEnum]
 public enum DishType
 {
-    Casserole,
-    MushroomSoup,
-    ToastCheese,
-    ToastKarambola,
-    FruitSoup,
-    AppleTart
+    DishCasserole,
+    DishMushroomSoup,
+    DishToastCheese,
+    DishToastKarambola,
+    DishFruitSoup,
+    DishAppleTart
 }
 
 [BlackboardEnum]
