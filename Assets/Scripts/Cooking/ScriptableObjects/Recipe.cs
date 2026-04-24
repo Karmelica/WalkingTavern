@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Cooking.ScriptableObjects
@@ -9,6 +10,7 @@ namespace Cooking.ScriptableObjects
         {
                 public DishType dishType;
                 public List<Ingredients> ingredients;
+                [MinMaxSlider(0f, 300f)] public Vector2 cookingMinMax;
         }
         
         [Serializable]

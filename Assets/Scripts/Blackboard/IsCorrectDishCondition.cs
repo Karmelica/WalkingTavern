@@ -14,14 +14,20 @@ public partial class IsCorrectDishCondition : Condition
 
     public override bool IsTrue()
     {
-        if (Dish.Value.TryGetComponent<DishItem>(out var dishItem))
-        {
-            if(dishItem.dishType == Self.Value.requestedDish.Value){
-                AIManager.OnScoreChanged?.Invoke(100);
+        if (Dish.Value.TryGetComponent<DishItem>(out var dishItem)) {
+            if(dishItem.dishType == Self.Value.requestedDish.Value) {
+                if(dishItem.IsCookedEnough()) {
+                    AIManager.OnScoreChanged?.Invoke(100);
+                    Self.Value.ShowMessageRpc("This is good");
+                }else {
+                    AIManager.OnScoreChanged?.Invoke(20);
+                    Self.Value.ShowMessageRpc("It's not good enough");
+                }
                 return true;
             }
         }
         AIManager.OnScoreChanged?.Invoke(-50);
+        _ = Self.Value.ShowMessage("This is bad");
         return false;
     }
 }

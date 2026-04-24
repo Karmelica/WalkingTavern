@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
-  m_Name: FruitSoup
+  m_Name: DishFruitSoup
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
   dishType: 4
   ingredients:
@@ -20,3 +20,4 @@ MonoBehaviour:
     quantity: 2
   - ingredientType: 3
     quantity: 2
+  cookingMinMax: {x: 10, y: 15}

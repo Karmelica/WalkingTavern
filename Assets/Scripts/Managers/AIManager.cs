@@ -82,8 +82,13 @@ namespace Managers
 
         private void UpdateScore(int scoreChange)
         {
-            totalScore = Mathf.RoundToInt(Math.Max(0, (totalScore + scoreChange) * streak));
-            streak = scoreChange > 0 ? streak + 0.5f : 1f;
+            if(scoreChange > 0){
+                totalScore = Mathf.RoundToInt(totalScore + (scoreChange * streak));
+                streak += 0.5f;
+            } else {
+                totalScore = Mathf.RoundToInt(Math.Max(0, totalScore + scoreChange));
+                streak = 1f;
+            }
             streak = Mathf.Min(streak, 5.5f);
             UpdateGUI();
         }

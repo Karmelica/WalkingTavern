@@ -10,15 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
-  m_Name: Casserole
-  m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
-  dishType: 0
+  m_Name: DishToastKarambola
+  m_EditorClassIdentifier: Assembly-CSharp::Cooking.Scriptable_Objects.Recipe
+  dishType: 3
   ingredients:
-  - ingredientType: 8
+  - ingredientType: 9
     quantity: 1
-  - ingredientType: 5
-    quantity: 3
-  - ingredientType: 4
-    quantity: 3
-  - ingredientType: 7
+  - ingredientType: 6
     quantity: 1
+  cookingMinMax: {x: 0, y: 5}

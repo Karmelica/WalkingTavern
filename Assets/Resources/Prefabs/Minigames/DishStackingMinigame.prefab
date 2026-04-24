@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 706508275765779051, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 52ca777300fe45b44a6398f7e398e13c, type: 2}
     - target: {fileID: 2465937664471346525, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.146
@@ -223,6 +227,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   shouldSpawnSomeIngredients: 0
   spawnLocation: {fileID: 3876965302291451640}
+  particles: {fileID: 0}
 --- !u!114 &4563610660604396331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,10 +241,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StackingMinigame
   ShowTopMostFoldoutHeaderGroup: 1
-  cameraLocation: {fileID: 7510776570666144159}
-  foodPlaceholder: {fileID: 3587692666235625113}
   requiredScore: 10
   instructions: {fileID: 6928032955803721082}
+  cameraLocation: {fileID: 7510776570666144159}
+  foodPlaceholder: {fileID: 3587692666235625113}
   dishType: 0
   ingredientListText: {fileID: 8967413785468590969}
 --- !u!1001 &1831701574318747683

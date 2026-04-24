@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
-  m_Name: AppleTart
+  m_Name: DishMushroomSoup
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
-  dishType: 5
+  dishType: 1
   ingredients:
-  - ingredientType: 3
-    quantity: 3
-  - ingredientType: 5
-    quantity: 1
-  - ingredientType: 6
-    quantity: 2
+  - ingredientType: 0
+    quantity: 9
+  cookingMinMax: {x: 10, y: 20}

@@ -25,10 +25,5 @@ namespace Cooking
         {
             return _recipesDict[dishType];
         }
-        
-        public static List<Recipe> GetRecipes()
-        {
-            return _recipes;
-        }
     }
 }

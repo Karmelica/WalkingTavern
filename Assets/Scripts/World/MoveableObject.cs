@@ -43,7 +43,7 @@ namespace World
             }
             else
             {
-                if (isOnMinigame) return;
+                if (_isInteractedWith.Value) return;
                 Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
                     QueryTriggerInteraction.Ignore);
                 transform.up = hit.normal;

@@ -1,3 +1,6 @@
+using System;
+using Cooking;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -6,14 +9,30 @@ namespace World
     public class DishItem : MoveableObject
     {
         public DishType dishType;
-        public bool canBeCooked;
+        private float _cookingProgressMin;
+        private float _cookingProgressMax;
         private NetworkVariable<float> _cookingProgress = new();
+        [SerializeField] private TextMeshProUGUI progressText;
 
         private void OnValidate()
         {
             gameObject.name = dishType.ToString();
         }
-        
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            var recipe = GetRecipe.GetRecipeByDishType(dishType);
+            _cookingProgressMin = recipe.cookingMinMax.x;
+            _cookingProgressMax = recipe.cookingMinMax.y;
+        }
+
+        protected override void Update()
+        {
+            progressText.text = $"Cooking progress: {_cookingProgress.Value:F0}\nTarget progress: {_cookingProgressMin}~{_cookingProgressMax}";
+            base.Update();
+        }
+
         public void Despawn()
         {
             DespawnItemServerRpc();
@@ -28,8 +47,12 @@ namespace World
         [Rpc(SendTo.Server)]
         public void CookRpc()
         {
-            if(canBeCooked)
-                _cookingProgress.Value += Time.deltaTime;
+            _cookingProgress.Value += Time.deltaTime;
+        }
+
+        public bool IsCookedEnough()
+        {
+            return  _cookingProgress.Value <= _cookingProgressMax &&  _cookingProgress.Value >= _cookingProgressMin;
         }
         
         public override string GetInteractText()

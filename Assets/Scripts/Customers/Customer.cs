@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cooking;
 using Managers;
 using PlayerScripts;
+using TMPro;
 using Unity.Behavior;
 using Unity.Collections;
 using Unity.Netcode;
@@ -17,6 +20,10 @@ public class Customer : NetworkBehaviour, IInteractable
     [SerializeField] private SkinnedMeshRenderer[] customerMesh;
     [SerializeField] private SkinnedMeshRenderer faceRenderer;
     [SerializeField] private Image foodIcon;
+    [SerializeField] private Image timeImage;
+    [SerializeField] private TextMeshProUGUI messageText;
+    private Awaitable _messageAwaitable;
+    private Awaitable _timerAwaitable;
     
     private BehaviorGraphAgent _behaviorGraphAgent;
     private BlackboardReference _blackboardReference;
@@ -33,6 +40,9 @@ public class Customer : NetworkBehaviour, IInteractable
     public NetworkVariable<int> selectedFaceIndex;
     public NetworkVariable<bool> orderTaken =  new (true);
     private readonly List<Transform> _waypoints = new();
+    private float _totalWaitTime;
+    private float _elapsedTime;
+
 
     #region Unity Lifecycle
     
@@ -43,11 +53,23 @@ public class Customer : NetworkBehaviour, IInteractable
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
     }
+    
+    private void Update()
+    {
+        Gravity();
+        
+        _animator.SetBool("IsGrounded", _controller.isGrounded);
+        
+        if(IsOwner)
+            SetAnimSpeedServerRpc(_agent.velocity.magnitude);
+    }
 
     protected override void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
         CustomerSetup();
+        _totalWaitTime = GetRecipe.GetRecipeByDishType(requestedDish.Value).cookingMinMax.y + 90f;
+        _elapsedTime = _totalWaitTime;
 
         if (!IsServer) return;
 
@@ -62,6 +84,7 @@ public class Customer : NetworkBehaviour, IInteractable
         _blackboardReference.SetVariableValue("OrderingLocation", _waypoints[0]);
         _blackboardReference.SetVariableValue("LeaveLocation", _waypoints[1]);
         _blackboardReference.SetVariableValue("WaitingLocation", _waypoints[2]);
+        _blackboardReference.SetVariableValue("WaitingTime", _totalWaitTime);
 
         // Add to waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
@@ -82,15 +105,14 @@ public class Customer : NetworkBehaviour, IInteractable
 
     private void ChangeFoodIcon(DishType newValue)
     {
-        foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
-        {
-            mainTexture = Resources.Load<Texture>("Icons/Food/" + newValue)
-        };
+        foodIcon.sprite = Resources.Load<Sprite>("Icons/Food/" + newValue);
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
+        _messageAwaitable?.Cancel();
+        _timerAwaitable?.Cancel();
         if (!IsServer) return;
         // Remove from waiting line
         _blackboardReference.GetVariableValue("CustomersInLine", out List<GameObject> customerList);
@@ -108,16 +130,6 @@ public class Customer : NetworkBehaviour, IInteractable
     private void DespawnServerRpc()
     {
         NetworkObject.Despawn();
-    }
-
-    private void Update()
-    {
-        Gravity();
-        
-        _animator.SetBool("IsGrounded", _controller.isGrounded);
-        
-        if(IsOwner)
-            SetAnimSpeedServerRpc(_agent.velocity.magnitude);
     }
     
     #endregion
@@ -189,9 +201,51 @@ public class Customer : NetworkBehaviour, IInteractable
         orderTaken.Value = true;
     }
 
+    [Rpc(SendTo.Everyone)]
+    public void ShowMessageRpc(FixedString128Bytes message)
+    {
+        _messageAwaitable = ShowMessage(message);
+    }
+    
+    public async Awaitable ShowMessage(FixedString128Bytes message)
+    {
+        messageText.text = message.ToString();
+        await Awaitable.WaitForSecondsAsync(3);
+        messageText.text = "";
+    }
+    
+    [Rpc(SendTo.Everyone)]
+    public void StartTimerRpc()
+    {
+        _timerAwaitable = StartTimer();
+    }
+
+    private async Awaitable StartTimer()
+    { 
+        while(timeImage.fillAmount > 0f)
+        {
+            _elapsedTime -= Time.deltaTime;
+            var fAmount = _elapsedTime / _totalWaitTime;
+            var c = new Color(1 - fAmount, fAmount, 0);
+            timeImage.fillAmount = fAmount;
+            timeImage.color = c;
+            await Awaitable.EndOfFrameAsync();
+        }
+    }
+
+
     public void RemoveDish()
     {
         _aiManager.RemoveDish(requestedDish.Value);
+        RemoveDishRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void RemoveDishRpc()
+    {
+        _timerAwaitable?.Cancel();
+        timeImage.enabled = false;
+        foodIcon.enabled = false;
     }
 
     public string GetInteractText()
@@ -205,4 +259,5 @@ public class Customer : NetworkBehaviour, IInteractable
     }
 
     #endregion
+
 }

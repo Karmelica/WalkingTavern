@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34aa619c2c384774abbdec08ad0c25d7, type: 3}
-  m_Name: MushroomSoup
+  m_Name: DishToastCheese
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
-  dishType: 1
+  dishType: 2
   ingredients:
-  - ingredientType: 0
-    quantity: 9
+  - ingredientType: 5
+    quantity: 2
+  - ingredientType: 6
+    quantity: 1
+  cookingMinMax: {x: 40, y: 60}
