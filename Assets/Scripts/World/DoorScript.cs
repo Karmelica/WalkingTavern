@@ -13,7 +13,7 @@ namespace World
         [AnimatorParam("animator")]
         [SerializeField] private string trigger;
         
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true, bool disconnection = false)
         {
             return null;
         }

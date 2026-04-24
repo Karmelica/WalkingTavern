@@ -4,16 +4,16 @@ namespace World
 {
     public class ProcessedFoodItem : MoveableObject
     {
-        public ProcessedIngredientType ingredientType;
+        public ProcessedIngredientType processedIngredientType;
 
         private void OnValidate()
         {
-            gameObject.name = ingredientType.ToString();
+            gameObject.name = processedIngredientType.ToString();
         }
 
         public override string GetInteractText()
         {
-            return $"Pick up {ingredientType.ToString()}";
+            return $"Pick up {processedIngredientType.ToString()}";
         }
 
     }

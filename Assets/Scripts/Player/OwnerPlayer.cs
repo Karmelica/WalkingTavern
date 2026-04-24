@@ -145,13 +145,14 @@ namespace PlayerScripts
         private void OnClientDisconnect(ulong clientId)
         {
             if (clientId != OwnerClientId) return;
-            _lastInteractedObject?.PrimaryInteract(this, false);
+            _lastInteractedObject?.PrimaryInteract(this, false, true);
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            _lastInteractedObject?.PrimaryInteract(null, false);
+            _lastInteractedObject?.PrimaryInteract(null, false, true);
+            _lastInteractedObject = null;
             _shouldUpdateInterface = false;
             CleanupInput();
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;

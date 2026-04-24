@@ -39,7 +39,8 @@ namespace World.Caravan
             }
         }
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
+            bool disconnection = false)
         {
             return null;
         }

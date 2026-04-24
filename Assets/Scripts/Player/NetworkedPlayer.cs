@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using World;
 
 namespace PlayerScripts
 {
@@ -23,6 +24,9 @@ namespace PlayerScripts
         #endregion
 
         #region Variables
+        
+        [SerializeField] private MoveableObject[] itemsInHand;
+        private MoveableObject _itemInHand;
 
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
@@ -184,7 +188,22 @@ namespace PlayerScripts
         {
             networkedPlayerFace.materials = new[] { new Material (faces[newValue]) };
         }
-
+        
+        #endregion
+        
+        #region Network RPCs
+        
+        /// <summary>
+        /// Synchronizuje animacje dla wszystkich klientów
+        /// </summary>
+        [Rpc(SendTo.Owner)]
+        public void SetAnimationRpc(float walkDir, int velocity, bool isInteracting)
+        {
+            _animator.SetFloat(WalkSpeed, velocity);
+            _animator.SetBool(IsInteracting, isInteracting);
+            _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
+        }
+        
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetSteamNicknameRpc(ulong id)
         {
@@ -208,20 +227,14 @@ namespace PlayerScripts
         {
             _playerEarsIndex.Value = earsIndex;
         }
-        
-        #endregion
-        
-        #region Network RPCs
-        
-        /// <summary>
-        /// Synchronizuje animacje dla wszystkich klientów
-        /// </summary>
-        [Rpc(SendTo.Owner)]
-        public void SetAnimationRpc(float walkDir, int velocity, bool isInteracting)
+
+        [Rpc(SendTo.Everyone)]
+        private void ChangeHandItemRpc(int index)
         {
-            _animator.SetFloat(WalkSpeed, velocity);
-            _animator.SetBool(IsInteracting, isInteracting);
-            _animator.SetFloat(WalkDir, Mathf.Abs(walkDir) > 0 ? walkDir : 1f);
+            _itemInHand.gameObject.SetActive(false);
+            var item = itemsInHand[index];
+            item.gameObject.SetActive(true);
+            _itemInHand = item;
         }
 
         #endregion

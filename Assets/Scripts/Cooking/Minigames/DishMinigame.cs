@@ -27,20 +27,20 @@ namespace Cooking.Minigames
                 _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
             }
 
-            Recipe = GetRecipe.GetRecipeByDishType(dishType);
+            Recipe = GetFoodItems.GetRecipeByDishType(dishType);
             UpdateRecipeText();
         }
         
         public void DishTypeChanged(DishType type)
         {
             dishType = type;
-            Recipe = GetRecipe.GetRecipeByDishType(type);
+            Recipe = GetFoodItems.GetRecipeByDishType(type);
             UpdateRecipeText();
         }
 
         protected void TryAddIngredient(ProcessedFoodItem foodItem)
         {
-            _placedIngredients[foodItem.ingredientType]++;
+            _placedIngredients[foodItem.processedIngredientType]++;
             if (!CurrentFood.Contains(foodItem))
             {
                 CurrentFood.Add(foodItem);
@@ -51,13 +51,13 @@ namespace Cooking.Minigames
 
         protected void TryRemoveIngredient(ProcessedFoodItem foodItem)
         {
-            if (!_placedIngredients.TryGetValue(foodItem.ingredientType, out _)) return;
+            if (!_placedIngredients.TryGetValue(foodItem.processedIngredientType, out _)) return;
             if (CurrentFood.Contains(foodItem))
             { 
                 CurrentFood.Remove(foodItem);
                 foodItem.isOnMinigame = false;
             }
-            _placedIngredients[foodItem.ingredientType]--;
+            _placedIngredients[foodItem.processedIngredientType]--;
                 
             UpdateRecipeText();
         }
@@ -76,7 +76,7 @@ namespace Cooking.Minigames
                 for (int i = CurrentFood.Count - 1; i >= 0 && removedCount < quantity; i--)
                 {
                     var item = CurrentFood[i];
-                    if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) && foodItemComponent.ingredientType == ingredientType)
+                    if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) && foodItemComponent.processedIngredientType == ingredientType)
                     {
                         CurrentFood.Remove(item);
                         Helper.DespawnObject(item);

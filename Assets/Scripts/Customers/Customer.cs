@@ -68,7 +68,7 @@ public class Customer : NetworkBehaviour, IInteractable
     {
         base.OnNetworkPostSpawn();
         CustomerSetup();
-        _totalWaitTime = GetRecipe.GetRecipeByDishType(requestedDish.Value).cookingMinMax.y + 90f;
+        _totalWaitTime = GetFoodItems.GetRecipeByDishType(requestedDish.Value).cookingMinMax.y + 90f;
         _elapsedTime = _totalWaitTime;
 
         if (!IsServer) return;
@@ -182,7 +182,8 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Interact
 
-    public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
+    public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
+        bool disconnection = false)
     {
         return null;
     }

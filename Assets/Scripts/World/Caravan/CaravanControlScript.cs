@@ -101,7 +101,8 @@ namespace World.Caravan
             transform.rotation = Quaternion.identity;
         }
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
+            bool disconnection = false)
         {
             if(!startedInteraction)
             {

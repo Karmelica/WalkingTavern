@@ -6,7 +6,6 @@ namespace Cooking.Minigames
     public class Slicing : IngredientMinigame
     {
         [Range(1, 10)]
-        [SerializeField] private float requiredSpeed = 3.5f;
         
         private Vector2 _oldMousePos;
 
@@ -16,8 +15,8 @@ namespace Cooking.Minigames
             if (!DidHit) return;
             if (RayHit.collider.gameObject)
             {
-                var difference = (_oldMousePos.y - MousePos.y) / Screen.height * Time.deltaTime * 1000f;
-                if (MousePos.y < _oldMousePos.y && difference > requiredSpeed)
+                // ReSharper disable PossibleLossOfFraction
+                if (MousePos.y < Screen.height / 2 && _oldMousePos.y > Screen.height/2)
                 {
                     Score++;
                 }

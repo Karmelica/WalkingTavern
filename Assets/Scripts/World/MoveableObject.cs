@@ -92,8 +92,19 @@ namespace World
 
         #region Interface Methods
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true)
+        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
+            bool disconnection = false)
         {
+            if (disconnection)
+            {
+                transform.SetParent(null);
+                if(NetworkManager.Singleton)
+                {
+                    OwnerDisconnectedRpc();
+                }
+                return null;
+            }
+            
             Vector3 placePoint = Vector3.zero;
             Vector3 placeRotation = Vector3.up;
             
@@ -134,6 +145,12 @@ namespace World
                 Physics.SyncTransforms();
                 return this;
             }
+        }
+
+        [Rpc(SendTo.Server)]
+        private void OwnerDisconnectedRpc()
+        {
+            _isInteractedWith.Value = false;
         }
 
         public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)

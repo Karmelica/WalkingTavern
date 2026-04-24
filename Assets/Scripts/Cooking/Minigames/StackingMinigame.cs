@@ -73,7 +73,7 @@ namespace Cooking.Minigames
                 var quantity = 0;
                 foreach (var moveableObject in CurrentFood) {
                     if (moveableObject is ProcessedFoodItem foodItem &&
-                        foodItem.ingredientType == ingredient.ingredientType)
+                        foodItem.processedIngredientType == ingredient.ingredientType)
                     {
                         food = foodItem;
                         quantity++;

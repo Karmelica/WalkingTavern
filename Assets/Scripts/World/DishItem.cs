@@ -22,7 +22,7 @@ namespace World
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            var recipe = GetRecipe.GetRecipeByDishType(dishType);
+            var recipe = GetFoodItems.GetRecipeByDishType(dishType);
             _cookingProgressMin = recipe.cookingMinMax.x;
             _cookingProgressMax = recipe.cookingMinMax.y;
         }

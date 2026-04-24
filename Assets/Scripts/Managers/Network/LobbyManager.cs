@@ -144,7 +144,9 @@ namespace Managers.Network
         public void OnExitButtonClicked()
         {
             Application.Quit();
+#if UNITY_EDITOR
             EditorApplication.isPlaying = false;
+#endif
         }
         
         public void OnLeaveButtonClicked()
