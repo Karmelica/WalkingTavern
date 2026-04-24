@@ -24,9 +24,6 @@ namespace PlayerScripts
         #endregion
 
         #region Variables
-        
-        [SerializeField] private MoveableObject[] itemsInHand;
-        private MoveableObject _itemInHand;
 
         [SerializeField] private Canvas playerNameCanvas;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
@@ -226,15 +223,6 @@ namespace PlayerScripts
         public void SetEarsRpc(int earsIndex)
         {
             _playerEarsIndex.Value = earsIndex;
-        }
-
-        [Rpc(SendTo.Everyone)]
-        private void ChangeHandItemRpc(int index)
-        {
-            _itemInHand.gameObject.SetActive(false);
-            var item = itemsInHand[index];
-            item.gameObject.SetActive(true);
-            _itemInHand = item;
         }
 
         #endregion
