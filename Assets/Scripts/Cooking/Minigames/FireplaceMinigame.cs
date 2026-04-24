@@ -14,6 +14,7 @@ namespace Cooking.Minigames
 
         protected override void DoMinigame()
         {
+            if (!IsSpawned) return;
             foreach (var foodItem in CurrentFood)
             {
                 if(foodItem is DishItem food)

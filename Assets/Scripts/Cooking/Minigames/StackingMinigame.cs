@@ -24,6 +24,7 @@ namespace Cooking.Minigames
         {
             if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
             TryAddIngredient(foodItem);
+            lastInteractedObject?.PlaceDownRpc();
         }
         
         private void OnTriggerExit(Collider other)
@@ -42,8 +43,7 @@ namespace Cooking.Minigames
             if (!DidHit) return;
 
             if (OwnerPlayer.IsHoldingLMB()) {
-                if (lastInteractedObject)
-                {
+                if (lastInteractedObject) {
                     lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance)); 
                 }
                 else if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity, 1<<7, QueryTriggerInteraction.Ignore) &&
@@ -51,14 +51,12 @@ namespace Cooking.Minigames
                     lastInteractedObject = foodItem;
                 }
             }
-            if (!OwnerPlayer.IsHoldingLMB()) {
-                if(lastInteractedObject)
-                {
+            else {
+                if(lastInteractedObject) {
                     lastInteractedObject.PlaceDownRpc();
                     lastInteractedObject = null;
                 }
-                if (CheckForRecipe())
-                {
+                if (CheckForRecipe()) {
                     Score = requiredScore;
                 }
             }
@@ -67,7 +65,6 @@ namespace Cooking.Minigames
 
         private bool CheckForRecipe()
         {
-            Debug.ClearDeveloperConsole();
             recipeQueue = new();
             //tylko jeśli wszystkie składniki są na miejscu
             foreach (var ingredient in Recipe.ingredients)

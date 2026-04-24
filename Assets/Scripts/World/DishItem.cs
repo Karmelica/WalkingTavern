@@ -57,7 +57,7 @@ namespace World
         
         public override string GetInteractText()
         {
-            return $"Pick up {dishType.ToString()}";
+            return $"Pick up {Utilis.DeleteAndSplit(dishType.ToString(), "Dish")}";
         }
 
     }
