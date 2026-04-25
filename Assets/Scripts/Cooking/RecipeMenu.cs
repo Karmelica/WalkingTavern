@@ -45,14 +45,14 @@ namespace Cooking
 
         public void DropdownValueChanged(int index)
         {
-            RecipeChangedRpc();
+            var dishType = (DishType)Enum.Parse(typeof(DishType), dropdown.options[dropdown.value].text); 
+            RecipeChangedRpc(dishType);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void RecipeChangedRpc()
+        private void RecipeChangedRpc(DishType type)
         {
-            var dishType = (DishType)Enum.Parse(typeof(DishType), dropdown.options[dropdown.value].text); 
-            _dishType.Value = dishType;
+            _dishType.Value = type;
         }
     }
 }
