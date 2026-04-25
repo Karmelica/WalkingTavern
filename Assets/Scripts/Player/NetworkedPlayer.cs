@@ -38,7 +38,7 @@ namespace PlayerScripts
         private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        private NetworkVariable<uint> _objectId = new();
+        private NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
