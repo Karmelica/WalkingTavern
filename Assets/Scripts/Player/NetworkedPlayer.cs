@@ -1,4 +1,5 @@
 using System;
+using Cooking;
 using Managers;
 using Steamworks;
 using TMPro;
@@ -37,6 +38,7 @@ namespace PlayerScripts
         private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private NetworkVariable<uint> _objectId = new();
 
         public bool IsGrounded { get; private set; }
         
@@ -44,6 +46,9 @@ namespace PlayerScripts
         private Animator _animator;
 
         private int _newVelocity;
+        
+        [SerializeField] private Transform handTransform;
+        public MoveableObject ObjectInHand { get; private set; }
 
         #endregion
         
@@ -70,6 +75,8 @@ namespace PlayerScripts
             SkinChanged(_playerSkinIndex.Value);
             FaceChanged(_playerFaceIndex.Value);
             EarsChanged(_playerEarsIndex.Value);
+
+            _objectId.OnValueChanged += ChangeObjectInHand;
         }
 
         public override void OnNetworkDespawn()
@@ -79,6 +86,8 @@ namespace PlayerScripts
             _playerSkinIndex.OnValueChanged -= OnSkinChanged;
             _playerFaceIndex.OnValueChanged -= OnFaceChanged;
             _playerEarsIndex.OnValueChanged -= OnEarsChanged;
+            
+            _objectId.OnValueChanged -= ChangeObjectInHand;
         }
         
         private void Update()
@@ -223,6 +232,22 @@ namespace PlayerScripts
         public void SetEarsRpc(int earsIndex)
         {
             _playerEarsIndex.Value = earsIndex;
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void ChangeObjectInHandIdRpc(uint id)
+        {
+            _objectId.Value = id;
+        }
+
+        private void ChangeObjectInHand(uint oldValue, uint newValue)
+        {
+            if (newValue == 0) {
+                Destroy(ObjectInHand.gameObject);
+                ObjectInHand = null;
+            }
+            else
+                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), handTransform.position, handTransform.rotation, handTransform);
         }
 
         #endregion

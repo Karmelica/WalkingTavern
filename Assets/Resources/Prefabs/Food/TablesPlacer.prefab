@@ -161,7 +161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &3430761777505829617
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -317,7 +316,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &332900910251538394
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -473,7 +471,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &6669634018623816246
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -629,7 +626,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &3397638774574162028
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -818,7 +814,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &4559665038240217740
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -974,7 +969,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &8117475868587523088
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1168,7 +1162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &6837885787029857970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1355,7 +1348,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &2293416175814850663
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1511,7 +1503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &949237290518031994
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1552,8 +1543,6 @@ GameObject:
   - component: {fileID: 8490269400769757493}
   - component: {fileID: 8817769484635913508}
   - component: {fileID: 6757008551592090718}
-  - component: {fileID: 4549782693603930140}
-  - component: {fileID: 8752015998282155506}
   - component: {fileID: 4108800651862743232}
   - component: {fileID: 4164204112096882701}
   m_Layer: 7
@@ -1572,7 +1561,7 @@ Transform:
   m_GameObject: {fileID: 6682961964202644327}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.729, y: -24.41, z: 2.285}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.42547, y: 0.42547, z: 0.42547}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1648,7 +1637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4183628718
+  GlobalObjectIdHash: 1747668422
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1674,6 +1663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World.Caravan.TablesPlacer
   ShowTopMostFoldoutHeaderGroup: 1
+  <ID>k__BackingField: 28
   isOnMinigame: 0
   groundLayer: 9
   tables: {fileID: 0}
@@ -1693,69 +1683,6 @@ MonoBehaviour:
   - {fileID: 5906119284000692532}
   - {fileID: 8342427325866449984}
   - {fileID: 8977036165938853026}
---- !u!114 &4549782693603930140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6682961964202644327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 1
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &8752015998282155506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6682961964202644327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 0
-  AutoSetKinematicOnDespawn: 1
 --- !u!54 &4108800651862743232
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1780,9 +1707,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!65 &4164204112096882701
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1932,7 +1859,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &1830698648214925423
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2121,7 +2047,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &3225354645674205416
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2343,7 +2268,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mat: {fileID: 2100000, guid: e61d4b89862f8034aa8d054b071195e1, type: 2}
-  colors: []
 --- !u!54 &6860166639527941231
 Rigidbody:
   m_ObjectHideFlags: 0

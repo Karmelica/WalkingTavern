@@ -1,3 +1,4 @@
+using MyInterfaces;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
@@ -101,26 +102,23 @@ namespace World.Caravan
             transform.rotation = Quaternion.identity;
         }
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
-            bool disconnection = false)
+        public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition = default)
         {
-            if(!startedInteraction)
-            {
+            if (pickUp) {
+                if (!_isDriven.Value) {
+                    SetUprightPositionRpc();
+                }
+            }
+            else {
                 StopDrivingCarRpc();
-                if(_drivingPlayer && _drivingPlayer == interactor){
+                if (_drivingPlayer) {
                     _drivingPlayer.SetDriving(false);
                     _drivingPlayer.SetCaravanControl(null);
+                    var right = followLocation.right;
+                    right.y = 0;
+                    right.Normalize();
+                    _drivingPlayer.transform.position = followLocation.position + right * 3f;
                     _drivingPlayer = null;
-                }
-                var right = followLocation.right;
-                right.y = 0;
-                right.Normalize();
-                interactor.transform.position = followLocation.position + right * 3f;
-            }
-            else
-            {
-                if(!_isDriven.Value){
-                    SetUprightPositionRpc();
                 }
             }
             return null;

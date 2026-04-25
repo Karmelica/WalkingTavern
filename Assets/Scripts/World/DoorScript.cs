@@ -1,3 +1,4 @@
+using MyInterfaces;
 using NaughtyAttributes;
 using PlayerScripts;
 using Unity.Netcode;
@@ -13,12 +14,12 @@ namespace World
         [AnimatorParam("animator")]
         [SerializeField] private string trigger;
         
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true, bool disconnection = false)
+        public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition)
         {
             return null;
         }
 
-        public IInteractable SecondaryInteract(OwnerPlayer interactor)
+        public IInteractable SecondaryInteract(OwnerPlayer interactor = null)
         {
             OpenDoorServerRpc();
             return null;

@@ -2684,10 +2684,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
-  ingredientsInHand: []
-  processedIngredientsInHand: []
-  dishesInHand: []
-  otherItemInHand: []
   playerNameCanvas: {fileID: 7498144743461933851}
   networkedPlayerMesh:
   - {fileID: 5970120869399318737}
@@ -2710,6 +2706,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4fcdf6b93e158c64483c650f59f8ec63, type: 2}
   - {fileID: 2100000, guid: 3dadabe0b76f1384b8358cf5a9729df8, type: 2}
   - {fileID: 2100000, guid: cf10930bc1013734a8da2542f372f9be, type: 2}
+  handTransform: {fileID: 5676881259848900130}
 --- !u!114 &3231727551264482569
 MonoBehaviour:
   m_ObjectHideFlags: 0

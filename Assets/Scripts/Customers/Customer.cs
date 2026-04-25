@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cooking;
 using Managers;
+using MyInterfaces;
 using PlayerScripts;
 using TMPro;
 using Unity.Behavior;
@@ -68,7 +69,7 @@ public class Customer : NetworkBehaviour, IInteractable
     {
         base.OnNetworkPostSpawn();
         CustomerSetup();
-        _totalWaitTime = GetFoodItems.GetRecipeByDishType(requestedDish.Value).cookingMinMax.y + 90f;
+        _totalWaitTime = GetItems.GetRecipeByDishType(requestedDish.Value).cookingMinMax.y + 90f;
         _elapsedTime = _totalWaitTime;
 
         if (!IsServer) return;
@@ -182,8 +183,8 @@ public class Customer : NetworkBehaviour, IInteractable
 
     #region Interact
 
-    public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
-        bool disconnection = false)
+    public IInteractable PickupOrDropObject(bool pickUp,
+        Vector3 placePosition)
     {
         return null;
     }

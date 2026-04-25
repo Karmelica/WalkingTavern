@@ -1,4 +1,5 @@
 using System;
+using MyInterfaces;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
@@ -39,8 +40,8 @@ namespace World.Caravan
             }
         }
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
-            bool disconnection = false)
+        public IInteractable PickupOrDropObject(bool pickUp,
+            Vector3 placePosition)
         {
             return null;
         }
