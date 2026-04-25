@@ -246,8 +246,12 @@ namespace PlayerScripts
                 Destroy(ObjectInHand.gameObject);
                 ObjectInHand = null;
             }
-            else
-                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), handTransform.position, handTransform.rotation, handTransform);
+            else {
+                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), handTransform.position,
+                    handTransform.rotation, handTransform);
+                ObjectInHand.GetComponent<Collider>().enabled = false;
+            }
+            
         }
 
         #endregion

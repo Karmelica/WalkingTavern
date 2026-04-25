@@ -33,7 +33,7 @@ namespace World
 
         protected virtual void Update()
         {
-            if (transform.parent || isOnMinigame) return;
+            if (transform.parent) return;
             Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
                 QueryTriggerInteraction.Ignore);
             transform.up = hit.normal;

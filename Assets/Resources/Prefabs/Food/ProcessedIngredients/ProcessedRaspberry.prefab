@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5756973000607921986}
   - component: {fileID: 3244648209167935754}
   m_Layer: 7
-  m_Name: ProcessedMushroom
+  m_Name: ProcessedRaspberry
   m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   <ID>k__BackingField: 26
   isOnMinigame: 0
-  processedIngredientType: 0
+  processedIngredientType: 1
 --- !u!54 &5756973000607921986
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -159,7 +159,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!64 &3244648209167935754
