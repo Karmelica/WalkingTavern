@@ -24,7 +24,6 @@ namespace Cooking.Minigames
         {
             if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
             TryAddIngredient(foodItem);
-            lastInteractedObject?.PlaceDownRpc();
         }
         
         private void OnTriggerExit(Collider other)
@@ -42,7 +41,7 @@ namespace Cooking.Minigames
             DidHit = Interacted && plane.Raycast(mouseRay, out distance);
             if (!DidHit) return;
 
-            if (OwnerPlayer.IsHoldingLMB()) {
+            if (OwnerPlayer.IsHoldingLmb()) {
                 if (lastInteractedObject) {
                     lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance)); 
                 }
@@ -53,7 +52,7 @@ namespace Cooking.Minigames
             }
             else {
                 if(lastInteractedObject) {
-                    lastInteractedObject.PlaceDownRpc();
+                    lastInteractedObject.PlaceDown();
                     lastInteractedObject = null;
                 }
                 if (CheckForRecipe()) {

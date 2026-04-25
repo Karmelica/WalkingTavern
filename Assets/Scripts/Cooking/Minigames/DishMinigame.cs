@@ -27,14 +27,14 @@ namespace Cooking.Minigames
                 _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
             }
 
-            Recipe = GetFoodItems.GetRecipeByDishType(dishType);
+            Recipe = GetItems.GetRecipeByDishType(dishType);
             UpdateRecipeText();
         }
         
         public void DishTypeChanged(DishType type)
         {
             dishType = type;
-            Recipe = GetFoodItems.GetRecipeByDishType(type);
+            Recipe = GetItems.GetRecipeByDishType(type);
             UpdateRecipeText();
         }
 

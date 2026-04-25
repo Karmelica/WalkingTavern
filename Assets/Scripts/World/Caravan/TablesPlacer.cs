@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Managers;
+using MyInterfaces;
 using NaughtyAttributes;
 using PlayerScripts;
 using Unity.Netcode;
@@ -9,7 +10,6 @@ using UnityEngine;
 
 namespace World.Caravan
 {
-    [RequireComponent(typeof(Collider), typeof(NetworkTransform))]
     public class TablesPlacer : MoveableObject
     {
         [Layer]
@@ -19,10 +19,10 @@ namespace World.Caravan
         [SerializeField] private AIManager aiManager;
         [SerializeField] private GameObject particle;
         [SerializeField] private TableCollisionTest[] colliders;
-
+        
         protected override void Update()
         {
-            previewTables.SetActive(!IsInteractedWith());
+            previewTables.SetActive(!transform.parent);
 
             base.Update();
         }
@@ -60,7 +60,7 @@ namespace World.Caravan
 
         public override string GetInteractText()
         {
-            return "Setup tables";
+            return $"Setup tables";
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Cooking.Minigames.Helpers;
 using Managers;
+using MyInterfaces;
 using PlayerScripts;
 using TMPro;
 using Unity.Netcode;
@@ -71,8 +72,8 @@ namespace Cooking.Minigames
                 RayHit.collider.gameObject && Interacted;
         }
 
-        public IInteractable PrimaryInteract(OwnerPlayer interactor, bool startedInteraction = true,
-            bool disconnection = false)
+        public IInteractable PickupOrDropObject(bool pickUp,
+            Vector3 placePosition)
         {
             OwnerPlayer = null;
             Interacted = false;

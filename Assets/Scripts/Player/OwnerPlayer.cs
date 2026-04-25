@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using JetBrains.Annotations;
+using MyInterfaces;
 using Steamworks;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -137,32 +138,23 @@ namespace PlayerScripts
                 playerNameCanvas.enabled = false;
 
                 StartCoroutine(UpdateInterface());
-                
-                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
             }
-        }
-
-        private void OnClientDisconnect(ulong clientId)
-        {
-            if (clientId != OwnerClientId) return;
-            _lastInteractedObject?.PrimaryInteract(this, false, true);
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            _lastInteractedObject?.PrimaryInteract(null, false, true);
+            _lastInteractedObject?.PickupOrDropObject(false, transform.position);
             _lastInteractedObject = null;
             _shouldUpdateInterface = false;
             CleanupInput();
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
         }
 
         private IEnumerator UpdateInterface()
         {
             while (_shouldUpdateInterface)
             {
-                if(GetHitInfo(out IInteractable interactable))
+                if(GetHitInfo(out var interactable, out _, true, QueryTriggerInteraction.Collide))
                 {
                     if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking)
                     {
@@ -378,15 +370,16 @@ namespace PlayerScripts
                     if (!_isCooking) SetCanMove(true);
                     return;
                 }
+                
+                if (_lastInteractedObject != null) {
+                    _isInteracting = false;
+                    _networkedPlayer.ChangeObjectInHandIdRpc(0);
+                    _lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
+                    _lastInteractedObject = null;
+                }
 
                 SetCooking(false);
                 SetCanMove(true);
-
-                if (_lastInteractedObject == null) return;
-                
-                _isInteracting = false;
-                _lastInteractedObject.PrimaryInteract(this, false);
-                _lastInteractedObject = null;
             }
         }
 
@@ -397,38 +390,40 @@ namespace PlayerScripts
         public void OnAttack(InputAction.CallbackContext context)
         {
             if (context.started) { _isHoldingMouseButton = true; }
-            if(context.canceled) { _isHoldingMouseButton = false; }
+            if (context.canceled) { _isHoldingMouseButton = false; }
             
             if (!_canMove || _isCooking) return;
 
-            if (!context.started) return;
-            if (!GetHitInfo(out IInteractable interactObj, true, QueryTriggerInteraction.Ignore)) return;
-            if (interactObj.IsInteractedWith()) return;
-            _lastInteractedObject = interactObj.PrimaryInteract(this, true);
-            _isInteracting = _lastInteractedObject != null;
+            if (context.started)
+            {
+                if (!GetHitInfo(out var interactObj, out var idComponent)) return;
+                if (idComponent != null)
+                    _networkedPlayer.ChangeObjectInHandIdRpc(idComponent.ID);
+                _lastInteractedObject = interactObj.PickupOrDropObject(true);
+                _isInteracting = _lastInteractedObject != null;
+            }
         }
         
         public void OnInteract(InputAction.CallbackContext context)
         {
             if (!_canMove || _isCooking) return;
-            
-            if (context.started) {
 
-                if (GetHitInfo(out IInteractable interactable, false, QueryTriggerInteraction.Ignore) && interactable.GetInteractText() == "Open/Close Door")
-                {
-                    interactable.SecondaryInteract(this);
-                    return;
-                }
-                
-                if (_lastInteractedObject != null) {
-                    _isInteracting = false;
-                    _lastInteractedObject.PrimaryInteract(this, false);
-                    _lastInteractedObject = null;
-                }
-                else if(GetHitInfo(out IInteractable interactObj)) {
-                    if (interactObj.IsInteractedWith()) return;
-                    _lastInteractedObject = interactObj.SecondaryInteract(this);
-                }
+            if (!context.started) return;
+            if (GetHitInfo(out var interactable, out _, false) && interactable.GetInteractText() == "Open/Close Door")
+            {
+                interactable.SecondaryInteract();
+                return;
+            }
+            
+            if (_lastInteractedObject != null) {
+                _isInteracting = false;
+                _networkedPlayer.ChangeObjectInHandIdRpc(0);
+                _lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
+                _lastInteractedObject = null;
+            }
+            else if(GetHitInfo(out var interactObj, out _,false, QueryTriggerInteraction.Collide)) {
+                if (interactObj.IsInteractedWith()) return;
+                _lastInteractedObject = interactObj.SecondaryInteract(this);
             }
         }
         
@@ -437,13 +432,13 @@ namespace PlayerScripts
             Unstuck();
         }
 
-        private bool GetHitInfo(out IInteractable interactableComponent, bool checkForInteracting = true, QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.UseGlobal)
+        private bool GetHitInfo(out IInteractable interactableComponent, out IObjectID objectID, bool shouldCheckForInteracting = true,
+            QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.Ignore)
         {
             interactableComponent = null;
-            if (checkForInteracting && _isInteracting)
-            {
-                return false;
-            }
+            objectID = null;
+            
+            if (shouldCheckForInteracting && _isInteracting) return false;
             var interactPoint = interactor;
             var ray = new Ray(interactPoint.position, interactPoint.forward);
             var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7, triggerInteraction);
@@ -452,23 +447,33 @@ namespace PlayerScripts
             {
                 if (hit.collider.TryGetComponent(out interactableComponent))
                 {
+                    hit.collider.TryGetComponent(out objectID);
                     return true;
                 }
             }
             return false;
         }
 
-        public Transform GetHandPoint()
+        private Vector3 CalculateDropPoint()
         {
-            return hand;
+            var hitObjects = Physics.RaycastAll(interactor.position, interactor.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
+            if (hitObjects.Length > 0)
+            {
+                Array.Sort(hitObjects, Utilis.CompareRaycastDistance);
+                foreach (var hit in hitObjects)
+                {
+                    if (hit.collider.gameObject == _networkedPlayer.ObjectInHand?.gameObject) continue;
+                    return hit.point + hit.normal * 0.2f;
+                }
+            }
+
+            //drop on ground if nothing or only held object was hit
+            Physics.Raycast(hand.position, Vector3.down, out var groundHit, Single.PositiveInfinity, ~(1 << 2),
+                QueryTriggerInteraction.Ignore);
+            return groundHit.point + Vector3.up * 0.2f;
         }
         
-        public Transform GetInteractPoint()
-        {
-            return interactor;
-        }
-        
-        public bool IsHoldingLMB()
+        public bool IsHoldingLmb()
         {
             return _isHoldingMouseButton;
         }
@@ -504,11 +509,6 @@ namespace PlayerScripts
         public void SetCaravanControl(CaravanControlScript caravanControl)
         {
             _caravanControl = caravanControl;
-        }
-
-        public bool CanMove()
-        {
-            return _canMove;
         }
 
         #endregion
