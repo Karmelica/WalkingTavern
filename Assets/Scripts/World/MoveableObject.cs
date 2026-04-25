@@ -57,9 +57,9 @@ namespace World
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
         {
+            gameObject.SetActive(setActive);
             if(setActive)
                 transform.position = placePosition;
-            gameObject.SetActive(setActive);
         }
 
         public void MoveOnMinigame(Vector3 position)
