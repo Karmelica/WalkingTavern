@@ -35,13 +35,19 @@ namespace Cooking.Minigames
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            dishType.OnValueChanged += DishChanged;
+            dishType.OnValueChanged += OnDishValueChanged;
         }
 
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
-            dishType.OnValueChanged -= DishChanged;
+            dishType.OnValueChanged -= OnDishValueChanged;
+        }
+
+        private void OnDishValueChanged(DishType previousValue, DishType newValue)
+        {
+            Recipe = GetItems.GetRecipeByDishType(newValue);
+            UpdateRecipeText();
         }
 
         public void DishTypeChanged(DishType type)
@@ -53,12 +59,6 @@ namespace Cooking.Minigames
         private void ChangeDishTypeRpc(DishType type)
         {
             dishType.Value = type;
-        }
-
-        private void DishChanged(DishType previousValue, DishType newValue)
-        {
-            Recipe = GetItems.GetRecipeByDishType(newValue);
-            UpdateRecipeText();
         }
 
         protected void TryAddIngredient(ProcessedFoodItem foodItem)

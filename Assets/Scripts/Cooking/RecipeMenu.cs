@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cooking.ScriptableObjects;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -38,6 +39,7 @@ namespace Cooking
 
         private void OnDishChanged(DishType previousValue, DishType newValue)
         {
+            dropdown.value = applicableDishes.IndexOf(newValue);
             onDishTypeChanged?.Invoke(newValue);
         }
 
