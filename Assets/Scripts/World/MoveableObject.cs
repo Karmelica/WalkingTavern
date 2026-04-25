@@ -26,14 +26,9 @@ namespace World
             _collider = GetComponent<Collider>();
         }
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-        }
-
         protected virtual void Update()
         {
-            if (transform.parent) return;
+            if (transform.parent || isOnMinigame) return;
             Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
                 QueryTriggerInteraction.Ignore);
             transform.up = hit.normal;

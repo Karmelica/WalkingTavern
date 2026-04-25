@@ -46,7 +46,7 @@ public class EditorCameraSet : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.matrix = cameraLocation.localToWorldMatrix;
-            Gizmos.DrawFrustum(cameraLocation.position, 60, 0.3f, 200, 16 / 9f);
+            Gizmos.DrawFrustum(Vector3.zero, 60, 0.3f, 200, 16 / 9f);
         }
     }
 #endif

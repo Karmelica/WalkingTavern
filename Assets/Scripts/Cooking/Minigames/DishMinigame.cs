@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cooking.ScriptableObjects;
 using NaughtyAttributes;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using World;
@@ -12,7 +13,7 @@ namespace Cooking.Minigames
     public abstract class DishMinigame : Minigame
     {
         [Header("Minigame Properties")]
-        [SerializeField] protected DishType dishType;
+        [SerializeField] protected NetworkVariable<DishType> dishType = new();
         [Expandable]
         protected Recipe Recipe;
         private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
@@ -27,14 +28,36 @@ namespace Cooking.Minigames
                 _placedIngredients.TryAdd((ProcessedIngredientType)processedIngredientType, 0);
             }
 
-            Recipe = GetItems.GetRecipeByDishType(dishType);
+            Recipe = GetItems.GetRecipeByDishType(dishType.Value);
             UpdateRecipeText();
         }
-        
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            dishType.OnValueChanged += DishChanged;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            dishType.OnValueChanged -= DishChanged;
+        }
+
         public void DishTypeChanged(DishType type)
         {
-            dishType = type;
-            Recipe = GetItems.GetRecipeByDishType(type);
+            ChangeDishTypeRpc(type);
+        }
+
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+        private void ChangeDishTypeRpc(DishType type)
+        {
+            dishType.Value = type;
+        }
+
+        private void DishChanged(DishType previousValue, DishType newValue)
+        {
+            Recipe = GetItems.GetRecipeByDishType(newValue);
             UpdateRecipeText();
         }
 
@@ -85,7 +108,7 @@ namespace Cooking.Minigames
                 }
                 _placedIngredients[ingredientType] -= removedCount;
             }
-            Helper.SpawnObject(dishType);
+            Helper.SpawnObject(dishType.Value);
             
             UpdateRecipeText();
         }
