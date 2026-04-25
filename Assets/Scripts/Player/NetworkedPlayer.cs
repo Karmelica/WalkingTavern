@@ -250,6 +250,8 @@ namespace PlayerScripts
                 ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), handTransform.position,
                     handTransform.rotation, handTransform);
                 ObjectInHand.GetComponent<Collider>().enabled = false;
+                if (ObjectInHand is not DishItem item) return;
+                item.GetComponentInChildren<Canvas>().enabled = false;
             }
             
         }

@@ -33,7 +33,6 @@ namespace World
                 QueryTriggerInteraction.Ignore);
             transform.up = hit.normal;
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
-            Physics.SyncTransforms();
         }
 
         #endregion
@@ -46,21 +45,18 @@ namespace World
                 QueryTriggerInteraction.Ignore);
             transform.up = hit.normal;
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
-            Physics.SyncTransforms();
         }
         
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
         {
+            transform.position = placePosition;
             gameObject.SetActive(setActive);
-            if(setActive)
-                transform.position = placePosition;
         }
 
         public void MoveOnMinigame(Vector3 position)
         {
             transform.position = position;
-            Physics.SyncTransforms();
         }
 
         #endregion

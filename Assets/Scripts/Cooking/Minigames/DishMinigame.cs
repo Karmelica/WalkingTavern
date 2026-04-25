@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cooking.ScriptableObjects;
 using NaughtyAttributes;
 using TMPro;
@@ -30,6 +31,21 @@ namespace Cooking.Minigames
 
             Recipe = GetItems.GetRecipeByDishType(dishType.Value);
             UpdateRecipeText();
+        }
+
+        protected override void Update()
+        {
+            if(CurrentFood.Any()){
+                foreach (var food in CurrentFood.Where(food => !food.gameObject.activeInHierarchy))
+                {
+                    if (!food.TryGetComponent(out ProcessedFoodItem item)) break;
+                    CurrentFood.Remove(food);
+                    TryRemoveIngredient(item);
+                    break;
+                }
+            }
+
+            base.Update();
         }
 
         public override void OnNetworkSpawn()
