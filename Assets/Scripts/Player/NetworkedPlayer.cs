@@ -252,7 +252,7 @@ namespace PlayerScripts
             }
             else
             {
-                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), _parentTransform.position, Quaternion.identity, _parentTransform);
+                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), _parentTransform.position, Quaternion.LookRotation(transform.forward), _parentTransform);
                 ObjectInHand.GetComponent<Collider>().enabled = false;
                 if (ObjectInHand is not DishItem item) return;
                 item.GetComponentInChildren<Canvas>().enabled = false;
