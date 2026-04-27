@@ -13,6 +13,8 @@ namespace World.Caravan
         [SerializeField] private Image foodIcon;
         [SerializeField] private bool unlimited;
         private NetworkVariable<int> _quantity = new();
+        //private FoodItem _lastIngredient;
+        //private OwnerPlayer _lastInteractor;
 
         private void Awake()
         {
@@ -48,18 +50,33 @@ namespace World.Caravan
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            SpawnIngredientServerRpc(ingredientBox);
+            //_lastInteractor = interactor;
+            CheckIngredientServerRpc();
             return null;
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SpawnIngredientServerRpc(IngredientType ingredientType)
+        private void CheckIngredientServerRpc(RpcParams rpcParams = default)
         {
-            if (!FoodStorage.Instance.GetIngredient(ingredientType, unlimited)) return;
-            var ingredient = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientType), transform.position + transform.forward * 0.5f, Quaternion.identity);
-            ingredient.GetComponent<NetworkObject>().Spawn();
+            if (!FoodStorage.Instance.GetIngredient(ingredientBox, unlimited)) return;
             _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
+            var i = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientBox), transform.position + transform.forward * 0.5f, Quaternion.identity);
+            i.GetComponent<NetworkObject>().Spawn(true);
+            /*PutInPlayerHandRpc(new RpcParams
+            {
+                Send = RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp)
+            });*/
         }
+
+        /*[Rpc(SendTo.SpecifiedInParams, InvokePermission = RpcInvokePermission.Server)]
+        private void PutInPlayerHandRpc(RpcParams rpcParams = default)
+        {
+            var i = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientBox), transform.position + transform.forward * 1000f, Quaternion.identity);
+            _lastIngredient = i.GetComponent<FoodItem>();
+            _lastInteractor?.PickupFromBox(_lastIngredient);
+            _lastInteractor = null;
+            _lastIngredient = null;
+        }*/
 
         public string GetInteractText()
         {

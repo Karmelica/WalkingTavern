@@ -8,7 +8,6 @@ public enum IngredientType
     Raspberry,
     Grape,
     Apple,
-    Lettuce,
     Cheese,
     Toast,
     Baguette,
@@ -21,7 +20,6 @@ public enum ProcessedIngredientType
     ProcessedRaspberry,
     ProcessedGrape,
     ProcessedApple,
-    ProcessedLettuce,
     ProcessedCheese,
     ProcessedToast,
     ProcessedBaguetteBottom,
@@ -34,8 +32,8 @@ public enum DishType
 {
     DishCasserole,
     DishMushroomSoup,
-    DishToastCheese,
     DishToastKarambola,
+    DishToastJam,
     DishFruitSoup,
     DishAppleTart
 }

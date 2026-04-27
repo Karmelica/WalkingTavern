@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8948018229326638860}
-  - component: {fileID: 5551112693374950506}
-  - component: {fileID: 8467791214968434957}
+  - component: {fileID: 2998127226378923011}
+  - component: {fileID: 8819572533941750054}
   - component: {fileID: 8207663783740634924}
   - component: {fileID: 171522839633014211}
   - component: {fileID: 5858893382463307456}
   - component: {fileID: 9093246474480355307}
   m_Layer: 7
-  m_Name: DishToastCheese
+  m_Name: DishToastJam
   m_TagString: Dish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,18 +35,18 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 9117218831875334528}
+  - {fileID: 380286686241608745}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5551112693374950506
+--- !u!33 &2998127226378923011
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338176272568123566}
-  m_Mesh: {fileID: 1299659441277568103, guid: 11f486dc076e8b94d8af4c5f1581b334, type: 3}
---- !u!23 &8467791214968434957
+  m_Mesh: {fileID: 2856057340758562542, guid: 72913c6c2227680428df295b76ebbb77, type: 3}
+--- !u!23 &8819572533941750054
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c3396e1c8ec642842ae2e55861e2a3af, type: 2}
+  - {fileID: 2100000, guid: e90830f869fd2d04fa544f47c75bc205, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 486767051
+  GlobalObjectIdHash: 3017572936
   InScenePlacedSourceGlobalObjectIdHash: 2370954167
   DeferredDespawnTick: 0
   Ownership: 1
@@ -133,10 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
-  <ID>k__BackingField: 5
+  <ID>k__BackingField: 6
   isOnMinigame: 0
-  dishType: 2
-  progressText: {fileID: 2035649534112823260}
+  dishType: 3
+  progressText: {fileID: 7458461219321037429}
 --- !u!54 &5858893382463307456
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -185,8 +185,8 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1299659441277568103, guid: 11f486dc076e8b94d8af4c5f1581b334, type: 3}
---- !u!1001 &2509773885441332034
+  m_Mesh: {fileID: 2856057340758562542, guid: 72913c6c2227680428df295b76ebbb77, type: 3}
+--- !u!1001 &6419125407036729067
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -287,10 +287,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ed74e282f1e83a4a95e1d258161d1eb, type: 3}
---- !u!114 &2035649534112823260 stripped
+--- !u!224 &380286686241608745 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6652480985925825218, guid: 0ed74e282f1e83a4a95e1d258161d1eb, type: 3}
+  m_PrefabInstance: {fileID: 6419125407036729067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7458461219321037429 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4509394579441820830, guid: 0ed74e282f1e83a4a95e1d258161d1eb, type: 3}
-  m_PrefabInstance: {fileID: 2509773885441332034}
+  m_PrefabInstance: {fileID: 6419125407036729067}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -298,8 +303,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!224 &9117218831875334528 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6652480985925825218, guid: 0ed74e282f1e83a4a95e1d258161d1eb, type: 3}
-  m_PrefabInstance: {fileID: 2509773885441332034}
-  m_PrefabAsset: {fileID: 0}

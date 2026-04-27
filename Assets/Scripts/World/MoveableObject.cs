@@ -46,7 +46,7 @@ namespace World
             transform.up = hit.normal;
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
         }
-        
+
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
         {
@@ -63,7 +63,7 @@ namespace World
 
         #region Interface Methods
 
-        public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition)
+        public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition = default)
         {
             SetObjectActiveRpc(!pickUp, placePosition);
             return this;

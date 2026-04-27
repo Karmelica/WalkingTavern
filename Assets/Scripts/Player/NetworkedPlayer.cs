@@ -38,7 +38,7 @@ namespace PlayerScripts
         private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-        private NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
         
@@ -47,7 +47,9 @@ namespace PlayerScripts
 
         private int _newVelocity;
         
-        [SerializeField] private Transform handTransform;
+        [SerializeField] private Transform networkedHandTransform;
+        [SerializeField] private Transform localHandTransform;
+        private Transform _parentTransform;
         public MoveableObject ObjectInHand { get; private set; }
 
         #endregion
@@ -76,6 +78,7 @@ namespace PlayerScripts
             FaceChanged(_playerFaceIndex.Value);
             EarsChanged(_playerEarsIndex.Value);
 
+            _parentTransform = IsOwner ? localHandTransform : networkedHandTransform;
             _objectId.OnValueChanged += ChangeObjectInHand;
         }
 
@@ -242,13 +245,14 @@ namespace PlayerScripts
 
         private void ChangeObjectInHand(uint oldValue, uint newValue)
         {
+            
             if (newValue == 0) {
                 Destroy(ObjectInHand.gameObject);
                 ObjectInHand = null;
             }
-            else {
-                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), handTransform.position,
-                    handTransform.rotation, handTransform);
+            else
+            {
+                ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), _parentTransform.position, Quaternion.identity, _parentTransform);
                 ObjectInHand.GetComponent<Collider>().enabled = false;
                 if (ObjectInHand is not DishItem item) return;
                 item.GetComponentInChildren<Canvas>().enabled = false;

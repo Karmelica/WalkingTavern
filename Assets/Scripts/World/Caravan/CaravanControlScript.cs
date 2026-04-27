@@ -18,6 +18,7 @@ namespace World.Caravan
         [SerializeField] private Transform snail;
         [SerializeField] private float caravanHeight = 0.3f;
         [SerializeField] private float distance = 3f;
+        private Awaitable _snailMoving;
 
         private void Awake()
         {
@@ -26,10 +27,10 @@ namespace World.Caravan
 
         private void Update()
         {
-            if(Physics.Raycast(snail.position, Vector3.down, out RaycastHit hit, 5f))
+            if(Physics.Raycast(snail.position, Vector3.down, out var hit, 5f))
             {
-                var p = hit.point + Vector3.up * 1.2f;
-                transform.position = new Vector3(transform.position.x, p.y, transform.position.z);
+                var point = hit.point + Vector3.up * 1.2f;
+                transform.position = new Vector3(transform.position.x, point.y, transform.position.z);
             }
             
             //caravan control
@@ -37,13 +38,13 @@ namespace World.Caravan
             {
                 var d = Vector3.Distance(caravan.transform.position, followLocation.position);
                 if(d > distance){
-                    Vector3 point = default;
-                    if (Physics.Raycast(caravan.transform.position, Vector3.down, out RaycastHit caravanRay, float.PositiveInfinity))
+                    Vector3 height = default;
+                    if (Physics.Raycast(caravan.transform.position, Vector3.down, out var caravanRay, float.PositiveInfinity))
                     {
-                         point = caravanRay.point + Vector3.up * caravanHeight;
+                         height = caravanRay.point + Vector3.up * caravanHeight;
                     }
-                    var vector3 = new Vector3(followLocation.position.x, point.y, followLocation.position.z);
-                    caravan.transform.position = Vector3.Lerp(caravan.transform.position, vector3, 0.3f * Time.deltaTime);
+                    var targetPos = new Vector3(followLocation.position.x, height.y, followLocation.position.z);
+                    caravan.transform.position = Vector3.Lerp(caravan.transform.position, targetPos, 0.5f * Time.deltaTime);
                 }
 
                 var rot = Quaternion.LookRotation(followLocation.position - caravan.transform.position);
@@ -63,21 +64,32 @@ namespace World.Caravan
             }
         }
 
+        private void FixedUpdate()
+        {
+            _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z) * 0.1f, ForceMode.VelocityChange);
+        }
+
         //driving
         public void Drive(Vector2 inputVector)
         {
-            _rb.AddForce(-new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z), ForceMode.VelocityChange);
-
-            if (_rb.linearVelocity.magnitude < Speed && inputVector.y > 0)
-            {
-                var forward = transform.forward;
-                forward.y = 0;
-                forward.Normalize();
-                _rb.AddForce(forward * (inputVector.y * Time.fixedDeltaTime * Speed), ForceMode.VelocityChange);
-            }
-
             if(Vector3.Dot(transform.forward, caravan.transform.forward) > 0)
                 transform.Rotate(transform.up, inputVector.x * inputVector.y * 50f * Time.fixedDeltaTime);
+            
+            if (_snailMoving == null || (inputVector.y > 0 && _snailMoving.IsCompleted))
+            {
+                _snailMoving = SnailMovement(inputVector);
+            }
+        }
+
+        private async Awaitable SnailMovement(Vector2 inputVector)
+        {
+            var forward = transform.forward;
+            forward.y = 0;
+            var moveVector = (forward * inputVector.y).normalized * (Speed * 6f * Time.fixedDeltaTime);
+
+            if(_rb.linearVelocity.magnitude < Speed)
+                _rb.AddForce(moveVector, ForceMode.Impulse);
+            await Awaitable.WaitForSecondsAsync(1f);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

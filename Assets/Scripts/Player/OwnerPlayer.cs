@@ -330,7 +330,8 @@ namespace PlayerScripts
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!Application.isFocused || _playerCamera == null || (!_canMove && !_isDriving)) return;
+            if (!Application.isFocused || _playerCamera == null) return;
+            if (!_canMove && !_isDriving) return;
             
             var lookVector = context.ReadValue<Vector2>();
             transform.Rotate(0f, lookVector.x * LookSensitivity, 0f);
@@ -409,7 +410,8 @@ namespace PlayerScripts
             if (!_canMove || _isCooking) return;
 
             if (!context.started) return;
-            if (GetHitInfo(out var interactable, out _, false) && interactable.GetInteractText() == "Open/Close Door")
+            if (GetHitInfo(out var interactable, out _, false) && 
+                (interactable.GetInteractText().Contains("Door") || interactable.GetInteractText().Contains("Storage")))
             {
                 interactable.SecondaryInteract();
                 return;
@@ -420,10 +422,12 @@ namespace PlayerScripts
                 _networkedPlayer.ChangeObjectInHandIdRpc(0);
                 _lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
                 _lastInteractedObject = null;
+                return;
             }
-            else if(GetHitInfo(out var interactObj, out _,false, QueryTriggerInteraction.Collide)) {
-                if (interactObj.IsInteractedWith()) return;
-                _lastInteractedObject = interactObj.SecondaryInteract(this);
+            
+            if(GetHitInfo(out interactable, out _,false, QueryTriggerInteraction.Collide)) {
+                if (interactable.IsInteractedWith()) return;
+                _lastInteractedObject = interactable.SecondaryInteract(this);
             }
         }
         
@@ -505,6 +509,14 @@ namespace PlayerScripts
             _networkedPlayer.SetDriving(driving);
             SetCanMove(!driving, false);
         }
+
+        /*public void PickupFromBox(FoodItem foodItem)
+        {
+            var id = foodItem.GetComponent<IObjectID>().ID;
+            _networkedPlayer.ChangeObjectInHandIdRpc(id);
+            _lastInteractedObject = foodItem.PickupOrDropObject(true);
+            _isInteracting = true;
+        }*/
 
         public void SetCaravanControl(CaravanControlScript caravanControl)
         {

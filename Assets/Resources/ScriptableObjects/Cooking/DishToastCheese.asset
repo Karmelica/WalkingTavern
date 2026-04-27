@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.ScriptableObjects.Recipe
   dishType: 2
   ingredients:
+  - ingredientType: 8
+    quantity: 1
+  - ingredientType: 4
+    quantity: 1
   - ingredientType: 5
-    quantity: 2
-  - ingredientType: 6
     quantity: 1
   cookingMinMax: {x: 40, y: 60}

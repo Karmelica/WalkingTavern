@@ -67,6 +67,7 @@ namespace Cooking.Minigames
 
         protected virtual void DoMinigame()
         {
+            if (!MainCamera) return;
             MousePos = Mouse.current.position.ReadValue();
             DidHit = Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit) &&
                 RayHit.collider.gameObject && Interacted;

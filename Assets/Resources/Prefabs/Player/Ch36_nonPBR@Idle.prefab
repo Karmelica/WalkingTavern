@@ -733,6 +733,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6965143107992088839}
+  - {fileID: 6629508818484153113}
   m_Father: {fileID: 4061438641069411729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2583388374300817342
@@ -1026,7 +1027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5676881259848900130}
   m_Layer: 0
-  m_Name: ObjectHolder
+  m_Name: NetworkedParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1109,6 +1110,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8992995559557785479}
+  m_Father: {fileID: 1051799422322408855}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3909818139921721576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6629508818484153113}
+  m_Layer: 0
+  m_Name: LocalParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6629508818484153113
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909818139921721576}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.545, y: 0.415, z: 0.578}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 1051799422322408855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3929462229455036204
@@ -2539,7 +2571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1928220444
+  GlobalObjectIdHash: 1959477017
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2706,7 +2738,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4fcdf6b93e158c64483c650f59f8ec63, type: 2}
   - {fileID: 2100000, guid: 3dadabe0b76f1384b8358cf5a9729df8, type: 2}
   - {fileID: 2100000, guid: cf10930bc1013734a8da2542f372f9be, type: 2}
-  handTransform: {fileID: 5676881259848900130}
+  networkedHandTransform: {fileID: 5676881259848900130}
+  localHandTransform: {fileID: 6629508818484153113}
 --- !u!114 &3231727551264482569
 MonoBehaviour:
   m_ObjectHideFlags: 0
