@@ -47,16 +47,16 @@ namespace World
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
         }
 
+        public void MoveOnMinigame(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
         {
             transform.position = placePosition;
             gameObject.SetActive(setActive);
-        }
-
-        public void MoveOnMinigame(Vector3 position)
-        {
-            transform.position = position;
         }
 
         #endregion
