@@ -131,6 +131,9 @@ namespace PlayerScripts
                 _networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
                 _networkedPlayer.SetFaceRpc(PlayerPrefs.GetInt("PlayerFace", 0));
                 _networkedPlayer.SetEarsRpc(PlayerPrefs.GetInt("PlayerEars", 0));
+                _networkedPlayer.SetPantsRpc(PlayerPrefs.GetInt("PlayerPants", 0));
+                _networkedPlayer.SetShirtRpc(PlayerPrefs.GetInt("PlayerShirt", 0));
+                _networkedPlayer.SetHairRpc(PlayerPrefs.GetInt("PlayerHair", 0));
 
                 _playerGUI = FindFirstObjectByType<PlayerGUI>();
 

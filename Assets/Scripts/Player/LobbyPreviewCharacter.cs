@@ -14,6 +14,9 @@ namespace PlayerScripts
         
         [SerializeField] private SkinnedMeshRenderer[] playerMesh;
         [SerializeField] private SkinnedMeshRenderer[] playerEars;
+        [SerializeField] private SkinnedMeshRenderer[] playerShirt;
+        [SerializeField] private SkinnedMeshRenderer[] playerPants;
+        [SerializeField] private SkinnedMeshRenderer[] playerHair;
         [SerializeField] private SkinnedMeshRenderer playerFace;
         
         [SerializeField] private Material[] skinsMaterials;
@@ -22,6 +25,9 @@ namespace PlayerScripts
         public int PlayerEarsCount => playerEars.Length;
         public int PlayerSkinsCount => skinsMaterials.Length;
         public int PlayerFacesCount => facesMaterials.Length;
+        public int PlayerPantsCount => playerPants.Length;
+        public int PlayerShirtCount => playerShirt.Length;
+        public int PlayerHairCount => playerHair.Length;
         
         #endregion
 
@@ -33,9 +39,15 @@ namespace PlayerScripts
             var selectedSkin = PlayerPrefs.GetInt("PlayerSkin", 0);
             var selectedFace = PlayerPrefs.GetInt("PlayerFace", 0);
             var selectedEars = PlayerPrefs.GetInt("PlayerEars", 0);
+            var selectedPants = PlayerPrefs.GetInt("PlayerPants", 0);
+            var selectedShirt = PlayerPrefs.GetInt("PlayerShirt", 0);
+            var selectedHair = PlayerPrefs.GetInt("PlayerHair", 0);
             ChangeSkin(selectedSkin);
             ChangeFace(selectedFace);
             ChangeEars(selectedEars);
+            ChangePants(selectedPants);
+            ChangeShirt(selectedShirt);
+            ChangeHair(selectedHair);
         }
 
         public void ChangeSkin(int index)
@@ -53,10 +65,22 @@ namespace PlayerScripts
         
         public void ChangeEars(int index)
         {
-            for(var i = 0; i < playerEars.Length; i++)
-            {
-                playerEars[i].enabled = i == index;
-            }
+            Utilis.ShowSelectedMesh(playerEars, index);
+        }
+
+        public void ChangeHair(int selectedHair)
+        {
+            Utilis.ShowSelectedMesh(playerHair, selectedHair);
+        }
+
+        public void ChangeShirt(int selectedShirt)
+        {
+            Utilis.ShowSelectedMesh(playerShirt, selectedShirt);
+        }
+
+        public void ChangePants(int selectedPants)
+        {
+            Utilis.ShowSelectedMesh(playerPants, selectedPants);
         }
 
         #endregion

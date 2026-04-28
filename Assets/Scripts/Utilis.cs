@@ -19,4 +19,12 @@ public static class Utilis
         //return replace.Split(BigLetters, 1);
         return str.Replace(delete, "");
     }
+    
+    public static void ShowSelectedMesh(SkinnedMeshRenderer[] renderers, int selectedIndex)
+    {
+        for (var i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].enabled = i == selectedIndex;
+        }
+    }
 }

@@ -142,12 +142,24 @@ namespace Managers
                 var randomDish = _availableRecipes[Random.Range(0, _availableRecipes.Count)].dishType;
                 customer.requestedDish = new NetworkVariable<DishType>(randomDish);
 
-                int rand = Random.Range(0, customer.ears.Count);
+                int rand = Random.Range(0, customer.ears.Length);
                 customer.selectedEarsIndex = new NetworkVariable<int>(rand);
                 rand = Random.Range(0, customer.skins.Count);
                 customer.selectedSkinIndex = new NetworkVariable<int>(rand);
                 rand = Random.Range(0, customer.faces.Count);
                 customer.selectedFaceIndex = new NetworkVariable<int>(rand);
+                rand = Random.Range(0, customer.hairMesh.Length);
+                customer.selectedHairIndex = new NetworkVariable<int>(rand);
+                rand = Random.Range(0, customer.pantsMesh.Length);
+                customer.selectedShirtIndex = new NetworkVariable<int>(rand);
+                rand = Random.Range(0, customer.shirtMesh.Length);
+                customer.selectedPantsIndex = new NetworkVariable<int>(rand);
+                var color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
+                customer.selectedHairColor = new NetworkVariable<FixedString32Bytes>(color);
+                color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
+                customer.selectedPantsColor = new NetworkVariable<FixedString32Bytes>(color);
+                color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
+                customer.selectedShirtColor = new NetworkVariable<FixedString32Bytes>(color);
 
                 customer.customerName = new(GenerateName());
 

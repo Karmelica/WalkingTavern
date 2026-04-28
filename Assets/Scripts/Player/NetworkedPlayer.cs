@@ -27,8 +27,11 @@ namespace PlayerScripts
         #region Variables
 
         [SerializeField] private Canvas playerNameCanvas;
-        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerMesh;
+        [SerializeField] private SkinnedMeshRenderer[] networkedSkinMesh;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerEars;
+        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerPants;
+        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerShirt;
+        [SerializeField] private SkinnedMeshRenderer[] networkedPlayerHair;
         [SerializeField] private SkinnedMeshRenderer networkedPlayerFace;
         [SerializeField] private Material[] skins;
         [SerializeField] private Material[] faces;
@@ -38,6 +41,9 @@ namespace PlayerScripts
         private readonly NetworkVariable<int> _playerSkinIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerPantsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerShirtIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerHairIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
@@ -72,11 +78,17 @@ namespace PlayerScripts
             _playerSkinIndex.OnValueChanged += OnSkinChanged;
             _playerFaceIndex.OnValueChanged += OnFaceChanged;
             _playerEarsIndex.OnValueChanged += OnEarsChanged;
+            _playerHairIndex.OnValueChanged += OnHairChanged;
+            _playerPantsIndex.OnValueChanged += OnPantsChanged;
+            _playerShirtIndex.OnValueChanged += OnShirtChanged;
             
             NicknameChanged(_playerNickname.Value);
             SkinChanged(_playerSkinIndex.Value);
             FaceChanged(_playerFaceIndex.Value);
             EarsChanged(_playerEarsIndex.Value);
+            PantsChanged(_playerPantsIndex.Value);
+            ShirtChanged(_playerShirtIndex.Value);
+            HairChanged(_playerHairIndex.Value);
 
             _parentTransform = IsOwner ? localHandTransform : networkedHandTransform;
             _objectId.OnValueChanged += ChangeObjectInHand;
@@ -89,6 +101,9 @@ namespace PlayerScripts
             _playerSkinIndex.OnValueChanged -= OnSkinChanged;
             _playerFaceIndex.OnValueChanged -= OnFaceChanged;
             _playerEarsIndex.OnValueChanged -= OnEarsChanged;
+            _playerHairIndex.OnValueChanged -= OnHairChanged;
+            _playerPantsIndex.OnValueChanged -= OnPantsChanged;
+            _playerShirtIndex.OnValueChanged -= OnShirtChanged;
             
             _objectId.OnValueChanged -= ChangeObjectInHand;
         }
@@ -166,11 +181,11 @@ namespace PlayerScripts
             SkinChanged(newValue);
         }
 
-        private void SkinChanged(int newValue)
+        private void SkinChanged(int index)
         {
-            foreach (var mesh in networkedPlayerMesh)
+            foreach (var mesh in networkedSkinMesh)
             {
-                mesh.materials = new[] { skins[newValue] };
+                mesh.materials = new[] { skins[index] };
             }
         }
         
@@ -179,13 +194,10 @@ namespace PlayerScripts
             EarsChanged(newValue);
         }
         
-        private void EarsChanged(int newValue)
+        private void EarsChanged(int index)
         {
             if (IsOwner) return;
-            for (var i = 0; i < networkedPlayerEars.Length; i++)
-            {
-                networkedPlayerEars[i].enabled = newValue == i;
-            }
+            Utilis.ShowSelectedMesh(networkedPlayerEars, index);
         }
         
         private void OnFaceChanged(int previousValue, int newValue)
@@ -193,11 +205,44 @@ namespace PlayerScripts
             FaceChanged(newValue);
         }
 
-        private void FaceChanged(int newValue)
+        private void FaceChanged(int index)
         {
-            networkedPlayerFace.materials = new[] { new Material (faces[newValue]) };
+            networkedPlayerFace.materials = new[] { new Material (faces[index]) };
         }
         
+        private void OnShirtChanged(int previousValue, int newValue)
+        {
+            ShirtChanged(newValue);
+        }
+
+        private void ShirtChanged(int index)
+        {
+            if (IsOwner) return;
+            Utilis.ShowSelectedMesh(networkedPlayerShirt, index);
+        }
+
+        private void OnPantsChanged(int previousValue, int newValue)
+        {
+            PantsChanged(newValue);
+        }
+
+        private void PantsChanged(int index)
+        {
+            if (IsOwner) return;
+            Utilis.ShowSelectedMesh(networkedPlayerPants, index);
+        }
+
+        private void OnHairChanged(int previousValue, int newValue)
+        {
+            HairChanged(newValue);
+        }
+
+        private void HairChanged(int index)
+        {
+            if (IsOwner) return;
+            Utilis.ShowSelectedMesh(networkedPlayerHair, index);
+        }
+
         #endregion
         
         #region Network RPCs
@@ -235,6 +280,21 @@ namespace PlayerScripts
         public void SetEarsRpc(int earsIndex)
         {
             _playerEarsIndex.Value = earsIndex;
+        }
+        
+        public void SetPantsRpc(int pantsIndex)
+        {
+            _playerPantsIndex.Value = pantsIndex;
+        }
+
+        public void SetShirtRpc(int shirtIndex)
+        {
+            _playerShirtIndex.Value = shirtIndex;
+        }
+
+        public void SetHairRpc(int hairIndex)
+        {
+            _playerHairIndex.Value = hairIndex;
         }
 
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
