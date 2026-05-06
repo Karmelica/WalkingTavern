@@ -14,9 +14,11 @@ namespace PlayerScripts
     public class PlayerGUI : MonoBehaviour
     {
         public static Action<FixedString512Bytes> OnGameInfoChanged;
+        public static Action<float> OnSnailProgressChanged;
         
         [SerializeField] private GameObject gameUI;
         [SerializeField] private GameObject pauseUI;
+        [SerializeField] private Slider snailSlider;
         
         public TextMeshProUGUI interactText;
         public TextMeshProUGUI gameInfoText;
@@ -25,16 +27,26 @@ namespace PlayerScripts
         private void Awake()
         {
             OnGameInfoChanged += UpdateScoreText;
+            OnSnailProgressChanged += SnailSliderChange;
         }
+
 
         private void OnDestroy()
         {
             OnGameInfoChanged -= UpdateScoreText;
+            OnSnailProgressChanged -= SnailSliderChange;
         }
 
         private void UpdateScoreText(FixedString512Bytes newInfo)
         {
             gameInfoText.text = newInfo.ToString();
+        }
+        
+        private void SnailSliderChange(float value)
+        {
+            if (value <= 0 && snailSlider.gameObject.activeInHierarchy) snailSlider.gameObject.SetActive(false);
+            else if (value > 0 && !snailSlider.gameObject.activeInHierarchy) snailSlider.gameObject.SetActive(true);
+            snailSlider.value = value;
         }
 
         public void ShowPause(bool show)

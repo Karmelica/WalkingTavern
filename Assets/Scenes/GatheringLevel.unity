@@ -2950,6 +2950,53 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &909846069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 909846071}
+  - component: {fileID: 909846072}
+  m_Layer: 0
+  m_Name: SnailProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &909846071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909846069}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.7, y: 1.82, z: -89.083}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &909846072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909846069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 811ce4efd2f10c941a0cfb65870bb68c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SnailProgress
+  snail: {fileID: 1510117761479942833}
+  finish: {fileID: 815250204}
+  start: {fileID: 909846071}
 --- !u!114 &922453803 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8134232826461669000, guid: ddd68d81e8469414b910097cfcb3f3eb, type: 3}
@@ -7632,6 +7679,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de1ab317996498344a5152d8185f9d50, type: 3}
+--- !u!4 &1510117761479942833 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5020196554455443596, guid: de1ab317996498344a5152d8185f9d50, type: 3}
+  m_PrefabInstance: {fileID: 1510117761479942832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7641,6 +7693,7 @@ SceneRoots:
   - {fileID: 1133444971}
   - {fileID: 547941071}
   - {fileID: 815250204}
+  - {fileID: 909846071}
   - {fileID: 348834321}
   - {fileID: 1776833158}
   - {fileID: 522661459}
