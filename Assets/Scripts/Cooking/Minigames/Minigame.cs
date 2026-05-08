@@ -99,6 +99,11 @@ namespace Cooking.Minigames
         {
             return Interacted;
         }
+
+        public void ChangeOutline(bool show)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

@@ -8,7 +8,7 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using World;
+using UnityEngine.Rendering.Universal;
 using World.Caravan;
 
 namespace PlayerScripts
@@ -25,6 +25,8 @@ namespace PlayerScripts
     {
         #region Variables
 
+        [SerializeField] private ScriptableRendererFeature renderOutlines;
+        
         #region Constants
         
         private const float CameraHeight = 1.6f;
@@ -68,7 +70,6 @@ namespace PlayerScripts
         private bool _isInteracting;
         [CanBeNull] private IInteractable _lastInteractedObject;
         private bool _canMove = true;
-        private bool _isCrouching;
         private bool _isCooking;
         private bool _isDriving;
         private bool _isHoldingMouseButton;
@@ -113,13 +114,11 @@ namespace PlayerScripts
         {
             base.OnNetworkSpawn();
 
-            if (!IsOwner)
-            {
+            if (!IsOwner) {
                 enabled = false;
                 _shouldUpdateInterface = false;
             }
-            else
-            {
+            else {
                 _playerCamera = Camera.main;
                 _windowMatrix = _playerCamera!.transform.localToWorldMatrix;
 
@@ -155,21 +154,16 @@ namespace PlayerScripts
 
         private IEnumerator UpdateInterface()
         {
-            while (_shouldUpdateInterface)
-            {
-                if(GetHitInfo(out var interactable, out _, true, QueryTriggerInteraction.Collide))
-                {
-                    if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking)
-                    {
+            while (_shouldUpdateInterface) {
+                if(GetHitInfo(out var interactable, out _, true, QueryTriggerInteraction.Collide)) {
+                    if (!interactable.IsInteractedWith() && !_isInteracting && !_isCooking) {
                         _playerGUI.interactText.text = interactable.GetInteractText();
                     }
-                    else
-                    {
+                    else {
                         _playerGUI.interactText.text = string.Empty;
                     }
                 }
-                else
-                {
+                else {
                     _playerGUI.interactText.text = string.Empty;
                 }
                 yield return new WaitForSeconds(0.1f);
@@ -213,21 +207,17 @@ namespace PlayerScripts
         /// </summary>
         private void UpdateCameraPosition()
         {
-            if (!_isCooking)
-            {
+            if (!_isCooking) {
                 _windowMatrix = _playerCamera.transform.localToWorldMatrix;
                 if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out var hitInfo,
-                        InteractRange))
-                {
-                    if (hitInfo.collider.TryGetComponent(out PortalCamera portal))
-                    {
-                        _windowMatrix = portal.otherPortal.transform.localToWorldMatrix * portal.transform.worldToLocalMatrix *
+                        InteractRange)) {
+                    if (hitInfo.collider.TryGetComponent(out PortalCamera portal)) {
+                        _windowMatrix = portal.otherPortal.transform.localToWorldMatrix * portal.transform.worldToLocalMatrix * 
                                         _playerCamera.transform.localToWorldMatrix;
                     }
                 }
-
-                var cameraHeight = _isCrouching ? CameraHeight / 2f : CameraHeight;
-                _playerCamera.transform.position = transform.position + Vector3.up * cameraHeight;
+                
+                _playerCamera.transform.position = transform.position + Vector3.up * CameraHeight;
 
                 var lookVectorY = Mathf.Clamp(
                     NormalizeAngle(_playerCamera.transform.rotation.eulerAngles.x),
@@ -237,8 +227,7 @@ namespace PlayerScripts
 
                 _playerCamera.transform.rotation = Quaternion.Euler(lookVectorY, transform.rotation.eulerAngles.y, 0f);
             }
-            else
-            {
+            else {
                 _playerCamera.transform.position = Vector3.Lerp(_playerCamera.transform.position, _minigameCamera.position, 0.5f);
                 _playerCamera.transform.rotation = Quaternion.Lerp(_playerCamera.transform.rotation, _minigameCamera.rotation, 0.5f);
                 
@@ -267,32 +256,26 @@ namespace PlayerScripts
         {
             _rigidbody.AddForce(-new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z), ForceMode.VelocityChange);
 
-            if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f)
-            {
+            if(MathF.Abs(transform.eulerAngles.x) > 0.01f || Mathf.Abs(transform.eulerAngles.z) > 0.01f) {
                 var rot = Quaternion.identity;
                 transform.rotation = new Quaternion(rot.x, transform.rotation.eulerAngles.y, rot.z, rot.w);
             }
 
-            if (_canMove)
-            {
+            if (_canMove) {
                 var moveForce = _isSprinting ? sprintForce : walkForce;
-
                 
                 var moveVector = (_inputVector.y * transform.forward + _inputVector.x * transform.right).normalized *
                                  (moveForce * Time.fixedDeltaTime);
 
-                if (_rigidbody.linearVelocity.magnitude < moveForce)
-                {
-                    if (Physics.Raycast(transform.position + Vector3.up * 0.05f, moveVector + Vector3.up * -1, out var hit, 0.4f))
-                    {
+                if (_rigidbody.linearVelocity.magnitude < moveForce) {
+                    if (Physics.Raycast(transform.position + Vector3.up * 0.05f, moveVector + Vector3.up * -1, out var hit, 0.4f)) {
                         if (Vector3.Angle(hit.normal, Vector3.up) > walkableAngle && !_networkedPlayer.IsGrounded) return;
                     }
                     _rigidbody.AddForce(moveVector, ForceMode.VelocityChange);
                 }
             }
 
-            if (_caravanControl)
-            {
+            if (_caravanControl) {
                 _caravanControl.Drive(_inputVector);
             }
         }
@@ -306,12 +289,6 @@ namespace PlayerScripts
 
             _networkedPlayer.SetJumping();
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Force);
-        }
-
-        public void Unstuck()
-        {
-            transform.position = Vector3.zero;
-            transform.rotation = Quaternion.identity;
         }
         
         #endregion
@@ -361,15 +338,12 @@ namespace PlayerScripts
         {
             if (!context.performed) return;
             
-            if (context.interaction is HoldInteraction)
-            {
+            if (context.interaction is HoldInteraction) {
                 _playerGUI.ShowPause(true);
                 SetCanMove(false);
             }
-            else
-            {
-                if (_playerGUI.IsPaused())
-                {
+            else {
+                if (_playerGUI.IsPaused()) {
                     _playerGUI.ShowPause(false);
                     if (!_isCooking) SetCanMove(true);
                     return;
@@ -398,8 +372,7 @@ namespace PlayerScripts
             
             if (!_canMove || _isCooking) return;
 
-            if (context.started)
-            {
+            if (context.started) {
                 if (!GetHitInfo(out var interactObj, out var idComponent)) return;
                 if (idComponent != null)
                     _networkedPlayer.ChangeObjectInHandIdRpc(idComponent.ID);
@@ -414,7 +387,7 @@ namespace PlayerScripts
 
             if (!context.started) return;
             if (GetHitInfo(out var interactable, out _, false) && 
-                (interactable.GetInteractText().Contains("Door") || interactable.GetInteractText().Contains("Storage")))
+                (interactable.GetInteractText().Contains("Door") || interactable.GetInteractText().Contains("Storage"))) 
             {
                 interactable.SecondaryInteract();
                 return;
@@ -436,7 +409,10 @@ namespace PlayerScripts
         
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            Unstuck();
+            if(context.started)
+                renderOutlines?.SetActive(true);
+            if(context.canceled)
+                renderOutlines?.SetActive(false);
         }
 
         private bool GetHitInfo(out IInteractable interactableComponent, out IObjectID objectID, bool shouldCheckForInteracting = true,
@@ -450,10 +426,8 @@ namespace PlayerScripts
             var ray = new Ray(interactPoint.position, interactPoint.forward);
             var rayHitInfo = Physics.RaycastAll(ray, InteractRange, 1<<7, triggerInteraction);
             Array.Sort(rayHitInfo, Utilis.CompareRaycastDistance);
-            foreach (var hit in rayHitInfo)
-            {
-                if (hit.collider.TryGetComponent(out interactableComponent))
-                {
+            foreach (var hit in rayHitInfo) {
+                if (hit.collider.TryGetComponent(out interactableComponent)) {
                     hit.collider.TryGetComponent(out objectID);
                     return true;
                 }
@@ -464,11 +438,9 @@ namespace PlayerScripts
         private Vector3 CalculateDropPoint()
         {
             var hitObjects = Physics.RaycastAll(interactor.position, interactor.forward, 3f, ~(1 << 11), QueryTriggerInteraction.Ignore);
-            if (hitObjects.Length > 0)
-            {
+            if (hitObjects.Length > 0) {
                 Array.Sort(hitObjects, Utilis.CompareRaycastDistance);
-                foreach (var hit in hitObjects)
-                {
+                foreach (var hit in hitObjects) {
                     if (hit.collider.gameObject == _networkedPlayer.ObjectInHand?.gameObject) continue;
                     return hit.point + hit.normal * 0.2f;
                 }
@@ -512,14 +484,6 @@ namespace PlayerScripts
             _networkedPlayer.SetDriving(driving);
             SetCanMove(!driving, false);
         }
-
-        /*public void PickupFromBox(FoodItem foodItem)
-        {
-            var id = foodItem.GetComponent<IObjectID>().ID;
-            _networkedPlayer.ChangeObjectInHandIdRpc(id);
-            _lastInteractedObject = foodItem.PickupOrDropObject(true);
-            _isInteracting = true;
-        }*/
 
         public void SetCaravanControl(CaravanControlScript caravanControl)
         {

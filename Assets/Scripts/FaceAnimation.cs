@@ -9,7 +9,7 @@ public class FaceAnimation : MonoBehaviour
     private SkinnedMeshRenderer _faceRenderer;
     private float _currentTime;
     
-    private float blinkTimer;
+    private float _blinkTimer;
     [SerializeField] private float originalBlinkTimer = 7.5f;
     [SerializeField] private float blinkOffset = 2.5f;
     [SerializeField] private float blinkDuration = 0.2f;
@@ -31,29 +31,29 @@ public class FaceAnimation : MonoBehaviour
     private void NormalUpdate()
     {
         _currentTime += Time.deltaTime;
-        if (_currentTime >= blinkTimer + blinkDuration)
+        if (_currentTime >= _blinkTimer + blinkDuration)
         {
             _currentTime = 0;
-            blinkTimer = originalBlinkTimer + Random.Range(-blinkOffset, blinkOffset);
-            _faceRenderer.materials[0].SetFloat(FaceIndex, Random.Range(1, 4));
+            _blinkTimer = originalBlinkTimer + Random.Range(-blinkOffset, blinkOffset);
+            _faceRenderer.sharedMaterials[0].SetFloat(FaceIndex, Random.Range(1, 4));
             
         }
-        if (_currentTime >= blinkTimer)
+        if (_currentTime >= _blinkTimer)
         {
-            _faceRenderer.materials[0].SetFloat(FaceIndex, 0);
+            _faceRenderer.sharedMaterials[0].SetFloat(FaceIndex, 0);
         }
     }
     private void EditorUpdate()
     {
         _currentTime += Time.deltaTime;
-        if (_currentTime >= blinkTimer + blinkDuration)
+        if (_currentTime >= _blinkTimer + blinkDuration)
         {
             _currentTime = 0;
-            blinkTimer = originalBlinkTimer + Random.Range(-blinkOffset, blinkOffset);
+            _blinkTimer = originalBlinkTimer + Random.Range(-blinkOffset, blinkOffset);
             _faceRenderer.sharedMaterials[0].SetFloat(FaceIndex, Random.Range(1, 4));
             
         }
-        if (_currentTime >= blinkTimer)
+        if (_currentTime >= _blinkTimer)
         {
             _faceRenderer.sharedMaterials[0].SetFloat(FaceIndex, 0);
         }

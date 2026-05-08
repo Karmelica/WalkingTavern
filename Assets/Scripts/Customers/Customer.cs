@@ -280,6 +280,11 @@ public class Customer : NetworkBehaviour, IInteractable
         return orderTaken.Value;
     }
 
+    public void ChangeOutline(bool show)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 
 }

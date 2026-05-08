@@ -67,10 +67,10 @@ MonoBehaviour:
     probeSamplingDebugTexture: {fileID: 2800000, guid: 24ec0e140fb444a44ab96ee80844e18e, type: 3}
     probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
   m_RendererFeatures:
-  - {fileID: 7833122117494664109}
   - {fileID: 6050383692996708566}
   - {fileID: -6138921621538225706}
-  m_RendererFeatureMap: ad6b866f10d7b46cd688e297e947f753d6c13f844f2bceaa
+  - {fileID: 7833122117494664109}
+  m_RendererFeatureMap: d688e297e947f753d6c13f844f2bceaaad6b866f10d7b46c
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -109,11 +109,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderObjects
+  m_Name: RenderOutlines
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.RenderObjects
-  m_Active: 1
+  m_Active: 0
   settings:
-    passTag: RenderObjects
+    passTag: RenderOutlines
     Event: 400
     filterSettings:
       RenderQueueType: 0
