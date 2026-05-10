@@ -6,12 +6,12 @@ namespace Player
 {
     public class SkinSelector : MonoBehaviour
     {
-        private int _selectedSkinColor;
         private int _selectedFace;
         private int _selectedEars;
         private int _selectedPants;
         private int _selectedShirt;
         private int _selectedHair;
+        private int _selectedSkinColor;
         private int _selectedPantsColor;
         private int _selectedShirtColor;
         private int _selectedHairColor;
@@ -26,12 +26,18 @@ namespace Player
             _selectedPants = PlayerPrefs.GetInt("PlayerPants", 0);
             _selectedShirt = PlayerPrefs.GetInt("PlayerShirt", 0);
             _selectedHair = PlayerPrefs.GetInt("PlayerHair", 0);
-            previewCharacter.ChangeSkinColor(_selectedSkinColor);
+            _selectedPantsColor = PlayerPrefs.GetInt("PlayerPantsColor", 0);
+            _selectedShirtColor = PlayerPrefs.GetInt("PlayerShirtColor", 0);
+            _selectedHairColor = PlayerPrefs.GetInt("PlayerHairColor", 0);
             previewCharacter.ChangeFace(_selectedFace);
+            previewCharacter.ChangeSkinColor(_selectedSkinColor);
             previewCharacter.ChangeEars(_selectedEars);
             previewCharacter.ChangePants(_selectedPants);
             previewCharacter.ChangeShirt(_selectedShirt);
             previewCharacter.ChangeHair(_selectedHair);
+            previewCharacter.ChangePantsColor(_selectedPantsColor);
+            previewCharacter.ChangeShirtColor(_selectedShirtColor);
+            previewCharacter.ChangeHairColor(_selectedHairColor);
         }
 
         public void NextSkin()
@@ -40,53 +46,25 @@ namespace Player
             previewCharacter.ChangeSkinColor(_selectedSkinColor);
             PlayerPrefs.SetInt("PlayerSkin",  _selectedSkinColor);
         }
-
-        public void PreviousSkin()
-        {
-            _selectedSkinColor = Previous(_selectedSkinColor, previewCharacter.PlayerSkinsCount);
-            previewCharacter.ChangeSkinColor(_selectedSkinColor);
-            PlayerPrefs.SetInt("PlayerSkin",  _selectedSkinColor);
-        }
         
         public void NextShirtColor()
         {
             _selectedShirtColor = Next(_selectedShirtColor, previewCharacter.PlayerClothesMatCount);
-            previewCharacter.ChangeShirtColor(_selectedShirtColor, _selectedShirt);
+            previewCharacter.ChangeShirtColor(_selectedShirtColor);
             PlayerPrefs.SetInt("PlayerShirtColor",  _selectedShirtColor);
-        }
-
-        public void PreviousShirtColor()
-        {
-            _selectedSkinColor = Previous(_selectedSkinColor, previewCharacter.PlayerClothesMatCount);
-            previewCharacter.ChangeShirtColor(_selectedShirtColor, _selectedShirt);
-            PlayerPrefs.SetInt("PlayerShirtColor",  _selectedSkinColor);
         }
         
         public void NextPantsColor()
         {
             _selectedPantsColor = Next(_selectedPantsColor, previewCharacter.PlayerClothesMatCount);
-            previewCharacter.ChangePantsColor(_selectedPantsColor, _selectedPants);
-            PlayerPrefs.SetInt("PlayerPantsColor",  _selectedPantsColor);
-        }
-
-        public void PreviousPantsColor()
-        {
-            _selectedPantsColor = Previous(_selectedPantsColor, previewCharacter.PlayerClothesMatCount);
-            previewCharacter.ChangePantsColor(_selectedPantsColor, _selectedPants);
+            previewCharacter.ChangePantsColor(_selectedPantsColor);
             PlayerPrefs.SetInt("PlayerPantsColor",  _selectedPantsColor);
         }
         
         public void NextHairColor()
         {
-            _selectedHairColor = Next(_selectedHairColor, previewCharacter.PlayerSkinsCount);
-            previewCharacter.ChangeHairColor(_selectedHairColor, _selectedHair);
-            PlayerPrefs.SetInt("PlayerHairColor",  _selectedHairColor);
-        }
-
-        public void PreviousHairColor()
-        {
-            _selectedHairColor = Previous(_selectedHairColor, previewCharacter.PlayerSkinsCount);
-            previewCharacter.ChangeHairColor(_selectedHairColor, _selectedHair);
+            _selectedHairColor = Next(_selectedHairColor, previewCharacter.PlayerHairMatCount);
+            previewCharacter.ChangeHairColor(_selectedHairColor);
             PlayerPrefs.SetInt("PlayerHairColor",  _selectedHairColor);
         }
         

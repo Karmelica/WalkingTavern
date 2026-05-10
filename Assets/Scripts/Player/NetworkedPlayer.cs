@@ -33,8 +33,10 @@ namespace PlayerScripts
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerShirt;
         [SerializeField] private SkinnedMeshRenderer[] networkedPlayerHair;
         [SerializeField] private SkinnedMeshRenderer networkedPlayerFace;
-        [SerializeField] private Material[] skins;
-        [SerializeField] private Material[] faces;
+        [SerializeField] private Material[] skinsMats;
+        [SerializeField] private Material[] facesMats;
+        [SerializeField] private Material[] clothesMats;
+        [SerializeField] private Material[] hairMats;
         private TextMeshProUGUI _steamNicknameTMP;
         
         private readonly NetworkVariable<FixedString64Bytes> _playerNickname = new("Nickname", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -42,8 +44,11 @@ namespace PlayerScripts
         private readonly NetworkVariable<int> _playerFaceIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerEarsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerPantsIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerPantsColor = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerShirtIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerShirtColor = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<int> _playerHairIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        private readonly NetworkVariable<int> _playerHairColor = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         private readonly NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
@@ -79,8 +84,11 @@ namespace PlayerScripts
             _playerFaceIndex.OnValueChanged += OnFaceChanged;
             _playerEarsIndex.OnValueChanged += OnEarsChanged;
             _playerHairIndex.OnValueChanged += OnHairChanged;
+            _playerHairColor.OnValueChanged += OnHairColorChanged;
             _playerPantsIndex.OnValueChanged += OnPantsChanged;
+            _playerPantsColor.OnValueChanged += OnPantsColorChanged;
             _playerShirtIndex.OnValueChanged += OnShirtChanged;
+            _playerShirtColor.OnValueChanged += OnShirtColorChanged;
             
             NicknameChanged(_playerNickname.Value);
             SkinChanged(_playerSkinIndex.Value);
@@ -89,10 +97,15 @@ namespace PlayerScripts
             PantsChanged(_playerPantsIndex.Value);
             ShirtChanged(_playerShirtIndex.Value);
             HairChanged(_playerHairIndex.Value);
+            PantsColorChanged(_playerPantsColor.Value);
+            ShirtColorChanged(_playerShirtColor.Value);
+            HairColorChanged(_playerHairColor.Value);
+            
 
             _parentTransform = IsOwner ? localHandTransform : networkedHandTransform;
             _objectId.OnValueChanged += ChangeObjectInHand;
         }
+
 
         public override void OnNetworkDespawn()
         {
@@ -104,6 +117,10 @@ namespace PlayerScripts
             _playerHairIndex.OnValueChanged -= OnHairChanged;
             _playerPantsIndex.OnValueChanged -= OnPantsChanged;
             _playerShirtIndex.OnValueChanged -= OnShirtChanged;
+            _playerHairColor.OnValueChanged -= OnHairColorChanged;
+            _playerPantsColor.OnValueChanged -= OnPantsColorChanged;
+            _playerShirtColor.OnValueChanged -= OnShirtColorChanged;
+            
             
             _objectId.OnValueChanged -= ChangeObjectInHand;
         }
@@ -185,7 +202,7 @@ namespace PlayerScripts
         {
             foreach (var mesh in networkedSkinMesh)
             {
-                mesh.materials = new[] { skins[index] };
+                mesh.sharedMaterial =  skinsMats[index];
             }
         }
         
@@ -207,7 +224,7 @@ namespace PlayerScripts
 
         private void FaceChanged(int index)
         {
-            networkedPlayerFace.materials = new[] { new Material (faces[index]) };
+            networkedPlayerFace.sharedMaterial = new Material (facesMats[index]);
         }
         
         private void OnShirtChanged(int previousValue, int newValue)
@@ -241,6 +258,46 @@ namespace PlayerScripts
         {
             if (IsOwner) return;
             Utilis.ShowSelectedMesh(networkedPlayerHair, index);
+        }
+        
+        
+        private void OnShirtColorChanged(int previousValue, int newValue)
+        {
+            ShirtColorChanged(newValue);
+        }
+
+        private void ShirtColorChanged(int index)
+        {
+            foreach (var mesh in networkedPlayerShirt)
+            {
+                mesh.sharedMaterial = clothesMats[index];
+            }
+        }
+
+        private void OnPantsColorChanged(int previousValue, int newValue)
+        {
+            PantsColorChanged(newValue);
+        }
+
+        private void PantsColorChanged(int index)
+        {
+            foreach (var mesh in networkedPlayerPants)
+            {
+                mesh.sharedMaterial = clothesMats[index];
+            }
+        }
+
+        private void OnHairColorChanged(int previousValue, int newValue)
+        {
+            HairColorChanged(newValue);
+        }
+
+        private void HairColorChanged(int index)
+        {
+            foreach (var mesh in networkedPlayerHair)
+            {
+                mesh.sharedMaterial = hairMats[index];
+            }
         }
 
         #endregion
@@ -282,19 +339,40 @@ namespace PlayerScripts
             _playerEarsIndex.Value = earsIndex;
         }
         
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetPantsRpc(int pantsIndex)
         {
             _playerPantsIndex.Value = pantsIndex;
         }
 
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetShirtRpc(int shirtIndex)
         {
             _playerShirtIndex.Value = shirtIndex;
         }
 
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
         public void SetHairRpc(int hairIndex)
         {
             _playerHairIndex.Value = hairIndex;
+        }
+        
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetPantsColorRpc(int pantsColor)
+        {
+            _playerPantsColor.Value = pantsColor;
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetShirtColorRpc(int shirtColor)
+        {
+            _playerShirtColor.Value = shirtColor;
+        }
+
+        [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
+        public void SetHairColorRpc(int hairColor)
+        {
+            _playerHairColor.Value = hairColor;
         }
 
         [Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
