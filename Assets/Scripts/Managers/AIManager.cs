@@ -154,12 +154,12 @@ namespace Managers
                 customer.selectedShirtIndex = new NetworkVariable<int>(rand);
                 rand = Random.Range(0, customer.shirtMesh.Length);
                 customer.selectedPantsIndex = new NetworkVariable<int>(rand);
-                var color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
-                customer.selectedHairColor = new NetworkVariable<FixedString32Bytes>(color);
-                color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
-                customer.selectedPantsColor = new NetworkVariable<FixedString32Bytes>(color);
-                color = "#" + ColorUtility.ToHtmlStringRGB(Random.ColorHSV());
-                customer.selectedShirtColor = new NetworkVariable<FixedString32Bytes>(color);
+                rand = Random.Range(0, customer.clothesMats.Count);
+                customer.selectedShirtMat = new NetworkVariable<int>(rand);
+                rand = Random.Range(0, customer.clothesMats.Count);
+                customer.selectedPantsMat = new NetworkVariable<int>(rand);
+                rand = Random.Range(0, customer.hairMats.Count);
+                customer.selectedHairMat = new NetworkVariable<int>(rand);
 
                 customer.customerName = new(GenerateName());
 

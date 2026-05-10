@@ -18,6 +18,8 @@ public class Customer : NetworkBehaviour, IInteractable
 {
     [SerializeField] public List<Material> skins;
     [SerializeField] public List<Material> faces;
+    [SerializeField] public List<Material> clothesMats;
+    [SerializeField] public List<Material> hairMats;
     [SerializeField] public SkinnedMeshRenderer[] ears;
     [SerializeField] public SkinnedMeshRenderer[] shirtMesh;
     [SerializeField] public SkinnedMeshRenderer[] pantsMesh;
@@ -46,9 +48,9 @@ public class Customer : NetworkBehaviour, IInteractable
     public NetworkVariable<int> selectedPantsIndex;
     public NetworkVariable<int> selectedShirtIndex;
     public NetworkVariable<int> selectedHairIndex;
-    public NetworkVariable<FixedString32Bytes> selectedPantsColor;
-    public NetworkVariable<FixedString32Bytes> selectedShirtColor;
-    public NetworkVariable<FixedString32Bytes> selectedHairColor;
+    public NetworkVariable<int> selectedPantsMat;
+    public NetworkVariable<int> selectedShirtMat;
+    public NetworkVariable<int> selectedHairMat;
     public NetworkVariable<bool> orderTaken =  new (true);
     private readonly List<Transform> _waypoints = new();
     private float _totalWaitTime;
@@ -111,17 +113,14 @@ public class Customer : NetworkBehaviour, IInteractable
         Utilis.ShowSelectedMesh(pantsMesh, selectedPantsIndex.Value);
         Utilis.ShowSelectedMesh(hairMesh, selectedHairIndex.Value);
 
-        faceRenderer.materials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
+        faceRenderer.sharedMaterials = new[]{ new Material (faces[selectedFaceIndex.Value]) };
         foreach (var mesh in customerMesh) {
-            mesh.materials = new[] { skins[selectedSkinIndex.Value] };
+            mesh.sharedMaterials = new[] { skins[selectedSkinIndex.Value] };
         }
         
-        if (ColorUtility.TryParseHtmlString(selectedHairColor.Value.ToString(), out var c))
-            hairMesh[selectedHairIndex.Value].material.color = c;
-        if (ColorUtility.TryParseHtmlString(selectedShirtColor.Value.ToString(), out c))
-            shirtMesh[selectedShirtIndex.Value].material.color = c;
-        if (ColorUtility.TryParseHtmlString(selectedPantsColor.Value.ToString(), out c))
-            pantsMesh[selectedPantsIndex.Value].material.color = c;
+        hairMesh[selectedHairIndex.Value].sharedMaterial = hairMats[selectedHairMat.Value];
+        shirtMesh[selectedShirtIndex.Value].sharedMaterial = clothesMats[selectedShirtMat.Value];
+        pantsMesh[selectedPantsIndex.Value].sharedMaterial = clothesMats[selectedPantsMat.Value];
     }
 
     private void ChangeFoodIcon(DishType newValue)
