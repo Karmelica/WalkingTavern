@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0.47
       objectReference: {fileID: 0}
+    - target: {fileID: 2465937664471346525, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1841
+      objectReference: {fileID: 0}
     - target: {fileID: 2756045895714045244, guid: 7f1ab3a80bcb4cb4cb85ae76cada3661, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.115
@@ -301,10 +305,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   requiredScore: 10
   instructions: {fileID: 7899075767086435906}
+  tool: {fileID: 0}
   cameraLocation: {fileID: 7314362239099978407}
   foodPlaceholder: {fileID: 4355119051510091169}
   applicableFood: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
-  requiredSpeed: 3.2
 --- !u!114 &-4311329082738962118
 MonoBehaviour:
   m_ObjectHideFlags: 0

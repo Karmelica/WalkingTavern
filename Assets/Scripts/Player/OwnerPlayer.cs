@@ -34,7 +34,7 @@ namespace PlayerScripts
         private const float CameraVerticalClampMax = 87f;
         [SerializeField] private float walkForce = 20f;
         [SerializeField] private float sprintForce = 25f;
-        [SerializeField] private float jumpForce = 250f;
+        [SerializeField] private float jumpForce = 200f;
         [Range(0f, 90f)]
         [SerializeField] private float walkableAngle = 45f;
         private const float LookSensitivity = 0.1f;
@@ -120,6 +120,11 @@ namespace PlayerScripts
             }
             else {
                 _playerCamera = Camera.main;
+                if (_playerCamera == null)
+                {
+                    throw new Exception("Player camera not found");
+                }
+                _minigameCamera = _playerCamera.transform;
                 _windowMatrix = _playerCamera!.transform.localToWorldMatrix;
 
                 Cursor.lockState = CursorLockMode.Locked;

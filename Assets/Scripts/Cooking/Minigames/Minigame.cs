@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cooking.Minigames.Helpers;
+using JetBrains.Annotations;
 using Managers;
 using MyInterfaces;
 using PlayerScripts;
@@ -24,14 +25,14 @@ namespace Cooking.Minigames
         
         [Header("Components")]
         [SerializeField] private TextMeshProUGUI instructions;
+        [SerializeField] [CanBeNull] private GameObject tool;
         public Transform cameraLocation;
         public Transform foodPlaceholder;
         protected Camera MainCamera;
         protected Helper Helper;
         protected OwnerPlayer OwnerPlayer;
-        
         protected bool Interacted;
-        
+
         protected virtual void Awake()
         {
             MainCamera = Camera.main;
@@ -40,6 +41,7 @@ namespace Cooking.Minigames
 
         protected virtual void Update()
         {
+            MoveTool();
             if (!CheckForIngredients()) return;
             
             if (Score == requiredScore)
@@ -73,11 +75,21 @@ namespace Cooking.Minigames
                 RayHit.collider.gameObject && Interacted;
         }
 
+        private void MoveTool()
+        {
+            if (tool)
+            {
+                tool.transform.position = RayHit.point;
+            }
+        }
+
         public IInteractable PickupOrDropObject(bool pickUp,
             Vector3 placePosition)
         {
+            OwnerPlayer.SetCameraLocation(null);
             OwnerPlayer = null;
             Interacted = false;
+            if(tool) tool.SetActive(false);
             instructions.enabled = false;
             return null;
         }
@@ -88,6 +100,7 @@ namespace Cooking.Minigames
             OwnerPlayer.SetCooking(true);
             OwnerPlayer.SetCameraLocation(cameraLocation);
             Interacted = true;
+            if(tool) tool.SetActive(true);
             instructions.enabled = true;
             
             return this;
@@ -98,11 +111,6 @@ namespace Cooking.Minigames
         public bool IsInteractedWith()
         {
             return Interacted;
-        }
-
-        public void ChangeOutline(bool show)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
