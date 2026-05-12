@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cooking.Scriptable_Objects.Recipe
   dishType: 3
   ingredients:
-  - ingredientType: 0
+  - ingredientType: 2
+    quantity: 1
+  - ingredientType: 1
     quantity: 1
   - ingredientType: 5
     quantity: 1
