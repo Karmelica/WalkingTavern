@@ -15,28 +15,37 @@ namespace PlayerScripts
     {
         public static Action<FixedString512Bytes> OnGameInfoChanged;
         public static Action<float> OnSnailProgressChanged;
+        public static Action<string> OnTutorialTextChanged;
         
         [SerializeField] private GameObject gameUI;
+        [SerializeField] private GameObject tutorialUI;
         [SerializeField] private GameObject pauseUI;
         [SerializeField] private Slider snailSlider;
         
         public TextMeshProUGUI interactText;
         public TextMeshProUGUI gameInfoText;
-
+        public TextMeshProUGUI tutorialText;
 
         private void Awake()
         {
             OnGameInfoChanged += UpdateScoreText;
             OnSnailProgressChanged += SnailSliderChange;
+            OnTutorialTextChanged += TutorialTextChanged;
         }
 
-
-        private void OnDestroy()
+        private void TutorialTextChanged(string newText)
         {
-            OnGameInfoChanged -= UpdateScoreText;
-            OnSnailProgressChanged -= SnailSliderChange;
+            tutorialUI.SetActive(true);
+            tutorialText.text = newText;
+            tutorialText.text += "\n\nPress back button to close this window";
         }
 
+        public void CloseTutorialPopup()
+        {
+            tutorialUI.SetActive(false);
+            tutorialText.text = "";
+        }
+        
         private void UpdateScoreText(FixedString512Bytes newInfo)
         {
             gameInfoText.text = newInfo.ToString();
@@ -67,6 +76,18 @@ namespace PlayerScripts
         public bool IsPaused()
         {
             return pauseUI.activeSelf;
+        }
+
+        public bool IsTutorialShown()
+        {
+            return tutorialUI.activeSelf;
+        }
+
+        private void OnDestroy()
+        {
+            OnGameInfoChanged -= UpdateScoreText;
+            OnSnailProgressChanged -= SnailSliderChange;
+            OnTutorialTextChanged -= TutorialTextChanged;
         }
     }
 }

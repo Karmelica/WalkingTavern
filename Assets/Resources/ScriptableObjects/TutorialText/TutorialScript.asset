@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: TutorialScript
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialTexts
+  texts:
+  - tutorialName: moving
+    tutorialText: Press WASD to move your character. Press Space to jump. Move your
+      mouse to see around.
+  - tutorialName: pickingUp
+    tutorialText: Press left mouse buton to pick up most of the highlighted objects.
+      Press E, right mouse button or ESC to drop held object.
+  - tutorialName: cooking
+    tutorialText: On this "Minigame Screen" you can prepare different ingredients
+      and dishes. Use your mouse acoording to instructions on screen to finish minigame.
+  - tutorialName: dish
+    tutorialText: On the top right corner you can select any available recipe with
+      your mouse. Use the dropdown to select any dish.
+  - tutorialName: interact
+    tutorialText: If you press E on highlighted object, you can interact with it,
+      e.g. open doors, control caravan, interact with minigames or customers.
+  - tutorialName: highlight
+    tutorialText: You can press F at any time to highlight every object that you
+      can interact with.

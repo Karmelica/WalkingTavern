@@ -78,6 +78,9 @@ namespace PlayerScripts
         private NetworkedPlayer _networkedPlayer;
         private CaravanControlScript _caravanControl;
         private Matrix4x4 _windowMatrix;
+        private bool _canMovePreTutorialState;
+        private bool _cursorVisiblePreTutorialState;
+        private CursorLockMode _cursorPreTutorialState;
 
         #endregion
         
@@ -89,6 +92,7 @@ namespace PlayerScripts
         {
             _rigidbody = GetComponent<Rigidbody>();
             _networkedPlayer =  GetComponent<NetworkedPlayer>();
+            Tutorial.ResetTutorials();
         }
 
         private void Update()
@@ -334,6 +338,9 @@ namespace PlayerScripts
         
         public void OnMove(InputAction.CallbackContext context)
         {
+            if(PlayerPrefs.GetInt("moving") == 0){
+                ShowTutorialPage("moving");
+            }
             _inputVector = context.ReadValue<Vector2>();
         }
         
@@ -355,6 +362,11 @@ namespace PlayerScripts
                     _playerGUI.ShowPause(false);
                     if (!_isCooking) SetCanMove(true);
                     return;
+                }
+
+                if (_playerGUI.IsTutorialShown())
+                {
+                    CloseTutorialPage();
                 }
                 
                 if (_lastInteractedObject != null) {
@@ -386,6 +398,7 @@ namespace PlayerScripts
                     _networkedPlayer.ChangeObjectInHandIdRpc(idComponent.ID);
                 _lastInteractedObject = interactObj.PickupOrDropObject(true);
                 _isInteracting = _lastInteractedObject != null;
+                ShowTutorialPage("pickingUp");
             }
         }
         
@@ -398,6 +411,8 @@ namespace PlayerScripts
                 (interactable.GetInteractText().Contains("Door") || interactable.GetInteractText().Contains("Storage"))) 
             {
                 interactable.SecondaryInteract();
+                
+                ShowTutorialPage("interact");
                 return;
             }
             
@@ -406,17 +421,21 @@ namespace PlayerScripts
                 _networkedPlayer.ChangeObjectInHandIdRpc(0);
                 _lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
                 _lastInteractedObject = null;
+                
+                ShowTutorialPage("interact");
                 return;
             }
             
             if(GetHitInfo(out interactable, out _,false, QueryTriggerInteraction.Collide)) {
                 if (interactable.IsInteractedWith()) return;
                 _lastInteractedObject = interactable.SecondaryInteract(this);
+                ShowTutorialPage("interact");
             }
         }
         
         public void OnCrouch(InputAction.CallbackContext context)
         {
+            ShowTutorialPage("highlight");
             if(context.started)
                 renderOutlines?.SetActive(true);
             if(context.canceled)
@@ -479,6 +498,33 @@ namespace PlayerScripts
                 Cursor.lockState = canMove ? CursorLockMode.Locked : CursorLockMode.None;
                 Cursor.visible = !canMove;
             }
+        }
+
+        private void ShowTutorialPage(string tutorialName)
+        {
+            if(PlayerPrefs.GetInt(tutorialName) == 0) {
+                PlayerPrefs.SetInt(tutorialName, 1);
+            }else {
+                return;
+            }
+            
+            _canMovePreTutorialState = _canMove;
+            _cursorPreTutorialState = Cursor.lockState;
+            _cursorVisiblePreTutorialState = Cursor.visible;
+            SetCanMove(false);
+            
+            Tutorial.CheckTutorial(tutorialName);
+            var text = Tutorial.GetTutorialTextByName(tutorialName);
+            
+            PlayerGUI.OnTutorialTextChanged.Invoke(text);
+        }
+
+        private void CloseTutorialPage()
+        {
+            _playerGUI.CloseTutorialPopup();
+            _canMove = _canMovePreTutorialState;
+            Cursor.lockState = _cursorPreTutorialState;
+            Cursor.visible = _cursorVisiblePreTutorialState;
         }
         
         public void SetCooking(bool cooking, bool showCursor = true)
