@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cooking.Minigames;
 using JetBrains.Annotations;
 using MyInterfaces;
 using Steamworks;
@@ -9,6 +10,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.Rendering.Universal;
+using World;
 using World.Caravan;
 
 namespace PlayerScripts
@@ -92,7 +94,7 @@ namespace PlayerScripts
         {
             _rigidbody = GetComponent<Rigidbody>();
             _networkedPlayer =  GetComponent<NetworkedPlayer>();
-            Tutorial.ResetTutorials();
+            ShowTutorialPage("start");
         }
 
         private void Update()
@@ -421,15 +423,27 @@ namespace PlayerScripts
                 _networkedPlayer.ChangeObjectInHandIdRpc(0);
                 _lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
                 _lastInteractedObject = null;
-                
-                ShowTutorialPage("interact");
                 return;
             }
             
             if(GetHitInfo(out interactable, out _,false, QueryTriggerInteraction.Collide)) {
                 if (interactable.IsInteractedWith()) return;
                 _lastInteractedObject = interactable.SecondaryInteract(this);
-                ShowTutorialPage("interact");
+                switch (interactable)
+                {
+                    case Minigame when PlayerPrefs.GetInt("cooking", 0) == 0:
+                        ShowTutorialPage("cooking");
+                        return;
+                    case DishMinigame when PlayerPrefs.GetInt("dish", 0) == 0:
+                        ShowTutorialPage("dish");
+                        return;
+                    case CaravanControlScript when PlayerPrefs.GetInt("caravan", 0) == 0:
+                        ShowTutorialPage("caravan");
+                        return;
+                    case Customer when PlayerPrefs.GetInt("customer", 0) == 0:
+                        ShowTutorialPage("customer");
+                        return;
+                }
             }
         }
         
@@ -502,7 +516,7 @@ namespace PlayerScripts
 
         private void ShowTutorialPage(string tutorialName)
         {
-            if(PlayerPrefs.GetInt(tutorialName) == 0) {
+            if(PlayerPrefs.GetInt(tutorialName, 0) == 0) {
                 PlayerPrefs.SetInt(tutorialName, 1);
             }else {
                 return;

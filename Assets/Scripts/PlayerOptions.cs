@@ -35,6 +35,11 @@ public class PlayerOptions : MonoBehaviour
         UpdateOptions();
     }
 
+    public void ResetTutorials()
+    {
+        Tutorial.ResetTutorials();
+    }
+
     private void UpdateOptions()
     {
         framerateSlider.interactable = vSyncDropdown.value == 0;

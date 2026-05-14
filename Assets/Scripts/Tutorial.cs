@@ -11,8 +11,8 @@ public static class Tutorial
     {
         PlayerPrefs.SetInt(tutorialName, 1);
     }
-    
-    public static void UncheckTutorial(string tutorialName)
+
+    private static void UncheckTutorial(string tutorialName)
     {
         PlayerPrefs.SetInt(tutorialName, 0);
     }

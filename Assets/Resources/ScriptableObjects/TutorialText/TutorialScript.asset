@@ -13,6 +13,13 @@ MonoBehaviour:
   m_Name: TutorialScript
   m_EditorClassIdentifier: Assembly-CSharp::TutorialTexts
   texts:
+  - tutorialName: start
+    tutorialText: 'Hello! You are a team of elves, who will gather resources, prepare
+      meals, and serve them to your customers. Gather as many ingredients in this
+      level as you can, drive the caravan and follow the path to travel to next stage.
+
+      Basic
+      instructions are on the bottom left of your screen.'
   - tutorialName: moving
     tutorialText: Press WASD to move your character. Press Space to jump. Move your
       mouse to see around.
@@ -21,7 +28,7 @@ MonoBehaviour:
       Press E, right mouse button or ESC to drop held object.
   - tutorialName: cooking
     tutorialText: On this "Minigame Screen" you can prepare different ingredients
-      and dishes. Use your mouse acoording to instructions on screen to finish minigame.
+      and dishes. Move your mouse acoording to instructions on screen to finish minigame.
   - tutorialName: dish
     tutorialText: On the top right corner you can select any available recipe with
       your mouse. Use the dropdown to select any dish.
@@ -31,3 +38,14 @@ MonoBehaviour:
   - tutorialName: highlight
     tutorialText: You can press F at any time to highlight every object that you
       can interact with.
+  - tutorialName: caravan
+    tutorialText: Use your W key to drive forward, A and D to steer the snail. When
+      you move, you bring the whole caravan with you and you can enter it at any
+      time.
+  - tutorialName: customer
+    tutorialText: 'You''ve just taken your first order! Prepare correct dish, cook
+      it and deliver to customer''s table. If you mess something up, they might be
+      upset, so try your best!
+
+      All orders are listed on the top right of your
+      screen.'
