@@ -8,7 +8,13 @@ namespace Cooking.Minigames
     public abstract class IngredientMinigame : Minigame
     {
         [SerializeField] private IngredientType[] applicableFood;
-        
+
+        protected override void Awake()
+        {
+            ShowCursor = false;
+            base.Awake();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (CurrentFood.Any()) return;

@@ -22,7 +22,7 @@ namespace Cooking.Minigames
         protected RaycastHit RayHit;
         protected bool DidHit;
         protected List<MoveableObject> CurrentFood = new();
-        
+
         [Header("Components")]
         [SerializeField] private TextMeshProUGUI instructions;
         [SerializeField] [CanBeNull] private GameObject tool;
@@ -32,6 +32,7 @@ namespace Cooking.Minigames
         protected Helper Helper;
         protected OwnerPlayer OwnerPlayer;
         protected bool Interacted;
+        protected bool ShowCursor = true;
 
         protected virtual void Awake()
         {
@@ -79,14 +80,13 @@ namespace Cooking.Minigames
         {
             if (tool)
             {
-                tool.transform.position = RayHit.point;
+                tool.transform.position = RayHit.point + Vector3.up * 0.05f;
             }
         }
 
         public IInteractable PickupOrDropObject(bool pickUp,
             Vector3 placePosition)
         {
-            OwnerPlayer.SetCameraLocation(null);
             OwnerPlayer = null;
             Interacted = false;
             if(tool) tool.SetActive(false);
@@ -97,12 +97,11 @@ namespace Cooking.Minigames
         public IInteractable SecondaryInteract(OwnerPlayer interactor){
             OwnerPlayer =  interactor;
             OwnerPlayer.SetCanMove(false);
-            OwnerPlayer.SetCooking(true);
+            OwnerPlayer.SetCooking(true, ShowCursor);
             OwnerPlayer.SetCameraLocation(cameraLocation);
             Interacted = true;
             if(tool) tool.SetActive(true);
             instructions.enabled = true;
-            
             return this;
         }
 

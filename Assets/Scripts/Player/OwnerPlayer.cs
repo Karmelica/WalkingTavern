@@ -481,9 +481,10 @@ namespace PlayerScripts
             }
         }
         
-        public void SetCooking(bool cooking)
+        public void SetCooking(bool cooking, bool showCursor = true)
         {
             _isCooking = cooking;
+            Cursor.visible = showCursor;
         }
         
         public void SetDriving(bool driving)
