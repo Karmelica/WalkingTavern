@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Managers;
 using Managers.Network;
 using TMPro;
 using Unity.Collections;
@@ -71,6 +72,7 @@ namespace PlayerScripts
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
             SceneManager.LoadScene("Menu");
+            AudioManager.Instance.StartMenuMusic();
         }
 
         public bool IsPaused()

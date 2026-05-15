@@ -9,43 +9,56 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 5e51bd241bb14ca9ad943bd95325d4ca, type: 3}
   m_Name: TutorialScript
   m_EditorClassIdentifier: Assembly-CSharp::TutorialTexts
   texts:
-  - tutorialName: start
-    tutorialText: 'Hello! You are a team of elves, who will gather resources, prepare
-      meals, and serve them to your customers. Gather as many ingredients in this
-      level as you can, drive the caravan and follow the path to travel to next stage.
-
-      Basic
-      instructions are on the bottom left of your screen.'
-  - tutorialName: moving
-    tutorialText: Press WASD to move your character. Press Space to jump. Move your
-      mouse to see around.
   - tutorialName: pickingUp
-    tutorialText: Press left mouse buton to pick up most of the highlighted objects.
-      Press E, right mouse button or ESC to drop held object.
-  - tutorialName: cooking
-    tutorialText: On this "Minigame Screen" you can prepare different ingredients
-      and dishes. Move your mouse acoording to instructions on screen to finish minigame.
-  - tutorialName: dish
-    tutorialText: On the top right corner you can select any available recipe with
-      your mouse. Use the dropdown to select any dish.
+    tutorialText: You can pick up most objects by pressing LMB on them. You can only
+      hold one item at the time. To drop item press RMB, E or ESC. Item will be dropped
+      where you're looking if it's in your range.
   - tutorialName: interact
-    tutorialText: If you press E on highlighted object, you can interact with it,
-      e.g. open doors, control caravan, interact with minigames or customers.
-  - tutorialName: highlight
-    tutorialText: You can press F at any time to highlight every object that you
-      can interact with.
+    tutorialText: 'You can interact with some items by pressing E on them. Here are
+      some of them:
+
+      Table placer - find correct place and unpack tables for
+      customers to start coming.
+
+      Minigames - get into "minigame view" and
+      follow instructions.
+
+      Storage - get one item from storage
+
+      Seat
+      in front of caravan - control snail.'
+  - tutorialName: cooking
+    tutorialText: When interacting with kitchen tools, you cannot move and instead
+      operate with your mouse. To complete the minigame, firstly bring all correct
+      ingredients and follow instructions on screen.
+  - tutorialName: dish
+    tutorialText: When making dishes (indicated by dropdown in the corner) you need
+      to select the recipe you want to prepare bring all processed ingredients e.g.
+      sliced bread, cheese and follow instructions on screen.
   - tutorialName: caravan
-    tutorialText: Use your W key to drive forward, A and D to steer the snail. When
-      you move, you bring the whole caravan with you and you can enter it at any
+    tutorialText: Press W to move the snail forward. Press A or D to steer. When
+      you control snail, whole caravan is moving behind and you can enter it at any
       time.
   - tutorialName: customer
-    tutorialText: 'You''ve just taken your first order! Prepare correct dish, cook
-      it and deliver to customer''s table. If you mess something up, they might be
-      upset, so try your best!
+    tutorialText: When you interact with customer, they go to any available table.
+      They will wait for their order (shown obove their head and also on the top
+      left of your screen), but if you take too long or mess up the order they will
+      leave and you will lose some money.
+  - tutorialName: highlight
+    tutorialText: Hold F button to highlight every object that you can interact with.
+  - tutorialName: moving
+    tutorialText: 'Press WASD to move. Press Space to jump. Use your mouse to look
+      around. Hold ESC to open pause menu.
 
-      All orders are listed on the top right of your
-      screen.'
+      All keybinds are shown on the bottom
+      left corner.'
+  - tutorialName: start
+    tutorialText: Hello! You are an elf, who takes care of The Walking Tavern. Every
+      time you do something for the first time you will recieve this kind of message.
+      While following the path collect as many ingredients as you can, put them in
+      storage boxes inside the caravan and procced by reaching the end (indicated
+      by progress bar on the bottom). You can reset tutorials from options menu.

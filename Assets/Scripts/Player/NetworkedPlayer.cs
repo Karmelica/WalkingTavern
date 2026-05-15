@@ -52,6 +52,7 @@ namespace PlayerScripts
         private readonly NetworkVariable<uint> _objectId = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         public bool IsGrounded { get; private set; }
+        private string _groundType = "";
         
         private Camera _playerCamera;
         private Animator _animator;
@@ -148,7 +149,11 @@ namespace PlayerScripts
         
         private void GroundCheck()
         {
-            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.2f);
+            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f,  Vector3.down, out var h,0.2f);
+            if (IsGrounded && h.collider.TryGetComponent(out GroundType type))
+            {
+                _groundType = type.type;
+            }
         }
         
         public void SetJumping()
@@ -168,7 +173,7 @@ namespace PlayerScripts
 
         public void PlayFootstep()
         {
-            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.footsteps, transform.position);
+            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.footsteps, transform.position, _groundType);
         }
         
         public void PlayJumpSound()

@@ -4471,6 +4471,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8551133150235091424, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1350145736862232838}
+    - targetCorrespondingSourceObject: {fileID: 8551133150235091424, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2260602834230030043}
   m_SourcePrefab: {fileID: 100100000, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
 --- !u!4 &8181599858421383343 stripped
 Transform:
@@ -4504,6 +4507,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 72911065360980774, guid: 55ffd42aea1458245a97802ee8461e83, type: 3}
+--- !u!114 &2260602834230030043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8845405112569928213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1001 &1521532888534474289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5178,6 +5194,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6451195443697101562, guid: af958879222072d49b0bd90eb46b7a2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4516867385066609539}
+    - targetCorrespondingSourceObject: {fileID: 6451195443697101562, guid: af958879222072d49b0bd90eb46b7a2e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1019002864862809762}
   m_SourcePrefab: {fileID: 100100000, guid: af958879222072d49b0bd90eb46b7a2e, type: 3}
 --- !u!4 &7065175666456185377 stripped
 Transform:
@@ -38888,6 +38907,19 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &1019002864862809762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7586132674329874587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1001 &3603486106183867476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67129,6 +67161,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bff5706359711364db16acfa93cb37d5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3512912734186653286}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bff5706359711364db16acfa93cb37d5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5836719225084914953}
   m_SourcePrefab: {fileID: 100100000, guid: bff5706359711364db16acfa93cb37d5, type: 3}
 --- !u!1 &4621219329526553960 stripped
 GameObject:
@@ -68994,6 +69029,19 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &5836719225084914953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4621219329526553960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!4 &5434172197346805714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bff5706359711364db16acfa93cb37d5, type: 3}
@@ -69263,6 +69311,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8551133150235091424, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2706219802874710790}
+    - targetCorrespondingSourceObject: {fileID: 8551133150235091424, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4150589589592547426}
   m_SourcePrefab: {fileID: 100100000, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}
 --- !u!1 &1177502224928516583 stripped
 GameObject:
@@ -69291,6 +69342,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 72911065360980774, guid: 55ffd42aea1458245a97802ee8461e83, type: 3}
+--- !u!114 &4150589589592547426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177502224928516583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!4 &1953582180255462237 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9070367193323289434, guid: 9040e3b94e7c869409b346d2d2ea3c45, type: 3}

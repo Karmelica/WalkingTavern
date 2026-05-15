@@ -85,12 +85,20 @@ namespace Managers
             if(scoreChange > 0){
                 totalScore = Mathf.RoundToInt(totalScore + (scoreChange * streak));
                 streak += 0.5f;
+                PlayKachingSoundRpc();
             } else {
                 totalScore = Mathf.RoundToInt(Math.Max(0, totalScore + scoreChange));
                 streak = 1f;
             }
             streak = Mathf.Min(streak, 5.5f);
             UpdateGUI();
+        }
+
+        
+        [Rpc(SendTo.Everyone)]
+        private void PlayKachingSoundRpc()
+        {
+            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.money);
         }
 
         private void UpdateGUI()

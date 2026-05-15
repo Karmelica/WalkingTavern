@@ -52,7 +52,6 @@ namespace Managers
         private void OnSceneLoaded(ulong clientId, string currentSceneName, LoadSceneMode loadSceneMode)
         {
             _isLoaded = true;
-
             if (clientId != NetworkManager.Singleton.LocalClientId) return;
             if (scenesToSpawnPlayersIn.Count == 0) throw new Exception("Scenes to spawn players in not set");
             foreach (var scene in scenesToSpawnPlayersIn)

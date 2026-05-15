@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cooking.ScriptableObjects;
+using Managers;
 using NaughtyAttributes;
 using TMPro;
 using Unity.Netcode;
@@ -125,6 +126,7 @@ namespace Cooking.Minigames
                 _placedIngredients[ingredientType] -= removedCount;
             }
             Helper.SpawnObject(dishType.Value);
+            AudioManager.Instance.StopStirring();
             
             UpdateRecipeText();
         }

@@ -7,9 +7,10 @@ namespace World.Caravan
 {
     public class CaravanControlScript : NetworkBehaviour, IInteractable
     {
+        private static readonly int Moving = Animator.StringToHash("Moving");
         private OwnerPlayer _drivingPlayer;
         private Rigidbody _rb;
-        private const float Speed = 80f;
+        private const float Speed = 6f;
         private NetworkVariable<bool> _isDriven = new NetworkVariable<bool>();
         [SerializeField] private GameObject caravan;
         [SerializeField] private GameObject room;
@@ -18,7 +19,7 @@ namespace World.Caravan
         [SerializeField] private Transform snail;
         [SerializeField] private float caravanHeight = 0.3f;
         [SerializeField] private float distance = 3f;
-        private Awaitable _snailMoving;
+        [SerializeField] private Animator animator;
 
         private void Awake()
         {
@@ -27,6 +28,9 @@ namespace World.Caravan
 
         private void Update()
         {
+
+            animator.SetBool(Moving, _rb.linearVelocity.magnitude > 0.1f);
+            
             if(Physics.Raycast(snail.position, Vector3.down, out var hit, 5f))
             {
                 var point = hit.point + Vector3.up * 1.2f;
@@ -74,22 +78,18 @@ namespace World.Caravan
         {
             if(Vector3.Dot(transform.forward, caravan.transform.forward) > 0)
                 transform.Rotate(transform.up, inputVector.x * inputVector.y * 50f * Time.fixedDeltaTime);
-            
-            if (_snailMoving == null || (inputVector.y > 0 && _snailMoving.IsCompleted))
-            {
-                _snailMoving = SnailMovement(inputVector);
-            }
+
+            SnailMovement(inputVector);
         }
 
-        private async Awaitable SnailMovement(Vector2 inputVector)
+        private void SnailMovement(Vector2 inputVector)
         {
             var forward = transform.forward;
             forward.y = 0;
-            var moveVector = (forward * inputVector.y).normalized * (Speed * 6f * Time.fixedDeltaTime);
+            var moveVector = (forward * inputVector.y).normalized * (Speed * Time.fixedDeltaTime);
 
-            if(_rb.linearVelocity.magnitude < Speed)
-                _rb.AddForce(moveVector, ForceMode.Impulse);
-            await Awaitable.WaitForSecondsAsync(1f);
+            if(_rb.linearVelocity.magnitude < Speed && inputVector.y > 0)
+                _rb.AddForce(moveVector, ForceMode.VelocityChange);
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]

@@ -1,4 +1,5 @@
 using Cooking.Minigames;
+using Managers;
 using UnityEngine;
 using World;
 
@@ -11,10 +12,14 @@ namespace Cooking
         private int _thisSlice = -1;
         private int _mixStreak;
         
+        private Vector2 _lastMousePos;
+        
         protected override void Awake()
         {
             base.Awake();
             _screenMiddle = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            
+            _lastMousePos = MousePos;
         }
         
         private void OnTriggerEnter(Collider other)
@@ -32,7 +37,12 @@ namespace Cooking
         protected override void DoMinigame()
         {
             base.DoMinigame();
-            if (!DidHit) return;
+            if (!DidHit)
+            {
+                AudioManager.Instance.StopStirring();
+                return;
+            }
+            PlayStirSound();
             var newSlice = GetSlice(MousePos);
 
             if (newSlice == _thisSlice || newSlice == -1) return;
@@ -53,6 +63,17 @@ namespace Cooking
                 Score++;
                 _mixStreak = 0;
             }
+        }
+
+        private void PlayStirSound()
+        {
+            var mousePos = MousePos;
+            if (mousePos != _lastMousePos) {
+                AudioManager.Instance.StartStirring();
+            }else {
+                AudioManager.Instance.StopStirring();
+            }
+            _lastMousePos = mousePos;
         }
 
         private int GetSlice(Vector3 mousePos)

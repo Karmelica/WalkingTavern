@@ -1,4 +1,5 @@
 using System;
+using FMODUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -10,6 +11,12 @@ public class PlayerOptions : MonoBehaviour
     [SerializeField] private TMP_Dropdown vSyncDropdown;
     [SerializeField] private Slider framerateSlider;
     [SerializeField] private TextMeshProUGUI framerateText;
+    
+    [Header("Volume")]
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider ambientSlider;
+    [SerializeField] private Slider uiSlider;
 
     private void Awake()
     {
@@ -40,6 +47,31 @@ public class PlayerOptions : MonoBehaviour
         Tutorial.ResetTutorials();
     }
 
+    public void ChangeMasterVolume(float value)
+    {
+        RuntimeManager.GetVCA("vca:/Master").setVolume(masterSlider.value);
+        
+        PlayerPrefs.SetFloat("masterVolume", masterSlider.value);
+    }
+    public void ChangeAmbientVolume(float value)
+    {
+        RuntimeManager.GetVCA("vca:/Ambient").setVolume(ambientSlider.value);
+        
+        PlayerPrefs.SetFloat("ambientVolume", ambientSlider.value);
+    }
+    public void ChangeSfxVolume(float value)
+    {
+        RuntimeManager.GetVCA("vca:/SFX").setVolume(sfxSlider.value);
+        
+        PlayerPrefs.SetFloat("sfxVolume", sfxSlider.value);
+    }
+    public void ChangeUIVolume(float value)
+    {
+        RuntimeManager.GetVCA("vca:/UI").setVolume(uiSlider.value);
+        
+        PlayerPrefs.SetFloat("uiVolume", uiSlider.value);
+    }
+
     private void UpdateOptions()
     {
         framerateSlider.interactable = vSyncDropdown.value == 0;
@@ -47,5 +79,10 @@ public class PlayerOptions : MonoBehaviour
         framerateText.text = Mathf.RoundToInt(framerateSlider.value).ToString();
         qualityLevelDropdown.value = QualitySettings.GetQualityLevel();
         vSyncDropdown.value = QualitySettings.vSyncCount;
+        
+        ambientSlider.value = PlayerPrefs.GetFloat("ambientVolume", 1);
+        sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1);
+        uiSlider.value = PlayerPrefs.GetFloat("uiVolume", 1);
+        masterSlider.value = PlayerPrefs.GetFloat("masterVolume", 1);
     }
 }

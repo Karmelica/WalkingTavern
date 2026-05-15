@@ -791,6 +791,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4303926355784753256}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3994981181778140015}
     - targetCorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6616828825830417082}
@@ -824,12 +827,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -3313330600900592384, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5941312359275201903}
+    - targetCorrespondingSourceObject: {fileID: -3313330600900592384, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1787884319762906113}
     - targetCorrespondingSourceObject: {fileID: -1812474920030035999, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 62084045148717430}
+    - targetCorrespondingSourceObject: {fileID: -1812474920030035999, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5551421936601197819}
     - targetCorrespondingSourceObject: {fileID: -6725881931148868369, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9056770100211870031}
+    - targetCorrespondingSourceObject: {fileID: -6725881931148868369, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6304996397887497035}
   m_SourcePrefab: {fileID: 100100000, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
 --- !u!1 &1693354198377802439 stripped
 GameObject:
@@ -858,6 +870,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5823587056276414295, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+--- !u!114 &1787884319762906113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693354198377802439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1 &2548021842993793062 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1812474920030035999, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
@@ -885,6 +910,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5465485375317174514, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+--- !u!114 &5551421936601197819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548021842993793062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1 &3909031187336841363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -884107597194977452, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
@@ -1068,6 +1106,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.70100003, y: 3.1030002, z: 0.010000001}
   m_TimeToStationary: 0.5
+--- !u!114 &3994981181778140015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5279844002942151318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1 &7434442363314737960 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6725881931148868369, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
@@ -1095,6 +1146,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3425556230871536759, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}
+--- !u!114 &6304996397887497035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434442363314737960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb55f01c933b5a4b90af46ef3856355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.GroundType
+  type: Wood
 --- !u!1 &8330946591842590177 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5324987326720538074, guid: 1de3c61e6a830314f929c06ef38d0208, type: 3}

@@ -19,6 +19,7 @@ namespace Cooking.Minigames
                 if (MousePos.y < Screen.height / 2 && _oldMousePos.y > Screen.height/2)
                 {
                     Score++;
+                    AudioManager.Instance.PlayOneShot(AudioEvents.Instance.slice);
                 }
             }
             _oldMousePos = MousePos;
