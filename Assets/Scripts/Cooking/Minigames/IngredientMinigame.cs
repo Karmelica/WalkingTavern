@@ -17,10 +17,16 @@ namespace Cooking.Minigames
 
         private void OnTriggerEnter(Collider other)
         {
+            AddFood(other);
+        }
+
+        private void AddFood(Collider other)
+        {
             if (CurrentFood.Any()) return;
             if (!other.gameObject.TryGetComponent(out FoodItem foodItem)) return;
             if (applicableFood.Any(ingredientType => ingredientType == foodItem.ingredientType))
             {
+                foodItem.OnObjectDisable += RemoveCollidedFood;
                 CurrentFood.Add(foodItem);
                 CurrentFood[0].transform.position = new Vector3(foodPlaceholder.position.x, CurrentFood[0].transform.position.y, foodPlaceholder.position.z);
                 CurrentFood[0].isOnMinigame = true;
@@ -29,14 +35,21 @@ namespace Cooking.Minigames
 
         private void OnTriggerExit(Collider other)
         {
+            RemoveCollidedFood(other);
+        }
+
+        private void RemoveCollidedFood(Collider other)
+        {
             if (!CheckForIngredients()) return;
-            if (CurrentFood[0] == other.gameObject.GetComponent<FoodItem>())
+            var food = CurrentFood[0];
+            if (food == other.gameObject.GetComponent<FoodItem>())
             {
+                food.OnObjectDisable -= RemoveCollidedFood;
                 CurrentFood[0].isOnMinigame = false;
                 RemoveFood();
             }
         }
-        
+
         protected override bool CheckForIngredients()
         {
             return CurrentFood.Any();

@@ -1544,7 +1544,7 @@ GameObject:
   - component: {fileID: 8817769484635913508}
   - component: {fileID: 6757008551592090718}
   - component: {fileID: 4108800651862743232}
-  - component: {fileID: 4164204112096882701}
+  - component: {fileID: 5204213948000860101}
   m_Layer: 7
   m_Name: TablesPlacer
   m_TagString: Untagged
@@ -1575,7 +1575,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6682961964202644327}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -6503147224676226389, guid: 32c142f466822f247b0781c3e3948b9a, type: 3}
 --- !u!23 &8490269400769757493
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1601,7 +1601,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4459625b187fa4746be9d25418190d91, type: 2}
+  - {fileID: 2100000, guid: 725c1fe83300fb148af56d056343a2f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1710,8 +1710,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!65 &4164204112096882701
-BoxCollider:
+--- !u!64 &5204213948000860101
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1728,9 +1728,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6503147224676226389, guid: 32c142f466822f247b0781c3e3948b9a, type: 3}
 --- !u!1 &7429556486899603535
 GameObject:
   m_ObjectHideFlags: 0

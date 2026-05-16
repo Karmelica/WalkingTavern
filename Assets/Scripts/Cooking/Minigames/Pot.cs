@@ -24,13 +24,25 @@ namespace Cooking
         
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
-            TryAddIngredient(foodItem);
+            AddCollidedFood(other);
         }
-        
-        private void OnTriggerExit(Collider other)
+
+        private void AddCollidedFood(Collider other)
         {
             if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
+            foodItem.OnObjectDisable += RemoveCollidedFood;
+            TryAddIngredient(foodItem);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            RemoveCollidedFood(other);
+        }
+
+        private void RemoveCollidedFood(Collider other)
+        {
+            if (!other.TryGetComponent(out ProcessedFoodItem foodItem)) return;
+            foodItem.OnObjectDisable -= RemoveCollidedFood;
             TryRemoveIngredient(foodItem);
         }
 

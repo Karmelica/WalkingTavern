@@ -108,7 +108,7 @@ namespace Managers
             info += "\nRequested Dishes:";
             if (_dishes.Count != 0) {
                 foreach (var dish in _dishes) {
-                    info += $"\n  {dish.Key.ToString()} x{dish.Value.ToString()}";
+                    info += $"\n  {Utilis.DeleteAndSplit(dish.Key.ToString(), "Dish")} x{dish.Value.ToString()}";
                 }
             }
             SendUpdatedScoreRpc(info);
@@ -182,7 +182,7 @@ namespace Managers
             {
                 return "Noname";
             }
-            return $"{firstNames?[Random.Range(0, firstNames.Count)]} {secondNames?[Random.Range(0, secondNames.Count)]}";
+            return $"{firstNames[Random.Range(0, firstNames.Count)]} {secondNames[Random.Range(0, secondNames.Count)]}";
         }
     }
 }

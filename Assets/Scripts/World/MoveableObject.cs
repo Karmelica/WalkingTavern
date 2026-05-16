@@ -13,6 +13,7 @@ namespace World
     {
         #region Variables
 
+        public Action<Collider> OnObjectDisable;
         [field: SerializeField] public uint ID { get; private set; }
 
         public bool isOnMinigame;
@@ -36,6 +37,11 @@ namespace World
             transform.position = hit.point + transform.up * _collider.bounds.extents.y;
         }
 
+        private void OnDisable()
+        {
+            OnObjectDisable?.Invoke(_collider);
+        }
+
         #endregion
         
         #region RPC Methods
@@ -55,6 +61,11 @@ namespace World
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
         private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
+        {
+            MoveLocally(setActive, placePosition);
+        }
+
+        private void MoveLocally(bool setActive, Vector3 placePosition)
         {
             transform.position = placePosition;
             gameObject.SetActive(setActive);

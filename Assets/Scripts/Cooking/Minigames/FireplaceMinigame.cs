@@ -20,11 +20,6 @@ namespace Cooking.Minigames
                 DoMinigame();
         }
 
-        private void OnDisable()
-        {
-            AudioManager.Instance.StopFireplace();
-        }
-
         protected override void DoMinigame()
         {
             if (!IsSpawned) return;
@@ -37,22 +32,33 @@ namespace Cooking.Minigames
 
         private void OnTriggerEnter(Collider other)
         {
+            AddCollidedFood(other);
+        }
+
+        private void AddCollidedFood(Collider other)
+        {
             if (!other.gameObject.TryGetComponent(out DishItem dishItem)) return;
-            
+            dishItem.OnObjectDisable += RemoveCollidedFood;
             CurrentFood.Add(dishItem);
             dishItem.isOnMinigame = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
+            RemoveCollidedFood(other);
+        }
+
+        private void RemoveCollidedFood(Collider other)
+        {
             if(!other.gameObject.TryGetComponent(out DishItem otherItem)) return;
             if (CurrentFood.Contains(otherItem))
             {
+                otherItem.OnObjectDisable -= RemoveCollidedFood;
                 otherItem.isOnMinigame = false;
                 CurrentFood.Remove(otherItem);
             }
         }
-        
+
         protected override bool CheckForIngredients()
         {
             return CurrentFood.Any();

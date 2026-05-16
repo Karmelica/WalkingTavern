@@ -145,7 +145,7 @@ namespace Cooking.Minigames
                 var ingredientQuantity = ingredient.quantity;
 
                 if (!_placedIngredients.TryGetValue(ingredientType, out var placedCount)) continue;
-                ingredientListText.text += $"\n{ingredientQuantity}/{placedCount} {ingredientType}   ";
+                ingredientListText.text += $"\n{ingredientQuantity}/{placedCount} {Utilis.SplitBigLetter(ingredientType.ToString())}   ";
             }
         }
         

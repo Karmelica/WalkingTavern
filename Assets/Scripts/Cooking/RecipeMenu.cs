@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Cooking.ScriptableObjects;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,7 +19,7 @@ namespace Cooking
             dropdown.ClearOptions();
             foreach (var dish in applicableDishes)
             {
-                dropdown.options.Add(new TMP_Dropdown.OptionData(dish.ToString()));
+                dropdown.options.Add(new TMP_Dropdown.OptionData(Utilis.DeleteAndSplit(dish.ToString(), "Dish")));
             }
         }
 
@@ -45,7 +43,11 @@ namespace Cooking
 
         public void DropdownValueChanged(int index)
         {
-            var dishType = (DishType)Enum.Parse(typeof(DishType), dropdown.options[dropdown.value].text); 
+            var type = dropdown.options[dropdown.value].text;
+            var replace = type.Replace(" ", "");
+            replace = "Dish" + replace;
+            Debug.Log(replace);
+            var dishType = (DishType)Enum.Parse(typeof(DishType), replace); 
             RecipeChangedRpc(dishType);
         }
 

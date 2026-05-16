@@ -13,7 +13,8 @@ namespace World
 
         public override string GetInteractText()
         {
-            return $"Pick up {processedIngredientType.ToString()}";
+            var str = processedIngredientType.ToString();
+            return $"Pick up {Utilis.SplitBigLetter(str)}";
         }
 
     }

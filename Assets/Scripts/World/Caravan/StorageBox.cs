@@ -24,8 +24,13 @@ namespace World.Caravan
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer) return;
             base.OnNetworkSpawn();
+            if (!IsServer) return;
+            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
             _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
         }
 
