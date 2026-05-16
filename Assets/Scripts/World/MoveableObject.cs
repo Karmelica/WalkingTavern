@@ -1,4 +1,5 @@
 using System;
+using Managers;
 using MyInterfaces;
 using NaughtyAttributes;
 using PlayerScripts;
@@ -58,6 +59,8 @@ namespace World
             transform.position = placePosition;
             gameObject.SetActive(setActive);
         }
+
+        public void PlayPickupSound() => AudioManager.Instance.PlayOneShot(AudioEvents.Instance.itemPickup, transform.position);
 
         #endregion
 

@@ -14,6 +14,8 @@ namespace Managers
         private EventInstance _menuMusicEvent;
         private EventInstance _ambientEvent;
         private EventInstance _stirEvent;
+        private EventInstance _footstepsEvent;
+        private EventInstance _fireplaceEvent;
 
         private void OnEnable()
         {
@@ -44,29 +46,32 @@ namespace Managers
         private void Start()
         {
             _menuMusicEvent = InitializeEventInstance(AudioEvents.Instance.menuMusic);
+            _fireplaceEvent = InitializeEventInstance(AudioEvents.Instance.fireplace);
             _ambientEvent = InitializeEventInstance(AudioEvents.Instance.backgroundMusic);
             _stirEvent = InitializeEventInstance(AudioEvents.Instance.stir);
+            _footstepsEvent = InitializeEventInstance(AudioEvents.Instance.footsteps);
         }
 
         private void OnDestroy()
         {
-            StopEventInstance(_menuMusicEvent);
-            StopEventInstance(_ambientEvent);
-            StopEventInstance(_stirEvent);
+            ReleaseEventInstance(_menuMusicEvent);
+            ReleaseEventInstance(_fireplaceEvent);
+            ReleaseEventInstance(_ambientEvent);
+            ReleaseEventInstance(_stirEvent);
+            ReleaseEventInstance(_footstepsEvent);
             if(Instance == this) Instance = null;
         }
 
-        public void PlayOneShot(EventReference eventReference, Vector3 audioPos = default, string groundType = "")
+        public void PlayOneShot(EventReference eventReference, Vector3 audioPos = default)
+        { 
+            RuntimeManager.PlayOneShot(eventReference, audioPos);
+        }
+
+        public void PlayFootSteps(Vector3 audioPos, string groundType)
         {
-            if(groundType != ""){
-                var eventInstance = RuntimeManager.CreateInstance(eventReference);
-                eventInstance.set3DAttributes(audioPos.To3DAttributes());
-                eventInstance.setParameterByNameWithLabel("GroundType", groundType);
-                eventInstance.start();
-                eventInstance.release();
-            }
-            else
-                RuntimeManager.PlayOneShot(eventReference, audioPos);
+            _footstepsEvent.set3DAttributes(audioPos.To3DAttributes());
+            _footstepsEvent.setParameterByNameWithLabel("GroundType", groundType);
+            _footstepsEvent.start();
         }
 
         #region Event Instances
@@ -83,20 +88,33 @@ namespace Managers
             PlayOneShot(AudioEvents.Instance.buttonClick);
         }
 
-        public void StartMenuMusic()
+        public void StartFireplace(Vector3 audioPos)
+        {
+            _fireplaceEvent.set3DAttributes(audioPos.To3DAttributes());
+            _fireplaceEvent.start();
+        }
+        
+        public void StopFireplace()
+        {
+            StopEventInstance(_fireplaceEvent);
+        }
+
+        private void StartMenuMusic()
         {
             StopAmbient();
             _menuMusicEvent.getPlaybackState(out var state);
-            if(state == PLAYBACK_STATE.STOPPED)
+            if(!_menuMusicEvent.isValid() || state == PLAYBACK_STATE.STOPPED)
                 StartEventInstance(_menuMusicEvent);
         }
-        public void StartAmbient()
+
+        private void StartAmbient()
         {
             StopMenuMusic();
             _ambientEvent.getPlaybackState(out var state);
-            if(state == PLAYBACK_STATE.STOPPED)
+            if(!_ambientEvent.isValid() || state == PLAYBACK_STATE.STOPPED)
                 StartEventInstance(_ambientEvent);
         }
+        
         public void StartStirring()
         {
             _stirEvent.getPlaybackState(out var state);
@@ -104,12 +122,13 @@ namespace Managers
                 StartEventInstance(_stirEvent);
             _stirEvent.setPaused(false);
         }
-        
-        public void StopMenuMusic()
+
+        private void StopMenuMusic()
         {
             StopEventInstance(_menuMusicEvent);
         }
-        public void StopAmbient()
+
+        private void StopAmbient()
         {
             StopEventInstance(_ambientEvent);
         }
@@ -126,7 +145,12 @@ namespace Managers
         private void StopEventInstance(EventInstance eventInstance)
         {
             eventInstance.stop(STOP_MODE.ALLOWFADEOUT);
-            //eventInstance.release();
+        }
+        
+        private void ReleaseEventInstance(EventInstance eventInstance)
+        {
+            eventInstance.stop(STOP_MODE.ALLOWFADEOUT);
+            eventInstance.release();
         }
 
         #endregion

@@ -72,7 +72,6 @@ namespace PlayerScripts
             SteamCurrentLobby.CurrentLobby?.Leave();
             SteamCurrentLobby.CurrentLobby = null;
             SceneManager.LoadScene("Menu");
-            AudioManager.Instance.StartMenuMusic();
         }
 
         public bool IsPaused()

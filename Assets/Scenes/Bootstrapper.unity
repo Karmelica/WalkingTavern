@@ -999,8 +999,20 @@ PrefabInstance:
       value: event:/Cooking/stirr
       objectReference: {fileID: 0}
     - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemDrop.Path
+      value: event:/Objects/putDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: fireplace.Path
+      value: event:/Ambient/fireplace
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
       propertyPath: menuMusic.Path
       value: event:/Ambient/menuAmbient
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemPickup.Path
+      value: event:/Objects/pickup
       objectReference: {fileID: 0}
     - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
       propertyPath: stir.Guid.Data1
@@ -1071,6 +1083,38 @@ PrefabInstance:
       value: -684604589
       objectReference: {fileID: 0}
     - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemDrop.Guid.Data1
+      value: -136037918
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemDrop.Guid.Data2
+      value: 1248716806
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemDrop.Guid.Data3
+      value: 1306822585
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemDrop.Guid.Data4
+      value: 1793187116
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: fireplace.Guid.Data1
+      value: -575840572
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: fireplace.Guid.Data2
+      value: 1189608739
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: fireplace.Guid.Data3
+      value: 520822166
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: fireplace.Guid.Data4
+      value: 1563528606
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
       propertyPath: menuMusic.Guid.Data1
       value: -387166437
       objectReference: {fileID: 0}
@@ -1085,6 +1129,22 @@ PrefabInstance:
     - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
       propertyPath: menuMusic.Guid.Data4
       value: 1096214987
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemPickup.Guid.Data1
+      value: 1251082377
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemPickup.Guid.Data2
+      value: 1292640525
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemPickup.Guid.Data3
+      value: -1086533189
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
+      propertyPath: itemPickup.Guid.Data4
+      value: -318530414
       objectReference: {fileID: 0}
     - target: {fileID: 4969101935834421834, guid: 767c0d3632b0f954eb40fdc039cc1344, type: 3}
       propertyPath: buttonClick.Guid.Data1

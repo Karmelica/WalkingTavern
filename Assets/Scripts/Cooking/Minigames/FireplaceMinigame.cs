@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Managers;
 using UnityEngine;
 using World;
 
@@ -6,10 +8,21 @@ namespace Cooking.Minigames
 {
     public class FireplaceMinigame : Minigame
     {
+        protected override void Awake()
+        {
+            base.Awake();
+            AudioManager.Instance.StartFireplace(transform.position);
+        }
+
         protected override void Update()
         {
             if(IsServer)
                 DoMinigame();
+        }
+
+        private void OnDisable()
+        {
+            AudioManager.Instance.StopFireplace();
         }
 
         protected override void DoMinigame()

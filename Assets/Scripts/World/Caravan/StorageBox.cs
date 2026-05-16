@@ -13,8 +13,6 @@ namespace World.Caravan
         [SerializeField] private Image foodIcon;
         [SerializeField] private bool unlimited;
         private NetworkVariable<int> _quantity = new();
-        //private FoodItem _lastIngredient;
-        //private OwnerPlayer _lastInteractor;
 
         private void Awake()
         {
@@ -50,7 +48,6 @@ namespace World.Caravan
 
         public IInteractable SecondaryInteract(OwnerPlayer interactor)
         {
-            //_lastInteractor = interactor;
             CheckIngredientServerRpc();
             return null;
         }
@@ -62,21 +59,8 @@ namespace World.Caravan
             _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
             var i = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientBox), transform.position + transform.forward * 0.5f, Quaternion.identity);
             i.GetComponent<NetworkObject>().Spawn(true);
-            /*PutInPlayerHandRpc(new RpcParams
-            {
-                Send = RpcTarget.Single(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp)
-            });*/
+            i.GetComponent<MoveableObject>().PlayPickupSound();
         }
-
-        /*[Rpc(SendTo.SpecifiedInParams, InvokePermission = RpcInvokePermission.Server)]
-        private void PutInPlayerHandRpc(RpcParams rpcParams = default)
-        {
-            var i = Instantiate(Resources.Load<GameObject>("Prefabs/Food/Ingredients/" + ingredientBox), transform.position + transform.forward * 1000f, Quaternion.identity);
-            _lastIngredient = i.GetComponent<FoodItem>();
-            _lastInteractor?.PickupFromBox(_lastIngredient);
-            _lastInteractor = null;
-            _lastIngredient = null;
-        }*/
 
         public string GetInteractText()
         {

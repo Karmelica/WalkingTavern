@@ -173,7 +173,7 @@ namespace PlayerScripts
 
         public void PlayFootstep()
         {
-            AudioManager.Instance.PlayOneShot(AudioEvents.Instance.footsteps, transform.position, _groundType);
+            AudioManager.Instance.PlayFootSteps(transform.position, _groundType);
         }
         
         public void PlayJumpSound()
@@ -390,11 +390,13 @@ namespace PlayerScripts
         {
             
             if (newValue == 0) {
+                AudioManager.Instance.PlayOneShot(AudioEvents.Instance.itemDrop, transform.position);
                 Destroy(ObjectInHand.gameObject);
                 ObjectInHand = null;
             }
             else
             {
+                AudioManager.Instance.PlayOneShot(AudioEvents.Instance.itemPickup, transform.position);
                 ObjectInHand = Instantiate(GetItems.GetObjectByID(newValue), _parentTransform.position, Quaternion.LookRotation(transform.forward), _parentTransform);
                 ObjectInHand.GetComponent<Collider>().enabled = false;
                 if (ObjectInHand is not DishItem item) return;

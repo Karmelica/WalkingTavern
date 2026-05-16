@@ -14,6 +14,7 @@ namespace Managers
         [Header("Ambient")]
         public EventReference backgroundMusic;
         public EventReference menuMusic;
+        public EventReference fireplace;
         [Header("Cooking")]
         public EventReference minigameComplete;
         public EventReference slice;
@@ -22,6 +23,9 @@ namespace Managers
         public EventReference money;
         [Header("UI")]
         public EventReference buttonClick;
+        [Header("UI")]
+        public EventReference itemDrop;
+        public EventReference itemPickup;
         
 
         private void OnEnable()
