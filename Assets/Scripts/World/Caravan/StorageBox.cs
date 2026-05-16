@@ -3,6 +3,7 @@ using MyInterfaces;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace World.Caravan
@@ -26,11 +27,13 @@ namespace World.Caravan
         {
             base.OnNetworkSpawn();
             if (!IsServer) return;
-            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
-            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
-            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
-            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
-            FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+            if(SceneManager.GetActiveScene().name == "GatheringLevel")
+            {
+                for (var i = 0; i < 5; i++)
+                {
+                    FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+                }
+            }
             _quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
         }
 
@@ -69,8 +72,8 @@ namespace World.Caravan
 
         public string GetInteractText()
         {
-            if(unlimited) return $"\nStorage ({ingredientBox})";
-            return $"\nStorage ({ingredientBox}: {_quantity.Value})";
+            if(unlimited) return $"\nStorage ({Utilis.SplitBigLetter(ingredientBox.ToString())})";
+            return $"\nStorage ({Utilis.SplitBigLetter(ingredientBox.ToString())}: {_quantity.Value})";
         }
 
         public bool IsInteractedWith()

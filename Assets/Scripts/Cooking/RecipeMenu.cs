@@ -46,7 +46,6 @@ namespace Cooking
             var type = dropdown.options[dropdown.value].text;
             var replace = type.Replace(" ", "");
             replace = "Dish" + replace;
-            Debug.Log(replace);
             var dishType = (DishType)Enum.Parse(typeof(DishType), replace); 
             RecipeChangedRpc(dishType);
         }
