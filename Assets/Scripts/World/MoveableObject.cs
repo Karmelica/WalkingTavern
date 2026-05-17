@@ -2,6 +2,7 @@ using System;
 using Managers;
 using MyInterfaces;
 using NaughtyAttributes;
+using Player;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;

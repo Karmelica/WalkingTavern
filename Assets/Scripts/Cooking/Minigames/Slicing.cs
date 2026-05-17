@@ -5,8 +5,6 @@ namespace Cooking.Minigames
 {
     public class Slicing : IngredientMinigame
     {
-        [Range(1, 10)]
-        
         private Vector2 _oldMousePos;
 
         protected override void DoMinigame()

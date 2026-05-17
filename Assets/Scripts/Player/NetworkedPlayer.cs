@@ -149,7 +149,7 @@ namespace PlayerScripts
         
         private void GroundCheck()
         {
-            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f,  Vector3.down, out var h,0.2f);
+            IsGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out var h, 0.2f);
             if (IsGrounded && h.collider.TryGetComponent(out GroundType type))
             {
                 _groundType = type.type;

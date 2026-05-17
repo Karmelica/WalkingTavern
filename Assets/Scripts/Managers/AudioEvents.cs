@@ -23,7 +23,7 @@ namespace Managers
         public EventReference money;
         [Header("UI")]
         public EventReference buttonClick;
-        [Header("UI")]
+        [Header("Objects")]
         public EventReference itemDrop;
         public EventReference itemPickup;
         

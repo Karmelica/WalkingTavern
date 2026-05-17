@@ -3,6 +3,7 @@ using Cooking.Minigames.Helpers;
 using JetBrains.Annotations;
 using Managers;
 using MyInterfaces;
+using Player;
 using PlayerScripts;
 using TMPro;
 using Unity.Netcode;
@@ -38,6 +39,7 @@ namespace Cooking.Minigames
         {
             MainCamera = Camera.main;
             Helper = GetComponent<Helper>();
+            RayHit = new();
         }
 
         protected virtual void Update()
@@ -78,10 +80,8 @@ namespace Cooking.Minigames
 
         private void MoveTool()
         {
-            if (tool)
-            {
-                tool.transform.position = RayHit.point + Vector3.up * 0.05f;
-            }
+            if (!tool) return;
+            tool.transform.position = RayHit.point + Vector3.up * 0.05f;
         }
 
         public IInteractable PickupOrDropObject(bool pickUp,

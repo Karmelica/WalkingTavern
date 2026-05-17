@@ -3,6 +3,7 @@ using System.Linq;
 using Managers;
 using MyInterfaces;
 using NaughtyAttributes;
+using Player;
 using PlayerScripts;
 using Unity.Netcode;
 using Unity.Netcode.Components;

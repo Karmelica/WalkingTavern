@@ -4,6 +4,7 @@ using System.Threading;
 using Cooking;
 using Managers;
 using MyInterfaces;
+using Player;
 using PlayerScripts;
 using TMPro;
 using Unity.Behavior;
@@ -40,7 +41,7 @@ public class Customer : NetworkBehaviour, IInteractable
     private Animator _animator;
     private AIManager _aiManager;
 
-    public NetworkVariable<FixedString64Bytes> customerName;
+    //public NetworkVariable<FixedString64Bytes> customerName;
     public NetworkVariable<DishType> requestedDish;
     public NetworkVariable<int> selectedEarsIndex;
     public NetworkVariable<int> selectedSkinIndex;
@@ -271,17 +272,13 @@ public class Customer : NetworkBehaviour, IInteractable
 
     public string GetInteractText()
     {
-        return $"Take order from\n{customerName.Value}";
+        //return $"Take order from\n{customerName.Value}";
+        return $"Take order";
     }
 
     public bool IsInteractedWith()
     {
         return orderTaken.Value;
-    }
-
-    public void ChangeOutline(bool show)
-    {
-        throw new NotImplementedException();
     }
 
     #endregion

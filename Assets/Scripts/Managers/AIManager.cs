@@ -169,7 +169,7 @@ namespace Managers
                 rand = Random.Range(0, customer.hairMats.Count);
                 customer.selectedHairMat = new NetworkVariable<int>(rand);
 
-                customer.customerName = new(GenerateName());
+                //customer.customerName = new(GenerateName());
 
                 customerInstance.GetComponent<NetworkObject>().Spawn();
                 yield return new WaitForSeconds(spawnTime);

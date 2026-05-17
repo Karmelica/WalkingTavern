@@ -97,11 +97,11 @@ MonoBehaviour:
         hasOnlyBiggerBricks: 0
     - position: {x: -1, y: -1, z: 0}
       index: 31
-      probeCount: 4096
+      probeCount: 3776
       minSubdiv: 0
       indexChunkCount: 91
       shChunkCount: 1
-      bricksCount: 64
+      bricksCount: 59
       indirectionEntryInfo:
       - positionInBricks: {x: -27, y: -27, z: 0}
         minSubdiv: 0
@@ -139,11 +139,11 @@ MonoBehaviour:
         hasOnlyBiggerBricks: 0
     - position: {x: -1, y: 0, z: 0}
       index: 36
-      probeCount: 54336
+      probeCount: 54144
       minSubdiv: 0
       indexChunkCount: 91
       shChunkCount: 7
-      bricksCount: 849
+      bricksCount: 846
       indirectionEntryInfo:
       - positionInBricks: {x: -27, y: 0, z: 0}
         minSubdiv: 0
@@ -326,7 +326,7 @@ MonoBehaviour:
     m_Keys:
     - Default
     m_Values:
-    - sceneHash: -898167663
+    - sceneHash: -2116429225
       cellDataAsset:
         m_AssetGUID: 53099ae5a6c1b55469b91225b36787e7
         m_StreamableAssetPath: APVStreamingAssets\ab598c684ac5df34facdf02dd1855fba\53099ae5a6c1b55469b91225b36787e7.bytes
@@ -469,30 +469,30 @@ MonoBehaviour:
       - offset: 55696
         elementCount: 1036
       - offset: 72272
-        elementCount: 64
-      - offset: 73296
+        elementCount: 59
+      - offset: 73216
         elementCount: 1377
-      - offset: 95328
+      - offset: 95248
         elementCount: 820
-      - offset: 108448
-        elementCount: 849
-      - offset: 122032
+      - offset: 108368
+        elementCount: 846
+      - offset: 121904
         elementCount: 1778
-      - offset: 150480
+      - offset: 150352
         elementCount: 1381
-      - offset: 172576
+      - offset: 172448
         elementCount: 820
-      - offset: 185696
+      - offset: 185568
         elementCount: 820
-      - offset: 198816
+      - offset: 198688
         elementCount: 1805
-      - offset: 227696
+      - offset: 227568
         elementCount: 1043
-      - offset: 244384
+      - offset: 244256
         elementCount: 1855
-      - offset: 274064
+      - offset: 273936
         elementCount: 1824
-      - offset: 303248
+      - offset: 303120
         elementCount: 1268
     m_Asset: {fileID: 4900000, guid: 33f1c6bf04acc2e4398dbd6f16e2f93a, type: 3}
   cellSupportDataAsset:

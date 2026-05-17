@@ -1,5 +1,6 @@
 using System;
 using MyInterfaces;
+using Player;
 using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;

@@ -3,6 +3,7 @@ using System.Collections;
 using Cooking.Minigames;
 using JetBrains.Annotations;
 using MyInterfaces;
+using PlayerScripts;
 using Steamworks;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -10,10 +11,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.Rendering.Universal;
-using World;
 using World.Caravan;
 
-namespace PlayerScripts
+namespace Player
 {
     /// <summary>
     /// Obsługuje ruch gracza, skakanie i input w środowisku sieciowym
@@ -300,7 +300,7 @@ namespace PlayerScripts
         private void Jump()
         {
             if (!_networkedPlayer.IsGrounded) return;
-
+            
             _networkedPlayer.SetJumping();
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Force);
         }
@@ -340,7 +340,7 @@ namespace PlayerScripts
         
         public void OnMove(InputAction.CallbackContext context)
         {
-            if(PlayerPrefs.GetInt("moving") == 0){
+            if(PlayerPrefs.GetInt("moving", 0) == 0){
                 ShowTutorialPage("moving");
             }
             _inputVector = context.ReadValue<Vector2>();
