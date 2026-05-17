@@ -243,9 +243,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   requiredScore: 10
   instructions: {fileID: 6928032955803721082}
+  tool: {fileID: 0}
   cameraLocation: {fileID: 7510776570666144159}
   foodPlaceholder: {fileID: 3587692666235625113}
-  dishType: 0
+  dishType:
+    m_InternalValue: 0
   ingredientListText: {fileID: 8967413785468590969}
 --- !u!1001 &1831701574318747683
 PrefabInstance:
@@ -313,7 +315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5866793205270198782, guid: e98d26f47c0a7b94a9af3016a95a71ad, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2814314516
+      value: 996587629
       objectReference: {fileID: 0}
     - target: {fileID: 6225826298896997278, guid: e98d26f47c0a7b94a9af3016a95a71ad, type: 3}
       propertyPath: m_Pivot.x
