@@ -138,9 +138,11 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   requiredScore: 8
   instructions: {fileID: 1116722107931449990}
+  tool: {fileID: 0}
   cameraLocation: {fileID: 7727629921811679326}
   foodPlaceholder: {fileID: 6215958971858892260}
-  dishType: 1
+  dishType:
+    m_InternalValue: 0
   ingredientListText: {fileID: 7057140187696094244}
 --- !u!114 &1988282627651429507
 MonoBehaviour:
@@ -157,7 +159,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   shouldSpawnSomeIngredients: 1
   spawnLocation: {fileID: 6215958971858892260}
-  particles: {fileID: 0}
+  particles: {fileID: 2285905322232560349, guid: 6e34ff841e884a64a8ae03adf0ddd3cb, type: 3}
 --- !u!64 &8588358569864495664
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -534,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5866793205270198782, guid: e98d26f47c0a7b94a9af3016a95a71ad, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1724336093
+      value: 656652762
       objectReference: {fileID: 0}
     - target: {fileID: 6225826298896997278, guid: e98d26f47c0a7b94a9af3016a95a71ad, type: 3}
       propertyPath: m_Pivot.x
