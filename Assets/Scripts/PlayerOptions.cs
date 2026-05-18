@@ -74,7 +74,15 @@ public class PlayerOptions : MonoBehaviour
 
     private void UpdateOptions()
     {
-        framerateSlider.interactable = vSyncDropdown.value == 0;
+        if (vSyncDropdown.value == 0) {
+            framerateSlider.interactable = true;
+            framerateSlider.value = Application.targetFrameRate;
+            Application.targetFrameRate = Mathf.RoundToInt(framerateSlider.value);
+        }
+        else
+        {
+            framerateSlider.interactable = false;
+        }
         framerateSlider.value = Application.targetFrameRate;
         framerateText.text = Mathf.RoundToInt(framerateSlider.value).ToString();
         qualityLevelDropdown.value = QualitySettings.GetQualityLevel();

@@ -142,7 +142,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4022241717667640571}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.6014559, y: 0.00000020237863, z: -0.00000015236064, w: -0.79890597}
+  m_LocalRotation: {x: -0.60145575, y: -0, z: -0, w: -0.7989062}
   m_LocalPosition: {x: -0, y: 0.855, z: -0.246}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1707988120
+  GlobalObjectIdHash: 21845534
   InScenePlacedSourceGlobalObjectIdHash: 21845534
   DeferredDespawnTick: 0
   Ownership: 1
@@ -345,6 +345,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   requiredScore: 8
   instructions: {fileID: 8633447898793361119}
+  tool: {fileID: 0}
   cameraLocation: {fileID: 9209537037356184122}
   foodPlaceholder: {fileID: 2756045895714045244}
   applicableFood: 00000000
@@ -431,8 +432,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Move your mouse clockwise
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bf1140cd6c93abd4c96649eadd2e1075, type: 2}
+  m_sharedMaterial: {fileID: -6308467211712282751, guid: bf1140cd6c93abd4c96649eadd2e1075, type: 2}
   m_fontSharedMaterials:
   - {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontMaterial: {fileID: 0}
