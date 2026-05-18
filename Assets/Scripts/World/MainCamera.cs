@@ -11,12 +11,12 @@ namespace World
         private void Awake()
         {
             _portalCameras = FindObjectsByType<PortalCamera>(FindObjectsSortMode.None);
-            RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+            //RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
         }
 
         private void OnDisable()
         {
-            RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            //RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
         }
 
         private void OnBeginCameraRendering(ScriptableRenderContext context, Camera contextCamera)

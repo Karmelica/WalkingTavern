@@ -18,10 +18,8 @@ namespace World.Caravan
 
         private void Awake()
         {
-            foodIcon.material = new Material(Resources.Load<Material>("Icons/Food/FoodIcon"))
-            {
-                mainTexture = Resources.Load<Texture>("Icons/Food/" + ingredientBox)
-            };
+            foodIcon.sprite = Resources.Load<Sprite>("Icons/Food/" + ingredientBox);
+            foodIcon.SetNativeSize();
         }
 
         public override void OnNetworkSpawn()

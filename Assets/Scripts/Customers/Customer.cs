@@ -127,6 +127,7 @@ public class Customer : NetworkBehaviour, IInteractable
     private void ChangeFoodIcon(DishType newValue)
     {
         foodIcon.sprite = Resources.Load<Sprite>("Icons/Food/" + newValue);
+        foodIcon.SetNativeSize();
     }
 
     public override void OnNetworkDespawn()

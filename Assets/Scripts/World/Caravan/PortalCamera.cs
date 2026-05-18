@@ -26,14 +26,19 @@ namespace World.Caravan
         
             _portalCam.fieldOfView = _playerCam.fieldOfView;
             
-            RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 0);
-            _portalCam.targetTexture = rt;
-            portalRenderer.material.mainTexture = rt;
+            /*_viewTexture = new RenderTexture(Screen.width, Screen.height, 0);
+            _portalCam.targetTexture = _viewTexture;
+            portalRenderer.material.mainTexture = _viewTexture;*/
         }
 
         private void OnValidate()
         {
             if (otherPortal) otherPortal.otherPortal = this;
+        }
+
+        private void LateUpdate()
+        {
+            Render();
         }
 
         private void CreateViewTexture ()
@@ -59,8 +64,12 @@ namespace World.Caravan
             var m = transform.localToWorldMatrix * otherPortal.transform.worldToLocalMatrix * _playerCam.transform.localToWorldMatrix;
             _portalCam.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
             
+            portalRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            
             SetNearClipPlane();
             _portalCam.Render();
+            
+            portalRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
         }
     
         void SetNearClipPlane () {
