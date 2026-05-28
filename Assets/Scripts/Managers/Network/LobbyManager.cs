@@ -68,6 +68,7 @@ namespace Managers.Network
 
 		private void OnEnable()
 		{
+			if (!SteamClient.IsValid) return;
 			SteamMatchmaking.OnLobbyMemberJoined += PlayerJoined;
 			SteamMatchmaking.OnLobbyMemberLeave += PlayerLeft;
 			SteamMatchmaking.OnLobbyCreated += LobbyCreated;
@@ -77,6 +78,7 @@ namespace Managers.Network
 
 		private void OnDisable()
 		{
+			if (!SteamClient.IsValid) return;
 			SteamMatchmaking.OnLobbyMemberJoined -= PlayerJoined;
 			SteamMatchmaking.OnLobbyMemberLeave -= PlayerLeft;
 			SteamMatchmaking.OnLobbyCreated -= LobbyCreated;
@@ -111,8 +113,17 @@ namespace Managers.Network
 
 			lobbyId.text = lobby.Id.ToString();
 			ShowPlayers(lobby);
-			SetUI();
+			SetUI(false);
 			_targetLocation = lobbyLocation;
+		}
+		
+		private void LobbyEntered()
+		{
+			NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
+			NetworkManager.Singleton.StartHost();
+			
+			_targetLocation = lobbyLocation;
+			SetUI(true);
 		}
 
 		private async void GameLobbyJoinRequested(Lobby lobby, SteamId steamId)
@@ -140,12 +151,17 @@ namespace Managers.Network
 
 		public void OnHostButtonClicked()
 		{
-			SteamMatchmaking.CreateLobbyAsync(4);
+			if (SteamClient.IsValid) {
+				SteamMatchmaking.CreateLobbyAsync(4);
+			} else {
+				LobbyEntered();
+			}
 		}
 
 		public async void OnClientButtonClicked()
 		{
 			try {
+				if (!SteamClient.IsValid) return;
 				if (!ulong.TryParse(_clientSteamIdInputField.text, out var lobbyID)) return;
 				await SteamMatchmaking.JoinLobbyAsync(lobbyID);
 			} catch (Exception e) {
@@ -163,12 +179,21 @@ namespace Managers.Network
 
 		public void OnLeaveButtonClicked()
 		{
-			SteamCurrentLobby.CurrentLobby?.Leave();
-			SteamCurrentLobby.CurrentLobby = null;
-			SetUI();
-			NetworkManager.Singleton.Shutdown();
-			NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
-			_targetLocation = menuLocation;
+			if (!SteamClient.IsValid) {
+				NetworkManager.Singleton.Shutdown();
+				NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+				_targetLocation = menuLocation;
+				SetUI(true);
+				
+			} else {
+				SteamCurrentLobby.CurrentLobby?.Leave();
+				SteamCurrentLobby.CurrentLobby = null;
+				SetUI(false);
+				NetworkManager.Singleton.Shutdown();
+				NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+				_targetLocation = menuLocation;
+				
+			}
 		}
 
 		public void OnStartGameButtonClicked()
@@ -193,10 +218,16 @@ namespace Managers.Network
 			textEditor.Copy();
 		}
 
-		private void SetUI()
+		private void SetUI(bool offline)
 		{
-			loginUI.SetActive(SteamCurrentLobby.CurrentLobby == null);
-			lobbyUI.SetActive(SteamCurrentLobby.CurrentLobby != null);
+			if (offline) {
+				loginUI.SetActive(_targetLocation == menuLocation);
+				lobbyUI.SetActive(_targetLocation != menuLocation);
+			} else {
+				loginUI.SetActive(SteamCurrentLobby.CurrentLobby == null);
+				lobbyUI.SetActive(SteamCurrentLobby.CurrentLobby != null);
+			}
+
 			startGameButton.SetActive(NetworkManager.Singleton.IsHost);
 			waitingForPlayersText.SetActive(!NetworkManager.Singleton.IsHost);
 		}

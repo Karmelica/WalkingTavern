@@ -1,32 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using Netcode.Transports.Facepunch;
+using Steamworks;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using UnityEngine;
 
 namespace Managers.Network.Steam
 {
 	public class SteamBootstrapper : MonoBehaviour
 	{
-		/*private void OnEnable()
+		[SerializeField] private NetworkManager networkManager;
+		[SerializeField] private FacepunchTransport facepunchTransport;
+		[SerializeField] private UnityTransport unityTransport;
+		
+		private void Awake()
 		{
-		    try
-		    {
-		        SteamClient.Init( 480 );
-		        Debug.Log( "Steam initialized successfully." );
-		    }
-		    catch ( Exception e )
-		    {
-		        //if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
-		        Debug.LogWarning( $"Steam initialization failed: {e.Message}" );
-		    }
-
+			if (!SteamClient.IsValid) {
+				networkManager.NetworkConfig.NetworkTransport = unityTransport;
+			}
 		}
-
-		private void Update()
-		{
-		    SteamClient.RunCallbacks();
-		}
-
-		private void OnDisable()
-		{
-		    SteamClient.Shutdown();
-		}*/
 	}
 }

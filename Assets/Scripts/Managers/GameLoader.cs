@@ -17,7 +17,7 @@ namespace Managers
 				_loading = SceneManager.LoadSceneAsync("Menu");
 				_loading.allowSceneActivation = false;
 			} catch (Exception e) {
-				Debug.LogError(e);
+				Debug.LogException(e);
 				throw;
 			}
 		}

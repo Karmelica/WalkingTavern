@@ -149,7 +149,7 @@ namespace Player
 				Cursor.visible = false;
 
 				foreach (var playerMesh in localPlayerMesh) playerMesh.enabled = false;
-				_networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
+				if(SteamClient.IsValid) _networkedPlayer.SetSteamNicknameRpc(SteamClient.SteamId.Value);
 				_networkedPlayer.SetSkinRpc(PlayerPrefs.GetInt("PlayerSkin", 0));
 				_networkedPlayer.SetFaceRpc(PlayerPrefs.GetInt("PlayerFace", 0));
 				_networkedPlayer.SetEarsRpc(PlayerPrefs.GetInt("PlayerEars", 0));

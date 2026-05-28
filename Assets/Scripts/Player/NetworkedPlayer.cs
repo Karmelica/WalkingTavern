@@ -122,8 +122,7 @@ namespace PlayerScripts
 			PantsColorChanged(_playerPantsColor.Value);
 			ShirtColorChanged(_playerShirtColor.Value);
 			HairColorChanged(_playerHairColor.Value);
-
-
+			
 			_parentTransform = IsOwner ? localHandTransform : networkedHandTransform;
 			_objectId.OnValueChanged += ChangeObjectInHand;
 		}
@@ -142,7 +141,6 @@ namespace PlayerScripts
 			_playerHairColor.OnValueChanged -= OnHairColorChanged;
 			_playerPantsColor.OnValueChanged -= OnPantsColorChanged;
 			_playerShirtColor.OnValueChanged -= OnShirtColorChanged;
-
 
 			_objectId.OnValueChanged -= ChangeObjectInHand;
 		}
@@ -330,6 +328,7 @@ namespace PlayerScripts
 		[Rpc(SendTo.Owner, InvokePermission = RpcInvokePermission.Everyone)]
 		public void SetSteamNicknameRpc(ulong id)
 		{
+			if (!SteamClient.IsValid) return;
 			_playerNickname.Value = new Friend(id).Name;
 		}
 
