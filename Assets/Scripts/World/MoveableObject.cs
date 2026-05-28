@@ -57,10 +57,6 @@ namespace World
 		public void PlaceDown()
 		{
 			beingMoved = false;
-			/*Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity, ~(1 << 2),
-				QueryTriggerInteraction.Ignore);
-			transform.up = hit.normal;
-			transform.position = hit.point + transform.up * _collider.bounds.extents.y;*/
 		}
 
 		public void MoveOnMinigame(Vector3 position)

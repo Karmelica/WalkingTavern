@@ -75,9 +75,9 @@ namespace PlayerScripts
 		public void LeaveToMenu()
 		{
 			if (FoodStorage.Instance != null) Destroy(FoodStorage.Instance.gameObject);
-			NetworkManager.Singleton.Shutdown();
 			SteamCurrentLobby.CurrentLobby?.Leave();
 			SteamCurrentLobby.CurrentLobby = null;
+			NetworkManager.Singleton.Shutdown();
 			SceneManager.LoadScene("Menu");
 		}
 
