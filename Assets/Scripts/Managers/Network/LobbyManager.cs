@@ -5,9 +5,11 @@ using Steamworks;
 using Steamworks.Data;
 using TMPro;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Managers.Network
 {
@@ -16,6 +18,7 @@ namespace Managers.Network
 		[SerializeField] private GameObject loginUI;
 		[SerializeField] private GameObject lobbyUI;
 		[SerializeField] private GameObject startGameButton;
+		[SerializeField] private Button joinGameButton;
 		[SerializeField] private GameObject waitingForPlayersText;
 		[SerializeField] private TextMeshProUGUI playersInLobby;
 		[SerializeField] private TextMeshProUGUI lobbyId;
@@ -29,7 +32,7 @@ namespace Managers.Network
 		[SerializeField] private Transform lobbyLocation;
 		private TMP_InputField _clientSteamIdInputField;
 		private Transform _targetLocation;
-
+		
 		#region Connection Approval
 
 		private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request,
@@ -53,10 +56,18 @@ namespace Managers.Network
 
 		private void Awake()
 		{
+			
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
 			_clientSteamIdInputField = GetComponentInChildren<TMP_InputField>();
 			_targetLocation = menuLocation;
+			
+			if (!SteamClient.IsValid) {
+				NetworkManager.Singleton.NetworkConfig.NetworkTransport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+				joinGameButton.interactable = false;
+				_clientSteamIdInputField.placeholder.GetComponent<TextMeshProUGUI>().text = "Steam not detected";
+				_clientSteamIdInputField.interactable = false;
+			}
 		}
 
 		private void Update()

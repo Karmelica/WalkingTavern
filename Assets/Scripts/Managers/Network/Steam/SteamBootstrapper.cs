@@ -9,15 +9,5 @@ namespace Managers.Network.Steam
 {
 	public class SteamBootstrapper : MonoBehaviour
 	{
-		[SerializeField] private NetworkManager networkManager;
-		[SerializeField] private FacepunchTransport facepunchTransport;
-		[SerializeField] private UnityTransport unityTransport;
-		
-		private void Awake()
-		{
-			if (!SteamClient.IsValid) {
-				networkManager.NetworkConfig.NetworkTransport = unityTransport;
-			}
-		}
 	}
 }
