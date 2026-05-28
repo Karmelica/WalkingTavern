@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Managers;
 using MyInterfaces;
 using Player;
-using PlayerScripts;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -13,106 +12,107 @@ using World;
 
 namespace Cooking.Minigames
 {
-    [RequireComponent(typeof(Helper))]
-    public abstract class Minigame : NetworkBehaviour, IInteractable {
-        
-        [Header("Minigame Properties")]
-        [SerializeField] protected int requiredScore = 10;
-        protected int Score;
-        protected Vector2 MousePos;
-        protected RaycastHit RayHit;
-        protected bool DidHit;
-        protected List<MoveableObject> CurrentFood = new();
+	[RequireComponent(typeof(Helper))]
+	public abstract class Minigame : NetworkBehaviour, IInteractable
+	{
+		[Header("Minigame Properties")] [SerializeField]
+		protected int requiredScore = 10;
 
-        [Header("Components")]
-        [SerializeField] private TextMeshProUGUI instructions;
-        [SerializeField] [CanBeNull] private GameObject tool;
-        public Transform cameraLocation;
-        public Transform foodPlaceholder;
-        protected Camera MainCamera;
-        protected Helper Helper;
-        protected OwnerPlayer OwnerPlayer;
-        protected bool Interacted;
-        protected bool ShowCursor = true;
+		[Header("Components")] [SerializeField]
+		private TextMeshProUGUI instructions;
 
-        protected virtual void Awake()
-        {
-            MainCamera = Camera.main;
-            Helper = GetComponent<Helper>();
-            RayHit = new();
-        }
+		[SerializeField] [CanBeNull] private GameObject tool;
+		public Transform cameraLocation;
+		public Transform foodPlaceholder;
+		protected List<MoveableObject> CurrentFood = new();
+		protected bool DidHit;
+		protected Helper Helper;
+		protected bool Interacted;
+		protected Camera MainCamera;
+		protected Vector2 MousePos;
+		protected OwnerPlayer OwnerPlayer;
+		protected RaycastHit RayHit;
+		protected int Score;
+		protected bool ShowCursor = true;
 
-        protected virtual void Update()
-        {
-            MoveTool();
-            if (!CheckForIngredients()) return;
-            
-            if (Score == requiredScore)
-            {
-                FinishMinigameRpc();
-                AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
-                Score = 0;
-                return;
-            }
-            DoMinigame();
-        }
+		protected virtual void Awake()
+		{
+			MainCamera = Camera.main;
+			Helper = GetComponent<Helper>();
+			RayHit = new RaycastHit();
+		}
 
-        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
-        private void FinishMinigameRpc()
-        {
-            CompleteMinigame();
-            RemoveFood();
-        }
+		protected virtual void Update()
+		{
+			MoveTool();
+			if (!CheckForIngredients()) return;
 
-        protected abstract bool CheckForIngredients();
+			if (Score == requiredScore) {
+				FinishMinigameRpc();
+				AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
+				Score = 0;
+				return;
+			}
 
-        protected virtual void RemoveFood() { }
+			DoMinigame();
+		}
 
-        protected abstract void CompleteMinigame();
+		public IInteractable PickupOrDropObject(bool pickUp,
+			Vector3 placePosition)
+		{
+			OwnerPlayer = null;
+			Interacted = false;
+			if (tool) tool.SetActive(false);
+			instructions.enabled = false;
+			return null;
+		}
 
-        protected virtual void DoMinigame()
-        {
-            if (!MainCamera) return;
-            MousePos = Mouse.current.position.ReadValue();
-            DidHit = Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit) &&
-                RayHit.collider.gameObject && Interacted;
-        }
+		public IInteractable SecondaryInteract(OwnerPlayer interactor)
+		{
+			OwnerPlayer = interactor;
+			OwnerPlayer.SetCanMove(false);
+			OwnerPlayer.SetCooking(true, ShowCursor);
+			OwnerPlayer.SetCameraLocation(cameraLocation);
+			Interacted = true;
+			if (tool) tool.SetActive(true);
+			instructions.enabled = true;
+			return this;
+		}
 
-        private void MoveTool()
-        {
-            if (!tool) return;
-            tool.transform.position = RayHit.point + Vector3.up * 0.05f;
-        }
+		public abstract string GetInteractText();
 
-        public IInteractable PickupOrDropObject(bool pickUp,
-            Vector3 placePosition)
-        {
-            OwnerPlayer = null;
-            Interacted = false;
-            if(tool) tool.SetActive(false);
-            instructions.enabled = false;
-            return null;
-        }
+		public bool IsInteractedWith()
+		{
+			return Interacted;
+		}
 
-        public IInteractable SecondaryInteract(OwnerPlayer interactor){
-            OwnerPlayer =  interactor;
-            OwnerPlayer.SetCanMove(false);
-            OwnerPlayer.SetCooking(true, ShowCursor);
-            OwnerPlayer.SetCameraLocation(cameraLocation);
-            Interacted = true;
-            if(tool) tool.SetActive(true);
-            instructions.enabled = true;
-            return this;
-        }
+		[Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
+		private void FinishMinigameRpc()
+		{
+			CompleteMinigame();
+			RemoveFood();
+		}
 
-        public abstract string GetInteractText();
+		protected abstract bool CheckForIngredients();
 
-        public bool IsInteractedWith()
-        {
-            return Interacted;
-        }
-    }
+		protected virtual void RemoveFood()
+		{
+		}
+
+		protected abstract void CompleteMinigame();
+
+		protected virtual void DoMinigame()
+		{
+			if (!MainCamera) return;
+			MousePos = Mouse.current.position.ReadValue();
+			DidHit = Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit) &&
+			         RayHit.collider.gameObject && Interacted;
+		}
+
+		private void MoveTool()
+		{
+			if (!tool) return;
+			tool.transform.position = RayHit.point + Vector3.up * 0.05f;
+		}
+	}
 }
-
-
-

@@ -1,34 +1,32 @@
-﻿using System;
-using Steamworks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Managers.Network.Steam
 {
-    public class SteamBootstrapper : MonoBehaviour
-    {
-        /*private void OnEnable()
-        {
-            try
-            {
-                SteamClient.Init( 480 );
-                Debug.Log( "Steam initialized successfully." );
-            }
-            catch ( Exception e )
-            {
-                //if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
-                Debug.LogWarning( $"Steam initialization failed: {e.Message}" );
-            }
-            
-        }
+	public class SteamBootstrapper : MonoBehaviour
+	{
+		/*private void OnEnable()
+		{
+		    try
+		    {
+		        SteamClient.Init( 480 );
+		        Debug.Log( "Steam initialized successfully." );
+		    }
+		    catch ( Exception e )
+		    {
+		        //if(e.Message.Contains("Calling SteamClient.Init but is already initialized")) return;
+		        Debug.LogWarning( $"Steam initialization failed: {e.Message}" );
+		    }
 
-        private void Update()
-        {
-            SteamClient.RunCallbacks();
-        }
+		}
 
-        private void OnDisable()
-        {
-            SteamClient.Shutdown();
-        }*/
-    }
+		private void Update()
+		{
+		    SteamClient.RunCallbacks();
+		}
+
+		private void OnDisable()
+		{
+		    SteamClient.Shutdown();
+		}*/
+	}
 }

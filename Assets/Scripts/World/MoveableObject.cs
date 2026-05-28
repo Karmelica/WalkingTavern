@@ -1,106 +1,116 @@
 using System;
 using Managers;
 using MyInterfaces;
-using NaughtyAttributes;
 using Player;
-using PlayerScripts;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace World
 {
-    [RequireComponent(typeof(Collider))]
-    public class MoveableObject : NetworkBehaviour, IInteractable, IObjectID
-    {
-        #region Variables
+	[RequireComponent(typeof(Collider))]
+	public class MoveableObject : NetworkBehaviour, IInteractable, IObjectID
+	{
+		#region Variables
 
-        public Action<Collider> OnObjectDisable;
-        [field: SerializeField] public uint ID { get; private set; }
+		public Action<Collider> OnObjectDisable;
+		[field: SerializeField] public uint ID { get; private set; }
 
-        public bool isOnMinigame;
-        private Collider _collider;
+		public bool isOnMinigame;
+		public bool beingMoved;
+		private Collider _collider;
 
-        #endregion
+		#endregion
 
-        #region Unity Methods
-        
-        protected virtual void Awake()
-        {
-            _collider = GetComponent<Collider>();
-        }
+		#region Unity Methods
 
-        protected virtual void Update()
-        {
-            if (transform.parent || isOnMinigame) return;
-            Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
-                QueryTriggerInteraction.Ignore);
-            transform.up = hit.normal;
-            transform.position = hit.point + transform.up * _collider.bounds.extents.y;
-        }
+		protected virtual void Awake()
+		{
+			_collider = GetComponent<Collider>();
+		}
 
-        private void OnDisable()
-        {
-            OnObjectDisable?.Invoke(_collider);
-        }
+		protected virtual void Update()
+		{
+			if (beingMoved) return;
+			if (!Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity, ~(1 << 2),
+				    QueryTriggerInteraction.Ignore)) {
+				return;
+			}
 
-        #endregion
-        
-        #region RPC Methods
-        
-        public void PlaceDown()
-        {
-            Physics.Raycast(transform.position, Vector3.down, out var hit, Single.PositiveInfinity, ~(1 << 2),
-                QueryTriggerInteraction.Ignore);
-            transform.up = hit.normal;
-            transform.position = hit.point + transform.up * _collider.bounds.extents.y;
-        }
+			transform.up = Vector3.Lerp(transform.up, hit.normal, 10f * Time.deltaTime);
 
-        public void MoveOnMinigame(Vector3 position)
-        {
-            transform.position = position;
-        }
+			var tempPos = hit.point + transform.up * _collider.bounds.extents.y;
+			transform.position = Vector3.Lerp(transform.position, tempPos, 9.81f * Time.deltaTime);
 
-        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
-        private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
-        {
-            MoveLocally(setActive, placePosition);
-        }
+			if (!hit.collider.TryGetComponent(out MoveableObject _))
+				transform.parent = hit.transform;
+		}
 
-        private void MoveLocally(bool setActive, Vector3 placePosition)
-        {
-            transform.position = placePosition;
-            gameObject.SetActive(setActive);
-        }
+		private void OnDisable()
+		{
+			OnObjectDisable?.Invoke(_collider);
+		}
 
-        public void PlayPickupSound() => AudioManager.Instance.PlayOneShot(AudioEvents.Instance.itemPickup, transform.position);
+		#endregion
 
-        #endregion
+		#region RPC Methods
 
-        #region Interface Methods
+		public void PlaceDown()
+		{
+			beingMoved = false;
+			/*Physics.Raycast(transform.position, Vector3.down, out var hit, float.PositiveInfinity, ~(1 << 2),
+				QueryTriggerInteraction.Ignore);
+			transform.up = hit.normal;
+			transform.position = hit.point + transform.up * _collider.bounds.extents.y;*/
+		}
 
-        public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition = default)
-        {
-            SetObjectActiveRpc(!pickUp, placePosition);
-            return this;
-        }
+		public void MoveOnMinigame(Vector3 position)
+		{
+			beingMoved = true;
+			transform.position = position;
+		}
 
-        public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)
-        {
-            return null;
-        }
+		[Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
+		private void SetObjectActiveRpc(bool setActive, Vector3 placePosition)
+		{
+			MoveLocally(setActive, placePosition);
+		}
 
-        public virtual string GetInteractText()
-        {
-            return $"Pick up {gameObject.name}";
-        }
+		protected virtual void MoveLocally(bool setActive, Vector3 placePosition)
+		{
+			transform.position = placePosition;
+			gameObject.SetActive(setActive);
+		}
 
-        public bool IsInteractedWith()
-        {
-            return false;
-        }
+		public void PlayPickupSound()
+		{
+			AudioManager.Instance.PlayOneShot(AudioEvents.Instance.itemPickup, transform.position);
+		}
 
-        #endregion
+		#endregion
 
-    }
+		#region Interface Methods
+
+		public IInteractable PickupOrDropObject(bool pickUp, Vector3 placePosition = default)
+		{
+			SetObjectActiveRpc(!pickUp, placePosition);
+			return this;
+		}
+
+		public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)
+		{
+			return null;
+		}
+
+		public virtual string GetInteractText()
+		{
+			return $"Pick up {gameObject.name}";
+		}
+
+		public virtual bool IsInteractedWith()
+		{
+			return false;
+		}
+
+		#endregion
+	}
 }
-

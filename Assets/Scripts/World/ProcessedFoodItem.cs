@@ -1,21 +1,18 @@
-using System;
-
 namespace World
 {
-    public class ProcessedFoodItem : MoveableObject
-    {
-        public ProcessedIngredientType processedIngredientType;
+	public class ProcessedFoodItem : MoveableObject
+	{
+		public ProcessedIngredientType processedIngredientType;
 
-        private void OnValidate()
-        {
-            gameObject.name = processedIngredientType.ToString();
-        }
+		private void OnValidate()
+		{
+			gameObject.name = processedIngredientType.ToString();
+		}
 
-        public override string GetInteractText()
-        {
-            var str = processedIngredientType.ToString();
-            return $"Pick up {Utilis.SplitBigLetter(str)}";
-        }
-
-    }
+		public override string GetInteractText()
+		{
+			var str = processedIngredientType.ToString();
+			return $"Pick up {str.SplitBigLetter().ReplaceWordWith("Processed","Sliced")}";
+		}
+	}
 }
