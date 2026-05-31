@@ -48,9 +48,9 @@ namespace Cooking.Minigames
 			if (!CheckForIngredients()) return;
 
 			if (Score == requiredScore) {
+				Score = 0;
 				FinishMinigameRpc();
 				AudioManager.Instance.PlayOneShot(AudioEvents.Instance.minigameComplete, transform.position);
-				Score = 0;
 				return;
 			}
 

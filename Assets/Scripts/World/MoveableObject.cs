@@ -3,6 +3,7 @@ using Managers;
 using MyInterfaces;
 using Player;
 using Unity.Netcode;
+using UnityEditor.Searcher;
 using UnityEngine;
 
 namespace World
@@ -26,18 +27,6 @@ namespace World
 		protected virtual void Awake()
 		{
 			_collider = GetComponent<Collider>();
-		}
-
-		public override void OnNetworkSpawn()
-		{
-			base.OnNetworkSpawn();
-			Debug.Log("Object Spawned: " + Time.time);
-		}
-
-		public override void OnNetworkDespawn()
-		{
-			base.OnNetworkDespawn();
-			Debug.Log("Object Despawned: " + Time.time);
 		}
 
 		protected virtual void Update()
@@ -74,7 +63,7 @@ namespace World
 		public void MoveOnMinigame(Vector3 position)
 		{
 			beingMoved = true;
-			transform.position = position;
+			MoveLocally(true, position);
 		}
 
 		[Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]

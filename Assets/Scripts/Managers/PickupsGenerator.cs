@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,20 +15,24 @@ namespace Managers
 		{
 			if (!IsServer) return;
 			base.OnNetworkSpawn();
-			SpawnObjectsRpc();
+			SpawnObjects();
 		}
 		
-		[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
-		private void SpawnObjectsRpc()
+		private async void SpawnObjects()
 		{
-			foreach (var item in pickupPrefab) {
-				for (var i = 0; i < 35; i++) {
-					var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
-					var prefab = Instantiate(item, pos, Quaternion.identity);
-					var netObj = prefab.GetComponent<NetworkObject>();
-					_spawnedObjects.Add(netObj);
-					netObj.Spawn(true);
+			try {
+				await Awaitable.WaitForSecondsAsync(0.1f);
+				foreach (var item in pickupPrefab) {
+					for (var i = 0; i < 35; i++) {
+						var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
+						var prefab = Instantiate(item, pos, Quaternion.identity);
+						var netObj = prefab.GetComponent<NetworkObject>();
+						_spawnedObjects.Add(netObj);
+						netObj.Spawn(true);
+					}
 				}
+			} catch (Exception e) {
+				Debug.LogException(e);
 			}
 		}
 
