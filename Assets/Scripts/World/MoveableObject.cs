@@ -31,7 +31,13 @@ namespace World
 		public override void OnNetworkSpawn()
 		{
 			base.OnNetworkSpawn();
-			Debug.Log("Object Spawned");
+			Debug.Log("Object Spawned: " + Time.time);
+		}
+
+		public override void OnNetworkDespawn()
+		{
+			base.OnNetworkDespawn();
+			Debug.Log("Object Despawned: " + Time.time);
 		}
 
 		protected virtual void Update()
