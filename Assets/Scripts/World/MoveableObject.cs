@@ -28,6 +28,12 @@ namespace World
 			_collider = GetComponent<Collider>();
 		}
 
+		public override void OnNetworkSpawn()
+		{
+			base.OnNetworkSpawn();
+			Debug.Log("Object Spawned");
+		}
+
 		protected virtual void Update()
 		{
 			if (beingMoved) return;
@@ -41,8 +47,8 @@ namespace World
 			var tempPos = hit.point + transform.up * _collider.bounds.extents.y;
 			transform.position = Vector3.Lerp(transform.position, tempPos, 9.81f * Time.deltaTime);
 
-			//if (!hit.collider.TryGetComponent(out MoveableObject _))
-				//transform.parent = hit.transform;
+			if (!hit.collider.TryGetComponent(out MoveableObject _))
+				transform.parent = hit.transform;
 		}
 
 		private void OnDisable()
