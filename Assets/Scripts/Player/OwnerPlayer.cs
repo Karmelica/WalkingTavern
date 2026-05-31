@@ -43,7 +43,7 @@ namespace Player
 
 		#region Constants
 
-		private const float CameraHeight = 1.6f;
+		private const float CameraHeight = 1.5f;
 		private const float CameraVerticalClampMin = -87f;
 		private const float CameraVerticalClampMax = 87f;
 		[SerializeField] private float walkForce = 20f;
