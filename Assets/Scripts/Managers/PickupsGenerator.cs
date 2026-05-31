@@ -10,28 +10,29 @@ namespace Managers
 		[SerializeField] private GameObject[] pickupPrefab;
 		private readonly List<NetworkObject> _spawnedObjects = new();
 
-		private void OnDisable()
-		{
-			if (!IsServer) return;
-			foreach (var netObj in _spawnedObjects)
-				if (netObj.IsSpawned) {
-					netObj.Despawn();
-				}
-		}
-
 		public override void OnNetworkSpawn()
 		{
-			base.OnNetworkSpawn();
 			if (!IsServer) return;
+			base.OnNetworkSpawn();
 			foreach (var item in pickupPrefab) {
 				for (var i = 0; i < 35; i++) {
 					var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
 					var prefab = Instantiate(item, pos, Quaternion.identity);
 					var netObj = prefab.GetComponent<NetworkObject>();
 					_spawnedObjects.Add(netObj);
-					netObj.Spawn();
+					netObj.Spawn(true);
 				}
 			}
+		}
+		
+		public override void OnNetworkDespawn()
+		{
+			if (!IsServer) return;
+			base.OnNetworkDespawn();
+			foreach (var netObj in _spawnedObjects)
+				if (netObj.IsSpawned) {
+					netObj.Despawn();
+				}
 		}
 	}
 }

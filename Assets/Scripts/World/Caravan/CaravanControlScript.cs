@@ -28,7 +28,9 @@ namespace World.Caravan
 
 		private void Update()
 		{
-			animator.SetBool(Moving, _rb.linearVelocity.magnitude > 0.1f);
+			if(IsOwner){
+				animator.SetBool(Moving, _rb.linearVelocity.magnitude > 0.1f);
+			}
 
 			if (Physics.Raycast(snail.position, Vector3.down, out var hit, 5f)) {
 				var point = hit.point + Vector3.up * 1.2f;

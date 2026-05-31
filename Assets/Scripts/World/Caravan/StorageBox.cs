@@ -19,6 +19,18 @@ namespace World.Caravan
 			foodIcon.sprite = Resources.Load<Sprite>("Icons/Food/" + ingredientBox);
 			foodIcon.SetNativeSize();
 		}
+		
+		public override void OnNetworkSpawn()
+		{
+			base.OnNetworkSpawn();
+			if (!IsServer) return;
+			if (SceneManager.GetActiveScene().name == "GatheringLevel") {
+				for (var i = 0; i < 5; i++)
+					FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
+			}
+
+			_quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
+		}
 
 		private void OnTriggerEnter(Collider other)
 		{
@@ -52,18 +64,6 @@ namespace World.Caravan
 		public bool IsInteractedWith()
 		{
 			return false;
-		}
-
-		public override void OnNetworkSpawn()
-		{
-			base.OnNetworkSpawn();
-			if (!IsServer) return;
-			if (SceneManager.GetActiveScene().name == "GatheringLevel") {
-				for (var i = 0; i < 5; i++)
-					FoodStorage.Instance.ReturnIngredient(ingredientBox, unlimited);
-			}
-
-			_quantity.Value = FoodStorage.Instance.GetIngredientCount(ingredientBox, unlimited);
 		}
 
 		[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
