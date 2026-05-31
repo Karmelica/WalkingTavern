@@ -40,7 +40,7 @@ namespace Managers.Network
 				Debug.Log($"{clientId} Disconnected: {networkManager.DisconnectReason}");
 			}
 
-			if (networkManager.IsClient) SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+			//if (networkManager.IsClient) SceneManager.LoadScene("Menu", LoadSceneMode.Single);
 		}
 	}
 }
