@@ -61,7 +61,13 @@ namespace Cooking.Minigames
 					lastInteractedObject.PlaceDown();
 					lastInteractedObject = null;
 				}
-				if (CheckForRecipe()) Score = requiredScore;
+			}
+			
+			if (CheckForRecipe()) {
+				if (!AlreadySpawned) {
+					AlreadySpawned = true;
+					Score = requiredScore;
+				}
 			}
 		}
 

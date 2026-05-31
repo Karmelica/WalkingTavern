@@ -20,6 +20,7 @@ namespace Cooking.Minigames
 		private TextMeshProUGUI ingredientListText;
 
 		private readonly Dictionary<ProcessedIngredientType, int> _placedIngredients = new();
+		protected bool AlreadySpawned = false;
 
 		[Expandable] protected Recipe Recipe;
 
@@ -102,7 +103,6 @@ namespace Cooking.Minigames
 
 		private void CompleteRecipe()
 		{
-			if (!IsServer) return;
 			foreach (var ingredient in Recipe.ingredients) {
 				var ingredientType = ingredient.ingredientType;
 				var quantity = ingredient.quantity;
@@ -125,6 +125,7 @@ namespace Cooking.Minigames
 			AudioManager.Instance.StopStirring();
 
 			UpdateRecipeText();
+			AlreadySpawned = false;
 		}
 
 		protected override void CompleteMinigame()

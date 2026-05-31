@@ -13,8 +13,8 @@ namespace Managers
 
 		public override void OnNetworkSpawn()
 		{
-			if (!IsServer) return;
 			base.OnNetworkSpawn();
+			if (!IsServer) return;
 			SpawnObjects();
 		}
 		
@@ -38,12 +38,13 @@ namespace Managers
 
 		public override void OnNetworkDespawn()
 		{
-			/*if (!IsServer) return;
 			base.OnNetworkDespawn();
-			foreach (var netObj in _spawnedObjects)
+			if (!IsServer) return;
+			foreach (var netObj in _spawnedObjects) {
 				if (netObj.IsSpawned) {
 					netObj.Despawn();
-				}*/
+				}
+			}
 		}
 	}
 }
