@@ -33,12 +33,12 @@ namespace Managers
 
 		public override void OnNetworkDespawn()
 		{
-			if (!IsServer) return;
+			/*if (!IsServer) return;
 			base.OnNetworkDespawn();
 			foreach (var netObj in _spawnedObjects)
 				if (netObj.IsSpawned) {
 					netObj.Despawn();
-				}
+				}*/
 		}
 	}
 }
