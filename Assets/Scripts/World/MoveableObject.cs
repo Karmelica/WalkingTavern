@@ -63,7 +63,7 @@ namespace World
 		public void MoveOnMinigame(Vector3 position)
 		{
 			beingMoved = true;
-			MoveLocally(true, position);
+			SetObjectActiveRpc(true, position);
 		}
 
 		[Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]

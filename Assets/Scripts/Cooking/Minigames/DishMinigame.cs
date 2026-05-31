@@ -115,12 +115,10 @@ namespace Cooking.Minigames
 					var item = CurrentFood[i];
 					if (item.TryGetComponent(out ProcessedFoodItem foodItemComponent) &&
 					    foodItemComponent.processedIngredientType == ingredientType) {
-						//CurrentFood.Remove(item);
 						Helper.DespawnObject(item);
 						removedCount++;
 					}
 				}
-				//_placedIngredients[ingredientType] -= removedCount;
 			}
 
 			Helper.SpawnObject(dishType.Value);
