@@ -67,7 +67,7 @@ namespace Cooking.Minigames
 			return null;
 		}
 
-		public IInteractable SecondaryInteract(OwnerPlayer interactor)
+		public virtual IInteractable SecondaryInteract(OwnerPlayer interactor)
 		{
 			OwnerPlayer = interactor;
 			OwnerPlayer.SetCanMove(false);

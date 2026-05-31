@@ -1,5 +1,7 @@
 using System.Linq;
 using Managers;
+using MyInterfaces;
+using Player;
 using UnityEngine;
 using World;
 
@@ -68,6 +70,11 @@ namespace Cooking.Minigames
 
 		protected override void RemoveFood()
 		{
+		}
+
+		public override IInteractable SecondaryInteract(OwnerPlayer interactor)
+		{
+			return null;
 		}
 
 		public override string GetInteractText()
