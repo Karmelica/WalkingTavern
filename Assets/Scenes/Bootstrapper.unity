@@ -1600,6 +1600,10 @@ PrefabInstance:
       propertyPath: NetworkConfig.AutoSpawnPlayerPrefabClientSide
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8331445648881263076, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
+      propertyPath: networkManager
+      value: 
+      objectReference: {fileID: 1795385768}
     - target: {fileID: 8877089886642803208, guid: b60376dce423fa9498d2e577859b6abf, type: 3}
       propertyPath: networkManager
       value: 

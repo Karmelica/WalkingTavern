@@ -13,34 +13,34 @@ namespace Managers.Network
 	/// </remarks>
 	public class ConnectionApprovalHandler : MonoBehaviour
 	{
-		private static NetworkManager NetworkManager => NetworkManager.Singleton;
+		[SerializeField] private NetworkManager networkManager;
 
 		private void OnEnable()
 		{
-			if (NetworkManager == null) return;
-			NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
-			NetworkManager.OnClientConnectedCallback += OnClientConnectionCallback;
+			if (networkManager == null) return;
+			networkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
+			networkManager.OnClientConnectedCallback += OnClientConnectionCallback;
 		}
 
 		private void OnDisable()
 		{
-			if (NetworkManager == null) return;
-			NetworkManager.OnClientDisconnectCallback -= OnClientDisconnectCallback;
-			NetworkManager.OnClientConnectedCallback -= OnClientConnectionCallback;
+			if (networkManager == null) return;
+			networkManager.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+			networkManager.OnClientConnectedCallback -= OnClientConnectionCallback;
 		}
 
-		private static void OnClientConnectionCallback(ulong clientId)
+		private void OnClientConnectionCallback(ulong clientId)
 		{
 			Debug.Log($"Client connected: {clientId}");
 		}
 
-		private static void OnClientDisconnectCallback(ulong clientId)
+		private void OnClientDisconnectCallback(ulong clientId)
 		{
-			if (!NetworkManager.IsServer && NetworkManager.DisconnectReason != string.Empty) {
-				Debug.Log($"{clientId} Disconnected: {NetworkManager.DisconnectReason}");
+			if (!networkManager.IsServer && networkManager.DisconnectReason != string.Empty) {
+				Debug.Log($"{clientId} Disconnected: {networkManager.DisconnectReason}");
 			}
 
-			if (NetworkManager.IsClient) SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+			if (networkManager.IsClient) SceneManager.LoadScene("Menu", LoadSceneMode.Single);
 		}
 	}
 }
