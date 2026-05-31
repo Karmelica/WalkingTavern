@@ -103,6 +103,7 @@ namespace Cooking.Minigames
 
 		private void CompleteRecipe()
 		{
+			if (!IsServer) return;
 			foreach (var ingredient in Recipe.ingredients) {
 				var ingredientType = ingredient.ingredientType;
 				var quantity = ingredient.quantity;

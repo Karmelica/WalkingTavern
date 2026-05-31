@@ -47,6 +47,13 @@ namespace Cooking.Minigames
 			MousePos = Mouse.current.position.ReadValue();
 			var mouseRay = MainCamera.ScreenPointToRay(MousePos);
 
+			if (CheckForRecipe()) {
+				if (!AlreadySpawned && IsServer) {
+					AlreadySpawned = true;
+					Score = requiredScore;
+				}
+			}
+			
 			DidHit = Interacted && plane.Raycast(mouseRay, out distance);
 			if (!DidHit) return;
 
@@ -63,12 +70,6 @@ namespace Cooking.Minigames
 				}
 			}
 			
-			if (CheckForRecipe()) {
-				if (!AlreadySpawned) {
-					AlreadySpawned = true;
-					Score = requiredScore;
-				}
-			}
 		}
 
 		private bool CheckForRecipe()
