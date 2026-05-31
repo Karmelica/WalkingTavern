@@ -118,8 +118,8 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
-  SyncOwnerTransformWhenParented: 0
-  AllowOwnerToParent: 0
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 1
 --- !u!114 &171522839633014211
 MonoBehaviour:
   m_ObjectHideFlags: 0

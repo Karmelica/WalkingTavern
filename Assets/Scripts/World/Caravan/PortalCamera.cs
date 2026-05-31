@@ -4,6 +4,7 @@ using UnityEngine.Rendering;
 
 namespace World.Caravan
 {
+	//https://github.com/SebLague/Portals
 	public class PortalCamera : MonoBehaviour
 	{
 		private const float NearClipLimit = 0.2f;
@@ -25,32 +26,11 @@ namespace World.Caravan
 			_portalCam.enabled = false;
 
 			_portalCam.fieldOfView = _playerCam.fieldOfView;
-
-			/*_viewTexture = new RenderTexture(Screen.width, Screen.height, 0);
-			_portalCam.targetTexture = _viewTexture;
-			portalRenderer.material.mainTexture = _viewTexture;*/
 		}
 
 		private void LateUpdate()
 		{
 			Render();
-		}
-
-
-		private void OnDrawGizmosSelected()
-		{
-			if (!_portalCam) return;
-			Gizmos.color = Color.blue;
-			Gizmos.matrix = _portalCam.transform.localToWorldMatrix;
-
-			var clipPlane = transform;
-			var dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - _portalCam.transform.position));
-
-			var camSpacePos = _portalCam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
-			var camSpaceNormal = _portalCam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
-			var camSpaceDst = Vector3.Dot(camSpacePos, camSpaceNormal) + NearClipOffset;
-
-			Gizmos.DrawFrustum(Vector3.zero, _portalCam.fieldOfView, camSpaceDst, _portalCam.farClipPlane, 16 / 9f);
 		}
 
 		private void OnValidate()

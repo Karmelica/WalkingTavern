@@ -24,8 +24,7 @@ namespace Managers
 			base.OnNetworkSpawn();
 			if (!IsServer) return;
 			foreach (var item in pickupPrefab) {
-				var random = Random.Range(10, 35);
-				for (var i = 0; i < random; i++) {
+				for (var i = 0; i < 35; i++) {
 					var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
 					var prefab = Instantiate(item, pos, Quaternion.identity);
 					var netObj = prefab.GetComponent<NetworkObject>();

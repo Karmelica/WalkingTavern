@@ -53,10 +53,7 @@ namespace Cooking.Minigames
 			if (OwnerPlayer.IsHoldingLmb()) {
 				if (lastInteractedObject) {
 					lastInteractedObject.MoveOnMinigame(mouseRay.GetPoint(distance));
-				} else if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity,
-					           1 << 7, QueryTriggerInteraction.Ignore) &&
-				           RayHit.collider.gameObject &&
-				           RayHit.collider.gameObject.TryGetComponent(out ProcessedFoodItem foodItem)) {
+				} else if (Physics.Raycast(MainCamera.ScreenPointToRay(MousePos), out RayHit, float.PositiveInfinity, 1 << 7, QueryTriggerInteraction.Ignore) && RayHit.collider.gameObject && RayHit.collider.gameObject.TryGetComponent(out ProcessedFoodItem foodItem)) {
 					lastInteractedObject = foodItem;
 				}
 			} else {
