@@ -14,6 +14,12 @@ namespace Managers
 		{
 			if (!IsServer) return;
 			base.OnNetworkSpawn();
+			SpawnObjectsRpc();
+		}
+		
+		[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Server)]
+		private void SpawnObjectsRpc()
+		{
 			foreach (var item in pickupPrefab) {
 				for (var i = 0; i < 35; i++) {
 					var pos = new Vector3(Random.Range(-20, 20), 1, Random.Range(-100, 80));
@@ -24,7 +30,7 @@ namespace Managers
 				}
 			}
 		}
-		
+
 		public override void OnNetworkDespawn()
 		{
 			if (!IsServer) return;

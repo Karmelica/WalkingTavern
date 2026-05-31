@@ -171,15 +171,19 @@ namespace Player
 
 		public override void OnNetworkDespawn()
 		{
-			if (_lastInteractedObject != null) {
-				_isInteracting = false;
-				_networkedPlayer.ChangeObjectInHandIdRpc(0);
-				_lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
-				_lastInteractedObject = null;
-			}
+			
 			_shouldUpdateInterface = false;
 			CleanupInput();
 			base.OnNetworkDespawn();
+		}
+
+		private void OnDisable()
+		{
+			if (_lastInteractedObject != null) {
+				_isInteracting = false;
+				_lastInteractedObject.PickupOrDropObject(false, CalculateDropPoint());
+				_lastInteractedObject = null;
+			}
 		}
 
 		private IEnumerator UpdateInterface()

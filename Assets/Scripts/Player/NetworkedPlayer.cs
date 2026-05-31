@@ -404,6 +404,7 @@ namespace PlayerScripts
 					Quaternion.LookRotation(transform.forward), _parentTransform);
 				ObjectInHand.GetComponent<Collider>().enabled = false;
 				ObjectInHand.GetComponent<MoveableObject>().enabled = false;
+				ObjectInHand.GetComponent<NetworkObject>().DontDestroyWithOwner = false;
 				switch (ObjectInHand) {
 					case DishItem item:
 						item.GetComponentInChildren<Canvas>().enabled = false;
